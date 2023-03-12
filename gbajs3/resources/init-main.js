@@ -248,6 +248,10 @@ function handleOrientationChange(orient) {
 				margin: 'inherit'
 			});
 		}
+
+		if ($('#sidenavcleardismiss').is(':visible')) {
+			$('#sidenavcleardismiss').toggle('active');
+		}
 	}
 }
 
