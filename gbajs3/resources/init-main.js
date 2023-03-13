@@ -250,7 +250,7 @@ function handleOrientationChange(orient) {
 		}
 
 		if ($('#sidenavcleardismiss').is(':visible')) {
-			$('#sidenavcleardismiss').toggle('active');
+			handleMenuButtonClick(!islandscape, isMobile);
 		}
 	}
 }
@@ -261,6 +261,10 @@ $(window).on('orientationchange', function (event) {
 
 //easy sidebar menu close on mobile
 menu_btn.addEventListener('click', () => {
+	handleMenuButtonClick(islandscape, isMobile);
+});
+
+function handleMenuButtonClick(isLandscape, isMobile) {
 	if (islandscape) {
 		sidebar.classList.remove('active-nav');
 		container.classList.remove('active-cont');
@@ -275,7 +279,7 @@ menu_btn.addEventListener('click', () => {
 	if (isMobile) {
 		$('#sidenavcleardismiss').toggle('active');
 	}
-});
+}
 
 $('#sidenavcleardismiss').click(function (e) {
 	e.preventDefault();
