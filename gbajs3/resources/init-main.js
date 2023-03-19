@@ -250,7 +250,7 @@ function handleOrientationChange(orient) {
 		}
 
 		if ($('#sidenavcleardismiss').is(':visible')) {
-			handleMenuButtonClick(!islandscape, isMobile);
+			handleMenuButtonClick(!islandscape, false);
 		}
 	}
 }
