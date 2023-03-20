@@ -85,11 +85,11 @@ if (window.mobileCheck()) {
 	window.oncontextmenu = function () {
 		return false;
 	};
-	enableVirtualControls();
-	handleOrientationChange(window.orientation);
-	disableVirtualControlsMenuNode();
-	$('#sidenavcleardismiss').toggle('active');
 	isMobile = true;
+	handleOrientationChange(window.orientation, true);
+	$('#sidenavcleardismiss').toggle('active');
+	enableVirtualControls();
+	disableVirtualControlsMenuNode();
 }
 
 //login handlers
@@ -181,7 +181,7 @@ setDpadEvents([
 	dpad_select_button
 ]);
 
-function handleOrientationChange(orient) {
+function handleOrientationChange(orient, initial = false) {
 	if (isMobile) {
 		if (orient == '0') {
 			islandscape = false;
@@ -198,7 +198,7 @@ function handleOrientationChange(orient) {
 				"loadstatevc div:not('#loadstatevcbuttonhandle')"
 			]);
 
-			$('#sidebar').removeAttr('style'); //maybe need remove style instead
+			$('#sidebar').removeAttr('style');
 			$('#menunav').removeAttr('style');
 			$('#menu-btn').removeAttr('style');
 			$('.nav-container').removeAttr('style');
@@ -249,8 +249,11 @@ function handleOrientationChange(orient) {
 			});
 		}
 
-		if ($('#sidenavcleardismiss').is(':visible')) {
-			handleMenuButtonClick(!islandscape, false);
+		if (
+			$('#sidenavcleardismiss').is(':visible') ||
+			(initial && islandscape)
+		) {
+			handleMenuButtonClick(islandscape, false);
 		}
 	}
 }
