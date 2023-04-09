@@ -22,6 +22,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
 * Offline PWA Support
 * Functional Surface-level ASM debugger (gbajs only)
 * Save state support (mGBA only)
+* Cheat code support (mGBA only)
 * Interchangeable cores
     * mGBA support (wasm based)
     * gbajs support (pure javascript)
@@ -37,7 +38,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
 
 ## To Do
 * Debugger enhancements
-* Cheat entry/injection implementation
+* Server enhancements/Admin UI
 
 ## Sample Screenshots
 
