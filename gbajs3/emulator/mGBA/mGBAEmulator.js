@@ -81,7 +81,7 @@ class mGBAEmulator {
 			}
 
 			const match = cheatLine.match(
-				/^cheat([0-9]+)_([a-zA-Z]+)\s*=\s*"?([a-zA-Z0-9\s\+:]+)"?$/
+				/^cheat([0-9]+)_([a-zA-Z]+)\s*=\s*"?([a-zA-Z0-9\s\+:_]+)"?$/
 			);
 
 			if (match) {
