@@ -114,6 +114,10 @@ class mGBAEmulator {
 		}
 	}
 
+	getCurrentCheatsFileName() {
+		return this.filepathToFileName(this.module.gameName, '.cheats');
+	}
+
 	createSaveState(slot) {
 		return this.module.saveState(slot);
 	}

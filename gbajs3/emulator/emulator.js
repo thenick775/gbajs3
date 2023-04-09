@@ -186,6 +186,13 @@ class GameBoyAdvanceEmulator {
 		return false;
 	}
 
+	GetCurrentCheatsFileName() {
+		if (this.emulatorCan('getCurrentCheatsFileName')) {
+			return this.emulator.getCurrentCheatsFileName();
+		}
+		return false;
+	}
+
 	ParseCheatsString(cheatsStr) {
 		if (this.emulatorCan('parseCheatsString')) {
 			return this.emulator.parseCheatsString(cheatsStr);

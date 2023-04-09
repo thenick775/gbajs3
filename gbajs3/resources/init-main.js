@@ -871,34 +871,48 @@ function processEmulatorCheats() {
 }
 
 function saveCheatsToFile() {
-	const libretroCheats = $('#cheatsTable tr')
-		.map(function (idx, cheatRow) {
-			if (idx === 0) return null;
+	var libretroCheatsFile = null;
 
-			const descrip = $(this).find('.descrip').text().trim();
-			const cheatCode = $(this).find('.cheatCode').text().trim();
-			const isEnabled = $(this)
-				.find('.isCheatActive input')
-				.is(':checked');
+	if ($('#rawCheatsTab').hasClass('active')) {
+		libretroCheatsFile = $('#rawCheats').val();
+	} else {
+		const libretroCheats = $('#cheatsTable tr')
+			.map(function (idx, cheatRow) {
+				if (idx === 0) return null;
 
-			if (!descrip || descrip === '' || !cheatCode || cheatCode === '') {
-				return null;
-			}
+				const descrip = $(this).find('.descrip').text().trim();
+				const cheatCode = $(this).find('.cheatCode').text().trim();
+				const isEnabled = $(this)
+					.find('.isCheatActive input')
+					.is(':checked');
 
-			// write cheats in libretro format
-			return `cheat${
-				idx - 1
-			}_desc = "${descrip}"\ncheat${idx - 1}_enable = ${isEnabled}\ncheat${idx - 1}_code = "${cheatCode}"\n`;
-		})
-		.toArray();
+				if (
+					!descrip ||
+					descrip === '' ||
+					!cheatCode ||
+					cheatCode === ''
+				) {
+					return null;
+				}
 
-	const libretroCheatsFile =
-		`cheats = ${libretroCheats?.length}\n\n` + libretroCheats.join('\n');
+				// write cheats in libretro format
+				return `cheat${
+					idx - 1
+				}_desc = "${descrip}"\ncheat${idx - 1}_enable = ${isEnabled}\ncheat${idx - 1}_code = "${cheatCode}"\n`;
+			})
+			.toArray();
 
-	var blob = new Blob([libretroCheatsFile], { type: 'text/plain' });
-	var file = new File([blob], 'unbound.cheats');
+		libretroCheatsFile =
+			`cheats = ${libretroCheats?.length}\n\n` +
+			libretroCheats.join('\n');
+	}
 
-	emulator.LoadCheatsFile(file);
+	if (libretroCheatsFile) {
+		var blob = new Blob([libretroCheatsFile], { type: 'text/plain' });
+		var file = new File([blob], emulator.GetCurrentCheatsFileName());
+
+		emulator.LoadCheatsFile(file);
+	}
 }
 
 function saveExtraControlsConf() {
