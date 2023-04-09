@@ -38,7 +38,9 @@ Do not attempt to log into the server unless you are the server owner or an appr
 
 ## To Do
 * Debugger enhancements
-* Server enhancements/Admin UI
+* Server enhancements
+* Additional database support (Postgres)
+* Admin UI
 
 ## Sample Screenshots
 
