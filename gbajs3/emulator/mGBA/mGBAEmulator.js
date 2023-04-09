@@ -66,7 +66,7 @@ class mGBAEmulator {
 
 	// parses libretro cheats format input as string
 	// returns object where each key is a cheat of the
-	// output: [{desc: "<your description>", enable: true|false, code: "<cheat code>"}]
+	// output: { <cheat #>: {desc: "<your description>", enable: true|false, code: "<cheat code>"} ...}
 	parseCheatsStringLibRetro(cheatsStr) {
 		const lines = cheatsStr.split('\n');
 
