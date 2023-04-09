@@ -1,4 +1,4 @@
-gbajs3 -- My Personal Fork
+gbajs3 -- A Browser Based Game Boy Advance Emulator
 ======
 
 This project is a Game Boy Advance emulator that is freely licensed and works in any modern browser without plugins.
