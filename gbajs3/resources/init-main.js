@@ -266,8 +266,8 @@ function handleOrientationChange(orient, initial = false) {
 			});
 		}
 
-		const hasOrientationChanged = initialOrientation !== islandscape
-		const shouldToggleClearDismiss = !hasOrientationChanged && isMobile
+		const hasOrientationChanged = initialOrientation !== islandscape;
+		const shouldToggleClearDismiss = !hasOrientationChanged && isMobile;
 
 		if (
 			$('#sidenavcleardismiss').is(':visible') ||
