@@ -197,6 +197,8 @@ setDpadEvents([
 ]);
 
 function handleOrientationChange(orient, initial = false) {
+	const initialOrientation = islandscape;
+
 	if (isMobile) {
 		if (orient == '0') {
 			islandscape = false;
@@ -264,11 +266,14 @@ function handleOrientationChange(orient, initial = false) {
 			});
 		}
 
+		const hasOrientationChanged = initialOrientation !== islandscape
+		const shouldToggleClearDismiss = !hasOrientationChanged && isMobile
+
 		if (
 			$('#sidenavcleardismiss').is(':visible') ||
 			(initial && islandscape)
 		) {
-			handleMenuButtonClick(islandscape, false);
+			handleMenuButtonClick(islandscape, shouldToggleClearDismiss);
 		}
 	}
 }
