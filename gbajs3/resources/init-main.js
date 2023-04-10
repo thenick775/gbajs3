@@ -816,15 +816,14 @@ function newCheatsRow(description = '', code = '', isCheatActive = false) {
 		<tr class="cheatsRow">
 			<td 
 				contenteditable
-				class="descrip">
-				${description}
-			</td>
+				class="descrip"
+				placeholder="Name"
+			>${description}</td>
 			<td
 				contenteditable
-				class="cheatCode" 
-			>
-				${code}
-			</td>
+				class="cheatCode"
+				placeholder="820XXXXX 1234"
+			>${code}</td>
 			<td class="isCheatActive">
 				<input
 					type="checkbox"
