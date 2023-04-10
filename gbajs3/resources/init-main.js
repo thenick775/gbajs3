@@ -901,9 +901,11 @@ function saveCheatsToFile() {
 			})
 			.toArray();
 
-		libretroCheatsFile =
-			`cheats = ${libretroCheats?.length}\n\n` +
-			libretroCheats.join('\n');
+		if (libretroCheats?.length) {
+			libretroCheatsFile =
+				`cheats = ${libretroCheats?.length}\n\n` +
+				libretroCheats.join('\n');
+		}
 	}
 
 	if (libretroCheatsFile) {
