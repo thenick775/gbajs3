@@ -221,7 +221,7 @@ func listAllSaves(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fileNames, err := fileNamesFromDirPath(romPath + storePath)
+	fileNames, err := fileNamesFromDirPath(savePath + storePath)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
