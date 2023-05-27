@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"path/filepath"
 	"time"
@@ -107,7 +108,7 @@ func uploadRom(w http.ResponseWriter, r *http.Request) {
 
 	file, handler, err := r.FormFile("rom")
 	if err != nil {
-		fmt.Println("Error Retrieving the formFile")
+		log.Println("Error Retrieving the formFile")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -150,7 +151,7 @@ func uploadSave(w http.ResponseWriter, r *http.Request) {
 
 	file, handler, err := r.FormFile("save")
 	if err != nil {
-		fmt.Println("Error Retrieving the formFile")
+		log.Println("Error Retrieving the formFile")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

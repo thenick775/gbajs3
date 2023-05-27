@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -49,7 +49,7 @@ func tokenRefresh(w http.ResponseWriter, r *http.Request) {
 	var t string
 	refreshtok, err := r.Cookie("refresh-tok") // get the refresh token cookie
 	if err != nil {
-		fmt.Println("Cant find cookie")
+		log.Println("Cant find cookie")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}

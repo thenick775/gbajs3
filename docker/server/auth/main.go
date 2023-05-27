@@ -58,13 +58,12 @@ func serveRequests(port string, certLoc string, keyLoc string, clientHost string
 	))*/
 	router.PathPrefix("/api/documentation/").Handler(httpSwagger.WrapHandler) // swagger documentation endpoint
 
-	fmt.Println("vancise attempting to handle requests")
 	log.Println("handling requests initiated")
 	log.Fatal(http.ListenAndServeTLS(port, certLoc, keyLoc, c.Handler(router)))
 }
 
 func main() {
-	fmt.Println("gbajs3 auth server started")
+	log.Println("gbajs3 auth server started")
 	const (
 		basePath = "./data"
 		certLoc  = "./certs/fullchain.pem"
@@ -104,11 +103,7 @@ func main() {
 		panic(fmt.Errorf("Error, could not connect to gbajs3 db: %w", err))
 	}
 
-	fmt.Println("vancise connected to database success")
-
 	appFs = afero.NewBasePathFs(afero.NewOsFs(), basePath)
-
-	fmt.Println("vancise got afero file system")
 
 	serveRequests(":443", certLoc, keyLoc, clientHost)
 }
