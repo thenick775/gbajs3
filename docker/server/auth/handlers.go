@@ -50,7 +50,7 @@ func downloadSave(w http.ResponseWriter, r *http.Request) {
 
 	data, err := readFileData(savePath + storePath + fname)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	w.Header().Add("Content-Type", "application/x-spss-sav")
@@ -84,7 +84,7 @@ func downloadRom(w http.ResponseWriter, r *http.Request) {
 
 	data, err := readFileData(romPath + storePath + fname)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	w.Header().Add("Content-Type", "application/x-gba-rom")
