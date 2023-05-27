@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/go-cmp/cmp"
 	uuid "github.com/satori/go.uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestIsValidRefreshJWT(t *testing.T) {
@@ -88,9 +88,7 @@ func TestIsValidRefreshJWT(t *testing.T) {
 			if gotValid != tt.wantValid {
 				t.Errorf("TestIsValidRefreshJWT(%v) got valid %v, wanted valid %v", tt.tokenString, gotValid, tt.wantValid)
 			}
-			if !cmp.Equal(got, tt.want) {
-				t.Errorf("TestIsValidRefreshJWT(%v) got %v, want %v", tt.tokenString, got, tt.want)
-			}
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }
@@ -144,9 +142,7 @@ func TestIsValidAccessJWT(t *testing.T) {
 			if gotValid != tt.wantValid {
 				t.Errorf("TestIsValidAccessJWT(%v) got valid %v, wanted valid %v", tt.tokenString, gotValid, tt.wantValid)
 			}
-			if !cmp.Equal(got, tt.want) {
-				t.Errorf("TestIsValidAccessJWT(%v) got %v, want %v", tt.tokenString, got, tt.want)
-			}
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

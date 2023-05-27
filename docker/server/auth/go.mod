@@ -5,7 +5,6 @@ go 1.18
 require (
 	github.com/NYTimes/gziphandler v1.1.1
 	github.com/golang-jwt/jwt/v5 v5.0.0
-	github.com/google/go-cmp v0.5.9
 	github.com/gorilla/mux v1.8.0
 	github.com/matoous/go-nanoid/v2 v2.0.0
 	github.com/natefinch/lumberjack v2.0.0+incompatible
@@ -36,6 +35,7 @@ require (
 	github.com/go-openapi/jsonreference v0.20.2 // indirect
 	github.com/go-openapi/spec v0.20.8 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
+	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/gotestyourself/gotestyourself v2.2.0+incompatible // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect

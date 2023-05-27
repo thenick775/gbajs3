@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/go-cmp/cmp"
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
@@ -317,9 +316,7 @@ func TestUploadRom(t *testing.T) {
 			}
 
 			// compare contents
-			if !cmp.Equal(got, tt.wantContents) {
-				t.Errorf("TestUploadRom() got %v, want %v", got, tt.wantContents)
-			}
+			assert.Equal(t, tt.wantContents, got)
 		})
 	}
 }
@@ -422,9 +419,7 @@ func TestUploadSave(t *testing.T) {
 			}
 
 			// compare contents
-			if !cmp.Equal(got, tt.wantContents) {
-				t.Errorf("TestUploadSave() got %v, want %v", got, tt.wantContents)
-			}
+			assert.Equal(t, tt.wantContents, got)
 		})
 	}
 }

@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	uuid "github.com/satori/go.uuid"
+	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -161,9 +161,8 @@ func TestFetchUserByUsername(t *testing.T) {
 				gotErr == nil && tt.wantErr {
 				t.Errorf("TestFetchUserByUsername(%v) got error %v, wanted error %v", tt.username, gotErr, tt.wantErr)
 			}
-			if !cmp.Equal(got, tt.want) {
-				t.Errorf("TestFetchUserByUsername(%v) got %v, want %v", tt.username, got, tt.want)
-			}
+
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }
@@ -213,13 +212,8 @@ func TestUpdateUserTokenFields(t *testing.T) {
 				var tmpUser User
 				selectTestUser(tt.user.ID, &tmpUser, userdb, t)
 
-				if !cmp.Equal(tmpUser.TokenID, tt.newTokenId) {
-					t.Errorf("TestUpdateUserTokenFields(%v %v, %v) got %v, want %v", tt.user, tt.newTokenId, tt.newTokenSlug, tmpUser.TokenID, tt.newTokenId)
-				}
-
-				if !cmp.Equal(tmpUser.TokenSlug, tt.newTokenSlug) {
-					t.Errorf("TestUpdateUserTokenFields(%v %v, %v) got %v, want %v", tt.user, tt.newTokenId, tt.newTokenSlug, tmpUser.TokenSlug, tt.newTokenSlug)
-				}
+				assert.Equal(t, tt.newTokenId, tmpUser.TokenID)
+				assert.Equal(t, tt.newTokenSlug, tmpUser.TokenSlug)
 			}
 		})
 	}
@@ -254,9 +248,7 @@ func TestFetchTokenSlugByTokenId(t *testing.T) {
 				t.Errorf("TestFetchTokenSlugByTokenId(%s) got error %v, wanted error %v", tt.tokenId.String(), gotErr, tt.wantErr)
 			}
 
-			if !cmp.Equal(got, tt.want) {
-				t.Errorf("TestFetchTokenSlugByTokenId(%s) got %v, want %v", tt.tokenId.String(), got, tt.want)
-			}
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

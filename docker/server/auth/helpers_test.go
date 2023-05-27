@@ -7,9 +7,9 @@ import (
 	"testing"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/go-cmp/cmp"
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/afero"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetStorePathFromClaims(t *testing.T) {
@@ -34,9 +34,8 @@ func TestGetStorePathFromClaims(t *testing.T) {
 				gotErr == nil && tt.wantErr {
 				t.Errorf("TestGetStorePathFromClaims(%v) got error %v, wanted error %v", tt.ctx, gotErr, tt.wantErr)
 			}
-			if !cmp.Equal(got, tt.want) {
-				t.Errorf("TestGetStorePathFromClaims(%v) got %v, want %v", tt.ctx, got, tt.want)
-			}
+
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }
@@ -143,9 +142,7 @@ func TestCreateOrOverwriteFileIfNotExists(t *testing.T) {
 			}
 
 			// compare contents
-			if !cmp.Equal(got, tt.wantBytes) {
-				t.Errorf("TestCreateOrOverwriteFileIfNotExists(%v, %v) got %v, want %v", tt.filePath+tt.fileName, r, got, tt.wantBytes)
-			}
+			assert.Equal(t, tt.wantBytes, got)
 		})
 	}
 }
@@ -197,9 +194,7 @@ func TestFileNamesFromDirPath(t *testing.T) {
 				t.Errorf("TestFileNamesFromDirPath(%v) got error %v, wanted error %v", tt.dirPath, gotErr, tt.wantErr)
 			}
 
-			if !cmp.Equal(got, tt.want) {
-				t.Errorf("TestFileNamesFromDirPath(%v) got %v, want %v", tt.dirPath, got, tt.want)
-			}
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }
@@ -248,9 +243,7 @@ func TestReadFileData(t *testing.T) {
 				t.Errorf("TestReadFileData(%v) got error %v, wanted error %v", tt.filePath, gotErr, tt.wantErr)
 			}
 
-			if !cmp.Equal(got, tt.wantBytes) {
-				t.Errorf("TestReadFileData(%v) got %v, want %v", tt.filePath, got, tt.wantBytes)
-			}
+			assert.Equal(t, tt.wantBytes, got)
 		})
 	}
 }
