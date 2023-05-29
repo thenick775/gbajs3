@@ -42,7 +42,7 @@ go run .
 
 Due to some limitations of afero at thie time, using the OS file system flag will run additional error case tests against the file system, these are currently skipped when using MemMapfs.
 
-For full testing and coverage use the following command:
+For full testing and coverage use the following command (requires docker for database integration tests):
 
 ```
 go test --v --cover --useosfs --race ./...
