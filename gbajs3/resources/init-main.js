@@ -1,7 +1,6 @@
 //globals
 var statepause = 'play';
 var stateff = false;
-var isKeyDown = false;
 var isMobile = false;
 var actioncontrolorient = false; //false-> horizontal, true-> vertical
 var virtualControlsEnabled = false;
@@ -580,36 +579,44 @@ const fullScreen = () => {
 
 //set dpad/button event listeners
 function setDpadEvents(elems) {
+	var isKeyDown = {};
+	var pointerCount = 0;
+
 	elems.forEach(function (elem, index) {
 		var keyId = $(elem).attr('data-keyid').toLowerCase();
 
 		elem.addEventListener('pointerdown', (e) => {
-			isKeyDown = true;
+			pointerCount += 1;
+			isKeyDown[keyId] = true;
 			emulator.SimulateKeyDown(keyId);
 			elem.releasePointerCapture(e.pointerId); // <- Important!
 		});
 
 		elem.addEventListener('pointerup', (e) => {
-			isKeyDown = false;
+			pointerCount -= 1;
+			isKeyDown[keyId] = false;
 			emulator.SimulateKeyUp(keyId);
 		});
 
 		elem.addEventListener('pointerenter', (e) => {
-			if (isKeyDown) {
+			if (pointerCount > 0) {
+				isKeyDown[keyId] = true;
 				emulator.SimulateKeyDown(keyId);
 				elem.releasePointerCapture(e.pointerId); // <- Important!
 			}
 		});
 
 		elem.addEventListener('pointerleave', (e) => {
-			if (isKeyDown) {
+			if (isKeyDown[keyId]) {
+				isKeyDown[keyId] = false;
 				emulator.SimulateKeyUp(keyId);
 				elem.releasePointerCapture(e.pointerId); // <- Important!
 			}
 		});
 
 		elem.addEventListener('pointercancel', (e) => {
-			isKeyDown = false;
+			pointerCount -= 1;
+			isKeyDown[keyId] = false;
 			emulator.SimulateKeyUp(keyId);
 			elem.releasePointerCapture(e.pointerId);
 		});
