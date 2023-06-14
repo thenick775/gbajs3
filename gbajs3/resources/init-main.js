@@ -593,7 +593,9 @@ function setDpadEvents(elems) {
 		});
 
 		elem.addEventListener('pointerup', (e) => {
-			pointerCount -= 1;
+			if (pointerCount > 0) {
+				pointerCount -= 1;
+			}
 			isKeyDown[keyId] = false;
 			emulator.SimulateKeyUp(keyId);
 		});
@@ -614,8 +616,18 @@ function setDpadEvents(elems) {
 			}
 		});
 
+		elem.addEventListener('pointerout', (e) => {
+			if (isKeyDown[keyId]) {
+				isKeyDown[keyId] = false;
+				emulator.SimulateKeyUp(keyId);
+				elem.releasePointerCapture(e.pointerId); // <- Important!
+			}
+		});
+
 		elem.addEventListener('pointercancel', (e) => {
-			pointerCount -= 1;
+			if (pointerCount > 0) {
+				pointerCount -= 1;
+			}
 			isKeyDown[keyId] = false;
 			emulator.SimulateKeyUp(keyId);
 			elem.releasePointerCapture(e.pointerId);
