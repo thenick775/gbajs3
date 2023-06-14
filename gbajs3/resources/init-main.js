@@ -74,10 +74,10 @@ var menu_btn = document.querySelector('#menu-btn');
 var sidebar = document.querySelector('#sidebar');
 var container = document.querySelector('.nav-container');
 
-var dpad_right = document.querySelector('#dpadholder > nav > a.right');
-var dpad_up = document.querySelector('#dpadholder > nav > a.up');
-var dpad_left = document.querySelector('#dpadholder > nav > a.left');
-var dpad_down = document.querySelector('#dpadholder > nav > a.down');
+var dpad_right = document.querySelector('#dpadholder > nav > div.right');
+var dpad_up = document.querySelector('#dpadholder > nav > div.up');
+var dpad_left = document.querySelector('#dpadholder > nav > div.left');
+var dpad_down = document.querySelector('#dpadholder > nav > div.down');
 var dpad_a_button = document.querySelector('#dpadabutton');
 var dpad_b_button = document.querySelector('#dpadbbutton');
 var dpad_l_button = document.querySelector('#dpadlbutton');
