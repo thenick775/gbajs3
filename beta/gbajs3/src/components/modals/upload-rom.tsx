@@ -1,0 +1,150 @@
+import { Button } from '@mui/material';
+import { useCallback, useContext, useRef, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { BiCloudUpload } from 'react-icons/bi';
+import styled from 'styled-components';
+
+import { ModalBody } from './modal-body.tsx';
+import { ModalFooter } from './modal-footer.tsx';
+import { ModalHeader } from './modal-header.tsx';
+import { EmulatorContext } from '../../context/emulator/emulator.tsx';
+import { ModalContext } from '../../context/modal/modal.tsx';
+
+type InputProps = {
+  romFile: File;
+};
+
+type FormProps = {
+  $isDragActive?: boolean;
+};
+
+const StyledForm = styled.form<FormProps>`
+  cursor: pointer;
+  border-color: ${({ theme }) => theme.blackRussian};
+  background-color: ${({ $isDragActive = false, theme }) =>
+    $isDragActive ? theme.arcticAirBlue : theme.aliceBlue2};
+  border-width: 1px;
+  border-style: dashed;
+  padding: 0.5rem;
+  text-align: center;
+`;
+
+const HiddenInput = styled.input`
+  display: none;
+`;
+
+const BiCloudUploadLarge = styled(BiCloudUpload)`
+  height: 60px;
+  width: auto;
+`;
+
+const CenteredTextContainer = styled.div`
+  text-align: center;
+`;
+
+export const UploadRomModal = () => {
+  const { setIsModalOpen } = useContext(ModalContext);
+  const { emulator } = useContext(EmulatorContext);
+  const {
+    register,
+    reset,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    watch,
+  } = useForm<InputProps>();
+  const [hasCompletedUpload, setHasCompletedUpload] = useState(false);
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setValue('romFile', acceptedFiles[0], { shouldValidate: true });
+      setHasCompletedUpload(false);
+    },
+    [setValue]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: false,
+  });
+
+  const onSubmit: SubmitHandler<InputProps> = ({ romFile }) => {
+    const runCallback = () => {
+      emulator?.run(emulator.filePaths().gamePath + '/' + romFile.name);
+    };
+    emulator?.uploadRom(romFile, runCallback);
+    reset();
+    setHasCompletedUpload(true);
+  };
+
+  const triggerFileInputOnClick = () => {
+    if (hiddenInputRef.current) hiddenInputRef.current.click();
+  };
+
+  const file = watch('romFile');
+
+  const validateFileName = (rom: File) =>
+    ['gba', 'gbc', 'gb'].includes(rom.name.split('.').pop() ?? '');
+
+  return (
+    <>
+      <ModalHeader title="Upload Rom" />
+      <ModalBody>
+        <StyledForm
+          {...getRootProps({
+            id: 'uploadRomForm',
+            onSubmit: handleSubmit(onSubmit),
+            $isDragActive: isDragActive,
+            onClick: triggerFileInputOnClick,
+          })}
+        >
+          <HiddenInput
+            {...getInputProps({
+              ...register('romFile', {
+                validate: (rom) =>
+                  (!!rom && validateFileName(rom)) ||
+                  'One .gba, .gbc, or .gb file is required',
+              }),
+              ref: hiddenInputRef,
+            })}
+          />
+          <BiCloudUploadLarge />
+          <p>
+            Drag and drop a rom file here,
+            <br /> or click to upload a file
+          </p>
+          {errors.romFile && (
+            <p>
+              Rom file upload has failed: <br /> - {errors.romFile.message}
+            </p>
+          )}
+        </StyledForm>
+        <div>
+          {file instanceof File && !!file && (
+            <CenteredTextContainer>
+              <p>File to upload:</p>
+              <div key={file.name}>
+                <p>{file.name}</p>
+              </div>
+            </CenteredTextContainer>
+          )}
+          {hasCompletedUpload && (
+            <CenteredTextContainer>
+              <p>Upload complete!</p>
+            </CenteredTextContainer>
+          )}
+        </div>
+      </ModalBody>
+      <ModalFooter>
+        <Button form="uploadRomForm" type="submit" variant="contained">
+          Upload
+        </Button>
+        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+          Close
+        </Button>
+      </ModalFooter>
+    </>
+  );
+};
