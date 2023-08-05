@@ -12,6 +12,17 @@ RUN sed -i "s;<CLIENT_HOST>;${CLIENT_HOST};" /var/www/resources/gba-api.js && \
 # minify all js/css files except emscripten generated mgba.js
 RUN cd /var/www/ && find . | egrep '(.*\.js|.*\.css)' | egrep -v 'mgba.js' | xargs -n 1 -I {} minify -o {} {}
 
+# first stage - builder (beta)
+FROM node:20-alpine3.17 as builder
+WORKDIR /app
+COPY ./beta/gbajs3 /app
+
+ARG CLIENT_HOST
+ENV VITE_GBA_SERVER_LOCATION=${CLIENT_HOST}
+
+RUN npm install
+RUN npm run build
+
 # second stage, server
 FROM nginx:stable-alpine
 COPY ./docker/server/nginx/nginx.conf /etc/nginx/conf.d/default.conf
@@ -20,6 +31,9 @@ COPY ./docker/server/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 ARG CLIENT_HOST
 RUN sed -i "s;<CLIENT_HOST>;${CLIENT_HOST};" /etc/nginx/conf.d/default.conf
 COPY --from=minifier /var/www /var/www
+
+# copy beta build
+COPY --from=builder /app/dist /var/www/beta/
 
 # install fail2ban, fail2ban config
 RUN apk add rsyslog fail2ban
