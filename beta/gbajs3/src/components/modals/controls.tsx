@@ -26,7 +26,7 @@ type ControlsInputProps = {
 type ManagedCheckBoxProps = {
   label: string;
   registerProps: UseFormRegisterReturn;
-  defaultChecked?: boolean;
+  watcher?: boolean;
 };
 
 export type AreVirtualControlsEnabledProps = {
@@ -53,46 +53,40 @@ const TabWrapper = styled.div`
 
 const ManagedCheckbox = ({
   label,
-  defaultChecked = false,
   registerProps,
+  watcher
 }: ManagedCheckBoxProps) => {
-  const [checked, setIsChecked] = useState(defaultChecked);
-
-  const handleChange = (
-    _: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
-    setIsChecked(checked);
-  };
-
   return (
     <FormControlLabel
-      control={<Checkbox checked={checked} onChange={handleChange} />}
+      control={<Checkbox {...registerProps} checked={!!watcher} />}
       label={label}
-      {...registerProps}
     />
   );
 };
 
 const VirtualControlsForm = () => {
-  const { register, handleSubmit } = useForm<ControlsInputProps>();
   const [areVirtualControlsEnabled, setareVirtualControlsEnabled] =
     useLocalStorage<AreVirtualControlsEnabledProps>(
       'areVirtualControlsEnabled',
       {}
     );
-
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
-  const shouldShowVirtualButtonsAndDpad =
-    (areVirtualControlsEnabled?.DPadAndButtons === undefined &&
-      !isLargerThanPhone) ||
-    areVirtualControlsEnabled?.DPadAndButtons;
+  // TODO: fix dynamic check default value on screen resize
+  const { register, handleSubmit, watch } = useForm<ControlsInputProps>({
+    defaultValues: {
+      ...areVirtualControlsEnabled,
+      DPadAndButtons:
+        areVirtualControlsEnabled?.DPadAndButtons ??
+        (areVirtualControlsEnabled?.DPadAndButtons === undefined &&
+          !isLargerThanPhone)
+    }
+  });
 
   const onSubmit: SubmitHandler<ControlsInputProps> = async (formData) => {
     setareVirtualControlsEnabled((prevState) => ({
       ...prevState,
-      ...formData,
+      ...formData
     }));
   };
 
@@ -100,27 +94,27 @@ const VirtualControlsForm = () => {
     <StyledForm id="virtualControlsForm" onSubmit={handleSubmit(onSubmit)}>
       <ManagedCheckbox
         label="Virtual D-pad/Buttons"
-        defaultChecked={shouldShowVirtualButtonsAndDpad}
+        watcher={watch('DPadAndButtons')}
         registerProps={register('DPadAndButtons')}
       />
       <ManagedCheckbox
         label="Save State"
-        defaultChecked={areVirtualControlsEnabled?.SaveState}
+        watcher={watch('SaveState')}
         registerProps={register('SaveState')}
       />
       <ManagedCheckbox
         label="Load State"
-        defaultChecked={areVirtualControlsEnabled?.LoadState}
+        watcher={watch('LoadState')}
         registerProps={register('LoadState')}
       />
       <ManagedCheckbox
         label="Quick Reload"
-        defaultChecked={areVirtualControlsEnabled?.QuickReload}
+        watcher={watch('QuickReload')}
         registerProps={register('QuickReload')}
       />
       <ManagedCheckbox
         label="Send save to server"
-        defaultChecked={areVirtualControlsEnabled?.SendSaveToServer}
+        watcher={watch('SendSaveToServer')}
         registerProps={register('SendSaveToServer')}
       />
     </StyledForm>
@@ -159,7 +153,7 @@ const TabPanel = ({ children, index, value }: TabPanelProps) => {
 const a11yProps = (index: number) => {
   return {
     id: `control-tab-${index}`,
-    'aria-controls': `tabpanel-${index}`,
+    'aria-controls': `tabpanel-${index}`
   };
 };
 
