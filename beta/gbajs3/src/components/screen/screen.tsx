@@ -49,7 +49,7 @@ export const Screen = () => {
     if (screenWrapperRef.current && !hasDraggedOrResized) {
       screenWrapperRef.current.updatePosition({
         x: screenWrapperXStart,
-        y: screenWrapperYStart,
+        y: screenWrapperYStart
       });
     }
   }, [hasDraggedOrResized, screenWrapperXStart, screenWrapperYStart]);
@@ -65,11 +65,12 @@ export const Screen = () => {
       <ScreenWrapper
         disableDragging={!areItemsDraggable}
         ref={screenWrapperRef}
+        enableResizing={areItemsDraggable}
         default={{
           x: isLargerThanPhone ? screenWrapperXStart : 0,
           y: isLargerThanPhone ? screenWrapperYStart : 0,
           width: 'auto',
-          height: 'auto',
+          height: 'auto'
         }}
         // initial width needs to be controlled from css
         size={{ width: '', height: 'auto' }}

@@ -8,7 +8,7 @@ import {
   BiVolumeFull,
   BiMove,
   BiVolumeMute,
-  BiPause,
+  BiPause
 } from 'react-icons/bi';
 import { Rnd } from 'react-rnd';
 import styled, { useTheme } from 'styled-components';
@@ -41,7 +41,7 @@ const Panel = styled.ul`
 `;
 
 const PanelControl = styled.li.attrs({
-  className: 'noDrag',
+  className: 'noDrag'
 })<PanelControlProps>`
   cursor: pointer;
   background-color: ${({ theme }) => theme.panelControlGray};
@@ -78,7 +78,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
     isEmulatorPaused,
     isEmulatorRunning,
     areItemsDraggable,
-    setAreItemsDraggable,
+    setAreItemsDraggable
   } = useContext(EmulatorContext);
   const [isFastForwardOn, setIsFastForwardOn] = useState(false);
   const theme = useTheme();
@@ -119,6 +119,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
   return (
     <DragWrapper
       disableDragging={!areItemsDraggable}
+      enableResizing={areItemsDraggable}
       ref={dragRef}
       cancel=".noDrag"
       size={{ width: '', height: 'auto' }}
@@ -126,7 +127,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
         x: Math.floor(canvasBounds.left),
         y: Math.floor(canvasBounds.bottom + dragWrapperPadding),
         width: 'auto',
-        height: 'auto',
+        height: 'auto'
       }}
     >
       <Panel>
@@ -167,7 +168,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
               style={{
                 width: '100px',
                 margin: '0 5px 0 15px',
-                maxHeight: '40px',
+                maxHeight: '40px'
               }}
               onChange={setVolume}
             />
