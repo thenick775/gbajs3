@@ -10,10 +10,12 @@ import {
   BiVolumeMute,
   BiPause
 } from 'react-icons/bi';
+import { TbResize } from 'react-icons/tb';
 import { Rnd } from 'react-rnd';
 import styled, { useTheme } from 'styled-components';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
+import { GripperHandle } from '../shared/gripper-handle.tsx';
 
 type PanelControlProps = {
   $shouldGrow?: boolean;
@@ -62,11 +64,6 @@ const PanelControl = styled.li.attrs({
   }
 `;
 
-const TextControl = styled.p`
-  margin: 0 10px;
-  font-weight: bold;
-`;
-
 type ControlPanelProps = {
   setExternalBounds: Dispatch<DOMRect | undefined>;
 };
@@ -78,7 +75,9 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
     isEmulatorPaused,
     isEmulatorRunning,
     areItemsDraggable,
-    setAreItemsDraggable
+    setAreItemsDraggable,
+    areItemsResizable,
+    setAreItemsResizable
   } = useContext(EmulatorContext);
   const [isFastForwardOn, setIsFastForwardOn] = useState(false);
   const theme = useTheme();
@@ -119,7 +118,15 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
   return (
     <DragWrapper
       disableDragging={!areItemsDraggable}
-      enableResizing={areItemsDraggable}
+      enableResizing={areItemsResizable}
+      resizeHandleComponent={{
+        bottomRight: <GripperHandle variation="bottomRight" />,
+        bottomLeft: <GripperHandle variation="bottomLeft" />
+      }}
+      resizeHandleStyles={{
+        bottomRight: { marginBottom: '15px', marginRight: '15px' },
+        bottomLeft: { marginBottom: '15px', marginLeft: '15px' }
+      }}
       ref={dragRef}
       cancel=".noDrag"
       size={{ width: '', height: 'auto' }}
@@ -153,8 +160,17 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
               <BiMove />
             )}
           </PanelControl>
-          <PanelControl $shouldGrow>
-            <TextControl>Collapse</TextControl>
+          <PanelControl
+            $shouldGrow
+            onClick={() => {
+              setAreItemsResizable((prevState) => !prevState);
+            }}
+          >
+            {areItemsResizable ? (
+              <TbResize color={theme.gbaThemeBlue} />
+            ) : (
+              <TbResize />
+            )}
           </PanelControl>
           <PanelControl>
             <BiVolumeMute />

@@ -41,9 +41,10 @@ const BackgroundContainer = styled.div<BackgroundContainerProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-style: solid;
   border-color: ${({ $areItemsDraggable = false, theme }) =>
     $areItemsDraggable ? theme.gbaThemeBlue : 'rgba(255, 255, 255, 0.9)'};
+  border-style: ${({ $areItemsDraggable = false }) =>
+    $areItemsDraggable ? 'dashed' : 'solid'};
 
   z-index: 12;
 

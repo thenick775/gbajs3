@@ -48,6 +48,8 @@ const CircularButton = styled(ButtonBase)<CircularButtonProps>`
   border-radius: 100px;
   border-color: ${({ $areItemsDraggable = false, theme }) =>
     $areItemsDraggable ? theme.gbaThemeBlue : 'rgba(255, 255, 255, 0.9)'};
+  border-style: ${({ $areItemsDraggable = false }) =>
+    $areItemsDraggable ? 'dashed' : 'solid'};
 
   ${({ $initialPosition = { top: '0', left: '0' } }) =>
     `
@@ -62,6 +64,8 @@ const RectangularButton = styled(ButtonBase)<RectangularButtonProps>`
   min-width: 85px;
   border-color: ${({ $areItemsDraggable = false, theme }) =>
     $areItemsDraggable ? theme.gbaThemeBlue : 'rgba(255, 255, 255, 0.9)'};
+  border-style: ${({ $areItemsDraggable = false }) =>
+    $areItemsDraggable ? 'dashed' : 'solid'};
 
   ${({ $initialPosition = { top: '0', left: '0' } }) =>
     `
@@ -78,7 +82,7 @@ export const VirtualButton = ({
   onClick,
   initialPosition,
   initialOffset,
-  enabled = false,
+  enabled = false
 }: VirtualButtonProps) => {
   const { emulator, areItemsDraggable } = useContext(EmulatorContext);
   const dragRef = useRef(null);
@@ -102,7 +106,7 @@ export const VirtualButton = ({
         },
         onPointerCancel: () => {
           emulator?.simulateKeyUp(keyId);
-        },
+        }
       }
     : {};
 
