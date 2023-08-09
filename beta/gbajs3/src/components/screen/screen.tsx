@@ -5,6 +5,7 @@ import { useMediaQuery } from 'usehooks-ts';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { NavigationMenuWidth } from '../navigation-menu/navigation-menu.tsx';
+import { GripperHandle } from '../shared/gripper-handle.tsx';
 
 type RenderCanvasProps = {
   $pixelated?: boolean;
@@ -41,7 +42,8 @@ export const Screen = () => {
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const screenWrapperRef = useRef<Rnd>(null);
   const canvasRef = useRef(null);
-  const { setCanvas, areItemsDraggable } = useContext(EmulatorContext);
+  const { setCanvas, areItemsDraggable, areItemsResizable } =
+    useContext(EmulatorContext);
   const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
   const screenWrapperYStart = isLargerThanPhone ? 15 : 0;
 
@@ -65,7 +67,19 @@ export const Screen = () => {
       <ScreenWrapper
         disableDragging={!areItemsDraggable}
         ref={screenWrapperRef}
-        enableResizing={areItemsDraggable}
+        enableResizing={areItemsResizable}
+        resizeHandleComponent={{
+          topRight: <GripperHandle variation="topRight" />,
+          bottomRight: <GripperHandle variation="bottomRight" />,
+          bottomLeft: <GripperHandle variation="bottomLeft" />,
+          topLeft: <GripperHandle variation="topLeft" />
+        }}
+        resizeHandleStyles={{
+          topRight: { marginTop: '15px', marginRight: '15px' },
+          bottomRight: { marginBottom: '15px', marginRight: '15px' },
+          bottomLeft: { marginBottom: '15px', marginLeft: '15px' },
+          topLeft: { marginTop: '15px', marginLeft: '15px' }
+        }}
         default={{
           x: isLargerThanPhone ? screenWrapperXStart : 0,
           y: isLargerThanPhone ? screenWrapperYStart : 0,

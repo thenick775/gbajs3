@@ -3,7 +3,7 @@ import {
   ReactNode,
   SetStateAction,
   createContext,
-  useState,
+  useState
 } from 'react';
 
 import { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
@@ -17,6 +17,8 @@ type EmulatorContextProps = {
   isEmulatorRunning: boolean;
   areItemsDraggable: boolean;
   setAreItemsDraggable: Dispatch<SetStateAction<boolean>>;
+  areItemsResizable: boolean;
+  setAreItemsResizable: Dispatch<SetStateAction<boolean>>;
 };
 
 type EmulatorProviderProps = {
@@ -31,6 +33,8 @@ export const EmulatorContext = createContext<EmulatorContextProps>({
   isEmulatorRunning: false,
   areItemsDraggable: false,
   setAreItemsDraggable: () => undefined,
+  areItemsResizable: false,
+  setAreItemsResizable: () => undefined
 });
 
 export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
@@ -38,6 +42,7 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
   const [isEmulatorPaused, setIsPaused] = useState(false);
   const [isEmulatorRunning, setIsRunning] = useState(false);
   const [areItemsDraggable, setAreItemsDraggable] = useState(false);
+  const [areItemsResizable, setAreItemsResizable] = useState(false);
   const emulator = useEmulator({ canvas, setIsPaused, setIsRunning });
 
   return (
@@ -50,6 +55,8 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
         isEmulatorRunning,
         areItemsDraggable,
         setAreItemsDraggable,
+        areItemsResizable,
+        setAreItemsResizable
       }}
     >
       {children}
