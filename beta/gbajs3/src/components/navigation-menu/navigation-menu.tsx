@@ -1,4 +1,4 @@
-import { toPng } from 'html-to-image';
+import { domToPng } from 'modern-screenshot';
 import { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import {
@@ -232,7 +232,7 @@ export const NavigationMenu = ({
                 if (!canvas) return;
 
                 emulator?.screenShot(() =>
-                  toPng(canvas, { cacheBust: true })
+                  domToPng(canvas)
                     .then((dataUrl) => {
                       const link = document.createElement('a');
                       const gameName = emulator?.getCurrentGameName();
