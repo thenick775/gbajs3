@@ -1,4 +1,6 @@
+import { toPng } from 'html-to-image';
 import { useContext, useState } from 'react';
+import toast from 'react-hot-toast';
 import {
   BiInfoCircle,
   BiFolderPlus,
@@ -19,7 +21,7 @@ import {
   BiCheckShield,
   BiBug,
   BiConversation,
-  BiMenu,
+  BiMenu
 } from 'react-icons/bi';
 import styled from 'styled-components';
 
@@ -131,12 +133,12 @@ const NavigationMenuClearDismiss = styled.div`
 `;
 
 export const NavigationMenu = ({
-  $isExpanded = true,
+  $isExpanded = true
 }: ExpandableComponentProps) => {
   const [isExpanded, setIsExpanded] = useState($isExpanded);
   const { setModalContent, setIsModalOpen } = useContext(ModalContext);
   const { isAuthenticated } = useContext(AuthContext);
-  const { isEmulatorRunning } = useContext(EmulatorContext);
+  const { isEmulatorRunning, canvas, emulator } = useContext(EmulatorContext);
   const { execute: executeLogout } = useLogout();
 
   const isMenuItemDisabledByAuth = !isAuthenticated();
@@ -226,21 +228,63 @@ export const NavigationMenu = ({
               title="Screenshot"
               $disabled={!isEmulatorRunning}
               icon={<BiScreenshot />}
+              onClick={() => {
+                if (!canvas) return;
+
+                emulator?.screenShot(() =>
+                  toPng(canvas, { cacheBust: true })
+                    .then((dataUrl) => {
+                      const link = document.createElement('a');
+                      const gameName = emulator?.getCurrentGameName();
+                      const screenshotName =
+                        gameName?.substring(0, gameName?.lastIndexOf('.')) ??
+                        'screenshot.png';
+
+                      link.download = screenshotName;
+                      link.href = dataUrl;
+                      link.click();
+                    })
+                    .catch(() => {
+                      toast.error('Screenshot has failed');
+                    })
+                );
+              }}
             />
             <NavLeaf
               title="Full Screen"
               $disabled={!isEmulatorRunning}
               icon={<BiFullscreen />}
+              onClick={() => {
+                canvas?.requestFullscreen(); // TODO: test on mobile
+              }}
             />
             <NavLeaf
               title="Download Save"
               $disabled={!isEmulatorRunning}
               icon={<BiCloudDownload />}
+              onClick={() => {
+                const save = emulator?.getCurrentSave();
+                const saveName = emulator?.getCurrentSaveName();
+
+                if (save && saveName) {
+                  const saveFile = new Blob([save], {
+                    type: 'data:application/x-spss-sav'
+                  });
+
+                  const link = document.createElement('a');
+                  link.download = saveName;
+                  link.href = URL.createObjectURL(saveFile);
+                  link.click();
+                }
+              }}
             />
             <NavLeaf
               title="Quick Reload"
               $disabled={!isEmulatorRunning}
               icon={<BiRedo />}
+              onClick={() => {
+                emulator?.quickReload();
+              }}
             />
             <NavLeaf
               title="Manage Save States"

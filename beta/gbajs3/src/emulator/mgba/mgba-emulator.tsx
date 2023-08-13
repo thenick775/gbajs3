@@ -12,6 +12,7 @@ export type GBAEmulator = {
   enableKeyboardInput: () => void;
   getCurrentCheatsFile: () => Uint8Array;
   // getCurrentCheatsFileName: () => string; // maybe dont need?
+  getCurrentGameName: () => string | undefined;
   getCurrentSave: () => Uint8Array | null;
   getCurrentSaveName: () => string | undefined;
   getVolume: () => number;
@@ -45,10 +46,15 @@ export const mGBAEmulator = (
 ): GBAEmulator => {
   const paths = mGBA.filePaths();
 
-  const filepathToFileName = (path: string | undefined, extension: string) => {
-    let fileName = path?.split('/').pop();
-    const ext = '.' + fileName?.split('.').pop();
-    fileName = fileName?.replace(ext, extension);
+  const filepathToFileName = (
+    path: string | undefined,
+    extension?: string | undefined
+  ) => {
+    let fileName = path?.split('/')?.pop();
+    if (extension) {
+      const ext = '.' + fileName?.split('.')?.pop();
+      fileName = fileName?.replace(ext, extension);
+    }
 
     return fileName;
   };
@@ -68,8 +74,9 @@ export const mGBAEmulator = (
       setIsRunning(true);
       return mGBA.loadGame(romPath);
     },
+    getCurrentGameName: () => filepathToFileName(mGBA.gameName),
     getCurrentSave: () => (mGBA.saveName ? mGBA.getSave() : null),
-    getCurrentSaveName: () => mGBA.saveName,
+    getCurrentSaveName: () => filepathToFileName(mGBA.saveName),
     uploadCheats: (file, callback) => mGBA.uploadCheats(file, callback),
     uploadRom: (file, callback) => mGBA.uploadRom(file, callback),
     uploadSaveOrSaveState: (file, callback) =>
@@ -106,6 +113,6 @@ export const mGBAEmulator = (
     },
     screenShot: (copyCanvasCallback) => mGBA.screenShot(copyCanvasCallback),
     remapKeyBinding: () => undefined,
-    filePaths: () => mGBA.filePaths(),
+    filePaths: () => mGBA.filePaths()
   };
 };

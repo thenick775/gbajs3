@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from 'styled-components';
 
 import './App.css';
@@ -15,6 +16,7 @@ export const App = () => {
   return (
     <ThemeProvider theme={GbaDarkTheme}>
       <ProductTour />
+      <Toaster />
       <AuthProvider>
         <EmulatorProvider>
           <ModalProvider>
