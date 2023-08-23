@@ -48,7 +48,7 @@ declare namespace mGBA {
     //       planning to update the mgba-wasm dockerfile in the near future on my fork.
     //       For now, updating type defs to get around the problem manually.
     //       See: https://github.com/emscripten-core/emscripten/issues/5820
-    then: (callback: (Module: mGBAEmulator) => mGBAEmulator) => mGBAEmulator;
+    then: (callback: (Module: mGBAEmulator) => void) => mGBAEmulator;
   }
 
   // Note: see above note on then method, this function does NOT return a promise,
