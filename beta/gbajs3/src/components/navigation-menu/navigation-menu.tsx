@@ -38,6 +38,7 @@ import { LegalModal } from '../modals/legal.tsx';
 import { LoadRomModal } from '../modals/load-rom.tsx';
 import { LoadSaveModal } from '../modals/load-save.tsx';
 import { LoginModal } from '../modals/login.tsx';
+import { SaveStatesModal } from '../modals/save-states.tsx';
 import { UploadCheatsModal } from '../modals/upload-cheats.tsx';
 import { UploadRomModal } from '../modals/upload-rom.tsx';
 import { UploadSaveToServer } from '../modals/upload-save-to-server.tsx';
@@ -290,6 +291,10 @@ export const NavigationMenu = ({
               title="Manage Save States"
               $disabled={!isEmulatorRunning}
               icon={<BiBookmarks />}
+              onClick={() => {
+                setModalContent(<SaveStatesModal />);
+                setIsModalOpen(true);
+              }}
             />
             <NavLeaf
               title="Manage Cheats"

@@ -24,10 +24,14 @@ export const useEmulator = ({
           Module.version.projectName + ' ' + Module.version.projectVersion;
         console.log(mGBAVersion);
 
-        Module.FSInit();
-
-        const wrappedEmulator = mGBAEmulator(Module, setIsPaused, setIsRunning);
-        setEmulator(wrappedEmulator);
+        Module.FSInit(() => {
+          const wrappedEmulator = mGBAEmulator(
+            Module,
+            setIsPaused,
+            setIsRunning
+          );
+          setEmulator(wrappedEmulator);
+        });
       });
     }
   }, [canvas, setIsPaused, setIsRunning]);

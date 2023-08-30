@@ -1,6 +1,7 @@
 //declare module 'mGBA' {
 declare namespace mGBA {
   export interface filePaths {
+    root: string;
     cheatsPath: string;
     gamePath: string;
     savePath: string;
@@ -13,7 +14,8 @@ declare namespace mGBA {
     bindKey(bindingName: string, inputName: string): void;
     buttonPress(name: string): void;
     buttonUnpress(name: string): void;
-    FSInit(): void;
+    FSInit(callback?: () => void): void;
+    FSSync(): void;
     getMainLoopTiming(): number;
     getSave(): Uint8Array;
     getVolume(): number;

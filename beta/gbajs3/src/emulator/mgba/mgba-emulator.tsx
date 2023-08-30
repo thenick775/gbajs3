@@ -2,6 +2,16 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { filePaths, mGBAEmulator as mGBAEmulatorTypeDef } from './wasm/mgba.js';
 
+type FileNode = {
+  path: string;
+  isDir: boolean;
+  children?: FileNode[];
+};
+
+interface FsNode extends FS.FSNode {
+  mode: number;
+}
+
 export type GBAEmulator = {
   // audioPolyfill: () => void;
   createSaveState: (slot: number) => boolean;
@@ -18,6 +28,7 @@ export type GBAEmulator = {
   getVolume: () => number;
   // lcdFade: () => void; // put in screen
   listSaveStates: () => string[];
+  listRoms: () => string[];
   loadSaveState: (slot: number) => boolean;
   // parseCheatsString: () => void;
   // parseCheatsStringLibRetro: () => void;
@@ -37,6 +48,8 @@ export type GBAEmulator = {
   uploadRom: (file: File, callback?: () => void) => void;
   uploadSaveOrSaveState: (file: File, callback?: () => void) => void;
   filePaths: () => filePaths;
+  listAllFiles: () => FileNode;
+  fsSync: () => void;
 };
 
 export const mGBAEmulator = (
@@ -59,10 +72,37 @@ export const mGBAEmulator = (
     return fileName;
   };
 
+  const listAllFiles = () => {
+    const root: FileNode = { path: paths.root, isDir: true, children: [] };
+    const ignorePaths = ['.', '..'];
+
+    const recursiveRead = ({ path, children }: FileNode) => {
+      for (const name of mGBA.FS.readdir(path)) {
+        if (ignorePaths.includes(name)) continue;
+
+        const currPath = `${path}/${name}`;
+        const { mode } = mGBA.FS.lookupPath(currPath, {}).node as FsNode;
+        const fileNode = {
+          path: currPath,
+          isDir: mGBA.FS.isDir(mode),
+          children: []
+        };
+
+        children?.push(fileNode);
+        if (fileNode.isDir) recursiveRead(fileNode);
+      }
+    };
+
+    recursiveRead(root);
+
+    return root;
+  };
+
   return {
     createSaveState: (slot) => mGBA.saveState(slot),
     loadSaveState: (slot) => mGBA.loadState(slot),
     listSaveStates: () => mGBA.FS.readdir(paths.saveStatePath),
+    listRoms: () => mGBA.FS.readdir(paths.gamePath),
     setVolume: (volumePercent) => mGBA.setVolume(volumePercent),
     getVolume: () => mGBA.getVolume(),
     enableKeyboardInput: () => mGBA.toggleInput(true),
@@ -113,6 +153,8 @@ export const mGBAEmulator = (
     },
     screenShot: (copyCanvasCallback) => mGBA.screenShot(copyCanvasCallback),
     remapKeyBinding: () => undefined,
-    filePaths: () => mGBA.filePaths()
+    filePaths: () => mGBA.filePaths(),
+    listAllFiles: listAllFiles,
+    fsSync: () => mGBA.FSSync()
   };
 };
