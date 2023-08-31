@@ -21,7 +21,8 @@ import {
   BiCheckShield,
   BiBug,
   BiConversation,
-  BiMenu
+  BiMenu,
+  BiFileFind
 } from 'react-icons/bi';
 import styled from 'styled-components';
 
@@ -34,7 +35,9 @@ import { useLogout } from '../../hooks/use-logout.tsx';
 import { AboutModal } from '../modals/about.tsx';
 import { ChooseCoreModal } from '../modals/choose-core.tsx';
 import { ControlsModal } from '../modals/controls.tsx';
+import { FileSystemModal } from '../modals/file-system.tsx';
 import { LegalModal } from '../modals/legal.tsx';
+import { LoadLocalRomModal } from '../modals/load-local-rom.tsx';
 import { LoadRomModal } from '../modals/load-rom.tsx';
 import { LoadSaveModal } from '../modals/load-save.tsx';
 import { LoginModal } from '../modals/login.tsx';
@@ -217,6 +220,15 @@ export const NavigationMenu = ({
                 setIsModalOpen(true);
               }}
             />
+            <NavLeaf
+              title="Load Local Rom"
+              $disabled={isEmulatorRunning}
+              icon={<BiUpload />}
+              onClick={() => {
+                setModalContent(<LoadLocalRomModal />);
+                setIsModalOpen(true);
+              }}
+            />
           </NavComponent>
 
           <NavComponent
@@ -309,6 +321,16 @@ export const NavigationMenu = ({
             $withPadding
             onClick={() => {
               setModalContent(<ControlsModal />);
+              setIsModalOpen(true);
+            }}
+          />
+
+          <NavLeaf
+            title="File System"
+            icon={<BiFileFind />}
+            $withPadding
+            onClick={() => {
+              setModalContent(<FileSystemModal />);
               setIsModalOpen(true);
             }}
           />
