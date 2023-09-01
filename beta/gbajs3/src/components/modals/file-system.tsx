@@ -42,7 +42,11 @@ const CustomizedTreeView = ({ allFiles }: { allFiles?: FileNode }) => {
     let nodeName = node.path.split('/')?.pop();
 
     return (
-      <StyledTreeItem key={node.path} nodeId={`${counter}`} label={nodeName}>
+      <StyledTreeItem
+        key={`${node.path}_idx_${counter}`}
+        nodeId={`${counter}`}
+        label={nodeName}
+      >
         {node.isDir && !!node.children
           ? node.children.map((node) => {
               return renderTree(node);
