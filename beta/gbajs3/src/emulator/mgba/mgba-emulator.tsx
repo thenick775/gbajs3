@@ -17,6 +17,7 @@ export type GBAEmulator = {
   createSaveState: (slot: number) => boolean;
   // defaultKeyBindings: () => void; // return numbers map to keyboard keys -> react modern solutions??
   deleteSaveState: (slot: number) => void;
+  deleteFile: (path: string) => void;
   disableKeyboardInput: () => void;
   // downloadSave: () => void; // redundant, use getcurrentsave
   enableKeyboardInput: () => void;
@@ -126,6 +127,9 @@ export const mGBAEmulator = (
       const saveStatePath = paths.saveStatePath + '/' + saveStateName;
 
       mGBA.FS.unlink(saveStatePath);
+    },
+    deleteFile: (path) => {
+      mGBA.FS.unlink(path);
     },
     pause: () => {
       setIsPaused(true);

@@ -1,8 +1,10 @@
 import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
 import TreeView from '@mui/lab/TreeView';
 import { Button } from '@mui/material';
-import { alpha, styled } from '@mui/material/styles';
-import { useContext } from 'react';
+import { alpha, styled as muiStyled } from '@mui/material/styles';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { BiTrash } from 'react-icons/bi';
+import styled from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -16,9 +18,16 @@ import {
   MinusSquare
 } from '../shared/action-box-icons.tsx';
 
-const StyledTreeItem = styled((props: TreeItemProps) => (
+type EmulatorFSProps = {
+  allFiles?: FileNode;
+  updateAllFiles: () => void;
+  deleteFile: (path: string) => void;
+};
+
+const StyledTreeItem = muiStyled((props: TreeItemProps) => (
   <TreeItem {...props} />
 ))(({ theme }) => ({
+  marginTop: 5,
   // note: using mui theme here
   [`& .${treeItemClasses.iconContainer}`]: {
     '& .close': {
@@ -27,25 +36,55 @@ const StyledTreeItem = styled((props: TreeItemProps) => (
   },
   [`& .${treeItemClasses.group}`]: {
     marginLeft: 15,
-    paddingLeft: 18,
+    paddingLeft: 10,
     borderLeft: `1px dashed ${alpha(theme.palette.text.primary, 0.4)}`
+  },
+  [`& .${treeItemClasses.content}`]: {
+    width: 'auto'
   }
 }));
 
-const CustomizedTreeView = ({ allFiles }: { allFiles?: FileNode }) => {
+const LeafLabelWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+
+  > p {
+    margin: 0;
+    word-wrap: break-word;
+    max-width: 100%;
+  }
+`;
+
+const EmulatorFS = ({
+  allFiles,
+  updateAllFiles,
+  deleteFile
+}: EmulatorFSProps) => {
   if (!allFiles) return null;
 
-  let counter = 0;
+  const deleteAndUpdate = (path: string) => {
+    deleteFile(path);
+    updateAllFiles();
+  };
 
   const renderTree = (node: FileNode) => {
-    counter = counter + 1;
-    const nodeName = node.path.split('/')?.pop();
+    const nodeName = node.path.split('/')?.pop() ?? node.path;
+
+    const leafLabelNode = (
+      <LeafLabelWrapper>
+        <p>{nodeName}</p>
+        <BiTrash onClick={() => deleteAndUpdate(node.path)} />
+      </LeafLabelWrapper>
+    );
 
     return (
       <StyledTreeItem
-        key={`${node.path}_idx_${counter}`}
-        nodeId={`${counter}`}
-        label={nodeName}
+        key={node.path}
+        nodeId={node.path}
+        label={node.isDir ? nodeName : leafLabelNode}
       >
         {node.isDir && !!node.children
           ? node.children.map((node) => {
@@ -59,11 +98,11 @@ const CustomizedTreeView = ({ allFiles }: { allFiles?: FileNode }) => {
   return (
     <TreeView
       aria-label="FileSystem"
-      defaultExpanded={['1']}
+      defaultExpanded={[allFiles.path]}
       defaultCollapseIcon={<MinusSquare />}
       defaultExpandIcon={<PlusSquare />}
       defaultEndIcon={<CloseSquare />}
-      sx={{ minHeight: 264, flexGrow: 1, overflow: 'hidden' }}
+      sx={{ minHeight: 264 }}
     >
       {renderTree(allFiles)}
     </TreeView>
@@ -73,14 +112,32 @@ const CustomizedTreeView = ({ allFiles }: { allFiles?: FileNode }) => {
 export const FileSystemModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
+  const [allFiles, setAllFiles] = useState<FileNode | undefined>();
 
-  const allFiles = emulator?.listAllFiles();
+  useEffect(() => {
+    setAllFiles(emulator?.listAllFiles());
+  }, [emulator]);
+
+  const updateAllFiles = useCallback(() => {
+    setAllFiles(emulator?.listAllFiles());
+  }, [emulator]);
+
+  const deleteFile = useCallback(
+    (path: string) => {
+      emulator?.deleteFile(path);
+    },
+    [emulator]
+  );
 
   return (
     <>
       <ModalHeader title="File System" />
       <ModalBody>
-        <CustomizedTreeView allFiles={allFiles} />
+        <EmulatorFS
+          allFiles={allFiles}
+          updateAllFiles={updateAllFiles}
+          deleteFile={deleteFile}
+        />
       </ModalBody>
       <ModalFooter>
         <Button variant="contained" onClick={emulator?.fsSync}>
