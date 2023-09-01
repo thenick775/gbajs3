@@ -9,12 +9,12 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import { FileNode } from '../../emulator/mgba/mgba-emulator.tsx';
 import {
   CloseSquare,
   PlusSquare,
   MinusSquare
 } from '../shared/action-box-icons.tsx';
-import { FileNode } from '../../emulator/mgba/mgba-emulator.tsx';
 
 const StyledTreeItem = styled((props: TreeItemProps) => (
   <TreeItem {...props} />
@@ -39,7 +39,7 @@ const CustomizedTreeView = ({ allFiles }: { allFiles?: FileNode }) => {
 
   const renderTree = (node: FileNode) => {
     counter = counter + 1;
-    let nodeName = node.path.split('/')?.pop();
+    const nodeName = node.path.split('/')?.pop();
 
     return (
       <StyledTreeItem
