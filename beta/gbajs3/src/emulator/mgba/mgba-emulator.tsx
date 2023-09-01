@@ -15,7 +15,7 @@ interface FsNode extends FS.FSNode {
 export type GBAEmulator = {
   // audioPolyfill: () => void;
   createSaveState: (slot: number) => boolean;
-  // defaultKeyBindings: () => void; // vancise return numbers map to keyboard keys -> react modern solutions??
+  // defaultKeyBindings: () => void; // return numbers map to keyboard keys -> react modern solutions??
   deleteSaveState: (slot: number) => void;
   disableKeyboardInput: () => void;
   // downloadSave: () => void; // redundant, use getcurrentsave

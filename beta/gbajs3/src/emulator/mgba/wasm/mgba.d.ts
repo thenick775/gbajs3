@@ -1,4 +1,3 @@
-//declare module 'mGBA' {
 declare namespace mGBA {
   export interface filePaths {
     root: string;
