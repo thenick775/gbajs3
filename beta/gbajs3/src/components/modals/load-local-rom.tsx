@@ -67,6 +67,7 @@ export const LoadLocalRomModal = () => {
               <LoadRomButton
                 onClick={() => {
                   emulator?.run(emulator.filePaths().gamePath + '/' + romName);
+                  setIsModalOpen(false);
                 }}
               >
                 {romName}
