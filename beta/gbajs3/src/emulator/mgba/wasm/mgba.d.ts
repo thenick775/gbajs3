@@ -7,6 +7,25 @@ declare namespace mGBA {
     saveStatePath: string;
   }
 
+  // Note: this method is available, but missing from emscripten typings
+  // see: https://emscripten.org/docs/api_reference/Filesystem-API.html#FS.analyzePath
+  interface FSWithAnalyze {
+    analyzePath: (
+      path: string,
+      dontResolveLastLink?: boolean
+    ) => {
+      isRoot: boolean;
+      exists: boolean;
+      error: Error;
+      name: string;
+      path: string;
+      object: FS.FSNode;
+      parentExists: boolean;
+      parentPath: stringToUTF16;
+      parentObject: FS.FSNode;
+    };
+  }
+
   export interface mGBAEmulator extends EmscriptenModule {
     // custom methods from preamble
     autoLoadCheats(): boolean;
@@ -44,7 +63,7 @@ declare namespace mGBA {
     gameName?: string;
     saveName?: string;
     // extra exported runtime methods
-    FS: typeof FS;
+    FS: typeof FS & FSWithAnalyze;
     // NOTE: This version of emscripten (from 2019) does not use a valid thenable/promise,
     //       planning to update the mgba-wasm dockerfile in the near future on my fork.
     //       For now, updating type defs to get around the problem manually.

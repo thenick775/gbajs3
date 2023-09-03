@@ -152,8 +152,11 @@ export const mGBAEmulator = (
     quickReload: () => mGBA.quickReload(), // case handling from original js file, is it necessary??
     getCurrentCheatsFile: () => {
       const cheatsName = filepathToFileName(mGBA.gameName, '.cheats');
+      const exists = mGBA.FS.analyzePath(paths.cheatsPath + cheatsName).exists;
 
-      return mGBA.FS.readFile(paths.cheatsPath + cheatsName);
+      return exists
+        ? mGBA.FS.readFile(paths.cheatsPath + cheatsName)
+        : new Uint8Array();
     },
     screenShot: (copyCanvasCallback) => mGBA.screenShot(copyCanvasCallback),
     remapKeyBinding: () => undefined,
