@@ -8,35 +8,45 @@ export type FileNode = {
   children?: FileNode[];
 };
 
+export type ParsedCheats = {
+  desc: string;
+  code: string;
+  enable: boolean;
+};
+
 interface FsNode extends FS.FSNode {
   mode: number;
 }
 
 export type GBAEmulator = {
   // audioPolyfill: () => void;
-  createSaveState: (slot: number) => boolean;
   // defaultKeyBindings: () => void; // return numbers map to keyboard keys -> react modern solutions??
-  deleteSaveState: (slot: number) => void;
-  deleteFile: (path: string) => void;
-  disableKeyboardInput: () => void;
   // downloadSave: () => void; // redundant, use getcurrentsave
+  // lcdFade: () => void; // put in screen
+  autoLoadCheats: () => boolean;
+  createSaveState: (slot: number) => boolean;
+  deleteFile: (path: string) => void;
+  deleteSaveState: (slot: number) => void;
+  disableKeyboardInput: () => void;
   enableKeyboardInput: () => void;
+  filePaths: () => filePaths;
+  fsSync: () => void;
   getCurrentCheatsFile: () => Uint8Array;
-  // getCurrentCheatsFileName: () => string; // maybe dont need?
+  getCurrentCheatsFileName: () => string | undefined;
   getCurrentGameName: () => string | undefined;
   getCurrentSave: () => Uint8Array | null;
   getCurrentSaveName: () => string | undefined;
   getVolume: () => number;
-  // lcdFade: () => void; // put in screen
-  listSaveStates: () => string[];
+  listAllFiles: () => FileNode;
   listRoms: () => string[];
+  listSaveStates: () => string[];
   loadSaveState: (slot: number) => boolean;
-  // parseCheatsString: () => void;
-  // parseCheatsStringLibRetro: () => void;
+  parseCheatsString: (cheatsStr: string) => ParsedCheats[];
+  parsedCheatsToFile: (cheatsList: ParsedCheats[]) => File | null;
   pause: () => void;
   quickReload: () => void;
-  quitMgba: () => void;
   quitGame: () => void;
+  quitMgba: () => void;
   remapKeyBinding: () => void;
   resume: () => void;
   run: (romPath: string) => boolean;
@@ -48,9 +58,6 @@ export type GBAEmulator = {
   uploadCheats: (file: File, callback?: () => void) => void;
   uploadRom: (file: File, callback?: () => void) => void;
   uploadSaveOrSaveState: (file: File, callback?: () => void) => void;
-  filePaths: () => filePaths;
-  listAllFiles: () => FileNode;
-  fsSync: () => void;
 };
 
 export const mGBAEmulator = (
@@ -99,18 +106,80 @@ export const mGBAEmulator = (
     return root;
   };
 
+  // NOTE: only libretro format supported at this time
+  const parseCheatsString = (cheatsStr: string) => {
+    const lines = cheatsStr.split('\n');
+    const ignoreLines = ['cheats = ', ''];
+
+    if (!lines?.[0]?.match('^cheats = [0-9]+$')) return [];
+
+    const assembledCheats: {
+      [cheatNumber: string]: {
+        [cheatType: string]: string | boolean;
+      };
+    } = {};
+    const propertyMap: { [key: string]: keyof ParsedCheats } = {
+      desc: 'desc',
+      code: 'code',
+      enable: 'enable'
+    };
+
+    for (const cheatLine of lines) {
+      if (ignoreLines.includes(cheatLine)) continue;
+
+      const match = cheatLine.match(
+        /^cheat([0-9]+)_([a-zA-Z]+)\s*=\s*"?([a-zA-Z0-9\s+:_]+)"?$/
+      );
+
+      if (match) {
+        const [, cheatNumber, cheatType, value] = match;
+        const propertyName = propertyMap[cheatType];
+        assembledCheats[cheatNumber] = assembledCheats[cheatNumber] || {
+          desc: '',
+          code: '',
+          enable: false
+        };
+        if (propertyName)
+          assembledCheats[cheatNumber][propertyName] =
+            propertyName === propertyMap.enable
+              ? value.toLowerCase() === 'true'
+              : value;
+      }
+    }
+
+    return Object.values(assembledCheats) as ParsedCheats[];
+  };
+
+  const parsedCheatsToFile = (cheatsList: ParsedCheats[]) => {
+    const libretroCheats = cheatsList.map((cheat, idx) => {
+      return `cheat${idx}_desc = "${cheat.desc}"\ncheat${idx}_enable = ${cheat.enable}\ncheat${idx}_code = "${cheat.code}"\n`;
+    });
+    const header = `cheats = ${libretroCheats?.length}\n\n`;
+    const cheatsFileName = filepathToFileName(mGBA.gameName, '.cheats');
+
+    if (libretroCheats?.length && cheatsFileName) {
+      const libretroCheatsFile = header + libretroCheats.join('\n');
+      const blob = new Blob([libretroCheatsFile], { type: 'text/plain' });
+
+      return new File([blob], cheatsFileName);
+    }
+
+    return null;
+  };
+
   return {
-    createSaveState: (slot) => mGBA.saveState(slot),
-    loadSaveState: (slot) => mGBA.loadState(slot),
+    autoLoadCheats: mGBA.autoLoadCheats,
+    createSaveState: mGBA.saveState,
+    loadSaveState: mGBA.loadState,
     listSaveStates: () => mGBA.FS.readdir(paths.saveStatePath),
     listRoms: () => mGBA.FS.readdir(paths.gamePath),
-    setVolume: (volumePercent) => mGBA.setVolume(volumePercent),
-    getVolume: () => mGBA.getVolume(),
+    setVolume: mGBA.setVolume,
+    getVolume: mGBA.getVolume,
     enableKeyboardInput: () => mGBA.toggleInput(true),
     disableKeyboardInput: () => mGBA.toggleInput(false),
-    simulateKeyDown: (keyId) => mGBA.buttonPress(keyId),
-    simulateKeyUp: (keyId) => mGBA.buttonUnpress(keyId),
-    setFastForward: (mode, value) => mGBA.setMainLoopTiming(mode, value),
+    simulateKeyDown: mGBA.buttonPress,
+    simulateKeyUp: mGBA.buttonUnpress,
+    setFastForward: mGBA.setMainLoopTiming,
     run: (romPath) => {
       setIsRunning(true);
       return mGBA.loadGame(romPath);
@@ -118,13 +187,12 @@ export const mGBAEmulator = (
     getCurrentGameName: () => filepathToFileName(mGBA.gameName),
     getCurrentSave: () => (mGBA.saveName ? mGBA.getSave() : null),
     getCurrentSaveName: () => filepathToFileName(mGBA.saveName),
-    uploadCheats: (file, callback) => mGBA.uploadCheats(file, callback),
-    uploadRom: (file, callback) => mGBA.uploadRom(file, callback),
-    uploadSaveOrSaveState: (file, callback) =>
-      mGBA.uploadSaveOrSaveState(file, callback),
+    uploadCheats: mGBA.uploadCheats,
+    uploadRom: mGBA.uploadRom,
+    uploadSaveOrSaveState: mGBA.uploadSaveOrSaveState,
     deleteSaveState: (slot) => {
       const saveStateName = filepathToFileName(mGBA.saveName, '.ss' + slot);
-      const saveStatePath = paths.saveStatePath + '/' + saveStateName;
+      const saveStatePath = `${paths.saveStatePath}/${saveStateName}`;
 
       mGBA.FS.unlink(saveStatePath);
     },
@@ -152,16 +220,19 @@ export const mGBAEmulator = (
     quickReload: () => mGBA.quickReload(), // case handling from original js file, is it necessary??
     getCurrentCheatsFile: () => {
       const cheatsName = filepathToFileName(mGBA.gameName, '.cheats');
-      const exists = mGBA.FS.analyzePath(paths.cheatsPath + cheatsName).exists;
+      const cheatsPath = `${paths.cheatsPath}/${cheatsName}`;
+      const exists = mGBA.FS.analyzePath(cheatsPath).exists;
 
-      return exists
-        ? mGBA.FS.readFile(paths.cheatsPath + cheatsName)
-        : new Uint8Array();
+      return exists ? mGBA.FS.readFile(cheatsPath) : new Uint8Array();
     },
-    screenShot: (copyCanvasCallback) => mGBA.screenShot(copyCanvasCallback),
+    getCurrentCheatsFileName: () =>
+      filepathToFileName(mGBA.gameName, '.cheats'),
+    screenShot: mGBA.screenShot,
     remapKeyBinding: () => undefined,
-    filePaths: () => mGBA.filePaths(),
-    listAllFiles: listAllFiles,
-    fsSync: () => mGBA.FSSync()
+    filePaths: mGBA.filePaths,
+    fsSync: mGBA.FSSync,
+    listAllFiles,
+    parseCheatsString,
+    parsedCheatsToFile
   };
 };

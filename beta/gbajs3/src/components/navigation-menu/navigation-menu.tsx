@@ -33,6 +33,7 @@ import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useLogout } from '../../hooks/use-logout.tsx';
 import { AboutModal } from '../modals/about.tsx';
+import { CheatsModal } from '../modals/cheats.tsx';
 import { ChooseCoreModal } from '../modals/choose-core.tsx';
 import { ControlsModal } from '../modals/controls.tsx';
 import { FileSystemModal } from '../modals/file-system.tsx';
@@ -312,6 +313,10 @@ export const NavigationMenu = ({
               title="Manage Cheats"
               $disabled={!isEmulatorRunning}
               icon={<BiEdit />}
+              onClick={() => {
+                setModalContent(<CheatsModal />);
+                setIsModalOpen(true);
+              }}
             />
           </NavComponent>
 

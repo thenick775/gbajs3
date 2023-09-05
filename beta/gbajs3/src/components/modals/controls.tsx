@@ -1,6 +1,6 @@
-import { Button, Tabs, Tab, FormControlLabel, Checkbox } from '@mui/material';
+import { Button, Tabs, Tab } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { useForm, SubmitHandler, UseFormRegisterReturn } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import styled, { useTheme } from 'styled-components';
 import { useLocalStorage, useMediaQuery } from 'usehooks-ts';
 
@@ -8,6 +8,7 @@ import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import { ManagedCheckbox } from '../shared/managed-checkbox.tsx';
 
 type TabPanelProps = {
   children: React.ReactNode;
@@ -21,12 +22,6 @@ type ControlsInputProps = {
   LoadState: boolean;
   QuickReload: boolean;
   SendSaveToServer: boolean;
-};
-
-type ManagedCheckBoxProps = {
-  label: string;
-  registerProps: UseFormRegisterReturn;
-  watcher?: boolean;
 };
 
 export type AreVirtualControlsEnabledProps = {
@@ -50,19 +45,6 @@ const StyledForm = styled.form`
 const TabWrapper = styled.div`
   padding: 24px;
 `;
-
-const ManagedCheckbox = ({
-  label,
-  registerProps,
-  watcher
-}: ManagedCheckBoxProps) => {
-  return (
-    <FormControlLabel
-      control={<Checkbox {...registerProps} checked={!!watcher} />}
-      label={label}
-    />
-  );
-};
 
 const VirtualControlsForm = () => {
   const [areVirtualControlsEnabled, setareVirtualControlsEnabled] =
