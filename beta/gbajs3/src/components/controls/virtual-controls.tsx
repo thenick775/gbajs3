@@ -4,7 +4,7 @@ import {
   BiRefresh,
   BiSolidCloudUpload,
   BiSave,
-  BiSolidBookmark,
+  BiSolidBookmark
 } from 'react-icons/bi';
 import styled, { useTheme } from 'styled-components';
 import { useLocalStorage, useMediaQuery } from 'usehooks-ts';
@@ -36,10 +36,10 @@ const VirtualButtonTextSmall = styled.p`
 `;
 
 export const VirtualControls = ({
-  controlPanelBounds,
+  controlPanelBounds
 }: VirtualControlProps) => {
   const theme = useTheme();
-  // TODO: vancise desktop positioning
+  // TODO: desktop positioning
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const isMobileWithUrlBar = useMediaQuery(theme.isMobileWithUrlBar);
   const { emulator } = useContext(EmulatorContext);
@@ -69,14 +69,14 @@ export const VirtualControls = ({
         top: isMobileWithUrlBar
           ? `calc(${verticalStartPos}px + 10%)`
           : `calc(${verticalStartPos}px + 12%)`,
-        left: 'calc(100dvw - 25px)',
+        left: 'calc(100dvw - 25px)'
       },
       initialOffset: {
         x: '-100%',
-        y: '0px',
+        y: '0px'
       },
       key: 'a-button',
-      enabled: shouldShowVirtualButtonsAndDpad,
+      enabled: shouldShowVirtualButtonsAndDpad
     },
     {
       keyId: 'B',
@@ -85,14 +85,14 @@ export const VirtualControls = ({
         top: isMobileWithUrlBar
           ? `calc(${verticalStartPos}px + 13%)`
           : `calc(${verticalStartPos}px + 15%)`,
-        left: 'calc(100dvw - 100px)',
+        left: 'calc(100dvw - 100px)'
       },
       initialOffset: {
         x: '-100%',
-        y: '0px',
+        y: '0px'
       },
       key: 'b-button',
-      enabled: shouldShowVirtualButtonsAndDpad,
+      enabled: shouldShowVirtualButtonsAndDpad
     },
     {
       keyId: 'START',
@@ -100,10 +100,10 @@ export const VirtualControls = ({
       children: <VirtualButtonTextSmall>Start</VirtualButtonTextSmall>,
       initialPosition: {
         left: isMobileWithUrlBar ? '50dvw' : '25dvw',
-        top: isMobileWithUrlBar ? '92dvh' : '88dvh',
+        top: isMobileWithUrlBar ? '92dvh' : '88dvh'
       },
       key: 'start-button',
-      enabled: shouldShowVirtualButtonsAndDpad,
+      enabled: shouldShowVirtualButtonsAndDpad
     },
     {
       keyId: 'SELECT',
@@ -111,10 +111,10 @@ export const VirtualControls = ({
       children: <VirtualButtonTextSmall>Select</VirtualButtonTextSmall>,
       initialPosition: {
         left: isMobileWithUrlBar ? '75dvw' : '55dvw',
-        top: isMobileWithUrlBar ? '92dvh' : '88dvh',
+        top: isMobileWithUrlBar ? '92dvh' : '88dvh'
       },
       key: 'select-button',
-      enabled: shouldShowVirtualButtonsAndDpad,
+      enabled: shouldShowVirtualButtonsAndDpad
     },
     {
       keyId: 'L',
@@ -122,10 +122,10 @@ export const VirtualControls = ({
       children: <VirtualButtonTextSmall>L</VirtualButtonTextSmall>,
       initialPosition: {
         top: `${verticalStartPos + 15}px`,
-        left: '15px',
+        left: '15px'
       },
       key: 'l-button',
-      enabled: shouldShowVirtualButtonsAndDpad,
+      enabled: shouldShowVirtualButtonsAndDpad
     },
     {
       keyId: 'R',
@@ -133,14 +133,14 @@ export const VirtualControls = ({
       children: <VirtualButtonTextSmall>R</VirtualButtonTextSmall>,
       initialPosition: {
         top: `${verticalStartPos + 15}px`,
-        left: 'calc(100dvw - 15px)',
+        left: 'calc(100dvw - 15px)'
       },
       initialOffset: {
         x: '-100%',
-        y: '0px',
+        y: '0px'
       },
       key: 'r-button',
-      enabled: shouldShowVirtualButtonsAndDpad,
+      enabled: shouldShowVirtualButtonsAndDpad
     },
     {
       children: <BiRefresh />,
@@ -150,10 +150,10 @@ export const VirtualControls = ({
       width: 40,
       initialPosition: {
         top: `${verticalStartPos + 10}px`,
-        left: '135px',
+        left: '135px'
       },
       key: 'restart-button',
-      enabled: areVirtualControlsEnabled?.QuickReload,
+      enabled: areVirtualControlsEnabled?.QuickReload
     },
     {
       children: <BiSolidCloudUpload />,
@@ -164,14 +164,14 @@ export const VirtualControls = ({
       width: 40,
       initialPosition: {
         top: `${verticalStartPos + 10}px`,
-        left: 'calc(100dvw - 135px)',
+        left: 'calc(100dvw - 135px)'
       },
       initialOffset: {
         x: '-100%',
-        y: '0px',
+        y: '0px'
       },
       key: 'uploadsave-button',
-      enabled: areVirtualControlsEnabled?.SendSaveToServer,
+      enabled: areVirtualControlsEnabled?.SendSaveToServer
     },
     {
       children: <BiSolidBookmark />,
@@ -183,14 +183,14 @@ export const VirtualControls = ({
         top: isMobileWithUrlBar
           ? `calc(${verticalStartPos}px + 23%)`
           : `calc(${verticalStartPos}px + 25%)`,
-        left: 'calc(100dvw - 40px)',
+        left: 'calc(100dvw - 40px)'
       },
       initialOffset: {
         x: '-100%',
-        y: '0px',
+        y: '0px'
       },
       key: 'loadstate-button',
-      enabled: areVirtualControlsEnabled?.LoadState,
+      enabled: areVirtualControlsEnabled?.LoadState
     },
     {
       children: <BiSave />,
@@ -202,15 +202,15 @@ export const VirtualControls = ({
         top: isMobileWithUrlBar
           ? `calc(${verticalStartPos}px + 25%)`
           : `calc(${verticalStartPos}px + 27%)`,
-        left: 'calc(100dvw - 100px)',
+        left: 'calc(100dvw - 100px)'
       },
       initialOffset: {
         x: '-100%',
-        y: '0px',
+        y: '0px'
       },
       key: 'savestate-button',
-      enabled: areVirtualControlsEnabled?.SaveState,
-    },
+      enabled: areVirtualControlsEnabled?.SaveState
+    }
   ];
 
   return (
@@ -219,7 +219,7 @@ export const VirtualControls = ({
         <OPad
           initialPosition={{
             top: `calc(${verticalStartPos}px + 11%)`,
-            left: '10px',
+            left: '10px'
           }}
         />
       )}

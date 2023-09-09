@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     async () => {
       await executeRefresh();
     },
-    // TODO: vancise re-evaluate whether or not auth check is desired
+    // TODO: re-evaluate whether or not auth check is desired
     isAuthenticated() && !refreshTokenError ? fourMinutesInMS : null
   );
 

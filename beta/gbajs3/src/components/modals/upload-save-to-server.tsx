@@ -54,7 +54,7 @@ const DynamicBody = ({
   loadingColor,
   respStatus,
   isLoading,
-  hasError,
+  hasError
 }: DynamicBodyProps) => {
   const LoadingIndicator = () => (
     <PacmanLoader color={loadingColor} cssOverride={{ margin: '0 auto' }} />
@@ -97,7 +97,7 @@ export const UploadSaveToServer = () => {
     data,
     isLoading,
     error,
-    execute: executeUploadSave,
+    execute: executeUploadSave
   } = useUpLoadSave();
 
   return (
@@ -115,8 +115,7 @@ export const UploadSaveToServer = () => {
           variant="contained"
           onClick={() => {
             const saveFileBytes = emulator?.getCurrentSave();
-            const savePath = emulator?.getCurrentSaveName();
-            const saveName = savePath?.split('/')?.pop();
+            const saveName = emulator?.getCurrentSaveName();
 
             if (saveFileBytes && saveName) {
               const saveFileBlob = new Blob([saveFileBytes]);

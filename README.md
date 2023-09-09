@@ -28,6 +28,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
     * gbajs support (pure javascript)
 * Admin UI
 * Postgres support
+* Persistent file system utilizing IndexedDB (mGBA only)
 
 ## Existing Feature List
 - Both cores support realtime clock

@@ -1,4 +1,6 @@
+import { domToPng } from 'modern-screenshot';
 import { useContext, useState } from 'react';
+import toast from 'react-hot-toast';
 import {
   BiInfoCircle,
   BiFolderPlus,
@@ -20,6 +22,7 @@ import {
   BiBug,
   BiConversation,
   BiMenu,
+  BiFileFind
 } from 'react-icons/bi';
 import styled from 'styled-components';
 
@@ -30,12 +33,16 @@ import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useLogout } from '../../hooks/use-logout.tsx';
 import { AboutModal } from '../modals/about.tsx';
+import { CheatsModal } from '../modals/cheats.tsx';
 import { ChooseCoreModal } from '../modals/choose-core.tsx';
 import { ControlsModal } from '../modals/controls.tsx';
+import { FileSystemModal } from '../modals/file-system.tsx';
 import { LegalModal } from '../modals/legal.tsx';
+import { LoadLocalRomModal } from '../modals/load-local-rom.tsx';
 import { LoadRomModal } from '../modals/load-rom.tsx';
 import { LoadSaveModal } from '../modals/load-save.tsx';
 import { LoginModal } from '../modals/login.tsx';
+import { SaveStatesModal } from '../modals/save-states.tsx';
 import { UploadCheatsModal } from '../modals/upload-cheats.tsx';
 import { UploadRomModal } from '../modals/upload-rom.tsx';
 import { UploadSaveToServer } from '../modals/upload-save-to-server.tsx';
@@ -131,12 +138,12 @@ const NavigationMenuClearDismiss = styled.div`
 `;
 
 export const NavigationMenu = ({
-  $isExpanded = true,
+  $isExpanded = true
 }: ExpandableComponentProps) => {
   const [isExpanded, setIsExpanded] = useState($isExpanded);
   const { setModalContent, setIsModalOpen } = useContext(ModalContext);
   const { isAuthenticated } = useContext(AuthContext);
-  const { isEmulatorRunning } = useContext(EmulatorContext);
+  const { isEmulatorRunning, canvas, emulator } = useContext(EmulatorContext);
   const { execute: executeLogout } = useLogout();
 
   const isMenuItemDisabledByAuth = !isAuthenticated();
@@ -214,6 +221,15 @@ export const NavigationMenu = ({
                 setIsModalOpen(true);
               }}
             />
+            <NavLeaf
+              title="Load Local Rom"
+              $disabled={isEmulatorRunning}
+              icon={<BiUpload />}
+              onClick={() => {
+                setModalContent(<LoadLocalRomModal />);
+                setIsModalOpen(true);
+              }}
+            />
           </NavComponent>
 
           <NavComponent
@@ -226,31 +242,81 @@ export const NavigationMenu = ({
               title="Screenshot"
               $disabled={!isEmulatorRunning}
               icon={<BiScreenshot />}
+              onClick={() => {
+                if (!canvas) return;
+
+                emulator?.screenShot(() =>
+                  domToPng(canvas)
+                    .then((dataUrl) => {
+                      const link = document.createElement('a');
+                      const gameName = emulator?.getCurrentGameName();
+                      const screenshotName =
+                        gameName?.substring(0, gameName?.lastIndexOf('.')) ??
+                        'screenshot.png';
+
+                      link.download = screenshotName;
+                      link.href = dataUrl;
+                      link.click();
+                    })
+                    .catch(() => {
+                      toast.error('Screenshot has failed');
+                    })
+                );
+              }}
             />
             <NavLeaf
               title="Full Screen"
               $disabled={!isEmulatorRunning}
               icon={<BiFullscreen />}
+              onClick={() => {
+                canvas?.requestFullscreen(); // TODO: test on mobile
+              }}
             />
             <NavLeaf
               title="Download Save"
               $disabled={!isEmulatorRunning}
               icon={<BiCloudDownload />}
+              onClick={() => {
+                const save = emulator?.getCurrentSave();
+                const saveName = emulator?.getCurrentSaveName();
+
+                if (save && saveName) {
+                  const saveFile = new Blob([save], {
+                    type: 'data:application/x-spss-sav'
+                  });
+
+                  const link = document.createElement('a');
+                  link.download = saveName;
+                  link.href = URL.createObjectURL(saveFile);
+                  link.click();
+                }
+              }}
             />
             <NavLeaf
               title="Quick Reload"
               $disabled={!isEmulatorRunning}
               icon={<BiRedo />}
+              onClick={() => {
+                emulator?.quickReload();
+              }}
             />
             <NavLeaf
               title="Manage Save States"
               $disabled={!isEmulatorRunning}
               icon={<BiBookmarks />}
+              onClick={() => {
+                setModalContent(<SaveStatesModal />);
+                setIsModalOpen(true);
+              }}
             />
             <NavLeaf
               title="Manage Cheats"
               $disabled={!isEmulatorRunning}
               icon={<BiEdit />}
+              onClick={() => {
+                setModalContent(<CheatsModal />);
+                setIsModalOpen(true);
+              }}
             />
           </NavComponent>
 
@@ -260,6 +326,16 @@ export const NavigationMenu = ({
             $withPadding
             onClick={() => {
               setModalContent(<ControlsModal />);
+              setIsModalOpen(true);
+            }}
+          />
+
+          <NavLeaf
+            title="File System"
+            icon={<BiFileFind />}
+            $withPadding
+            onClick={() => {
+              setModalContent(<FileSystemModal />);
               setIsModalOpen(true);
             }}
           />

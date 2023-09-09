@@ -1,10 +1,29 @@
-//declare module 'mGBA' {
 declare namespace mGBA {
   export interface filePaths {
+    root: string;
     cheatsPath: string;
     gamePath: string;
     savePath: string;
     saveStatePath: string;
+  }
+
+  // Note: this method is available, but missing from emscripten typings
+  // see: https://emscripten.org/docs/api_reference/Filesystem-API.html#FS.analyzePath
+  interface FSWithAnalyze {
+    analyzePath: (
+      path: string,
+      dontResolveLastLink?: boolean
+    ) => {
+      isRoot: boolean;
+      exists: boolean;
+      error: Error;
+      name: string;
+      path: string;
+      object: FS.FSNode;
+      parentExists: boolean;
+      parentPath: stringToUTF16;
+      parentObject: FS.FSNode;
+    };
   }
 
   export interface mGBAEmulator extends EmscriptenModule {
@@ -13,7 +32,8 @@ declare namespace mGBA {
     bindKey(bindingName: string, inputName: string): void;
     buttonPress(name: string): void;
     buttonUnpress(name: string): void;
-    FSInit(): void;
+    FSInit(callback?: () => void): void;
+    FSSync(): void;
     getMainLoopTiming(): number;
     getSave(): Uint8Array;
     getVolume(): number;
@@ -43,12 +63,12 @@ declare namespace mGBA {
     gameName?: string;
     saveName?: string;
     // extra exported runtime methods
-    FS: typeof FS;
+    FS: typeof FS & FSWithAnalyze;
     // NOTE: This version of emscripten (from 2019) does not use a valid thenable/promise,
     //       planning to update the mgba-wasm dockerfile in the near future on my fork.
     //       For now, updating type defs to get around the problem manually.
     //       See: https://github.com/emscripten-core/emscripten/issues/5820
-    then: (callback: (Module: mGBAEmulator) => mGBAEmulator) => mGBAEmulator;
+    then: (callback: (Module: mGBAEmulator) => void) => mGBAEmulator;
   }
 
   // Note: see above note on then method, this function does NOT return a promise,
