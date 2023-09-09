@@ -52,7 +52,7 @@ export const UploadRomModal = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-    watch,
+    watch
   } = useForm<InputProps>();
   const [hasCompletedUpload, setHasCompletedUpload] = useState(false);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
@@ -67,12 +67,17 @@ export const UploadRomModal = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    multiple: false,
+    multiple: false
   });
 
   const onSubmit: SubmitHandler<InputProps> = ({ romFile }) => {
     const runCallback = () => {
-      emulator?.run(emulator.filePaths().gamePath + '/' + romFile.name);
+      const hasSucceeded = emulator?.run(
+        emulator.filePaths().gamePath + '/' + romFile.name
+      );
+      if (hasSucceeded) {
+        setIsModalOpen(false);
+      }
     };
     emulator?.uploadRom(romFile, runCallback);
     reset();
@@ -97,7 +102,7 @@ export const UploadRomModal = () => {
             id: 'uploadRomForm',
             onSubmit: handleSubmit(onSubmit),
             $isDragActive: isDragActive,
-            onClick: triggerFileInputOnClick,
+            onClick: triggerFileInputOnClick
           })}
         >
           <HiddenInput
@@ -105,9 +110,9 @@ export const UploadRomModal = () => {
               ...register('romFile', {
                 validate: (rom) =>
                   (!!rom && validateFileName(rom)) ||
-                  'One .gba, .gbc, or .gb file is required',
+                  'One .gba, .gbc, or .gb file is required'
               }),
-              ref: hiddenInputRef,
+              ref: hiddenInputRef
             })}
           />
           <BiCloudUploadLarge />
