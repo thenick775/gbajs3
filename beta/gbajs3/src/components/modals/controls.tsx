@@ -54,16 +54,23 @@ const VirtualControlsForm = () => {
     );
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
-  // TODO: fix dynamic check default value on screen resize
-  const { register, handleSubmit, watch } = useForm<ControlsInputProps>({
-    defaultValues: {
-      ...areVirtualControlsEnabled,
-      DPadAndButtons:
-        areVirtualControlsEnabled?.DPadAndButtons ??
-        (areVirtualControlsEnabled?.DPadAndButtons === undefined &&
-          !isLargerThanPhone)
-    }
-  });
+  const areDPadAndButtonsEnabled =
+    areVirtualControlsEnabled?.DPadAndButtons ??
+    (areVirtualControlsEnabled?.DPadAndButtons === undefined &&
+      !isLargerThanPhone);
+
+  const { register, handleSubmit, setValue, watch } =
+    useForm<ControlsInputProps>({
+      defaultValues: {
+        ...areVirtualControlsEnabled,
+        DPadAndButtons: areDPadAndButtonsEnabled
+      }
+    });
+
+  useEffect(() => {
+    // DPadAndButtons is the only value that can dynamically change without user input
+    setValue('DPadAndButtons', areDPadAndButtonsEnabled);
+  }, [areDPadAndButtonsEnabled, setValue]);
 
   const onSubmit: SubmitHandler<ControlsInputProps> = async (formData) => {
     setareVirtualControlsEnabled((prevState) => ({
