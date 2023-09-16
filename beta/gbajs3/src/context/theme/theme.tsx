@@ -1,4 +1,4 @@
-import { DefaultTheme } from 'styled-components';
+import type { DefaultTheme } from 'styled-components';
 
 export const GbaDarkTheme: DefaultTheme = {
   // media queries
@@ -28,5 +28,5 @@ export const GbaDarkTheme: DefaultTheme = {
   screenLight: '#65696d',
   darkGray: '#111',
   panelControlGray: '#a9a9a9',
-  panelBlueGray: '#4f555a',
+  panelBlueGray: '#4f555a'
 };

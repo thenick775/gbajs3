@@ -1,10 +1,13 @@
-import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
+import TreeItem, {
+  treeItemClasses,
+  type TreeItemProps
+} from '@mui/lab/TreeItem';
 import TreeView from '@mui/lab/TreeView';
 import { Button } from '@mui/material';
 import { alpha, styled as muiStyled } from '@mui/material/styles';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { BiTrash } from 'react-icons/bi';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

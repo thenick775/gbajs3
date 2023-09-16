@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
-import styled, { useTheme } from 'styled-components';
+import { styled, useTheme } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -109,7 +109,7 @@ const SaveLoadingIndicator = ({
   isLoading,
   currentLoadingSave,
   children,
-  indicator,
+  indicator
 }: SaveLoadingIndicatorProps) => {
   return isLoading ? (
     <SaveLoadingContainer>
@@ -132,13 +132,13 @@ export const LoadSaveModal = () => {
   const {
     data: saveList,
     isLoading: saveListloading,
-    error: saveListError,
+    error: saveListError
   } = useListSaves({ loadOnMount: true });
   const {
     data: saveFile,
     isLoading: saveLoading,
     error: saveLoadError,
-    execute: executeLoadSave,
+    execute: executeLoadSave
   } = useLoadSave();
   const [currentSaveLoading, setCurrentSaveLoading] = useState<string | null>(
     null

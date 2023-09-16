@@ -12,7 +12,7 @@ import {
 } from 'react-icons/bi';
 import { TbResize } from 'react-icons/tb';
 import { Rnd } from 'react-rnd';
-import styled, { useTheme } from 'styled-components';
+import { styled, useTheme } from 'styled-components';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';

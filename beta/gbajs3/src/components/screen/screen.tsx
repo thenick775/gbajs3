@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Rnd } from 'react-rnd';
-import styled, { useTheme } from 'styled-components';
+import { styled, useTheme } from 'styled-components';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';

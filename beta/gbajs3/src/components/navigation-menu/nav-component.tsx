@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 type NavComponentProps = {
   title: string;
@@ -61,7 +61,7 @@ export const NavComponent = ({
   icon,
   children,
   $isExpanded = false,
-  $disabled = false,
+  $disabled = false
 }: NavComponentProps) => {
   const [isExpanded, setIsExpanded] = useState($isExpanded);
 

@@ -3,7 +3,7 @@ import { useCallback, useContext, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BiCloudUpload } from 'react-icons/bi';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

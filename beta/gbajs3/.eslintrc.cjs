@@ -4,6 +4,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:import/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
@@ -11,7 +12,6 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': 'warn',
     'import/no-default-export': 'error',
-    'import/no-unresolved': 'error',
     'import/order': [
       'error',
       {
@@ -21,14 +21,14 @@ module.exports = {
           'internal', // <- Absolute imports
           ['sibling', 'parent'], // <- Relative imports, the sibling and parent types they can be mingled together
           'index', // <- index imports
-          'unknown', // <- unknown
+          'unknown' // <- unknown
         ],
         'newlines-between': 'always',
         alphabetize: {
           order: 'asc',
-          caseInsensitive: true,
-        },
-      },
-    ],
-  },
+          caseInsensitive: true
+        }
+      }
+    ]
+  }
 };

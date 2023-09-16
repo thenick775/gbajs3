@@ -1,6 +1,6 @@
 import { Button, FormControlLabel, Checkbox } from '@mui/material';
 import { useContext } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

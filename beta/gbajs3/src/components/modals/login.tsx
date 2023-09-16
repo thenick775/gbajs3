@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
-import styled, { useTheme } from 'styled-components';
+import { styled, useTheme } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -63,14 +63,14 @@ export const LoginModal = () => {
     execute: executeLogin,
     data: accessToken,
     isLoading: loginLoading,
-    error: loginError,
+    error: loginError
   } = useLogin();
 
   const {
     register,
     reset,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<InputProps>();
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const LoginModal = () => {
     loginError,
     setAccessToken,
     setAccessTokenSource,
-    setIsModalOpen,
+    setIsModalOpen
   ]);
 
   useEffect(() => {
@@ -117,7 +117,7 @@ export const LoginModal = () => {
               variant="filled"
               helperText={errors?.username?.message}
               {...register('username', {
-                required: { value: true, message: 'Username is required' },
+                required: { value: true, message: 'Username is required' }
               })}
             />
 
@@ -129,7 +129,7 @@ export const LoginModal = () => {
               variant="filled"
               helperText={errors?.password?.message}
               {...register('password', {
-                required: { value: true, message: 'Password is required' },
+                required: { value: true, message: 'Password is required' }
               })}
             />
             {!!loginError && (

@@ -1,4 +1,4 @@
-import jwt_decode, { JwtPayload } from 'jwt-decode';
+import jwt_decode, { type JwtPayload } from 'jwt-decode';
 import {
   createContext,
   useState,

@@ -3,7 +3,7 @@ import { useCallback, useContext, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BiCloudUpload } from 'react-icons/bi';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -52,7 +52,7 @@ export const UploadCheatsModal = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-    watch,
+    watch
   } = useForm<InputProps>();
   const [hasCompletedUpload, setHasCompletedUpload] = useState(false);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +67,7 @@ export const UploadCheatsModal = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    multiple: true,
+    multiple: true
   });
 
   const onSubmit: SubmitHandler<InputProps> = ({ cheatFiles }) => {
@@ -97,7 +97,7 @@ export const UploadCheatsModal = () => {
             id: 'uploadCheatsForm',
             onSubmit: handleSubmit(onSubmit),
             $isDragActive: isDragActive,
-            onClick: triggerFileInputOnClick,
+            onClick: triggerFileInputOnClick
           })}
         >
           <HiddenInput
@@ -105,9 +105,9 @@ export const UploadCheatsModal = () => {
               ...register('cheatFiles', {
                 validate: (cheatsList) =>
                   (cheatsList?.length > 0 && validateFileNames(cheatsList)) ||
-                  'At least one .cheats file is required',
+                  'At least one .cheats file is required'
               }),
-              ref: hiddenInputRef,
+              ref: hiddenInputRef
             })}
           />
           <BiCloudUploadLarge />

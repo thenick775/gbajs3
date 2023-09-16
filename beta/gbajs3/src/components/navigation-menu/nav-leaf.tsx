@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 type NavLeafProps = {
   title: string;
@@ -67,7 +67,7 @@ const NavLink = styled.a<NavLinkProps>`
 const ConditionalWrapper = ({
   condition,
   wrapper,
-  children,
+  children
 }: ConditionalWrapperProps) => (condition ? wrapper(children) : children);
 
 export const NavLeaf = ({
@@ -76,7 +76,7 @@ export const NavLeaf = ({
   onClick = () => undefined,
   $link = undefined,
   $disabled = false,
-  $withPadding = false,
+  $withPadding = false
 }: NavLeafProps) => {
   return (
     <NavLeafWrapper
