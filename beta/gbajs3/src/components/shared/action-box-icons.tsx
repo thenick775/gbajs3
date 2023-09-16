@@ -1,5 +1,4 @@
-import SvgIcon from '@mui/material/SvgIcon';
-import type { SvgIconProps } from '@mui/material/SvgIcon';
+import SvgIcon, { type SvgIconProps } from '@mui/material/SvgIcon';
 
 export const MinusSquare = (props: SvgIconProps) => {
   return (

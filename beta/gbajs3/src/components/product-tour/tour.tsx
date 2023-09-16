@@ -1,5 +1,4 @@
-import Joyride, { STATUS } from 'react-joyride';
-import type { Step } from 'react-joyride';
+import Joyride, { STATUS, type Step } from 'react-joyride';
 import { useLocalStorage } from 'usehooks-ts';
 
 const steps: Step[] = [

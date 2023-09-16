@@ -1,5 +1,7 @@
-import TreeItem, { treeItemClasses } from '@mui/lab/TreeItem';
-import type { TreeItemProps } from '@mui/lab/TreeItem';
+import TreeItem, {
+  treeItemClasses,
+  type TreeItemProps
+} from '@mui/lab/TreeItem';
 import TreeView from '@mui/lab/TreeView';
 import { Button } from '@mui/material';
 import { alpha, styled as muiStyled } from '@mui/material/styles';
