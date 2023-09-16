@@ -6,7 +6,7 @@ import {
   BiSave,
   BiSolidBookmark
 } from 'react-icons/bi';
-import styled, { useTheme } from 'styled-components';
+import { styled, useTheme } from 'styled-components';
 import { useLocalStorage, useMediaQuery } from 'usehooks-ts';
 
 import { OPad } from './o-pad.tsx';

@@ -1,6 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { filePaths, mGBAEmulator as mGBAEmulatorTypeDef } from './wasm/mgba.js';
+import type {
+  filePaths,
+  mGBAEmulator as mGBAEmulatorTypeDef
+} from './wasm/mgba.js';
 
 export type FileNode = {
   path: string;

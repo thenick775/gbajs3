@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { ModalContext } from '../../context/modal/modal.tsx';
 
@@ -47,7 +47,7 @@ const HeaderWrapper = styled.div`
 
 export const ModalHeader = ({
   title,
-  showExitIndicator = true,
+  showExitIndicator = true
 }: ModalHeaderProps) => {
   const { setIsModalOpen } = useContext(ModalContext);
 

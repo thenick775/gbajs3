@@ -1,6 +1,6 @@
 import { ReactNode, useContext, useRef } from 'react';
 import Draggable from 'react-draggable';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 

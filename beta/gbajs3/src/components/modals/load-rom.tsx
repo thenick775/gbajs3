@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
-import styled, { useTheme } from 'styled-components';
+import { styled, useTheme } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -109,7 +109,7 @@ const RomLoadingIndicator = ({
   isLoading,
   currentLoadingRom,
   children,
-  indicator,
+  indicator
 }: RomLoadingIndicatorProps) => {
   return isLoading ? (
     <RomLoadingContainer>
@@ -132,13 +132,13 @@ export const LoadRomModal = () => {
   const {
     data: romList,
     isLoading: romListloading,
-    error: romListError,
+    error: romListError
   } = useListRoms({ loadOnMount: true });
   const {
     data: romFile,
     isLoading: romLoading,
     error: romLoadError,
-    execute: executeLoadRom,
+    execute: executeLoadRom
   } = useLoadRom();
   const [currentRomLoading, setCurrentRomLoading] = useState<string | null>(
     null

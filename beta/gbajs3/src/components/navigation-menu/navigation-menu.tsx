@@ -24,7 +24,7 @@ import {
   BiMenu,
   BiFileFind
 } from 'react-icons/bi';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { NavComponent } from './nav-component.tsx';
 import { NavLeaf } from './nav-leaf.tsx';

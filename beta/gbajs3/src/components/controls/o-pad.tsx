@@ -1,7 +1,7 @@
 import { useState, useRef, PointerEvent, useContext, useCallback } from 'react';
 import Draggable from 'react-draggable';
-import { Position } from 'react-rnd';
-import styled from 'styled-components';
+import type { Position } from 'react-rnd';
+import { styled } from 'styled-components';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 

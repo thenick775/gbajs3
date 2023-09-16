@@ -2,7 +2,7 @@ import { Button, TextField } from '@mui/material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BiError, BiPlus, BiTrash } from 'react-icons/bi';
-import styled, { useTheme } from 'styled-components';
+import { styled, useTheme } from 'styled-components';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { ModalBody } from './modal-body.tsx';
