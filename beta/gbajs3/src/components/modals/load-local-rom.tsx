@@ -54,8 +54,8 @@ export const LoadLocalRomModal = () => {
   const { emulator } = useContext(EmulatorContext);
   const ignorePaths = ['.', '..'];
   const localRoms = emulator
-    ?.listRoms()
-    .filter((romName) => !ignorePaths.includes(romName));
+    ?.listRoms?.()
+    ?.filter((romName) => !ignorePaths.includes(romName));
 
   return (
     <>
