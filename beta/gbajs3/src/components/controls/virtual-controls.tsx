@@ -15,7 +15,7 @@ import { AuthContext } from '../../context/auth/auth.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { AreVirtualControlsEnabledProps } from '../modals/controls.tsx';
-import { UploadSaveToServer } from '../modals/upload-save-to-server.tsx';
+import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 
 type VirtualControlProps = {
   controlPanelBounds: DOMRect | undefined;
@@ -287,7 +287,7 @@ export const VirtualControls = ({
       children: <BiSolidCloudUpload />,
       onClick: () => {
         if (isAuthenticated()) {
-          setModalContent(<UploadSaveToServer />);
+          setModalContent(<UploadSaveToServerModal />);
           setIsModalOpen(true);
         }
       },

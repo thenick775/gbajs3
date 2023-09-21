@@ -45,7 +45,7 @@ import { LoginModal } from '../modals/login.tsx';
 import { SaveStatesModal } from '../modals/save-states.tsx';
 import { UploadCheatsModal } from '../modals/upload-cheats.tsx';
 import { UploadRomModal } from '../modals/upload-rom.tsx';
-import { UploadSaveToServer } from '../modals/upload-save-to-server.tsx';
+import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 import { UploadSavesModal } from '../modals/upload-saves.tsx';
 
 type ExpandableComponentProps = {
@@ -383,7 +383,7 @@ export const NavigationMenu = ({
               $disabled={isMenuItemDisabledByAuth}
               icon={<BiCloudUpload />}
               onClick={() => {
-                setModalContent(<UploadSaveToServer />);
+                setModalContent(<UploadSaveToServerModal />);
                 setIsModalOpen(true);
               }}
             />

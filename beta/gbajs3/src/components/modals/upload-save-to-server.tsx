@@ -89,7 +89,7 @@ const DynamicBody = ({
   );
 };
 
-export const UploadSaveToServer = () => {
+export const UploadSaveToServerModal = () => {
   const theme = useTheme();
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
