@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
+import AnimateHeight, { type Height } from 'react-animate-height';
 import { styled } from 'styled-components';
 
 type NavComponentProps = {
@@ -11,10 +12,6 @@ type NavComponentProps = {
 
 type ComponentWrapperProps = {
   $disabled: boolean;
-};
-
-type ChildrenWrapperProps = {
-  $isExpanded: boolean;
 };
 
 const NavComponentWrapper = styled.li<ComponentWrapperProps>`
@@ -43,17 +40,9 @@ const NavTitle = styled.span`
   font-size: 15px;
 `;
 
-const ChildrenWrapper = styled.ul<ChildrenWrapperProps>`
+const ChildrenWrapper = styled.ul`
   padding-left: 2rem;
   overflow-y: hidden;
-  max-height: 0;
-  transition: max-height 0.35s ease-in-out;
-
-  ${({ $isExpanded = false }) =>
-    $isExpanded &&
-    `max-height: 15em;
-     visibility: visible;
-    `}
 `;
 
 export const NavComponent = ({
@@ -63,24 +52,26 @@ export const NavComponent = ({
   $isExpanded = false,
   $disabled = false
 }: NavComponentProps) => {
-  const [isExpanded, setIsExpanded] = useState($isExpanded);
+  const [height, setHeight] = useState<Height>($isExpanded ? 'auto' : 0);
 
   useEffect(() => {
-    setIsExpanded($isExpanded);
+    setHeight($isExpanded ? 'auto' : 0);
   }, [$isExpanded]);
 
   return (
     <NavComponentWrapper $disabled={$disabled}>
       <HoverWrapper
         onClick={() => {
-          setIsExpanded((prevState: boolean) => !prevState);
+          setHeight(height === 0 ? 'auto' : 0);
         }}
       >
         {icon}
         <NavTitle>{title}</NavTitle>
       </HoverWrapper>
 
-      <ChildrenWrapper $isExpanded={isExpanded}>{children}</ChildrenWrapper>
+      <AnimateHeight duration={350} easing="ease-in-out" height={height}>
+        <ChildrenWrapper>{children}</ChildrenWrapper>
+      </AnimateHeight>
     </NavComponentWrapper>
   );
 };
