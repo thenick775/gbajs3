@@ -73,7 +73,7 @@ export default defineConfig({
       ]
     }),
     splitVendorChunkPlugin(),
-    visualizer()
+    visualizer({ gzipSize: true })
   ],
   build: {
     rollupOptions: {

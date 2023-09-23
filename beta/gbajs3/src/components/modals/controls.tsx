@@ -1,8 +1,8 @@
-import { Button, Tabs, Tab } from '@mui/material';
+import { Button, Tabs, Tab, useMediaQuery } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { styled, useTheme } from 'styled-components';
-import { useLocalStorage, useMediaQuery } from 'usehooks-ts';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

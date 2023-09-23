@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mui/material';
 import { useContext } from 'react';
 import { IconContext } from 'react-icons';
 import {
@@ -7,7 +8,7 @@ import {
   BiSolidBookmark
 } from 'react-icons/bi';
 import { styled, useTheme } from 'styled-components';
-import { useLocalStorage, useMediaQuery } from 'usehooks-ts';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { OPad } from './o-pad.tsx';
 import { VirtualButton } from './virtual-button.tsx';
