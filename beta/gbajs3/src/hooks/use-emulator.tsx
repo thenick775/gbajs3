@@ -17,23 +17,23 @@ export const useEmulator = ({
   const [emulator, setEmulator] = useState<GBAEmulator | null>(null);
 
   useEffect(() => {
-    if (canvas) {
-      // Note: this is NOT a promise, see type def for more info
-      mGBA({ canvas }).then((Module) => {
+    const initialize = async () => {
+      if (canvas) {
+        const Module = await mGBA({ canvas });
+
         const mGBAVersion =
           Module.version.projectName + ' ' + Module.version.projectVersion;
         console.log(mGBAVersion);
 
-        Module.FSInit(() => {
-          const wrappedEmulator = mGBAEmulator(
-            Module,
-            setIsPaused,
-            setIsRunning
-          );
-          setEmulator(wrappedEmulator);
-        });
-      });
-    }
+        await Module.FSInit();
+
+        const emulator = mGBAEmulator(Module, setIsPaused, setIsRunning);
+
+        setEmulator(emulator);
+      }
+    };
+
+    initialize();
   }, [canvas, setIsPaused, setIsRunning]);
 
   return emulator;

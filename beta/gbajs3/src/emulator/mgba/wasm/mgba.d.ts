@@ -32,7 +32,7 @@ declare namespace mGBA {
     bindKey(bindingName: string, inputName: string): void;
     buttonPress(name: string): void;
     buttonUnpress(name: string): void;
-    FSInit(callback?: () => void): void;
+    FSInit(): Promise<void>;
     FSSync(): void;
     getMainLoopTiming(): number;
     getSave(): Uint8Array;
@@ -64,19 +64,12 @@ declare namespace mGBA {
     saveName?: string;
     // extra exported runtime methods
     FS: typeof FS & FSWithAnalyze;
-    // NOTE: This version of emscripten (from 2019) does not use a valid thenable/promise,
-    //       planning to update the mgba-wasm dockerfile in the near future on my fork.
-    //       For now, updating type defs to get around the problem manually.
-    //       See: https://github.com/emscripten-core/emscripten/issues/5820
-    then: (callback: (Module: mGBAEmulator) => void) => mGBAEmulator;
   }
 
-  // Note: see above note on then method, this function does NOT return a promise,
-  //       async/await will fall into an infinite loop
   // eslint-disable-next-line import/no-default-export
   export default function mGBA(options: {
     canvas: HTMLCanvasElement;
-  }): mGBAEmulator;
+  }): Promise<mGBAEmulator>;
 }
 
 export = mGBA;
