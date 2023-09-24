@@ -94,8 +94,8 @@ export const Screen = () => {
       <RenderCanvas
         ref={canvasRef}
         id="screen"
-        width="480"
-        height="320"
+        width="240"
+        height="160"
         $pixelated
       />
     </ScreenWrapper>
