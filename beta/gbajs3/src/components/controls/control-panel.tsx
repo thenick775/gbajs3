@@ -13,6 +13,7 @@ import {
 import { TbResize } from 'react-icons/tb';
 import { Rnd } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
@@ -79,7 +80,6 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
   const {
     canvas,
     emulator,
-    isEmulatorPaused,
     isEmulatorRunning,
     areItemsDraggable,
     setAreItemsDraggable,
@@ -90,6 +90,11 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const dragRef = useRef<Rnd>(null);
+  const [isEmulatorPaused, setIsEmulatorPaused] = useState(false);
+  const [currentEmulatorVolume, setCurrentEmulatorVolume] = useLocalStorage(
+    'currentEmulatorVolume',
+    1
+  );
 
   useEffect(() => {
     if (canvas && dragRef?.current?.resizableElement?.current)
@@ -105,6 +110,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
 
   const togglePlay = () => {
     isEmulatorPaused ? emulator?.resume() : emulator?.pause();
+    setIsEmulatorPaused((prevState) => !prevState);
   };
 
   const toggleFastForward = () => {
@@ -115,11 +121,13 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
 
   const quitGame = () => {
     emulator?.quitGame();
+    setIsEmulatorPaused(false);
   };
 
   const setVolume = (event: Event) => {
     const volumePercent = Number((event.target as HTMLInputElement)?.value);
     emulator?.setVolume(volumePercent);
+    setCurrentEmulatorVolume(volumePercent);
   };
 
   return (
@@ -183,7 +191,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
             <BiVolumeMute />
             <MutedMarkSlider
               aria-label="Volume"
-              defaultValue={1}
+              value={currentEmulatorVolume}
               step={0.1}
               marks
               min={0}

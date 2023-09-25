@@ -3,8 +3,10 @@ import {
   ReactNode,
   SetStateAction,
   createContext,
+  useMemo,
   useState
 } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 import { useEmulator } from '../../hooks/use-emulator.tsx';
@@ -13,7 +15,6 @@ type EmulatorContextProps = {
   emulator: GBAEmulator | null;
   canvas: HTMLCanvasElement | null;
   setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
-  isEmulatorPaused: boolean;
   isEmulatorRunning: boolean;
   areItemsDraggable: boolean;
   setAreItemsDraggable: Dispatch<SetStateAction<boolean>>;
@@ -29,7 +30,6 @@ export const EmulatorContext = createContext<EmulatorContextProps>({
   emulator: null,
   canvas: null,
   setCanvas: () => undefined,
-  isEmulatorPaused: false,
   isEmulatorRunning: false,
   areItemsDraggable: false,
   setAreItemsDraggable: () => undefined,
@@ -39,19 +39,53 @@ export const EmulatorContext = createContext<EmulatorContextProps>({
 
 export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
   const [canvas, setCanvas] = useState<EmulatorContextProps['canvas']>(null);
-  const [isEmulatorPaused, setIsPaused] = useState(false);
-  const [isEmulatorRunning, setIsRunning] = useState(false);
+  const [isEmulatorRunning, setIsEmulatorRunning] = useState(false);
   const [areItemsDraggable, setAreItemsDraggable] = useState(false);
   const [areItemsResizable, setAreItemsResizable] = useState(false);
-  const emulator = useEmulator({ canvas, setIsPaused, setIsRunning });
+  const [currentEmulatorVolume] = useLocalStorage('currentEmulatorVolume', 1);
+  const emulator = useEmulator(canvas);
+
+  const emu = useMemo<GBAEmulator | null>(() => {
+    if (!emulator) return null;
+
+    const run = (romPath: string) => {
+      const isSuccessfulRun = emulator.run(romPath);
+      setIsEmulatorRunning(isSuccessfulRun);
+      emulator.setVolume(currentEmulatorVolume);
+
+      return isSuccessfulRun;
+    };
+
+    const stateBasedOverrides = {
+      run,
+      quickReload: () => {
+        if (isEmulatorRunning) {
+          emulator.quickReload();
+        } else if (emulator.getCurrentGameName()) {
+          const isSuccessfulRun = run(
+            emulator.filePaths().gamePath + '/' + emulator.getCurrentGameName()
+          );
+          setIsEmulatorRunning(isSuccessfulRun);
+        }
+      },
+      quitGame: () => {
+        emulator.quitGame();
+        setIsEmulatorRunning(false);
+      }
+    };
+
+    return {
+      ...emulator,
+      ...stateBasedOverrides
+    };
+  }, [emulator, isEmulatorRunning, currentEmulatorVolume]);
 
   return (
     <EmulatorContext.Provider
       value={{
-        emulator,
+        emulator: emu,
         canvas,
         setCanvas,
-        isEmulatorPaused,
         isEmulatorRunning,
         areItemsDraggable,
         setAreItemsDraggable,

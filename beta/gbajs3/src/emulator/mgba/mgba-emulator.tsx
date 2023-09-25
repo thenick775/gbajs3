@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import type {
   filePaths,
   mGBAEmulator as mGBAEmulatorTypeDef
@@ -22,9 +20,7 @@ interface FsNode extends FS.FSNode {
 }
 
 export type GBAEmulator = {
-  // audioPolyfill: () => void;
   // defaultKeyBindings: () => void; // return numbers map to keyboard keys -> react modern solutions??
-  // downloadSave: () => void; // redundant, use getcurrentsave
   // lcdFade: () => void; // put in screen
   autoLoadCheats: () => boolean;
   createSaveState: (slot: number) => boolean;
@@ -63,11 +59,7 @@ export type GBAEmulator = {
   uploadSaveOrSaveState: (file: File, callback?: () => void) => void;
 };
 
-export const mGBAEmulator = (
-  mGBA: mGBAEmulatorTypeDef,
-  setIsPaused: Dispatch<SetStateAction<boolean>>,
-  setIsRunning: Dispatch<SetStateAction<boolean>>
-): GBAEmulator => {
+export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
   const paths = mGBA.filePaths();
 
   const filepathToFileName = (
@@ -183,10 +175,7 @@ export const mGBAEmulator = (
     simulateKeyDown: mGBA.buttonPress,
     simulateKeyUp: mGBA.buttonUnpress,
     setFastForward: mGBA.setMainLoopTiming,
-    run: (romPath) => {
-      setIsRunning(true);
-      return mGBA.loadGame(romPath);
-    },
+    run: mGBA.loadGame,
     getCurrentGameName: () => filepathToFileName(mGBA.gameName),
     getCurrentSave: () => (mGBA.saveName ? mGBA.getSave() : null),
     getCurrentSaveName: () => filepathToFileName(mGBA.saveName),
@@ -199,28 +188,12 @@ export const mGBAEmulator = (
 
       mGBA.FS.unlink(saveStatePath);
     },
-    deleteFile: (path) => {
-      mGBA.FS.unlink(path);
-    },
-    pause: () => {
-      setIsPaused(true);
-      mGBA.pauseGame();
-    },
-    resume: () => {
-      setIsPaused(false);
-      mGBA.resumeGame();
-    },
-    quitGame: () => {
-      setIsRunning(false);
-      setIsPaused(false);
-      mGBA.quitGame();
-    },
-    quitMgba: () => {
-      setIsRunning(false);
-      setIsPaused(false);
-      mGBA.quitMgba();
-    },
-    quickReload: () => mGBA.quickReload(), // case handling from original js file, is it necessary??
+    deleteFile: mGBA.FS.unlink,
+    pause: mGBA.pauseGame,
+    resume: mGBA.resumeGame,
+    quitGame: mGBA.quitGame,
+    quitMgba: mGBA.quitMgba,
+    quickReload: mGBA.quickReload,
     getCurrentCheatsFile: () => {
       const cheatsName = filepathToFileName(mGBA.gameName, '.cheats');
       const cheatsPath = `${paths.cheatsPath}/${cheatsName}`;
@@ -231,7 +204,7 @@ export const mGBAEmulator = (
     getCurrentCheatsFileName: () =>
       filepathToFileName(mGBA.gameName, '.cheats'),
     screenShot: mGBA.screenShot,
-    remapKeyBinding: () => undefined,
+    remapKeyBinding: () => undefined, // TODO
     filePaths: mGBA.filePaths,
     fsSync: mGBA.FSSync,
     listAllFiles,
