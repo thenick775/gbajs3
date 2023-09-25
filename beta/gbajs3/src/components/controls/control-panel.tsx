@@ -64,6 +64,13 @@ const PanelControl = styled.li.attrs({
   }
 `;
 
+const MutedMarkSlider = styled(Slider)`
+  > .MuiSlider-markActive {
+    opacity: 1;
+    background-color: currentColor;
+  }
+`;
+
 type ControlPanelProps = {
   setExternalBounds: Dispatch<DOMRect | undefined>;
 };
@@ -174,16 +181,16 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
           </PanelControl>
           <PanelControl>
             <BiVolumeMute />
-            <Slider
+            <MutedMarkSlider
               aria-label="Volume"
-              defaultValue={0}
+              defaultValue={1}
               step={0.1}
               marks
               min={0}
               max={1}
               style={{
                 width: '100px',
-                margin: '0 5px 0 15px',
+                margin: '0 10px',
                 maxHeight: '40px'
               }}
               onChange={setVolume}
