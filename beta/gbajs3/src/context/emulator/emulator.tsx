@@ -71,6 +71,10 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
       quitGame: () => {
         emulator.quitGame();
         setIsEmulatorRunning(false);
+      },
+      quitMgba: () => {
+        emulator.quitMgba();
+        setIsEmulatorRunning(false);
       }
     };
 
