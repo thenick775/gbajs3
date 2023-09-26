@@ -43,7 +43,7 @@ export const VirtualControls = ({
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const isMobileWithUrlBar = useMediaQuery(theme.isMobileWithUrlBar);
-  const { emulator, isEmulatorRunning } = useContext(EmulatorContext);
+  const { emulator } = useContext(EmulatorContext);
   const { isAuthenticated } = useContext(AuthContext);
   const { setModalContent, setIsModalOpen } = useContext(ModalContext);
   const [currentSaveStateSlot] = useLocalStorage('currentSaveStateSlot', 0);
@@ -304,7 +304,7 @@ export const VirtualControls = ({
     {
       children: <BiSolidBookmark />,
       onClick: () => {
-        if (isEmulatorRunning) emulator?.loadSaveState(currentSaveStateSlot);
+        emulator?.loadSaveState(currentSaveStateSlot);
       },
       width: 40,
       initialPosition: initialPositionForKey('loadstate-button'),
@@ -318,7 +318,7 @@ export const VirtualControls = ({
     {
       children: <BiSave />,
       onClick: () => {
-        if (isEmulatorRunning) emulator?.createSaveState(currentSaveStateSlot);
+        emulator?.createSaveState(currentSaveStateSlot);
       },
       width: 40,
       initialPosition: initialPositionForKey('savestate-button'),
