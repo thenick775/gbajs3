@@ -9,9 +9,9 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
-import { useUpLoadSave } from '../../hooks/use-upload-save.tsx';
+import { useUpLoadRom } from '../../hooks/use-upload-rom.tsx';
 
-type UploadSaveErrorProps = {
+type UploadRomErrorProps = {
   text: string;
   icon?: JSX.Element;
 };
@@ -40,7 +40,7 @@ const ErrorText = styled.p`
   color: ${({ theme }) => theme.errorRed};
 `;
 
-const UploadSaveError = ({ icon, text }: UploadSaveErrorProps) => {
+const UploadRomError = ({ icon, text }: UploadRomErrorProps) => {
   return (
     <ErrorWrapper>
       {icon}
@@ -65,19 +65,19 @@ const DynamicBody = ({
     BodyContents = LoadingIndicator;
   } else if (hasError) {
     BodyContents = () => (
-      <UploadSaveError
+      <UploadRomError
         icon={<BiError style={{ color: errorColor }} />}
-        text="Save file upload has failed"
+        text="Rom file upload has failed"
       />
     );
   } else if (respStatus === 200) {
     BodyContents = () => (
-      <CenteredText>Save file upload was successful!</CenteredText>
+      <CenteredText>Rom file upload was successful!</CenteredText>
     );
   } else {
     BodyContents = () => (
       <CenteredText>
-        Are you sure you want to upload your current save file to the server?
+        Are you sure you want to upload your current rom file to the server?
       </CenteredText>
     );
   }
@@ -89,20 +89,15 @@ const DynamicBody = ({
   );
 };
 
-export const UploadSaveToServerModal = () => {
+export const UploadRomToServerModal = () => {
   const theme = useTheme();
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
-  const {
-    data,
-    isLoading,
-    error,
-    execute: executeUploadSave
-  } = useUpLoadSave();
+  const { data, isLoading, error, execute: executeUploadRom } = useUpLoadRom();
 
   return (
     <>
-      <ModalHeader title="Send Save to Server" />
+      <ModalHeader title="Send Rom to Server" />
       <DynamicBody
         errorColor={theme.errorRed}
         loadingColor={theme.gbaThemeBlue}
@@ -114,13 +109,13 @@ export const UploadSaveToServerModal = () => {
         <Button
           variant="contained"
           onClick={() => {
-            const saveFileBytes = emulator?.getCurrentSave();
-            const saveName = emulator?.getCurrentSaveName();
+            const romFileBytes = emulator?.getCurrentRom();
+            const romName = emulator?.getCurrentGameName();
 
-            if (saveFileBytes && saveName) {
-              const saveFileBlob = new Blob([saveFileBytes]);
-              const saveFile = new File([saveFileBlob], saveName);
-              executeUploadSave({ saveFile });
+            if (romFileBytes && romName) {
+              const romFileBlob = new Blob([romFileBytes]);
+              const romFile = new File([romFileBlob], romName);
+              executeUploadRom({ romFile });
             }
           }}
         >

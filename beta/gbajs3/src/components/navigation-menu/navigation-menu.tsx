@@ -44,6 +44,7 @@ import { LoadSaveModal } from '../modals/load-save.tsx';
 import { LoginModal } from '../modals/login.tsx';
 import { SaveStatesModal } from '../modals/save-states.tsx';
 import { UploadCheatsModal } from '../modals/upload-cheats.tsx';
+import { UploadRomToServerModal } from '../modals/upload-rom-to-server.tsx';
 import { UploadRomModal } from '../modals/upload-rom.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 import { UploadSavesModal } from '../modals/upload-saves.tsx';
@@ -160,7 +161,7 @@ export const NavigationMenu = ({
       <HamburgerButton
         id="menu-btn"
         $isExpanded={isExpanded}
-        onClick={() => setIsExpanded((prevState: boolean) => !prevState)}
+        onClick={() => setIsExpanded((prevState) => !prevState)}
       >
         <BiMenu />
       </HamburgerButton>
@@ -380,10 +381,19 @@ export const NavigationMenu = ({
             />
             <NavLeaf
               title="Send Save to Server"
-              $disabled={isMenuItemDisabledByAuth}
+              $disabled={isMenuItemDisabledByAuth || !isEmulatorRunning}
               icon={<BiCloudUpload />}
               onClick={() => {
                 setModalContent(<UploadSaveToServerModal />);
+                setIsModalOpen(true);
+              }}
+            />
+            <NavLeaf
+              title="Send Rom to Server"
+              $disabled={isMenuItemDisabledByAuth || !isEmulatorRunning}
+              icon={<BiCloudUpload />}
+              onClick={() => {
+                setModalContent(<UploadRomToServerModal />);
                 setIsModalOpen(true);
               }}
             />

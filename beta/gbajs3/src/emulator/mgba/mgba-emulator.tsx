@@ -32,6 +32,7 @@ export type GBAEmulator = {
   fsSync: () => void;
   getCurrentCheatsFile: () => Uint8Array;
   getCurrentCheatsFileName: () => string | undefined;
+  getCurrentRom: () => Uint8Array | null;
   getCurrentGameName: () => string | undefined;
   getCurrentSave: () => Uint8Array | null;
   getCurrentSaveName: () => string | undefined;
@@ -176,6 +177,8 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     simulateKeyUp: mGBA.buttonUnpress,
     setFastForward: mGBA.setMainLoopTiming,
     run: mGBA.loadGame,
+    getCurrentRom: () =>
+      mGBA.gameName ? mGBA.FS.readFile(mGBA.gameName) : null,
     getCurrentGameName: () => filepathToFileName(mGBA.gameName),
     getCurrentSave: () => (mGBA.saveName ? mGBA.getSave() : null),
     getCurrentSaveName: () => filepathToFileName(mGBA.saveName),

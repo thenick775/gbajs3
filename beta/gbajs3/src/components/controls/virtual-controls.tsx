@@ -43,7 +43,7 @@ export const VirtualControls = ({
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const isMobileWithUrlBar = useMediaQuery(theme.isMobileWithUrlBar);
-  const { emulator } = useContext(EmulatorContext);
+  const { emulator, isEmulatorRunning } = useContext(EmulatorContext);
   const { isAuthenticated } = useContext(AuthContext);
   const { setModalContent, setIsModalOpen } = useContext(ModalContext);
   const [currentSaveStateSlot] = useLocalStorage('currentSaveStateSlot', 0);
@@ -287,7 +287,7 @@ export const VirtualControls = ({
     {
       children: <BiSolidCloudUpload />,
       onClick: () => {
-        if (isAuthenticated()) {
+        if (isAuthenticated() && isEmulatorRunning) {
           setModalContent(<UploadSaveToServerModal />);
           setIsModalOpen(true);
         }
