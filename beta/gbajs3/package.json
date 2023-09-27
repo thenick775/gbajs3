@@ -13,8 +13,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/lab": "^5.0.0-alpha.142",
     "@mui/material": "^5.13.6",
+    "@mui/x-tree-view": "^6.0.0-alpha.4",
     "jwt-decode": "^3.1.2",
     "modern-screenshot": "^4.4.28",
     "react": "^18.2.0",
@@ -30,7 +30,6 @@
     "react-rnd": "^10.4.1",
     "react-spinners": "^0.13.8",
     "styled-components": "^6.0.5",
-    "stylis": "^4.3.0",
     "usehooks-ts": "^2.9.1"
   },
   "devDependencies": {
