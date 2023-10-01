@@ -4,11 +4,13 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:import/recommended'
+    'plugin:import/recommended',
+    'plugin:jsx-a11y/recommended',
+    'plugin:styled-components-a11y/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  plugins: ['react-refresh', 'import'],
+  plugins: ['react-refresh', 'import', 'jsx-a11y', 'styled-components-a11y'],
   rules: {
     'react-refresh/only-export-components': 'warn',
     'import/no-default-export': 'error',
