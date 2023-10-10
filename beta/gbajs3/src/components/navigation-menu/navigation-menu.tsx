@@ -131,12 +131,14 @@ const HamburgerButton = styled(ButtonBase)<ExpandableComponentProps>`
   }
 `;
 
-const NavigationMenuClearDismiss = styled.div`
+const NavigationMenuClearDismiss = styled.button`
   position: absolute;
-  width: 99%;
+  width: calc(100dvw - ${NavigationMenuWidth}px);
+  left: ${NavigationMenuWidth}px;
   height: 99%;
   background: 0 0;
   z-index: 40;
+  border: none;
 `;
 
 export const NavigationMenu = ({
@@ -154,13 +156,6 @@ export const NavigationMenu = ({
 
   return (
     <>
-      {isExpanded && !isLargerThanPhone && (
-        <NavigationMenuClearDismiss
-          onClick={() => {
-            setIsExpanded(false);
-          }}
-        />
-      )}
       <HamburgerButton
         id="menu-btn"
         $isExpanded={isExpanded}
@@ -421,6 +416,14 @@ export const NavigationMenu = ({
           />
         </MenuItemWrapper>
       </NavigationMenuWrapper>
+      {isExpanded && !isLargerThanPhone && (
+        <NavigationMenuClearDismiss
+          aria-label="Menu Dismiss"
+          onClick={() => {
+            setIsExpanded(false);
+          }}
+        />
+      )}
     </>
   );
 };
