@@ -1,5 +1,12 @@
 import { Slider, useMediaQuery } from '@mui/material';
-import { Dispatch, useContext, useEffect, useRef, useState } from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineFastForward, AiOutlineForward } from 'react-icons/ai';
 import {
@@ -12,13 +19,25 @@ import {
 } from 'react-icons/bi';
 import { TbResize } from 'react-icons/tb';
 import { Rnd } from 'react-rnd';
-import { styled, useTheme } from 'styled-components';
+import { css, styled, useTheme } from 'styled-components';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
+import { ButtonBase } from '../shared/custom-button-base.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
+type ControlPanelProps = {
+  setExternalBounds: Dispatch<DOMRect | undefined>;
+};
+
 type PanelControlProps = {
+  children: ReactNode;
+  $shouldGrow?: boolean;
+  $onClick?: () => void;
+  ariaLabel: string;
+};
+
+type PanelControlButtonProps = {
   $shouldGrow?: boolean;
 };
 
@@ -43,9 +62,11 @@ const Panel = styled.ul`
   max-width: 100%;
 `;
 
-const PanelControl = styled.li.attrs({
-  className: 'noDrag'
-})<PanelControlProps>`
+const PanelControlWrapper = styled.li`
+  display: contents;
+`;
+
+const InteractivePanelControlStyle = css`
   cursor: pointer;
   background-color: ${({ theme }) => theme.panelControlGray};
   border-radius: 0.25rem;
@@ -53,17 +74,48 @@ const PanelControl = styled.li.attrs({
   min-height: 40px;
   width: fit-content;
   height: fit-content;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  flex-grow: ${({ $shouldGrow = false }) => ($shouldGrow ? 1 : 0)};
 
   &:focus {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
   }
 `;
+
+const PanelControlButton = styled(ButtonBase).attrs({
+  className: 'noDrag'
+})<PanelControlButtonProps>`
+  ${InteractivePanelControlStyle}
+
+  border: none;
+  flex-grow: ${({ $shouldGrow = false }) => ($shouldGrow ? 1 : 0)};
+  margin: 0;
+  padding: 0;
+`;
+
+const VolumeSliderControl = styled.li`
+  ${InteractivePanelControlStyle}
+`;
+
+const PanelControl = ({
+  children,
+  $shouldGrow,
+  $onClick,
+  ariaLabel
+}: PanelControlProps) => {
+  return (
+    <PanelControlWrapper>
+      <PanelControlButton
+        $shouldGrow={$shouldGrow}
+        onClick={$onClick}
+        aria-label={ariaLabel}
+      >
+        {children}
+      </PanelControlButton>
+    </PanelControlWrapper>
+  );
+};
 
 const MutedMarkSlider = styled(Slider)`
   > .MuiSlider-markActive {
@@ -71,10 +123,6 @@ const MutedMarkSlider = styled(Slider)`
     background-color: currentColor;
   }
 `;
-
-type ControlPanelProps = {
-  setExternalBounds: Dispatch<DOMRect | undefined>;
-};
 
 export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
   const {
@@ -154,18 +202,27 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
     >
       <Panel>
         <IconContext.Provider value={{ size: '2em' }}>
-          <PanelControl $shouldGrow onClick={togglePlay}>
+          <PanelControl
+            ariaLabel={isEmulatorPaused ? 'Play' : 'Pause'}
+            $shouldGrow
+            $onClick={togglePlay}
+          >
             {isEmulatorPaused || !isEmulatorRunning ? <BiPlay /> : <BiPause />}
           </PanelControl>
-          <PanelControl $shouldGrow onClick={toggleFastForward}>
+          <PanelControl
+            ariaLabel={isFastForwardOn ? 'Fast Forward' : 'Regular Speed'}
+            $shouldGrow
+            $onClick={toggleFastForward}
+          >
             {isFastForwardOn ? <AiOutlineForward /> : <AiOutlineFastForward />}
           </PanelControl>
-          <PanelControl $shouldGrow onClick={quitGame}>
+          <PanelControl ariaLabel="Quit Game" $shouldGrow $onClick={quitGame}>
             <BiUndo />
           </PanelControl>
           <PanelControl
+            ariaLabel={areItemsDraggable ? 'Anchor Items' : 'Drag Items'}
             $shouldGrow
-            onClick={() => {
+            $onClick={() => {
               setAreItemsDraggable((prevState) => !prevState);
             }}
           >
@@ -176,8 +233,11 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
             )}
           </PanelControl>
           <PanelControl
+            ariaLabel={
+              areItemsResizable ? 'Stop Resizing Items' : 'Resize Items'
+            }
             $shouldGrow
-            onClick={() => {
+            $onClick={() => {
               setAreItemsResizable((prevState) => !prevState);
             }}
           >
@@ -187,7 +247,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
               <TbResize />
             )}
           </PanelControl>
-          <PanelControl>
+          <VolumeSliderControl>
             <BiVolumeMute />
             <MutedMarkSlider
               aria-label="Volume"
@@ -202,9 +262,11 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
                 maxHeight: '40px'
               }}
               onChange={setVolume}
+              onFocus={emulator?.disableKeyboardInput}
+              onBlur={emulator?.enableKeyboardInput}
             />
             <BiVolumeFull />
-          </PanelControl>
+          </VolumeSliderControl>
         </IconContext.Provider>
       </Panel>
     </DragWrapper>

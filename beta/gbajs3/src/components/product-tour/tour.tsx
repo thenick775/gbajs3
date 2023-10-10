@@ -9,7 +9,7 @@ const steps: Step[] = [
         <p>Would you like to take a product tour?</p>
       </>
     ),
-    locale: { skip: <strong aria-label="skip">Skip</strong> },
+    locale: { skip: <strong aria-label="Skip">Skip</strong> },
     placement: 'center',
     target: 'body'
   },
@@ -20,7 +20,7 @@ const steps: Step[] = [
         profile
       </p>
     ),
-    locale: { skip: <strong aria-label="skip">Skip</strong> },
+    locale: { skip: <strong aria-label="Skip">Skip</strong> },
     placement: 'auto',
     spotlightPadding: 40,
     offset: 30,
@@ -28,7 +28,7 @@ const steps: Step[] = [
   },
   {
     content: <p>Use the hamburger button to show and hide the menu</p>,
-    locale: { skip: <strong aria-label="skip">Skip</strong> },
+    locale: { skip: <strong aria-label="Skip">Skip</strong> },
     placement: 'auto',
     spotlightPadding: 10,
     target: '#menu-btn'

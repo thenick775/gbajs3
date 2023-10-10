@@ -33,7 +33,6 @@ const VirtualButtonTextLarge = styled.p`
 
 const VirtualButtonTextSmall = styled.p`
   color: ${({ theme }) => theme.pureWhite};
-  font-size: 1em;
   margin: 4px 5px;
 `;
 

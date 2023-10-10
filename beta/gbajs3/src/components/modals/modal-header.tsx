@@ -55,7 +55,7 @@ export const ModalHeader = ({
     <HeaderWrapper>
       <Header>{title}</Header>
       {showExitIndicator && (
-        <CloseButton onClick={() => setIsModalOpen(false)} />
+        <CloseButton aria-label="Close" onClick={() => setIsModalOpen(false)} />
       )}
     </HeaderWrapper>
   );

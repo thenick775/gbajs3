@@ -52,7 +52,6 @@ const NavLeafWrapper = styled.li<LeafWrapperProps>`
 
 const NavTitle = styled.span`
   margin-left: 0.5rem;
-  font-size: 15px;
 `;
 
 const NavLink = styled.a<NavLinkProps>`

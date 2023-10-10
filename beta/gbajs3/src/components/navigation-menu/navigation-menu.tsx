@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mui/material';
 import { domToPng } from 'modern-screenshot';
 import { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -24,7 +25,7 @@ import {
   BiMenu,
   BiFileFind
 } from 'react-icons/bi';
-import { styled } from 'styled-components';
+import { styled, useTheme } from 'styled-components';
 
 import { NavComponent } from './nav-component.tsx';
 import { NavLeaf } from './nav-leaf.tsx';
@@ -48,6 +49,7 @@ import { UploadRomToServerModal } from '../modals/upload-rom-to-server.tsx';
 import { UploadRomModal } from '../modals/upload-rom.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 import { UploadSavesModal } from '../modals/upload-saves.tsx';
+import { ButtonBase } from '../shared/custom-button-base.tsx';
 
 type ExpandableComponentProps = {
   $isExpanded?: boolean;
@@ -79,7 +81,7 @@ const NavigationMenuWrapper = styled.div<ExpandableComponentProps>`
 `;
 
 const StyledMenuHeader = styled.h2`
-  color: white;
+  color: ${({ theme }) => theme.pureWhite};
   padding: 0.5rem 1rem;
   font-size: calc(1.3rem + 0.6vw);
   font-weight: 500;
@@ -102,7 +104,7 @@ const MenuItemWrapper = styled.ul`
   padding: 0;
 `;
 
-const HamburgerButton = styled.div<ExpandableComponentProps>`
+const HamburgerButton = styled(ButtonBase)<ExpandableComponentProps>`
   background-color: ${({ theme }) => theme.mediumBlack};
   color: ${({ theme }) => theme.pureWhite};
   z-index: 100;
@@ -114,6 +116,9 @@ const HamburgerButton = styled.div<ExpandableComponentProps>`
   cursor: pointer;
   padding: 0.375rem 0.75rem;
   border-radius: 0.25rem;
+  border: none;
+  min-height: 36px;
+  min-width: 40px;
 
   ${({ $isExpanded = false }) =>
     !$isExpanded &&
@@ -132,10 +137,6 @@ const NavigationMenuClearDismiss = styled.div`
   height: 99%;
   background: 0 0;
   z-index: 40;
-
-  @media ${({ theme }) => theme.isLargerThanPhone} {
-    display: none;
-  }
 `;
 
 export const NavigationMenu = ({
@@ -146,12 +147,14 @@ export const NavigationMenu = ({
   const { isAuthenticated } = useContext(AuthContext);
   const { isEmulatorRunning, canvas, emulator } = useContext(EmulatorContext);
   const { execute: executeLogout } = useLogout();
+  const theme = useTheme();
+  const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
 
   const isMenuItemDisabledByAuth = !isAuthenticated();
 
   return (
     <>
-      {isExpanded && (
+      {isExpanded && !isLargerThanPhone && (
         <NavigationMenuClearDismiss
           onClick={() => {
             setIsExpanded(false);
@@ -162,13 +165,12 @@ export const NavigationMenu = ({
         id="menu-btn"
         $isExpanded={isExpanded}
         onClick={() => setIsExpanded((prevState) => !prevState)}
+        aria-label="Menu Dismiss"
       >
         <BiMenu />
       </HamburgerButton>
       <NavigationMenuWrapper id="menu-wrapper" $isExpanded={isExpanded}>
-        <StyledMenuHeader className="nav-link h3 text-white my-2">
-          Menu
-        </StyledMenuHeader>
+        <StyledMenuHeader>Menu</StyledMenuHeader>
         <MenuItemWrapper>
           <NavLeaf
             title="About"

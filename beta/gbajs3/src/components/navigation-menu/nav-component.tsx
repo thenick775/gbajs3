@@ -37,7 +37,6 @@ const HoverWrapper = styled.div`
 
 const NavTitle = styled.span`
   margin-left: 0.5rem;
-  font-size: 15px;
 `;
 
 const ChildrenWrapper = styled.ul`

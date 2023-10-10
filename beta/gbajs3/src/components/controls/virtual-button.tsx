@@ -3,6 +3,7 @@ import Draggable from 'react-draggable';
 import { styled } from 'styled-components';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
+import { ButtonBase } from '../shared/custom-button-base.tsx';
 
 type VirtualButtonProps = {
   isRectangular?: boolean;
@@ -32,7 +33,7 @@ type RectangularButtonProps = {
   $areItemsDraggable?: boolean;
 };
 
-const ButtonBase = styled.div`
+const VirtualButtonBase = styled(ButtonBase)`
   background-color: ${({ theme }) => theme.darkGray};
   border-style: solid;
   border-color: rgba(255, 255, 255, 0.9);
@@ -40,9 +41,11 @@ const ButtonBase = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
+  cursor: pointer;
+  box-sizing: content-box;
 `;
 
-const CircularButton = styled(ButtonBase)<CircularButtonProps>`
+const CircularButton = styled(VirtualButtonBase)<CircularButtonProps>`
   width: ${({ $diameter = 60 }) => $diameter}px;
   height: ${({ $diameter = 60 }) => $diameter}px;
   border-radius: 100px;
@@ -58,7 +61,7 @@ const CircularButton = styled(ButtonBase)<CircularButtonProps>`
     `}
 `;
 
-const RectangularButton = styled(ButtonBase)<RectangularButtonProps>`
+const RectangularButton = styled(VirtualButtonBase)<RectangularButtonProps>`
   border-radius: 16px;
   width: fit-content;
   min-width: 85px;
