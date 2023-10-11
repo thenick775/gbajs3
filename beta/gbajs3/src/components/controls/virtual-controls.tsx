@@ -36,6 +36,14 @@ const VirtualButtonTextSmall = styled.p`
   margin: 4px 5px;
 `;
 
+const keyToAriaLabel = (key: string) =>
+  key
+    .replace('-', ' ')
+    .replace(
+      /\w\S*/g,
+      (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
+    );
+
 export const VirtualControls = ({
   controlPanelBounds
 }: VirtualControlProps) => {
@@ -336,7 +344,10 @@ export const VirtualControls = ({
         <OPad initialPosition={initialPositionForKey('o-pad')} />
       )}
       {virtualButtons.map((virtualButtonProps) => (
-        <VirtualButton {...virtualButtonProps} />
+        <VirtualButton
+          ariaLabel={keyToAriaLabel(virtualButtonProps.key)}
+          {...virtualButtonProps}
+        />
       ))}
     </IconContext.Provider>
   );

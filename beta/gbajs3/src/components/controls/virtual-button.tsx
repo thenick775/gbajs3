@@ -20,6 +20,7 @@ type VirtualButtonProps = {
   };
   onClick?: () => void;
   enabled?: boolean;
+  ariaLabel: string;
 };
 
 type CircularButtonProps = {
@@ -85,7 +86,8 @@ export const VirtualButton = ({
   onClick,
   initialPosition,
   initialOffset,
-  enabled = false
+  enabled = false,
+  ariaLabel
 }: VirtualButtonProps) => {
   const { emulator, areItemsDraggable } = useContext(EmulatorContext);
   const dragRef = useRef(null);
@@ -124,6 +126,7 @@ export const VirtualButton = ({
           ref={dragRef}
           $initialPosition={initialPosition}
           $areItemsDraggable={areItemsDraggable}
+          aria-label={ariaLabel}
           {...pointerEvents}
           {...clickEvents}
         >
@@ -135,6 +138,7 @@ export const VirtualButton = ({
           $initialPosition={initialPosition}
           $diameter={width}
           $areItemsDraggable={areItemsDraggable}
+          aria-label={ariaLabel}
           {...pointerEvents}
           {...clickEvents}
         >
