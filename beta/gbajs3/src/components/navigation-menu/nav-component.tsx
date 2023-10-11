@@ -2,6 +2,8 @@ import { ReactNode, useEffect, useState } from 'react';
 import AnimateHeight, { type Height } from 'react-animate-height';
 import { styled } from 'styled-components';
 
+import { ButtonBase } from '../shared/custom-button-base.tsx';
+
 type NavComponentProps = {
   title: string;
   icon: ReactNode;
@@ -25,9 +27,15 @@ const NavComponentWrapper = styled.li<ComponentWrapperProps>`
     `}
 `;
 
-const HoverWrapper = styled.div`
+const HoverWrapper = styled(ButtonBase)`
+  background-color: unset;
+  border: none;
+  color: inherit;
   cursor: pointer;
+  height: 100%;
   padding: 0.5rem 1rem;
+  text-align: inherit;
+  width: 100%;
 
   &:hover {
     color: ${({ theme }) => theme.menuHover};

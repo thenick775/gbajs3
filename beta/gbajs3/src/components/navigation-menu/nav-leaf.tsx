@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import { styled } from 'styled-components';
 
+import { ButtonBase } from '../shared/custom-button-base.tsx';
+
 type NavLeafProps = {
   title: string;
   icon: ReactNode;
@@ -14,12 +16,6 @@ type LeafWrapperProps = {
   $disabled?: boolean;
   $withPadding?: boolean;
   $hasLink?: boolean;
-};
-
-type ConditionalWrapperProps = {
-  condition: boolean;
-  wrapper: (children: JSX.Element) => JSX.Element;
-  children: JSX.Element;
 };
 
 type NavLinkProps = {
@@ -50,6 +46,17 @@ const NavLeafWrapper = styled.li<LeafWrapperProps>`
   }
 `;
 
+const NavLeafButton = styled(ButtonBase)`
+  background-color: unset;
+  border: none;
+  color: inherit;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: inherit;
+  width: 100%;
+`;
+
 const NavTitle = styled.span`
   margin-left: 0.5rem;
 `;
@@ -63,40 +70,34 @@ const NavLink = styled.a<NavLinkProps>`
     ${({ $withPadding = false }) => ($withPadding ? '1rem' : '0.5rem')};
 `;
 
-const ConditionalWrapper = ({
-  condition,
-  wrapper,
-  children
-}: ConditionalWrapperProps) => (condition ? wrapper(children) : children);
-
 export const NavLeaf = ({
   title,
   icon,
-  onClick = () => undefined,
+  onClick = undefined,
   $link = undefined,
   $disabled = false,
   $withPadding = false
 }: NavLeafProps) => {
+  const commonChildren = (
+    <>
+      {icon}
+      <NavTitle>{title}</NavTitle>
+    </>
+  );
+
   return (
     <NavLeafWrapper
       $disabled={$disabled}
       $withPadding={$withPadding}
       $hasLink={!!$link}
-      onClick={onClick}
     >
-      <ConditionalWrapper
-        condition={!!$link}
-        wrapper={(children) => (
-          <NavLink href={$link} $withPadding={$withPadding} target="_blank">
-            {children}
-          </NavLink>
-        )}
-      >
-        <>
-          {icon}
-          <NavTitle>{title}</NavTitle>
-        </>
-      </ConditionalWrapper>
+      {$link ? (
+        <NavLink href={$link} $withPadding={$withPadding} target="_blank">
+          {commonChildren}
+        </NavLink>
+      ) : (
+        <NavLeafButton onClick={onClick}>{commonChildren}</NavLeafButton>
+      )}
     </NavLeafWrapper>
   );
 };
