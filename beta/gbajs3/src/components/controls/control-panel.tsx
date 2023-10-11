@@ -77,9 +77,14 @@ const InteractivePanelControlStyle = css`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: ${({ theme }) => theme.pureBlack};
 
   &:focus {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+
+  &:active {
+    color: ${({ theme }) => theme.gbaThemeBlue};
   }
 `;
 
