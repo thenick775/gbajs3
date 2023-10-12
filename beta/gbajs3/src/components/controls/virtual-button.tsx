@@ -114,6 +114,19 @@ export const VirtualButton = ({
         }
       }
     : {};
+  // due to using pointer events for the buttons without a click handler,
+  // we need to manage key events ourselves for buttons with an emulator keyId
+  const keyboardEvents = keyId
+    ? {
+        onKeyDown: (e: KeyboardEvent) => {
+          if (e.code == 'Space' || e.key == ' ')
+            emulator?.simulateKeyDown(keyId);
+        },
+        onKeyUp: (e: KeyboardEvent) => {
+          if (e.code == 'Space' || e.key == ' ') emulator?.simulateKeyUp(keyId);
+        }
+      }
+    : {};
 
   return (
     <Draggable
@@ -129,6 +142,7 @@ export const VirtualButton = ({
           aria-label={ariaLabel}
           {...pointerEvents}
           {...clickEvents}
+          {...keyboardEvents}
         >
           {children}
         </RectangularButton>
@@ -141,6 +155,7 @@ export const VirtualButton = ({
           aria-label={ariaLabel}
           {...pointerEvents}
           {...clickEvents}
+          {...keyboardEvents}
         >
           {children}
         </CircularButton>
