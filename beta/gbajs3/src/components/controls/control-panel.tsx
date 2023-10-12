@@ -269,6 +269,11 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
               onChange={setVolume}
               onFocus={emulator?.disableKeyboardInput}
               onBlur={emulator?.enableKeyboardInput}
+              onClick={() => {
+                // click is triggered on keyup, if using mouse this
+                // is the desired behavior after focus is gained
+                emulator?.enableKeyboardInput();
+              }}
             />
             <BiVolumeFull />
           </VolumeSliderControl>
