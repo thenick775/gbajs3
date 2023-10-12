@@ -37,6 +37,7 @@ export const ModalContainer = () => {
       onRequestClose={() => setIsModalOpen(false)}
       onAfterOpen={emulator?.disableKeyboardInput}
       onAfterClose={emulator?.enableKeyboardInput}
+      aria={{ labelledby: 'modalHeader' }}
     >
       {modalContent}
     </Modal>
