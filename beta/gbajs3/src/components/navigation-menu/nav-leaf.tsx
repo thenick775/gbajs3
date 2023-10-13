@@ -55,6 +55,7 @@ const NavLeafButton = styled(ButtonBase)`
   padding: 0;
   text-align: inherit;
   width: 100%;
+  cursor: pointer;
 `;
 
 const NavTitle = styled.span`
