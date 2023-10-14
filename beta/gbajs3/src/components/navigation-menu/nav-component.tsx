@@ -18,6 +18,7 @@ type ComponentWrapperProps = {
 
 const NavComponentWrapper = styled.li<ComponentWrapperProps>`
   color: ${({ theme }) => theme.gbaThemeBlue};
+  padding: 0 2px;
 
   ${({ $disabled = false, theme }) =>
     $disabled &&
@@ -49,7 +50,6 @@ const NavTitle = styled.span`
 
 const ChildrenWrapper = styled.ul`
   padding-left: 2rem;
-  overflow-y: hidden;
 `;
 
 export const NavComponent = ({

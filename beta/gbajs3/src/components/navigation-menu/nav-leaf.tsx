@@ -13,25 +13,22 @@ type NavLeafProps = {
 };
 
 type LeafWrapperProps = {
-  $disabled?: boolean;
-  $withPadding?: boolean;
-  $hasLink?: boolean;
+  $disabled: boolean;
 };
 
 type NavLinkProps = {
-  $withPadding?: boolean;
+  $withPadding: boolean;
+};
+
+type NavLeafButtonProps = {
+  $withPadding: boolean;
 };
 
 const NavLeafWrapper = styled.li<LeafWrapperProps>`
   cursor: pointer;
   color: ${({ theme }) => theme.gbaThemeBlue};
   list-style-type: none;
-
-  ${({ $withPadding = false, $hasLink = false }) =>
-    $hasLink
-      ? 'padding: 0;'
-      : `padding: 0.5rem ${$withPadding ? '1rem' : '0.5rem'};
-    `}
+  padding: 0 2px;
 
   ${({ $disabled = false, theme }) =>
     $disabled &&
@@ -46,13 +43,16 @@ const NavLeafWrapper = styled.li<LeafWrapperProps>`
   }
 `;
 
-const NavLeafButton = styled(ButtonBase)`
+const NavLeafButton = styled(ButtonBase)<NavLeafButtonProps>`
   background-color: unset;
   border: none;
   color: inherit;
   height: 100%;
   margin: 0;
-  padding: 0;
+
+  padding: 0.5rem
+    ${({ $withPadding = false }) => ($withPadding ? '1rem' : '0.5rem')};
+
   text-align: inherit;
   width: 100%;
   cursor: pointer;
@@ -66,6 +66,7 @@ const NavLink = styled.a<NavLinkProps>`
   display: block;
   text-decoration: none;
   color: unset;
+  outline-offset: 0;
 
   padding: 0.5rem
     ${({ $withPadding = false }) => ($withPadding ? '1rem' : '0.5rem')};
@@ -87,17 +88,15 @@ export const NavLeaf = ({
   );
 
   return (
-    <NavLeafWrapper
-      $disabled={$disabled}
-      $withPadding={$withPadding}
-      $hasLink={!!$link}
-    >
+    <NavLeafWrapper $disabled={$disabled}>
       {$link ? (
         <NavLink href={$link} $withPadding={$withPadding} target="_blank">
           {commonChildren}
         </NavLink>
       ) : (
-        <NavLeafButton onClick={onClick}>{commonChildren}</NavLeafButton>
+        <NavLeafButton onClick={onClick} $withPadding={$withPadding}>
+          {commonChildren}
+        </NavLeafButton>
       )}
     </NavLeafWrapper>
   );
