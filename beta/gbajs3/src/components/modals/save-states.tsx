@@ -147,12 +147,6 @@ export const SaveStatesModal = () => {
   }, [refreshSaveStates]);
 
   useEffect(() => {
-    emulator?.disableKeyboardInput();
-
-    return () => emulator?.enableKeyboardInput();
-  }, [emulator]);
-
-  useEffect(() => {
     setValue('saveStateSlot', currentSlot);
   }, [currentSlot, setValue]);
 

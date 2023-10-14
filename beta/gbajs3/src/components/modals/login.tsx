@@ -9,7 +9,6 @@ import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { AuthContext } from '../../context/auth/auth.tsx';
-import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useLogin } from '../../hooks/use-login.tsx';
 
@@ -58,7 +57,6 @@ export const LoginModal = () => {
   const theme = useTheme();
   const { setIsModalOpen } = useContext(ModalContext);
   const { setAccessToken, setAccessTokenSource } = useContext(AuthContext);
-  const { emulator } = useContext(EmulatorContext);
   const {
     execute: executeLogin,
     data: accessToken,
@@ -87,12 +85,6 @@ export const LoginModal = () => {
     setAccessTokenSource,
     setIsModalOpen
   ]);
-
-  useEffect(() => {
-    emulator?.disableKeyboardInput();
-
-    return () => emulator?.enableKeyboardInput();
-  }, [emulator]);
 
   const onSubmit: SubmitHandler<InputProps> = async (formData) => {
     await executeLogin(formData);

@@ -101,7 +101,7 @@ const EmulatorFS = ({
 
   return (
     <TreeView
-      aria-label="FileSystem"
+      aria-label="File System"
       defaultExpanded={[allFiles.path]}
       defaultCollapseIcon={<MinusSquare />}
       defaultExpandIcon={<PlusSquare />}

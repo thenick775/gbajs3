@@ -1,5 +1,5 @@
 import { Button, TextField, useMediaQuery } from '@mui/material';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { BiPlus } from 'react-icons/bi';
 import { CiSquareRemove } from 'react-icons/ci';
@@ -123,12 +123,6 @@ export const CheatsModal = () => {
     setValue('rawCheats', rawCheats);
     setValue('cheats', parsedCheats);
   }, [emulator, setValue]);
-
-  useEffect(() => {
-    emulator?.disableKeyboardInput();
-
-    return () => emulator?.enableKeyboardInput();
-  }, [emulator]);
 
   return (
     <>

@@ -3,6 +3,7 @@ import Draggable from 'react-draggable';
 import { styled } from 'styled-components';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
+import { ButtonBase } from '../shared/custom-button-base.tsx';
 
 type VirtualButtonProps = {
   isRectangular?: boolean;
@@ -19,6 +20,7 @@ type VirtualButtonProps = {
   };
   onClick?: () => void;
   enabled?: boolean;
+  ariaLabel: string;
 };
 
 type CircularButtonProps = {
@@ -32,7 +34,7 @@ type RectangularButtonProps = {
   $areItemsDraggable?: boolean;
 };
 
-const ButtonBase = styled.div`
+const VirtualButtonBase = styled(ButtonBase)`
   background-color: ${({ theme }) => theme.darkGray};
   border-style: solid;
   border-color: rgba(255, 255, 255, 0.9);
@@ -40,9 +42,11 @@ const ButtonBase = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
+  cursor: pointer;
+  box-sizing: content-box;
 `;
 
-const CircularButton = styled(ButtonBase)<CircularButtonProps>`
+const CircularButton = styled(VirtualButtonBase)<CircularButtonProps>`
   width: ${({ $diameter = 60 }) => $diameter}px;
   height: ${({ $diameter = 60 }) => $diameter}px;
   border-radius: 100px;
@@ -58,7 +62,7 @@ const CircularButton = styled(ButtonBase)<CircularButtonProps>`
     `}
 `;
 
-const RectangularButton = styled(ButtonBase)<RectangularButtonProps>`
+const RectangularButton = styled(VirtualButtonBase)<RectangularButtonProps>`
   border-radius: 16px;
   width: fit-content;
   min-width: 85px;
@@ -82,7 +86,8 @@ export const VirtualButton = ({
   onClick,
   initialPosition,
   initialOffset,
-  enabled = false
+  enabled = false,
+  ariaLabel
 }: VirtualButtonProps) => {
   const { emulator, areItemsDraggable } = useContext(EmulatorContext);
   const dragRef = useRef(null);
@@ -109,6 +114,19 @@ export const VirtualButton = ({
         }
       }
     : {};
+  // due to using pointer events for the buttons without a click handler,
+  // we need to manage key events ourselves for buttons with an emulator keyId
+  const keyboardEvents = keyId
+    ? {
+        onKeyDown: (e: KeyboardEvent) => {
+          if (e.code == 'Space' || e.key == ' ')
+            emulator?.simulateKeyDown(keyId);
+        },
+        onKeyUp: (e: KeyboardEvent) => {
+          if (e.code == 'Space' || e.key == ' ') emulator?.simulateKeyUp(keyId);
+        }
+      }
+    : {};
 
   return (
     <Draggable
@@ -121,8 +139,10 @@ export const VirtualButton = ({
           ref={dragRef}
           $initialPosition={initialPosition}
           $areItemsDraggable={areItemsDraggable}
+          aria-label={ariaLabel}
           {...pointerEvents}
           {...clickEvents}
+          {...keyboardEvents}
         >
           {children}
         </RectangularButton>
@@ -132,8 +152,10 @@ export const VirtualButton = ({
           $initialPosition={initialPosition}
           $diameter={width}
           $areItemsDraggable={areItemsDraggable}
+          aria-label={ariaLabel}
           {...pointerEvents}
           {...clickEvents}
+          {...keyboardEvents}
         >
           {children}
         </CircularButton>

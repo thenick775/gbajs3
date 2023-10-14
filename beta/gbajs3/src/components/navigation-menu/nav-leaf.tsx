@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import { styled } from 'styled-components';
 
+import { ButtonBase } from '../shared/custom-button-base.tsx';
+
 type NavLeafProps = {
   title: string;
   icon: ReactNode;
@@ -11,31 +13,22 @@ type NavLeafProps = {
 };
 
 type LeafWrapperProps = {
-  $disabled?: boolean;
-  $withPadding?: boolean;
-  $hasLink?: boolean;
-};
-
-type ConditionalWrapperProps = {
-  condition: boolean;
-  wrapper: (children: JSX.Element) => JSX.Element;
-  children: JSX.Element;
+  $disabled: boolean;
 };
 
 type NavLinkProps = {
-  $withPadding?: boolean;
+  $withPadding: boolean;
+};
+
+type NavLeafButtonProps = {
+  $withPadding: boolean;
 };
 
 const NavLeafWrapper = styled.li<LeafWrapperProps>`
   cursor: pointer;
   color: ${({ theme }) => theme.gbaThemeBlue};
   list-style-type: none;
-
-  ${({ $withPadding = false, $hasLink = false }) =>
-    $hasLink
-      ? 'padding: 0;'
-      : `padding: 0.5rem ${$withPadding ? '1rem' : '0.5rem'};
-    `}
+  padding: 0 2px;
 
   ${({ $disabled = false, theme }) =>
     $disabled &&
@@ -50,54 +43,61 @@ const NavLeafWrapper = styled.li<LeafWrapperProps>`
   }
 `;
 
+const NavLeafButton = styled(ButtonBase)<NavLeafButtonProps>`
+  background-color: unset;
+  border: none;
+  color: inherit;
+  height: 100%;
+  margin: 0;
+
+  padding: 0.5rem
+    ${({ $withPadding = false }) => ($withPadding ? '1rem' : '0.5rem')};
+
+  text-align: inherit;
+  width: 100%;
+  cursor: pointer;
+`;
+
 const NavTitle = styled.span`
   margin-left: 0.5rem;
-  font-size: 15px;
 `;
 
 const NavLink = styled.a<NavLinkProps>`
   display: block;
   text-decoration: none;
   color: unset;
+  outline-offset: 0;
 
   padding: 0.5rem
     ${({ $withPadding = false }) => ($withPadding ? '1rem' : '0.5rem')};
 `;
 
-const ConditionalWrapper = ({
-  condition,
-  wrapper,
-  children
-}: ConditionalWrapperProps) => (condition ? wrapper(children) : children);
-
 export const NavLeaf = ({
   title,
   icon,
-  onClick = () => undefined,
+  onClick = undefined,
   $link = undefined,
   $disabled = false,
   $withPadding = false
 }: NavLeafProps) => {
+  const commonChildren = (
+    <>
+      {icon}
+      <NavTitle>{title}</NavTitle>
+    </>
+  );
+
   return (
-    <NavLeafWrapper
-      $disabled={$disabled}
-      $withPadding={$withPadding}
-      $hasLink={!!$link}
-      onClick={onClick}
-    >
-      <ConditionalWrapper
-        condition={!!$link}
-        wrapper={(children) => (
-          <NavLink href={$link} $withPadding={$withPadding} target="_blank">
-            {children}
-          </NavLink>
-        )}
-      >
-        <>
-          {icon}
-          <NavTitle>{title}</NavTitle>
-        </>
-      </ConditionalWrapper>
+    <NavLeafWrapper $disabled={$disabled}>
+      {$link ? (
+        <NavLink href={$link} $withPadding={$withPadding} target="_blank">
+          {commonChildren}
+        </NavLink>
+      ) : (
+        <NavLeafButton onClick={onClick} $withPadding={$withPadding}>
+          {commonChildren}
+        </NavLeafButton>
+      )}
     </NavLeafWrapper>
   );
 };

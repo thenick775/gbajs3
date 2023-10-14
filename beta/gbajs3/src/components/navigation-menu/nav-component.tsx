@@ -2,6 +2,8 @@ import { ReactNode, useEffect, useState } from 'react';
 import AnimateHeight, { type Height } from 'react-animate-height';
 import { styled } from 'styled-components';
 
+import { ButtonBase } from '../shared/custom-button-base.tsx';
+
 type NavComponentProps = {
   title: string;
   icon: ReactNode;
@@ -16,6 +18,7 @@ type ComponentWrapperProps = {
 
 const NavComponentWrapper = styled.li<ComponentWrapperProps>`
   color: ${({ theme }) => theme.gbaThemeBlue};
+  padding: 0 2px;
 
   ${({ $disabled = false, theme }) =>
     $disabled &&
@@ -25,9 +28,15 @@ const NavComponentWrapper = styled.li<ComponentWrapperProps>`
     `}
 `;
 
-const HoverWrapper = styled.div`
+const HoverWrapper = styled(ButtonBase)`
+  background-color: unset;
+  border: none;
+  color: inherit;
   cursor: pointer;
+  height: 100%;
   padding: 0.5rem 1rem;
+  text-align: inherit;
+  width: 100%;
 
   &:hover {
     color: ${({ theme }) => theme.menuHover};
@@ -37,12 +46,10 @@ const HoverWrapper = styled.div`
 
 const NavTitle = styled.span`
   margin-left: 0.5rem;
-  font-size: 15px;
 `;
 
 const ChildrenWrapper = styled.ul`
   padding-left: 2rem;
-  overflow-y: hidden;
 `;
 
 export const NavComponent = ({
