@@ -1,9 +1,9 @@
 import {
   createContext,
   useState,
-  ReactNode,
-  Dispatch,
-  SetStateAction,
+  type ReactNode,
+  type Dispatch,
+  type SetStateAction
 } from 'react';
 
 type ModalContextProps = {
@@ -19,7 +19,7 @@ export const ModalContext = createContext<ModalContextProps>({
   modalContent: null,
   setModalContent: () => undefined,
   isModalOpen: false,
-  setIsModalOpen: () => undefined,
+  setIsModalOpen: () => undefined
 });
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {

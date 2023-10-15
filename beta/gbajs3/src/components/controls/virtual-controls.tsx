@@ -15,8 +15,9 @@ import { VirtualButton } from './virtual-button.tsx';
 import { AuthContext } from '../../context/auth/auth.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
-import { AreVirtualControlsEnabledProps } from '../modals/controls.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
+
+import type { AreVirtualControlsEnabledProps } from '../modals/controls.tsx';
 
 type VirtualControlProps = {
   controlPanelBounds: DOMRect | undefined;

@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import { GBAEmulator, mGBAEmulator } from '../emulator/mgba/mgba-emulator.tsx';
+import {
+  mGBAEmulator,
+  type GBAEmulator
+} from '../emulator/mgba/mgba-emulator.tsx';
 import mGBA from '../emulator/mgba/wasm/mgba.js';
 
 export const useEmulator = (canvas: HTMLCanvasElement | null) => {

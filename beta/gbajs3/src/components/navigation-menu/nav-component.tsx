@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import AnimateHeight, { type Height } from 'react-animate-height';
 import { styled } from 'styled-components';
 

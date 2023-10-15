@@ -12,6 +12,7 @@ module.exports = {
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   plugins: ['react-refresh', 'import', 'jsx-a11y', 'styled-components-a11y'],
   rules: {
+    '@typescript-eslint/consistent-type-imports': 'error',
     'react-refresh/only-export-components': 'warn',
     'import/no-default-export': 'error',
     'import/order': [
@@ -22,6 +23,7 @@ module.exports = {
           'external', // <- External imports
           'internal', // <- Absolute imports
           ['sibling', 'parent'], // <- Relative imports, the sibling and parent types they can be mingled together
+          'type', // <- type imports
           'index', // <- index imports
           'unknown' // <- unknown
         ],
