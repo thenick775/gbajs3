@@ -46,7 +46,7 @@ const BackgroundContainer = styled.div<BackgroundContainerProps>`
     $areItemsDraggable ? theme.gbaThemeBlue : 'rgba(255, 255, 255, 0.9)'};
   border-style: ${({ $areItemsDraggable = false }) =>
     $areItemsDraggable ? 'dashed' : 'solid'};
-
+  border-width: 2px;
   z-index: 12;
 
   ${({ $initialPosition = { top: '0', left: '0' } }) =>

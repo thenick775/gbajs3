@@ -44,6 +44,7 @@ const VirtualButtonBase = styled(ButtonBase)`
   position: absolute;
   cursor: pointer;
   box-sizing: content-box;
+  border-width: 2px;
 `;
 
 const CircularButton = styled(VirtualButtonBase)<CircularButtonProps>`
