@@ -2,11 +2,11 @@ import jwt_decode, { type JwtPayload } from 'jwt-decode';
 import {
   createContext,
   useState,
-  ReactNode,
-  SetStateAction,
-  Dispatch,
   useEffect,
   useCallback,
+  type ReactNode,
+  type SetStateAction,
+  type Dispatch,
 } from 'react';
 import { useInterval } from 'usehooks-ts';
 

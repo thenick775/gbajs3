@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { ReactNode, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, type ReactNode } from 'react';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
 import { styled, useTheme } from 'styled-components';

@@ -1,7 +1,8 @@
-import { ReactNode } from 'react';
 import { styled } from 'styled-components';
 
 import { ButtonBase } from '../shared/custom-button-base.tsx';
+
+import type { ReactNode } from 'react';
 
 type NavLeafProps = {
   title: string;

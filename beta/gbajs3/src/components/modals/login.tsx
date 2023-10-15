@@ -1,6 +1,6 @@
 import { TextField, Button } from '@mui/material';
 import { useContext, useEffect } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
 import { styled, useTheme } from 'styled-components';

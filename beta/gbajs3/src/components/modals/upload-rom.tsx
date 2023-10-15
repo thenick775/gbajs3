@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { useCallback, useContext, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiCloudUpload } from 'react-icons/bi';
 import { styled } from 'styled-components';
 

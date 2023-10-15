@@ -1,15 +1,16 @@
 import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
   createContext,
   useMemo,
-  useState
+  useState,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction
 } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
-import { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 import { useEmulator } from '../../hooks/use-emulator.tsx';
+
+import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
 type EmulatorContextProps = {
   emulator: GBAEmulator | null;

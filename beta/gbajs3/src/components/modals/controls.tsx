@@ -1,6 +1,6 @@
 import { Button, Tabs, Tab, useMediaQuery } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { styled, useTheme } from 'styled-components';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -11,7 +11,7 @@ import { ModalContext } from '../../context/modal/modal.tsx';
 import { ManagedCheckbox } from '../shared/managed-checkbox.tsx';
 
 type TabPanelProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   index: number;
   value: number;
 };

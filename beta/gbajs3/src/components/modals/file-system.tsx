@@ -15,12 +15,13 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
-import { FileNode } from '../../emulator/mgba/mgba-emulator.tsx';
 import {
   CloseSquare,
   PlusSquare,
   MinusSquare
 } from '../shared/action-box-icons.tsx';
+
+import type { FileNode } from '../../emulator/mgba/mgba-emulator.tsx';
 
 type EmulatorFSProps = {
   allFiles?: FileNode;

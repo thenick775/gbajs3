@@ -1,11 +1,11 @@
 import { Slider, useMediaQuery } from '@mui/material';
 import {
-  Dispatch,
-  ReactNode,
   useContext,
   useEffect,
   useRef,
-  useState
+  useState,
+  type Dispatch,
+  type ReactNode
 } from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineFastForward, AiOutlineForward } from 'react-icons/ai';
