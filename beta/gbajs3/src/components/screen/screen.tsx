@@ -4,7 +4,7 @@ import { Rnd } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
-import { NavigationMenuWidth } from '../navigation-menu/navigation-menu.tsx';
+import { NavigationMenuWidth } from '../navigation-menu/consts.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
 type RenderCanvasProps = {

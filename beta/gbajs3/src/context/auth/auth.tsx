@@ -1,4 +1,4 @@
-import jwt_decode, { type JwtPayload } from 'jwt-decode';
+import {jwtDecode,  type JwtPayload } from 'jwt-decode';
 import {
   createContext,
   useState,
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // convenience callback to determine if token is expired
   const isAuthenticated = useCallback(() => {
     if (accessToken) {
-      const { exp } = jwt_decode<JwtPayload>(accessToken);
+      const { exp } = jwtDecode<JwtPayload>(accessToken);
 
       if (exp && Date.now() <= exp * 1000) {
         return true;

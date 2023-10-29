@@ -27,6 +27,7 @@ import {
 } from 'react-icons/bi';
 import { styled, useTheme } from 'styled-components';
 
+import { NavigationMenuWidth } from './consts.tsx';
 import { NavComponent } from './nav-component.tsx';
 import { NavLeaf } from './nav-leaf.tsx';
 import { AuthContext } from '../../context/auth/auth.tsx';
@@ -54,8 +55,6 @@ import { ButtonBase } from '../shared/custom-button-base.tsx';
 type ExpandableComponentProps = {
   $isExpanded?: boolean;
 };
-
-export const NavigationMenuWidth = 250;
 
 const NavigationMenuWrapper = styled.div<ExpandableComponentProps>`
   width: ${NavigationMenuWidth}px;
