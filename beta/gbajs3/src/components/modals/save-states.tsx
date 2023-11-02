@@ -1,5 +1,5 @@
 import { Button, TextField } from '@mui/material';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useId, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiError, BiPlus, BiTrash } from 'react-icons/bi';
 import { styled, useTheme } from 'styled-components';
@@ -123,6 +123,7 @@ export const SaveStatesModal = () => {
     'currentSaveStateSlot',
     0
   );
+  const saveStatesFormId = useId();
   const {
     register,
     handleSubmit,
@@ -162,7 +163,7 @@ export const SaveStatesModal = () => {
     <>
       <ModalHeader title="Manage Save States" />
       <ModalBody>
-        <StyledForm id="saveSlotForm" onSubmit={handleSubmit(onSubmit)}>
+        <StyledForm id={saveStatesFormId} onSubmit={handleSubmit(onSubmit)}>
           <TextField
             label="Current Save State Slot"
             type="number"
@@ -179,7 +180,7 @@ export const SaveStatesModal = () => {
             })}
           />
           <Button
-            form="saveSlotForm"
+            form={saveStatesFormId}
             type="submit"
             variant="outlined"
             size="small"

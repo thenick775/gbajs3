@@ -1,14 +1,14 @@
-import { Button, Tabs, Tab, useMediaQuery } from '@mui/material';
-import { useContext, useEffect, useState, type ReactNode } from 'react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { styled, useTheme } from 'styled-components';
-import { useLocalStorage } from 'usehooks-ts';
+import { Button, Tabs, Tab } from '@mui/material';
+import { useContext, useEffect, useState, type ReactNode, useId } from 'react';
+import { styled } from 'styled-components';
 
+import { KeyBindingsForm } from './controls/key-bindings-form.tsx';
+import { VirtualControlsForm } from './controls/virtual-controls-form.tsx';
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
+import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
-import { ManagedCheckbox } from '../shared/managed-checkbox.tsx';
 
 type TabPanelProps = {
   children: ReactNode;
@@ -16,20 +16,10 @@ type TabPanelProps = {
   value: number;
 };
 
-type ControlsInputProps = {
-  DPadAndButtons: boolean;
-  SaveState: boolean;
-  LoadState: boolean;
-  QuickReload: boolean;
-  SendSaveToServer: boolean;
-};
-
-export type AreVirtualControlsEnabledProps = {
-  DPadAndButtons?: boolean;
-  SaveState?: boolean;
-  LoadState?: boolean;
-  QuickReload?: boolean;
-  SendSaveToServer?: boolean;
+type ControlTabsProps = {
+  setFormId: React.Dispatch<React.SetStateAction<string | null>>;
+  virtualControlsFormId: string;
+  keyBindingsFormId: string;
 };
 
 const TabsWithBorder = styled(Tabs)`
@@ -37,93 +27,15 @@ const TabsWithBorder = styled(Tabs)`
   border-color: rgba(0, 0, 0, 0.12);
 `;
 
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
 const TabWrapper = styled.div`
   padding: 24px;
 `;
 
-const VirtualControlsForm = () => {
-  const [areVirtualControlsEnabled, setareVirtualControlsEnabled] =
-    useLocalStorage<AreVirtualControlsEnabledProps>(
-      'areVirtualControlsEnabled',
-      {}
-    );
-  const theme = useTheme();
-  const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
-  const areDPadAndButtonsEnabled =
-    areVirtualControlsEnabled?.DPadAndButtons ??
-    (areVirtualControlsEnabled?.DPadAndButtons === undefined &&
-      !isLargerThanPhone);
-
-  const { register, handleSubmit, setValue, watch } =
-    useForm<ControlsInputProps>({
-      defaultValues: {
-        ...areVirtualControlsEnabled,
-        DPadAndButtons: areDPadAndButtonsEnabled
-      }
-    });
-
-  useEffect(() => {
-    // DPadAndButtons is the only value that can dynamically change without user input
-    setValue('DPadAndButtons', areDPadAndButtonsEnabled);
-  }, [areDPadAndButtonsEnabled, setValue]);
-
-  const onSubmit: SubmitHandler<ControlsInputProps> = async (formData) => {
-    setareVirtualControlsEnabled((prevState) => ({
-      ...prevState,
-      ...formData
-    }));
+const a11yProps = (index: number) => {
+  return {
+    id: `control-tab-${index}`,
+    'aria-controls': `tabpanel-${index}`
   };
-
-  return (
-    <StyledForm id="virtualControlsForm" onSubmit={handleSubmit(onSubmit)}>
-      <ManagedCheckbox
-        label="Virtual D-pad/Buttons"
-        watcher={watch('DPadAndButtons')}
-        registerProps={register('DPadAndButtons')}
-      />
-      <ManagedCheckbox
-        label="Save State"
-        watcher={watch('SaveState')}
-        registerProps={register('SaveState')}
-      />
-      <ManagedCheckbox
-        label="Load State"
-        watcher={watch('LoadState')}
-        registerProps={register('LoadState')}
-      />
-      <ManagedCheckbox
-        label="Quick Reload"
-        watcher={watch('QuickReload')}
-        registerProps={register('QuickReload')}
-      />
-      <ManagedCheckbox
-        label="Send save to server"
-        watcher={watch('SendSaveToServer')}
-        registerProps={register('SendSaveToServer')}
-      />
-    </StyledForm>
-  );
-};
-
-const KeyBindingsForm = () => {
-  return (
-    <StyledForm id="keyBindingsForm">
-      <table id="controlsTable">
-        <thead>
-          <tr>
-            <th scope="col">GBA Input</th>
-            <th scope="col">Key Binding</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </StyledForm>
-  );
 };
 
 const TabPanel = ({ children, index, value }: TabPanelProps) => {
@@ -139,18 +51,11 @@ const TabPanel = ({ children, index, value }: TabPanelProps) => {
   );
 };
 
-const a11yProps = (index: number) => {
-  return {
-    id: `control-tab-${index}`,
-    'aria-controls': `tabpanel-${index}`
-  };
-};
-
-type ControlTabsProps = {
-  setFormId: React.Dispatch<React.SetStateAction<string | null>>;
-};
-
-const ControlTabs = ({ setFormId }: ControlTabsProps) => {
+const ControlTabs = ({
+  setFormId,
+  virtualControlsFormId,
+  keyBindingsFormId
+}: ControlTabsProps) => {
   const [value, setValue] = useState(0);
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
@@ -159,11 +64,11 @@ const ControlTabs = ({ setFormId }: ControlTabsProps) => {
 
   useEffect(() => {
     if (value === 0) {
-      setFormId('virtualControlsForm');
+      setFormId(virtualControlsFormId);
     } else if (value === 1) {
-      setFormId('keyBindingsForm');
+      setFormId(keyBindingsFormId);
     }
-  }, [value, setFormId]);
+  }, [value, setFormId, keyBindingsFormId, virtualControlsFormId]);
 
   return (
     <>
@@ -176,10 +81,10 @@ const ControlTabs = ({ setFormId }: ControlTabsProps) => {
         <Tab label="Key Bindings" {...a11yProps(1)} />
       </TabsWithBorder>
       <TabPanel value={value} index={0}>
-        <VirtualControlsForm />
+        <VirtualControlsForm id={virtualControlsFormId} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <KeyBindingsForm />
+        <KeyBindingsForm id={keyBindingsFormId} />
       </TabPanel>
     </>
   );
@@ -187,16 +92,28 @@ const ControlTabs = ({ setFormId }: ControlTabsProps) => {
 
 export const ControlsModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
+  const { isEmulatorRunning } = useContext(EmulatorContext);
+  const virtualControlsFormId = useId();
+  const keyBindingsFormId = useId();
   const [formId, setFormId] = useState<string | null>(null);
 
   return (
     <>
       <ModalHeader title="Controls" />
       <ModalBody>
-        <ControlTabs setFormId={setFormId} />
+        <ControlTabs
+          setFormId={setFormId}
+          virtualControlsFormId={virtualControlsFormId}
+          keyBindingsFormId={keyBindingsFormId}
+        />
       </ModalBody>
       <ModalFooter>
-        <Button form={formId ?? ''} type="submit" variant="contained">
+        <Button
+          form={formId ?? ''}
+          disabled={!isEmulatorRunning && formId === keyBindingsFormId}
+          type="submit"
+          variant="contained"
+        >
           Save Changes
         </Button>
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>

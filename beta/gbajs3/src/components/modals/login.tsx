@@ -1,5 +1,5 @@
 import { TextField, Button } from '@mui/material';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useId } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
@@ -57,6 +57,7 @@ export const LoginModal = () => {
   const theme = useTheme();
   const { setIsModalOpen } = useContext(ModalContext);
   const { setAccessToken, setAccessTokenSource } = useContext(AuthContext);
+  const loginFormId = useId();
   const {
     execute: executeLogin,
     data: accessToken,
@@ -101,7 +102,7 @@ export const LoginModal = () => {
             cssOverride={{ margin: '0 auto' }}
           />
         ) : (
-          <StyledForm id="loginForm" onSubmit={handleSubmit(onSubmit)}>
+          <StyledForm id={loginFormId} onSubmit={handleSubmit(onSubmit)}>
             <TextField
               error={!!errors?.username}
               label="Username"
@@ -134,7 +135,7 @@ export const LoginModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button form="loginForm" type="submit" variant="contained">
+        <Button form={loginFormId} type="submit" variant="contained">
           Login
         </Button>
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>

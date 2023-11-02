@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useId, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiCloudUpload } from 'react-icons/bi';
@@ -56,6 +56,7 @@ export const UploadCheatsModal = () => {
   } = useForm<InputProps>();
   const [hasCompletedUpload, setHasCompletedUpload] = useState(false);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const cheatsFormId = useId();
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -94,7 +95,7 @@ export const UploadCheatsModal = () => {
       <ModalBody>
         <StyledForm
           {...getRootProps({
-            id: 'uploadCheatsForm',
+            id: cheatsFormId,
             onSubmit: handleSubmit(onSubmit),
             $isDragActive: isDragActive,
             onClick: triggerFileInputOnClick
@@ -143,7 +144,7 @@ export const UploadCheatsModal = () => {
         </div>
       </ModalBody>
       <ModalFooter>
-        <Button form="uploadCheatsForm" type="submit" variant="contained">
+        <Button form={cheatsFormId} type="submit" variant="contained">
           Upload
         </Button>
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
