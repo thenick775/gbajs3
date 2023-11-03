@@ -22,7 +22,7 @@ const RenderCanvas = styled.canvas<RenderCanvasProps>`
 
   ${({ $pixelated = false }) =>
     $pixelated &&
-    `image-rendering: pixelated !important;
+    `image-rendering: pixelated;
     `}
 `;
 

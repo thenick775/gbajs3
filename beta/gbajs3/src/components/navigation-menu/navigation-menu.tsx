@@ -85,8 +85,8 @@ const StyledMenuHeader = styled.h2`
   font-size: calc(1.3rem + 0.6vw);
   font-weight: 500;
   line-height: 1.2;
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 
   &:hover {
     background-color: ${({ theme }) => theme.menuHighlight};
