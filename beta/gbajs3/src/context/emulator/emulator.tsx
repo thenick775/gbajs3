@@ -10,7 +10,10 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import { useEmulator } from '../../hooks/use-emulator.tsx';
 
-import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
+import type {
+  GBAEmulator,
+  KeyBinding
+} from '../../emulator/mgba/mgba-emulator.tsx';
 
 type EmulatorContextProps = {
   emulator: GBAEmulator | null;
@@ -45,6 +48,10 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
   const [areItemsResizable, setAreItemsResizable] = useState(false);
   const [currentEmulatorVolume] = useLocalStorage('currentEmulatorVolume', 1);
   const emulator = useEmulator(canvas);
+  const [currentKeyBindings] = useLocalStorage<KeyBinding[] | null>(
+    'currentEmulatorKeyBindings',
+    null
+  );
 
   const emu = useMemo<GBAEmulator | null>(() => {
     if (!emulator) return null;
@@ -53,6 +60,8 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
       const isSuccessfulRun = emulator.run(romPath);
       setIsEmulatorRunning(isSuccessfulRun);
       emulator.setVolume(currentEmulatorVolume);
+
+      if (currentKeyBindings) emulator.remapKeyBindings(currentKeyBindings);
 
       return isSuccessfulRun;
     };
@@ -83,7 +92,7 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
       ...emulator,
       ...stateBasedOverrides
     };
-  }, [emulator, isEmulatorRunning, currentEmulatorVolume]);
+  }, [emulator, isEmulatorRunning, currentEmulatorVolume, currentKeyBindings]);
 
   return (
     <EmulatorContext.Provider

@@ -1,5 +1,5 @@
 import { Button, FormControlLabel, Checkbox } from '@mui/material';
-import { useContext } from 'react';
+import { useContext, useId } from 'react';
 import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
@@ -14,12 +14,13 @@ const StyledForm = styled.form`
 
 export const ChooseCoreModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
+  const chooseCoreFormId = useId();
 
   return (
     <>
       <ModalHeader title="Choose Core" />
       <ModalBody>
-        <StyledForm id="chooseCoreForm">
+        <StyledForm id={chooseCoreFormId}>
           <FormControlLabel
             control={<Checkbox checked />}
             label="mGBA (default wasm core)"
@@ -31,7 +32,7 @@ export const ChooseCoreModal = () => {
         </StyledForm>
       </ModalBody>
       <ModalFooter>
-        <Button form="chooseCoreForm" type="submit" variant="contained">
+        <Button form={chooseCoreFormId} type="submit" variant="contained">
           Save Changes
         </Button>
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>

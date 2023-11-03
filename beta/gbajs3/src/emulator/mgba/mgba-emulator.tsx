@@ -3,6 +3,16 @@ import type {
   mGBAEmulator as mGBAEmulatorTypeDef
 } from './wasm/mgba.js';
 
+interface FsNode extends FS.FSNode {
+  mode: number;
+}
+
+export type KeyBinding = {
+  gbaInput: string; // represents the GBA input to be remapped
+  key: string; // represents the key property of a browser KeyboardEvent
+  location: number; // represents the location property of a browser KeyboardEvent
+};
+
 export type FileNode = {
   path: string;
   isDir: boolean;
@@ -15,15 +25,11 @@ export type ParsedCheats = {
   enable: boolean;
 };
 
-interface FsNode extends FS.FSNode {
-  mode: number;
-}
-
 export type GBAEmulator = {
-  // defaultKeyBindings: () => void; // return numbers map to keyboard keys -> react modern solutions??
   // lcdFade: () => void; // put in screen
   autoLoadCheats: () => boolean;
   createSaveState: (slot: number) => boolean;
+  defaultKeyBindings: () => KeyBinding[];
   deleteFile: (path: string) => void;
   deleteSaveState: (slot: number) => void;
   disableKeyboardInput: () => void;
@@ -32,8 +38,8 @@ export type GBAEmulator = {
   fsSync: () => void;
   getCurrentCheatsFile: () => Uint8Array;
   getCurrentCheatsFileName: () => string | undefined;
-  getCurrentRom: () => Uint8Array | null;
   getCurrentGameName: () => string | undefined;
+  getCurrentRom: () => Uint8Array | null;
   getCurrentSave: () => Uint8Array | null;
   getCurrentSaveName: () => string | undefined;
   getVolume: () => number;
@@ -47,7 +53,7 @@ export type GBAEmulator = {
   quickReload: () => void;
   quitGame: () => void;
   quitMgba: () => void;
-  remapKeyBinding: () => void;
+  remapKeyBindings: (keyBindings: KeyBinding[]) => void;
   resume: () => void;
   run: (romPath: string) => boolean;
   screenShot: (callback: () => void) => void;
@@ -59,6 +65,9 @@ export type GBAEmulator = {
   uploadRom: (file: File, callback?: () => void) => void;
   uploadSaveOrSaveState: (file: File, callback?: () => void) => void;
 };
+
+export const KEY_LOCATION_STANDARD = 0;
+export const KEY_LOCATION_NUMPAD = 3;
 
 export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
   const paths = mGBA.filePaths();
@@ -163,9 +172,40 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     return null;
   };
 
+  // emscriptens SDL_Keycode differs a bit from browser keycode/key mappings
+  // this function takes in a keyboard event key, and returns the appropriate
+  // SDL_Keycode key namefor mGBA. See: https://wiki.libsdl.org/SDL2/SDL_Keycode
+  const handleKeyBindingEdgeCases = ({ key, location }: KeyBinding): string => {
+    // numpad keys are prefixed with 'Keypad' in emscripten SDL key mapping
+    let gbaSDLKey = location === KEY_LOCATION_NUMPAD ? `Keypad ${key}` : key;
+
+    // 'Enter' is named 'Return' in emscripten SDL key mapping
+    if (gbaSDLKey.toLowerCase().includes('enter'))
+      gbaSDLKey = gbaSDLKey.replace(/enter/gi, 'Return');
+
+    // arrow keys have no prefix in emscripten SDL key mapping
+    if (gbaSDLKey.toLowerCase().includes('arrow'))
+      gbaSDLKey = gbaSDLKey.replace(/arrow/gi, '');
+
+    return gbaSDLKey;
+  };
+
   return {
     autoLoadCheats: mGBA.autoLoadCheats,
     createSaveState: mGBA.saveState,
+    // note: this solution will not be accurate for all keyboard types
+    defaultKeyBindings: () => [
+      { gbaInput: 'A', key: 'X', location: KEY_LOCATION_STANDARD },
+      { gbaInput: 'B', key: 'Z', location: KEY_LOCATION_STANDARD },
+      { gbaInput: 'L', key: 'A', location: KEY_LOCATION_STANDARD },
+      { gbaInput: 'R', key: 'S', location: KEY_LOCATION_STANDARD },
+      { gbaInput: 'Start', key: 'Enter', location: KEY_LOCATION_STANDARD },
+      { gbaInput: 'Select', key: 'Backspace', location: KEY_LOCATION_STANDARD },
+      { gbaInput: 'Up', key: 'ArrowUp', location: KEY_LOCATION_STANDARD },
+      { gbaInput: 'Down', key: 'ArrowDown', location: KEY_LOCATION_STANDARD },
+      { gbaInput: 'Left', key: 'ArrowLeft', location: KEY_LOCATION_STANDARD },
+      { gbaInput: 'Right', key: 'ArrowRight', location: KEY_LOCATION_STANDARD }
+    ],
     loadSaveState: mGBA.loadState,
     listSaveStates: () => mGBA.FS.readdir(paths.saveStatePath),
     listRoms: () => mGBA.FS.readdir(paths.gamePath),
@@ -207,7 +247,10 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     getCurrentCheatsFileName: () =>
       filepathToFileName(mGBA.gameName, '.cheats'),
     screenShot: mGBA.screenShot,
-    remapKeyBinding: () => undefined, // TODO
+    remapKeyBindings: (keyBindings) =>
+      keyBindings.forEach((keyBinding) =>
+        mGBA.bindKey(handleKeyBindingEdgeCases(keyBinding), keyBinding.gbaInput)
+      ),
     filePaths: mGBA.filePaths,
     fsSync: mGBA.FSSync,
     listAllFiles,

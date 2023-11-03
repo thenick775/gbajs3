@@ -1,5 +1,5 @@
 import { Button, TextField, useMediaQuery } from '@mui/material';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useId, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { BiPlus } from 'react-icons/bi';
 import { CiSquareRemove } from 'react-icons/ci';
@@ -87,6 +87,7 @@ export const CheatsModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
   const [viewRawCheats, setViewRawCheats] = useState(false);
+  const cheatsFormId = useId();
   const defaultCheat = { desc: '', code: '', enable: false };
 
   const [rawCheats, parsedCheats] = useMemo(() => {
@@ -129,7 +130,7 @@ export const CheatsModal = () => {
       <ModalHeader title="Manage Cheats" />
       <ModalBody>
         <form
-          id="cheatsForm"
+          id={cheatsFormId}
           onSubmit={handleSubmit((data) => {
             const cheatsFile = viewRawCheats
               ? new File(
@@ -215,11 +216,10 @@ export const CheatsModal = () => {
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button form="cheatsForm" type="submit" variant="contained">
+        <Button form={cheatsFormId} type="submit" variant="contained">
           Submit
         </Button>
         <Button
-          form="cheatsForm"
           color="info"
           variant="contained"
           onClick={() => setViewRawCheats((prevState) => !prevState)}

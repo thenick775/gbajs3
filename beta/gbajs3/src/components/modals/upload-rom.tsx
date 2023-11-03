@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useId, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiCloudUpload } from 'react-icons/bi';
@@ -56,6 +56,7 @@ export const UploadRomModal = () => {
   } = useForm<InputProps>();
   const [hasCompletedUpload, setHasCompletedUpload] = useState(false);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const uploadRomFormId = useId();
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -99,7 +100,7 @@ export const UploadRomModal = () => {
       <ModalBody>
         <StyledForm
           {...getRootProps({
-            id: 'uploadRomForm',
+            id: uploadRomFormId,
             onSubmit: handleSubmit(onSubmit),
             $isDragActive: isDragActive,
             onClick: triggerFileInputOnClick
@@ -143,7 +144,7 @@ export const UploadRomModal = () => {
         </div>
       </ModalBody>
       <ModalFooter>
-        <Button form="uploadRomForm" type="submit" variant="contained">
+        <Button form={uploadRomFormId} type="submit" variant="contained">
           Upload
         </Button>
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
