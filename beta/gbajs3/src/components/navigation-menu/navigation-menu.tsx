@@ -288,6 +288,10 @@ export const NavigationMenu = ({
                   link.download = saveName;
                   link.href = URL.createObjectURL(saveFile);
                   link.click();
+                } else {
+                  toast.error(
+                    'You must load the rom to download its save file'
+                  );
                 }
               }}
             />
