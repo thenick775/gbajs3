@@ -266,7 +266,9 @@ export const NavigationMenu = ({
               $disabled={!isEmulatorRunning}
               icon={<BiFullscreen />}
               onClick={() => {
-                canvas?.requestFullscreen(); // TODO: test on mobile
+                canvas?.requestFullscreen().catch(() => {
+                  toast.error('Full screen request has failed');
+                });
               }}
             />
             <NavLeaf
