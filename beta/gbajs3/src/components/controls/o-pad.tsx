@@ -164,8 +164,10 @@ export const OPad = ({ initialPosition }: OPadProps) => {
       return 'DOWN';
     } else if (xAxisRotated < 0 && yAxisRotated < 0) {
       return 'LEFT';
-    } else {
+    } else if (xAxisRotated >= 0 && yAxisRotated < 0) {
       return 'UP';
+    } else {
+      return null;
     }
   };
 
@@ -196,9 +198,11 @@ export const OPad = ({ initialPosition }: OPadProps) => {
         setPosition({ x, y });
       }
 
-      if (!isKeyDown[getKeyId({ x, y }) as keyof typeof isKeyDown]) {
+      const keyId = getKeyId({ x, y });
+
+      if (keyId && !isKeyDown[keyId as keyof typeof isKeyDown]) {
         unpressEmulatorArrow(event.pointerId);
-        pressEmulatorArrow(getKeyId({ x, y }), event.pointerId);
+        pressEmulatorArrow(keyId, event.pointerId);
       }
     },
     [areItemsDraggable, isKeyDown, pressEmulatorArrow, unpressEmulatorArrow]
@@ -218,7 +222,10 @@ export const OPad = ({ initialPosition }: OPadProps) => {
       if (!areItemsDraggable) {
         setPosition({ x, y });
       }
-      pressEmulatorArrow(getKeyId({ x, y }), event.pointerId);
+
+      const keyId = getKeyId({ x, y });
+
+      if (keyId) pressEmulatorArrow(keyId, event.pointerId);
     },
     [areItemsDraggable, pressEmulatorArrow]
   );
