@@ -13,17 +13,23 @@ export const AboutModal = () => {
     <>
       <ModalHeader title="About" />
       <ModalBody>
-        <p>Gbajs3 is a full featured GBA emulator in the browser.</p>
+        <p>
+          Gbajs3 is a full featured Game Boy Advance emulator meant to operate
+          online and offline in the browser.
+        </p>
         <p>
           We support the mGBA wasm core, and the gbajs pure javascript core.
         </p>
         <p>Getting Started:</p>
         <ul>
           <li>
-            Using the pre-game actions menu, upload a sav file if you have one
-            available
+            Using the <i>Pre Game Actions</i> menu, upload a sav file if you
+            have one available
           </li>
-          <li>Then, load a rom of your choice</li>
+          <li>
+            Then, load a rom of your choice through the <i>Upload Rom</i> or{' '}
+            <i>Load Local Rom</i> menu items
+          </li>
           <li>Enjoy, your game will boot!</li>
         </ul>
       </ModalBody>
