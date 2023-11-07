@@ -7,23 +7,25 @@ import type { CompletedProductTourSteps } from './product-tour-intro.tsx';
 type EmbeddedProductTourProps = {
   allowScrolling?: boolean;
   completedProductTourStepName: string;
-  renderWithoutDelay?: boolean;
   millisecondDelay?: number;
+  renderWithoutDelay?: boolean;
   skipIfIntroSkipped?: boolean;
-  zIndex?: number;
+  skipRenderCondition?: boolean;
   steps: TourSteps;
+  zIndex?: number;
 };
 
 export type TourSteps = Step[];
 
 export const EmbeddedProductTour = ({
   completedProductTourStepName,
+  skipRenderCondition,
   steps,
-  zIndex = 500, // note, value here is +100 in react joyride/floater
   allowScrolling = true,
-  renderWithoutDelay = false,
   millisecondDelay = 800,
-  skipIfIntroSkipped = true
+  renderWithoutDelay = false,
+  skipIfIntroSkipped = true,
+  zIndex = 500 // note, value here is +100 in react joyride/floater
 }: EmbeddedProductTourProps) => {
   const [hasCompletedProductTourSteps, setHasCompletedProductTourSteps] =
     useLocalStorage<CompletedProductTourSteps>('completedProductTour', {
@@ -43,7 +45,8 @@ export const EmbeddedProductTour = ({
     hasCompletedProductTourSteps?.[completedProductTourStepName] ||
     (skipIfIntroSkipped &&
       hasCompletedProductTourSteps?.hasCompletedProductTourIntro ===
-        STATUS.SKIPPED)
+        STATUS.SKIPPED) ||
+    skipRenderCondition
   )
     return null;
 

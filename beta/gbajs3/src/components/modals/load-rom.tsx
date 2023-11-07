@@ -167,7 +167,6 @@ export const LoadRomModal = () => {
     />
   );
 
-  // todo: need to handle slow loading case -> adjust id??
   const tourSteps: TourSteps = [
     {
       content: (
@@ -238,6 +237,7 @@ export const LoadRomModal = () => {
         </Button>
       </ModalFooter>
       <EmbeddedProductTour
+        skipRenderCondition={romLoading || romListloading || !!romLoadError}
         steps={tourSteps}
         completedProductTourStepName="hasCompletedLoadRomTour"
       />

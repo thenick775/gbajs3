@@ -163,7 +163,6 @@ export const LoadSaveModal = () => {
     />
   );
 
-  // todo: need to handle slow loading case -> adjust id??
   const tourSteps: TourSteps = [
     {
       content: (
@@ -231,6 +230,7 @@ export const LoadSaveModal = () => {
         </Button>
       </ModalFooter>
       <EmbeddedProductTour
+        skipRenderCondition={saveLoading || saveListloading || !!saveLoadError}
         steps={tourSteps}
         completedProductTourStepName="hasCompletedLoadSaveTour"
       />

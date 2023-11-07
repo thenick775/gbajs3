@@ -163,6 +163,7 @@ export const LoginModal = () => {
         </Button>
       </ModalFooter>
       <EmbeddedProductTour
+        skipRenderCondition={loginLoading}
         steps={tourSteps}
         completedProductTourStepName="hasCompletedLoginTour"
       />
