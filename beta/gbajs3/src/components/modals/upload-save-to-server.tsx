@@ -10,6 +10,7 @@ import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useUpLoadSave } from '../../hooks/use-upload-save.tsx';
+import { CenteredText } from '../shared/styled.tsx';
 
 type UploadSaveErrorProps = {
   text: string;
@@ -23,11 +24,6 @@ type DynamicBodyProps = {
   isLoading: boolean;
   hasError: boolean;
 };
-
-const CenteredText = styled.p`
-  text-align: center;
-  margin: 0;
-`;
 
 const ErrorWrapper = styled.div`
   display: flex;

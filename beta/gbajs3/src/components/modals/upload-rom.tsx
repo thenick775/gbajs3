@@ -10,6 +10,11 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
+import { CenteredTextContainer } from '../shared/styled.tsx';
 
 type InputProps = {
   romFile: File;
@@ -37,10 +42,6 @@ const HiddenInput = styled.input`
 const BiCloudUploadLarge = styled(BiCloudUpload)`
   height: 60px;
   width: auto;
-`;
-
-const CenteredTextContainer = styled.div`
-  text-align: center;
 `;
 
 export const UploadRomModal = () => {
@@ -93,6 +94,28 @@ export const UploadRomModal = () => {
 
   const validateFileName = (rom: File) =>
     ['gba', 'gbc', 'gb'].includes(rom.name.split('.').pop() ?? '');
+
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <>
+          <p>
+            Use this area to drag and drop your rom file, or click to select a
+            rom file.
+          </p>
+          <p>
+            You may drop or select one rom file at a time, once uploaded your
+            game will boot!
+          </p>
+        </>
+      ),
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(uploadRomFormId)}`
+    }
+  ];
 
   return (
     <>
@@ -151,6 +174,10 @@ export const UploadRomModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedUploadRomTour"
+      />
     </>
   );
 };

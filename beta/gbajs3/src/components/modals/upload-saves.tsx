@@ -10,6 +10,11 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
+import { CenteredTextContainer } from '../shared/styled.tsx';
 
 type InputProps = {
   saveFiles: File[];
@@ -37,10 +42,6 @@ const HiddenInput = styled.input`
 const BiCloudUploadLarge = styled(BiCloudUpload)`
   height: 60px;
   width: auto;
-`;
-
-const CenteredTextContainer = styled.div`
-  text-align: center;
 `;
 
 export const UploadSavesModal = () => {
@@ -88,6 +89,25 @@ export const UploadSavesModal = () => {
       (saveFile: File) => saveFile.name.split('.').pop() === 'sav'
     );
   };
+
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <>
+          <p>
+            Use this area to drag and drop your save files, or click to select
+            save files.
+          </p>
+          <p>You may drop or select multiple save files!</p>
+        </>
+      ),
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(uploadSavesFormId)}`
+    }
+  ];
 
   return (
     <>
@@ -150,6 +170,10 @@ export const UploadSavesModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedUploadSavesTour"
+      />
     </>
   );
 };

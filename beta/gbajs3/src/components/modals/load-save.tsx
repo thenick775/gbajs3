@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { useContext, useEffect, useState, type ReactNode, useId } from 'react';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
 import { styled, useTheme } from 'styled-components';
@@ -11,6 +11,10 @@ import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useListSaves } from '../../hooks/use-list-saves.tsx';
 import { useLoadSave } from '../../hooks/use-load-save.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
 
 type SaveLoadingIndicatorProps = {
   isLoading: boolean;
@@ -129,6 +133,7 @@ export const LoadSaveModal = () => {
   const theme = useTheme();
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
+  const saveListId = useId();
   const {
     data: saveList,
     isLoading: saveListloading,
@@ -158,6 +163,26 @@ export const LoadSaveModal = () => {
     />
   );
 
+  // todo: need to handle slow loading case -> adjust id??
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <>
+          <p>
+            Use this area to load save files from the server. Once the list has
+            loaded, click a row to load the save.
+          </p>
+          <p>You may load multiple save files in a row!</p>
+        </>
+      ),
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(saveListId)}`
+    }
+  ];
+
   return (
     <>
       <ModalHeader title="Load Save" />
@@ -170,7 +195,7 @@ export const LoadSaveModal = () => {
             currentLoadingSave={currentSaveLoading}
             indicator={<LoadingIndicator />}
           >
-            <SaveList>
+            <SaveList id={saveListId}>
               {saveList?.map?.((save: string, idx: number) => (
                 <StyledLi key={`${save}_${idx}`}>
                   <LoadSaveButton
@@ -205,6 +230,10 @@ export const LoadSaveModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedLoadSaveTour"
+      />
     </>
   );
 };

@@ -11,6 +11,10 @@ import { ModalHeader } from './modal-header.tsx';
 import { AuthContext } from '../../context/auth/auth.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useLogin } from '../../hooks/use-login.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
 
 type InputProps = {
   username: string;
@@ -92,6 +96,22 @@ export const LoginModal = () => {
     reset();
   };
 
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <p>
+          Use this form to login for premium features if you have a registered
+          account.
+        </p>
+      ),
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(loginFormId)}`
+    }
+  ];
+
   return (
     <>
       <ModalHeader title="Login" />
@@ -142,6 +162,10 @@ export const LoginModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedLoginTour"
+      />
     </>
   );
 };

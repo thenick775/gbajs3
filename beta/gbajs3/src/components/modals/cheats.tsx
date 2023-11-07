@@ -10,6 +10,10 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
 import { ManagedCheckbox } from '../shared/managed-checkbox.tsx';
 
 type OptionallyHiddenProps = {
@@ -88,6 +92,13 @@ export const CheatsModal = () => {
   const { emulator } = useContext(EmulatorContext);
   const [viewRawCheats, setViewRawCheats] = useState(false);
   const cheatsFormId = useId();
+  const addCheatButtonId = useId();
+  const submitButtonId = useId();
+  const toggleRawCheatsButtonId = useId();
+  const firstNameFieldId = useId();
+  const firstCheatCodeFieldId = useId();
+  const firstEnabledFieldId = useId();
+  const firstRemoveIconId = useId();
   const defaultCheat = { desc: '', code: '', enable: false };
 
   const [rawCheats, parsedCheats] = useMemo(() => {
@@ -124,6 +135,92 @@ export const CheatsModal = () => {
     setValue('rawCheats', rawCheats);
     setValue('cheats', parsedCheats);
   }, [emulator, setValue]);
+
+  const tourSteps: TourSteps = [
+    {
+      content: <p>Use this form to enter, add, and delete cheats.</p>,
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(cheatsFormId)}`
+    },
+    {
+      content: <p>This form field is for what you want to call the cheat.</p>,
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(firstNameFieldId)}`
+    },
+    {
+      content: (
+        <>
+          <p>Put your cheat code into this field.</p>
+          <p>Remember to separate multi-line cheats with the '+' character!</p>
+        </>
+      ),
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(firstCheatCodeFieldId)}`
+    },
+    {
+      content: <p>Use this checkbox to enable/disable a cheat.</p>,
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'right',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(firstEnabledFieldId)}`
+    },
+    {
+      content: <p>Use this icon to remove a cheat entirely.</p>,
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'right',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(firstRemoveIconId)}`
+    },
+    {
+      content: (
+        <p>
+          Use the <i>plus</i> button to add a new cheat.
+        </p>
+      ),
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(addCheatButtonId)}`
+    },
+    {
+      content: (
+        <p>
+          Use the <i>Submit</i> button to save your cheats, and convert them to
+          libretro format.
+        </p>
+      ),
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(submitButtonId)}`
+    },
+    {
+      content: (
+        <p>
+          Use the <i>{viewRawCheats ? 'Parsed' : 'Raw'}</i> button to toggle
+          between viewing parsed cheats or raw cheats in libretro file format.
+        </p>
+      ),
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'right',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(toggleRawCheatsButtonId)}`
+    }
+  ];
 
   return (
     <>
@@ -165,6 +262,7 @@ export const CheatsModal = () => {
               <Cheat key={item.id}>
                 <CheatsFormSeparator $fullWidth>
                   <TextField
+                    id={index === 0 ? firstNameFieldId : undefined}
                     label="Name"
                     error={!!errors?.cheats?.[index]?.desc}
                     size="small"
@@ -179,6 +277,7 @@ export const CheatsModal = () => {
                     })}
                   />
                   <TextField
+                    id={index === 0 ? firstCheatCodeFieldId : undefined}
                     label="Cheat Code"
                     error={!!errors?.cheats?.[index]?.code}
                     size="small"
@@ -195,17 +294,22 @@ export const CheatsModal = () => {
 
                 <CheatsFormSeparator>
                   <ManagedCheckbox
+                    id={index === 0 ? firstEnabledFieldId : undefined}
                     label="Enabled"
                     watcher={watch(`cheats.${index}.enable`)}
                     registerProps={register(`cheats.${index}.enable`)}
                   />
-                  <StyledCiSquareRemove onClick={() => remove(index)} />
+                  <StyledCiSquareRemove
+                    id={index === 0 ? firstRemoveIconId : undefined}
+                    onClick={() => remove(index)}
+                  />
                 </CheatsFormSeparator>
               </Cheat>
             ))}
           </CheatsList>
           <RowContainer>
             <StyledBiPlus
+              id={addCheatButtonId}
               onClick={() => append(defaultCheat)}
               $shouldHide={viewRawCheats}
             />
@@ -216,10 +320,16 @@ export const CheatsModal = () => {
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button form={cheatsFormId} type="submit" variant="contained">
+        <Button
+          id={submitButtonId}
+          form={cheatsFormId}
+          type="submit"
+          variant="contained"
+        >
           Submit
         </Button>
         <Button
+          id={toggleRawCheatsButtonId}
           color="info"
           variant="contained"
           onClick={() => setViewRawCheats((prevState) => !prevState)}
@@ -230,6 +340,10 @@ export const CheatsModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedCheatsTour"
+      />
     </>
   );
 };

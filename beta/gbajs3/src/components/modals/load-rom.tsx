@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { useContext, useEffect, useState, type ReactNode, useId } from 'react';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
 import { styled, useTheme } from 'styled-components';
@@ -11,6 +11,10 @@ import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useListRoms } from '../../hooks/use-list-roms.tsx';
 import { useLoadRom } from '../../hooks/use-load-rom.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
 
 type RomLoadingIndicatorProps = {
   isLoading: boolean;
@@ -129,6 +133,7 @@ export const LoadRomModal = () => {
   const theme = useTheme();
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
+  const romListId = useId();
   const {
     data: romList,
     isLoading: romListloading,
@@ -162,6 +167,29 @@ export const LoadRomModal = () => {
     />
   );
 
+  // todo: need to handle slow loading case -> adjust id??
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <>
+          <p>
+            Use this area to load rom files from the server. Once the list has
+            loaded, click a row to load the rom.
+          </p>
+          <p>
+            You may load one rom file at a time, once the rom has loaded your
+            game will boot!
+          </p>
+        </>
+      ),
+      locale: { skip: <strong aria-label="Skip">Skip</strong> },
+      placement: 'auto',
+      placementBeacon: 'right-end',
+      spotlightPadding: 10,
+      target: `#${CSS.escape(romListId)}`
+    }
+  ];
+
   return (
     <>
       <ModalHeader title="Load Rom" />
@@ -174,7 +202,7 @@ export const LoadRomModal = () => {
             currentLoadingRom={currentRomLoading}
             indicator={<LoadingIndicator />}
           >
-            <RomList>
+            <RomList id={romListId}>
               {romList?.map?.((rom: string, idx: number) => (
                 <StyledLi key={`${rom}_${idx}`}>
                   <LoadRomButton
@@ -209,6 +237,10 @@ export const LoadRomModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedLoadRomTour"
+      />
     </>
   );
 };
