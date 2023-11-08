@@ -68,10 +68,10 @@ export const LoadLocalRomModal = () => {
       content: (
         <>
           <p>
-            Use this area to drag and drop your save files, or click to select
-            save files.
+            Use this area to load local roms that have been saved to your
+            device.
           </p>
-          <p>You may drop or select multiple save files!</p>
+          <p>Tap the name of your rom file and your game will boot!</p>
         </>
       ),
       target: `#${CSS.escape(romListId)}`
@@ -95,12 +95,14 @@ export const LoadLocalRomModal = () => {
               </LoadRomButton>
             </StyledLi>
           ))}
+          {!localRoms?.length && (
+            <li>
+              <CenteredText>
+                No local roms, load a game and save your file system
+              </CenteredText>
+            </li>
+          )}
         </RomList>
-        {!localRoms?.length && (
-          <CenteredText>
-            No local roms, load a game and save your file system
-          </CenteredText>
-        )}
       </ModalBody>
       <ModalFooter>
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
