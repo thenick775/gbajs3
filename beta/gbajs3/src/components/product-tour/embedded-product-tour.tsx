@@ -15,6 +15,13 @@ type EmbeddedProductTourProps = {
   zIndex?: number;
 };
 
+const defaultStepOptions = {
+  locale: { skip: <strong aria-label="Skip">Skip</strong> },
+  placement: 'auto' as const,
+  placementBeacon: 'right-end' as const,
+  spotlightPadding: 10
+};
+
 export type TourSteps = Step[];
 
 export const EmbeddedProductTour = ({
@@ -50,6 +57,11 @@ export const EmbeddedProductTour = ({
   )
     return null;
 
+  const stepsWithDefault = steps.map((step) => ({
+    ...defaultStepOptions,
+    ...step
+  }));
+
   return (
     <Joyride
       continuous
@@ -57,7 +69,7 @@ export const EmbeddedProductTour = ({
       hideCloseButton
       showProgress
       showSkipButton
-      steps={steps}
+      steps={stepsWithDefault}
       styles={{
         options: {
           zIndex: zIndex

@@ -181,10 +181,6 @@ export const LoadRomModal = () => {
           </p>
         </>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(romListId)}`
     }
   ];

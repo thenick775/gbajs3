@@ -173,10 +173,7 @@ export const SaveStatesModal = () => {
           slot in use.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
       placementBeacon: 'bottom-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(saveStatesFormId)}`
     },
     {
@@ -186,10 +183,7 @@ export const SaveStatesModal = () => {
           save state.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
       placementBeacon: 'bottom-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(saveStatesListId)}`
     },
     {
@@ -199,10 +193,7 @@ export const SaveStatesModal = () => {
           automatically increase the current save state number!
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
       placementBeacon: 'bottom-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(addStateButtonId)}`
     }
   ];

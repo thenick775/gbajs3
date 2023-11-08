@@ -174,10 +174,6 @@ export const LoadSaveModal = () => {
           <p>You may load multiple save files in a row!</p>
         </>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(saveListId)}`
     }
   ];

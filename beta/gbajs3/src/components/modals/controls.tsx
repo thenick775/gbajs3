@@ -107,10 +107,6 @@ export const ControlsModal = () => {
           Select which virtual controls you wish to enable in this form tab.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(virtualControlsFormId)}`
     },
     {
@@ -123,7 +119,6 @@ export const ControlsModal = () => {
         </>
       ),
       placement: 'right',
-      spotlightPadding: 10,
       target: `#${CSS.escape(a11yProps(1).id)}`,
       disableBeacon: true,
       disableOverlayClose: true,
@@ -137,9 +132,7 @@ export const ControlsModal = () => {
           input.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
       placement: 'top-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(keyBindingsFormId)}`
     },
     {
@@ -149,10 +142,6 @@ export const ControlsModal = () => {
           form tab.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(saveChangesButtonId)}`
     }
   ];

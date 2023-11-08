@@ -139,18 +139,10 @@ export const CheatsModal = () => {
   const tourSteps: TourSteps = [
     {
       content: <p>Use this form to enter, add, and delete cheats.</p>,
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(cheatsFormId)}`
     },
     {
       content: <p>This form field is for what you want to call the cheat.</p>,
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(firstNameFieldId)}`
     },
     {
@@ -160,26 +152,16 @@ export const CheatsModal = () => {
           <p>Remember to separate multi-line cheats with the '+' character!</p>
         </>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(firstCheatCodeFieldId)}`
     },
     {
       content: <p>Use this checkbox to enable/disable a cheat.</p>,
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
       placement: 'right',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(firstEnabledFieldId)}`
     },
     {
       content: <p>Use this icon to remove a cheat entirely.</p>,
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
       placement: 'right',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(firstRemoveIconId)}`
     },
     {
@@ -188,10 +170,6 @@ export const CheatsModal = () => {
           Use the <i>plus</i> button to add a new cheat.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(addCheatButtonId)}`
     },
     {
@@ -201,10 +179,6 @@ export const CheatsModal = () => {
           libretro format.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(submitButtonId)}`
     },
     {
@@ -214,10 +188,7 @@ export const CheatsModal = () => {
           between viewing parsed cheats or raw cheats in libretro file format.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
       placement: 'right',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(toggleRawCheatsButtonId)}`
     }
   ];

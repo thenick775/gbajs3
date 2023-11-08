@@ -101,10 +101,6 @@ export const UploadSavesModal = () => {
           <p>You may drop or select multiple save files!</p>
         </>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(uploadSavesFormId)}`
     }
   ];

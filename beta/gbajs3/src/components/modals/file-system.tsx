@@ -157,10 +157,6 @@ export const FileSystemModal = () => {
           </p>
         </>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(emulatorFsId)}`
     },
     {
@@ -170,10 +166,6 @@ export const FileSystemModal = () => {
           your device!
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
-      placementBeacon: 'right-end',
-      spotlightPadding: 10,
       target: `#${CSS.escape(saveFileSystemButtonId)}`
     }
   ];

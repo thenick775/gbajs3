@@ -209,10 +209,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
           <p>Click next to take a tour of the controls!</p>
         </>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
       placementBeacon: 'bottom',
-      spotlightPadding: 10,
       target: `#${CSS.escape(controlPanelId)}`
     },
     {
@@ -221,26 +218,17 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
           Use the this button to pause and resume your game if it is running.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
       placementBeacon: 'bottom',
-      spotlightPadding: 10,
       target: `#${CSS.escape(playPanelControlId)}`
     },
     {
       content: <p>Use this button to toggle fast forward on and off.</p>,
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
       placementBeacon: 'bottom',
-      spotlightPadding: 10,
       target: `#${CSS.escape(fastForwardPanelControlId)}`
     },
     {
       content: <p>Use this button to quit your current game.</p>,
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
       placementBeacon: 'bottom',
-      spotlightPadding: 10,
       target: `#${CSS.escape(quitGamePanelControlId)}`
     },
     {
@@ -250,20 +238,16 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
           controls, and control panel.
         </p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
       placement: 'right',
       placementBeacon: 'bottom',
-      spotlightPadding: 10,
       target: `#${CSS.escape(dragPanelControlId)}`
     },
     {
       content: (
         <p>Use this button to toggle resizing the screen and control panel.</p>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
       placement: 'right',
       placementBeacon: 'bottom',
-      spotlightPadding: 10,
       target: `#${CSS.escape(resizePanelControlId)}`
     },
     {
@@ -273,10 +257,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
           <p>Your volume setting will be saved between refreshes!</p>
         </>
       ),
-      locale: { skip: <strong aria-label="Skip">Skip</strong> },
-      placement: 'auto',
       placementBeacon: 'bottom',
-      spotlightPadding: 10,
       target: `#${CSS.escape(volumeSliderControlId)}`
     }
   ];
