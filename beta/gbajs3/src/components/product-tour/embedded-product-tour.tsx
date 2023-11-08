@@ -53,6 +53,7 @@ export const EmbeddedProductTour = ({
     (skipIfIntroSkipped &&
       hasCompletedProductTourSteps?.hasCompletedProductTourIntro ===
         STATUS.SKIPPED) ||
+    !hasCompletedProductTourSteps?.hasCompletedProductTourIntro ||
     skipRenderCondition
   )
     return null;
