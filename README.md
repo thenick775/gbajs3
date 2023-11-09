@@ -29,6 +29,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
 * Admin UI
 * Postgres support
 * Persistent file system utilizing IndexedDB (mGBA only)
+* Product Tour
 
 ## Existing Feature List
 - Both cores support realtime clock
