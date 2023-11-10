@@ -1,10 +1,15 @@
 import Joyride, { STATUS, type Step } from 'react-joyride';
+import { styled } from 'styled-components';
 import { useLocalStorage } from 'usehooks-ts';
 
 export type CompletedProductTourSteps = {
   hasCompletedProductTourIntro?: string | boolean;
   [key: string]: string | boolean | undefined;
 };
+
+const StyledUl = styled.ul`
+  text-align: left;
+`;
 
 const steps: Step[] = [
   {
@@ -26,11 +31,10 @@ const steps: Step[] = [
     target: 'body'
   },
   {
-    // todo: refactor copy?
     content: (
       <>
         <p>Use the sidebar navigation menu to:</p>
-        <ul>
+        <StyledUl>
           <li>
             Perform <i>Pre Game Actions</i> such as load roms, saves, and cheat
             files
@@ -39,10 +43,16 @@ const steps: Step[] = [
             Perform <i>In Game Actions</i> such as managing save states and
             cheats
           </li>
-          <li>Modify your controls</li>
-          <li>Save your local file system</li>
-          <li>Interact with your profile</li>
-        </ul>
+          <li>
+            Modify your <i>Controls</i>
+          </li>
+          <li>
+            Save your local <i>File System</i>
+          </li>
+          <li>
+            Interact with your <i>Profile</i>
+          </li>
+        </StyledUl>
       </>
     ),
     locale: { skip: <strong aria-label="Skip">Skip</strong> },
@@ -64,7 +74,7 @@ const steps: Step[] = [
           Guided tour items will appear as you use different features of Gbajs3.
         </p>
         <p>All interactive menu items will have a built in tour once opened.</p>
-        <p>Watch for the red beacons, tap them to initiate a tour!</p>
+        <p>Watch for the red beacons, tap them to continue your tour!</p>
       </>
     ),
     locale: { skip: <strong aria-label="Skip">Skip</strong> },
