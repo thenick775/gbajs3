@@ -114,7 +114,7 @@ export const ControlsModal = () => {
         <>
           <p>Use the tab panel to toggle which form you are seeing.</p>
           <p>
-            Select the <i>KEY BINDINGS</i> tab above!
+            Select the <i>KEY BINDINGS</i> tab above, then click next!
           </p>
         </>
       ),

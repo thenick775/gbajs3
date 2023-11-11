@@ -36,8 +36,8 @@ const steps: Step[] = [
         <p>Use the sidebar navigation menu to:</p>
         <StyledUl>
           <li>
-            Perform <i>Pre Game Actions</i> such as load roms, saves, and cheat
-            files
+            Perform <i>Pre Game Actions</i> such as load roms (games), saves,
+            and cheat files
           </li>
           <li>
             Perform <i>In Game Actions</i> such as managing save states and

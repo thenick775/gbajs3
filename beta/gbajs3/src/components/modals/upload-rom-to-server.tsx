@@ -101,6 +101,7 @@ export const UploadRomToServerModal = () => {
       content: (
         <p>Use this button to upload your current rom file to the server.</p>
       ),
+      placement: 'right',
       target: `#${CSS.escape(uploadRomToServerButtonId)}`
     }
   ];

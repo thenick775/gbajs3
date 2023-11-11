@@ -109,6 +109,7 @@ export const UploadSaveToServerModal = () => {
           <p>Remember to save in game before uploading!</p>
         </>
       ),
+      placement: 'right',
       target: `#${CSS.escape(uploadSaveToServerButtonId)}`
     }
   ];
