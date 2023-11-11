@@ -222,7 +222,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
       target: `#${CSS.escape(playPanelControlId)}`
     },
     {
-      content: <p>Use this button to toggle fast forward on and off.</p>,
+      content: <p>Use this button to turn fast forward on and off.</p>,
       placementBeacon: 'bottom',
       target: `#${CSS.escape(fastForwardPanelControlId)}`
     },
@@ -234,7 +234,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
     {
       content: (
         <p>
-          Use this button to toggle dragging and repositioning of the screen,
+          Use this button to enable dragging and repositioning of the screen,
           controls, and control panel.
         </p>
       ),
@@ -243,9 +243,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
       target: `#${CSS.escape(dragPanelControlId)}`
     },
     {
-      content: (
-        <p>Use this button to toggle resizing the screen and control panel.</p>
-      ),
+      content: <p>Use this button to resize the screen and control panel.</p>,
       placement: 'right',
       placementBeacon: 'bottom',
       target: `#${CSS.escape(resizePanelControlId)}`
