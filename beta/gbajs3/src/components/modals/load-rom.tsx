@@ -15,6 +15,7 @@ import {
   EmbeddedProductTour,
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
+import { CenteredText } from '../shared/styled.tsx';
 
 type RomLoadingIndicatorProps = {
   isLoading: boolean;
@@ -210,6 +211,14 @@ export const LoadRomModal = () => {
                   </LoadRomButton>
                 </StyledLi>
               ))}
+              {!romList?.length && !romListError && (
+                <li>
+                  <CenteredText>
+                    No roms on the server, load a game and send your rom to the
+                    server
+                  </CenteredText>
+                </li>
+              )}
             </RomList>
           </RomLoadingIndicator>
         )}
@@ -233,7 +242,9 @@ export const LoadRomModal = () => {
         </Button>
       </ModalFooter>
       <EmbeddedProductTour
-        skipRenderCondition={romLoading || romListloading || !!romLoadError}
+        skipRenderCondition={
+          romLoading || romListloading || !!romListError || !!romLoadError
+        }
         steps={tourSteps}
         completedProductTourStepName="hasCompletedLoadRomTour"
       />

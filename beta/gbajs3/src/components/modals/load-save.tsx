@@ -15,6 +15,7 @@ import {
   EmbeddedProductTour,
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
+import { CenteredText } from '../shared/styled.tsx';
 
 type SaveLoadingIndicatorProps = {
   isLoading: boolean;
@@ -203,6 +204,14 @@ export const LoadSaveModal = () => {
                   </LoadSaveButton>
                 </StyledLi>
               ))}
+              {!saveList?.length && !saveListError && (
+                <li>
+                  <CenteredText>
+                    No saves on the server, load a game and send your save to
+                    the server
+                  </CenteredText>
+                </li>
+              )}
             </SaveList>
           </SaveLoadingIndicator>
         )}
@@ -226,7 +235,9 @@ export const LoadSaveModal = () => {
         </Button>
       </ModalFooter>
       <EmbeddedProductTour
-        skipRenderCondition={saveLoading || saveListloading || !!saveLoadError}
+        skipRenderCondition={
+          saveLoading || saveListloading || !!saveListError || !!saveLoadError
+        }
         steps={tourSteps}
         completedProductTourStepName="hasCompletedLoadSaveTour"
       />
