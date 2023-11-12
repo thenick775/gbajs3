@@ -15,6 +15,7 @@ import {
   EmbeddedProductTour,
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
+import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { CenteredText } from '../shared/styled.tsx';
 
 type RomLoadingIndicatorProps = {
@@ -25,12 +26,6 @@ type RomLoadingIndicatorProps = {
 };
 
 type RomErrorProps = {
-  text: string;
-  icon?: JSX.Element;
-  $withMarginTop?: boolean;
-};
-
-type ErrorWrapperProps = {
   $withMarginTop?: boolean;
 };
 
@@ -84,31 +79,13 @@ const RomLoadingContainer = styled.div`
   margin-bottom: 15px;
 `;
 
-const ErrorWrapper = styled.div<ErrorWrapperProps>`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-
+const RomError = styled(ErrorWithIcon)<RomErrorProps>`
   ${({ $withMarginTop = false }) =>
     $withMarginTop &&
     `
     margin-top: 15px;
     `}
 `;
-
-const ErrorText = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.errorRed};
-`;
-
-const RomError = ({ icon, text, $withMarginTop = false }: RomErrorProps) => {
-  return (
-    <ErrorWrapper $withMarginTop={$withMarginTop}>
-      {icon}
-      <ErrorText>{text}</ErrorText>
-    </ErrorWrapper>
-  );
-};
 
 const RomLoadingIndicator = ({
   isLoading,

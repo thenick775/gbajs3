@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { useContext, useId } from 'react';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
-import { styled, useTheme } from 'styled-components';
+import { useTheme } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -14,12 +14,8 @@ import {
   EmbeddedProductTour,
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
+import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { CenteredText } from '../shared/styled.tsx';
-
-type UploadRomErrorProps = {
-  text: string;
-  icon?: JSX.Element;
-};
 
 type DynamicBodyProps = {
   errorColor: string;
@@ -27,26 +23,6 @@ type DynamicBodyProps = {
   respStatus: number | undefined;
   isLoading: boolean;
   hasError: boolean;
-};
-
-const ErrorWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-const ErrorText = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.errorRed};
-`;
-
-const UploadRomError = ({ icon, text }: UploadRomErrorProps) => {
-  return (
-    <ErrorWrapper>
-      {icon}
-      <ErrorText>{text}</ErrorText>
-    </ErrorWrapper>
-  );
 };
 
 const DynamicBody = ({
@@ -65,7 +41,7 @@ const DynamicBody = ({
     BodyContents = LoadingIndicator;
   } else if (hasError) {
     BodyContents = () => (
-      <UploadRomError
+      <ErrorWithIcon
         icon={<BiError style={{ color: errorColor }} />}
         text="Rom file upload has failed"
       />

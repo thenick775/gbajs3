@@ -15,15 +15,11 @@ import {
   EmbeddedProductTour,
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
+import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 
 type InputProps = {
   username: string;
   password: string;
-};
-
-type FormErrorProps = {
-  icon?: JSX.Element;
-  text: string;
 };
 
 const StyledForm = styled.form`
@@ -36,26 +32,6 @@ const StyledForm = styled.form`
   max-width: -webkit-fill-available;
   max-width: -moz-available;
 `;
-
-const ErrorWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-const ErrorText = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.errorRed};
-`;
-
-const FormError = ({ icon, text }: FormErrorProps) => {
-  return (
-    <ErrorWrapper>
-      {icon}
-      <ErrorText>{text}</ErrorText>
-    </ErrorWrapper>
-  );
-};
 
 export const LoginModal = () => {
   const theme = useTheme();
@@ -142,7 +118,7 @@ export const LoginModal = () => {
               })}
             />
             {!!loginError && (
-              <FormError
+              <ErrorWithIcon
                 icon={<BiError style={{ color: theme.errorRed }} />}
                 text="Login has failed"
               />
