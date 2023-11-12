@@ -13,7 +13,7 @@ RUN sed -i "s;<CLIENT_HOST>;${CLIENT_HOST};" /var/www/resources/gba-api.js && \
 RUN cd /var/www/ && find . | egrep '(.*\.js|.*\.css)' | egrep -v 'mgba.js' | xargs -n 1 -I {} minify -o {} {}
 
 # first stage - builder (beta)
-FROM node:20.5.1-alpine3.18 as builder
+FROM node:21.1.0-alpine3.18 as builder
 WORKDIR /app
 COPY ./beta/gbajs3 /app
 
