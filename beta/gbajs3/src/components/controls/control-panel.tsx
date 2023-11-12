@@ -381,6 +381,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
         completedProductTourStepName="hasCompletedControlPanelTour"
         zIndex={0}
         renderWithoutDelay
+        isNotInModal
       />
     </>
   );

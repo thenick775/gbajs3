@@ -1,17 +1,20 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Joyride, { STATUS, type Step } from 'react-joyride';
 import { useInterval, useLocalStorage } from 'usehooks-ts';
+
+import { ModalContext } from '../../context/modal/modal.tsx';
 
 import type { CompletedProductTourSteps } from './product-tour-intro.tsx';
 
 type EmbeddedProductTourProps = {
-  allowScrolling?: boolean;
   completedProductTourStepName: string;
+  steps: TourSteps;
+  allowScrolling?: boolean;
+  isNotInModal?: boolean;
   millisecondDelay?: number;
   renderWithoutDelay?: boolean;
   skipIfIntroSkipped?: boolean;
   skipRenderCondition?: boolean;
-  steps: TourSteps;
   zIndex?: number;
 };
 
@@ -26,18 +29,20 @@ export type TourSteps = Step[];
 
 export const EmbeddedProductTour = ({
   completedProductTourStepName,
-  skipRenderCondition,
   steps,
   allowScrolling = true,
-  millisecondDelay = 800,
+  isNotInModal = false, // by default, this component is assumed to be used in modals
+  millisecondDelay = 500,
   renderWithoutDelay = false,
   skipIfIntroSkipped = true,
+  skipRenderCondition = false,
   zIndex = 500 // note, value here is +100 in react joyride/floater
 }: EmbeddedProductTourProps) => {
   const [hasCompletedProductTourSteps, setHasCompletedProductTourSteps] =
     useLocalStorage<CompletedProductTourSteps>('completedProductTour', {
       [completedProductTourStepName]: false
     });
+  const { isModalOpen } = useContext(ModalContext);
   const [shouldRender, setShouldRender] = useState(renderWithoutDelay);
 
   useInterval(
@@ -48,13 +53,14 @@ export const EmbeddedProductTour = ({
   );
 
   if (
-    !shouldRender ||
-    hasCompletedProductTourSteps?.[completedProductTourStepName] ||
+    !shouldRender || // delay for positioning
+    hasCompletedProductTourSteps?.[completedProductTourStepName] || // if step is completed
     (skipIfIntroSkipped &&
       hasCompletedProductTourSteps?.hasCompletedProductTourIntro ===
-        STATUS.SKIPPED) ||
-    !hasCompletedProductTourSteps?.hasCompletedProductTourIntro ||
-    skipRenderCondition
+        STATUS.SKIPPED) || // if intro has been skipped
+    !hasCompletedProductTourSteps?.hasCompletedProductTourIntro || // if intro is not yet complete
+    (!isNotInModal && !isModalOpen) || // if in modal and modal is not open
+    skipRenderCondition // custom condition to skip evaluates to true
   )
     return null;
 
