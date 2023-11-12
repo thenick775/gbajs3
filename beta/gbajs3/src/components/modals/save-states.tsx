@@ -14,6 +14,7 @@ import {
   EmbeddedProductTour,
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
+import { CenteredText } from '../shared/styled.tsx';
 
 type SaveStateErrorProps = {
   icon?: JSX.Element;
@@ -262,6 +263,11 @@ export const SaveStatesModal = () => {
               />
             </StyledLi>
           ))}
+          {!currentSaveStates?.length && (
+            <li>
+              <CenteredText>No save states</CenteredText>
+            </li>
+          )}
         </SaveStatesList>
         <StyledBiPlus
           id={addStateButtonId}
