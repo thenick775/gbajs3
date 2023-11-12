@@ -10,6 +10,11 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
+import { CenteredTextContainer } from '../shared/styled.tsx';
 
 type InputProps = {
   cheatFiles: File[];
@@ -37,10 +42,6 @@ const HiddenInput = styled.input`
 const BiCloudUploadLarge = styled(BiCloudUpload)`
   height: 60px;
   width: auto;
-`;
-
-const CenteredTextContainer = styled.div`
-  text-align: center;
 `;
 
 export const UploadCheatsModal = () => {
@@ -88,6 +89,25 @@ export const UploadCheatsModal = () => {
       (cheatFile: File) => cheatFile.name.split('.').pop() === 'cheats'
     );
   };
+
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <>
+          <p>
+            Use this area to drag and drop your cheat files, or click to select
+            cheat files.
+          </p>
+          <p>
+            Cheat files should be in libretro format and have the file extension
+            '.cheats'.
+          </p>
+          <p>You may drop or select multiple cheat files!</p>
+        </>
+      ),
+      target: `#${CSS.escape(cheatsFormId)}`
+    }
+  ];
 
   return (
     <>
@@ -151,6 +171,10 @@ export const UploadCheatsModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedUploadCheatsTour"
+      />
     </>
   );
 };

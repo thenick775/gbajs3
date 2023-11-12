@@ -7,7 +7,7 @@ import { ModalContext } from '../../context/modal/modal.tsx';
 const modalStyles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 100
+    zIndex: 400
   },
   content: {
     width: 'calc(100dvw - 20px)',

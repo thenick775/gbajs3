@@ -63,7 +63,7 @@ const NavigationMenuWrapper = styled.div<ExpandableComponentProps>`
   background-color: ${({ theme }) => theme.mediumBlack};
   transition: 0.4s ease-in-out;
   -webkit-transition: 0.4s ease-in-out;
-  z-index: 50;
+  z-index: 150;
   overflow-y: auto;
   text-align: left;
   left: 0;
@@ -106,7 +106,7 @@ const MenuItemWrapper = styled.ul`
 const HamburgerButton = styled(ButtonBase)<ExpandableComponentProps>`
   background-color: ${({ theme }) => theme.mediumBlack};
   color: ${({ theme }) => theme.pureWhite};
-  z-index: 100;
+  z-index: 200;
   position: fixed;
   left: 244px;
   top: 12px;
@@ -136,7 +136,7 @@ const NavigationMenuClearDismiss = styled.button`
   left: ${NavigationMenuWidth}px;
   height: 99%;
   background: 0 0;
-  z-index: 40;
+  z-index: 140;
   border: none;
 `;
 

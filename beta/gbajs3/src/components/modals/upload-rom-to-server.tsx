@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useContext } from 'react';
+import { useContext, useId } from 'react';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
 import { styled, useTheme } from 'styled-components';
@@ -10,6 +10,11 @@ import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useUpLoadRom } from '../../hooks/use-upload-rom.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
+import { CenteredText } from '../shared/styled.tsx';
 
 type UploadRomErrorProps = {
   text: string;
@@ -23,11 +28,6 @@ type DynamicBodyProps = {
   isLoading: boolean;
   hasError: boolean;
 };
-
-const CenteredText = styled.p`
-  text-align: center;
-  margin: 0;
-`;
 
 const ErrorWrapper = styled.div`
   display: flex;
@@ -93,7 +93,18 @@ export const UploadRomToServerModal = () => {
   const theme = useTheme();
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
+  const uploadRomToServerButtonId = useId();
   const { data, isLoading, error, execute: executeUploadRom } = useUpLoadRom();
+
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <p>Use this button to upload your current rom file to the server.</p>
+      ),
+      placement: 'right',
+      target: `#${CSS.escape(uploadRomToServerButtonId)}`
+    }
+  ];
 
   return (
     <>
@@ -107,6 +118,7 @@ export const UploadRomToServerModal = () => {
       />
       <ModalFooter>
         <Button
+          id={uploadRomToServerButtonId}
           variant="contained"
           onClick={() => {
             const romFileBytes = emulator?.getCurrentRom();
@@ -125,6 +137,10 @@ export const UploadRomToServerModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedUploadRomToServerTour"
+      />
     </>
   );
 };

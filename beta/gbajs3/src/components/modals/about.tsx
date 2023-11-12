@@ -1,13 +1,18 @@
 import { Button } from '@mui/material';
 import { useContext } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 
+import type { CompletedProductTourSteps } from '../product-tour/product-tour-intro.tsx';
+
 export const AboutModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
+  const [, setHasCompletedProductTourSteps] =
+    useLocalStorage<CompletedProductTourSteps>('completedProductTour', {});
 
   return (
     <>
@@ -34,6 +39,15 @@ export const AboutModal = () => {
         </ul>
       </ModalBody>
       <ModalFooter>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setHasCompletedProductTourSteps({});
+            setIsModalOpen(false);
+          }}
+        >
+          Take a tour
+        </Button>
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
           Close
         </Button>

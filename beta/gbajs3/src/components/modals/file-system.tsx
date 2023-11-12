@@ -6,7 +6,7 @@ import {
   treeItemClasses,
   type TreeItemProps
 } from '@mui/x-tree-view';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useId, useState } from 'react';
 import { BiTrash } from 'react-icons/bi';
 import { styled } from 'styled-components';
 
@@ -16,6 +16,10 @@ import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
+import {
   CloseSquare,
   PlusSquare,
   MinusSquare
@@ -24,6 +28,7 @@ import {
 import type { FileNode } from '../../emulator/mgba/mgba-emulator.tsx';
 
 type EmulatorFSProps = {
+  id: string;
   allFiles?: FileNode;
   updateAllFiles: () => void;
   deleteFile: (path: string) => void;
@@ -64,6 +69,7 @@ const LeafLabelWrapper = styled.div`
 `;
 
 const EmulatorFS = ({
+  id,
   allFiles,
   updateAllFiles,
   deleteFile
@@ -102,6 +108,7 @@ const EmulatorFS = ({
 
   return (
     <TreeView
+      id={id}
       aria-label="File System"
       defaultExpanded={[allFiles.path]}
       defaultCollapseIcon={<MinusSquare />}
@@ -118,6 +125,8 @@ export const FileSystemModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
   const [allFiles, setAllFiles] = useState<FileNode | undefined>();
+  const emulatorFsId = useId();
+  const saveFileSystemButtonId = useId();
 
   useEffect(() => {
     setAllFiles(emulator?.listAllFiles());
@@ -134,24 +143,60 @@ export const FileSystemModal = () => {
     [emulator]
   );
 
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <>
+          <p>
+            Use this area to view your current file tree, as well as delete
+            files from the tree.
+          </p>
+          <p>
+            Use the <i>plus</i> and <i>minus</i> icons to open and close file
+            tree branches!
+          </p>
+        </>
+      ),
+      target: `#${CSS.escape(emulatorFsId)}`
+    },
+    {
+      content: (
+        <p>
+          Use the <i>SAVE FILE SYSTEM</i> button to persist all of your files to
+          your device!
+        </p>
+      ),
+      target: `#${CSS.escape(saveFileSystemButtonId)}`
+    }
+  ];
+
   return (
     <>
       <ModalHeader title="File System" />
       <ModalBody>
         <EmulatorFS
+          id={emulatorFsId}
           allFiles={allFiles}
           updateAllFiles={updateAllFiles}
           deleteFile={deleteFile}
         />
       </ModalBody>
       <ModalFooter>
-        <Button variant="contained" onClick={emulator?.fsSync}>
+        <Button
+          id={saveFileSystemButtonId}
+          variant="contained"
+          onClick={emulator?.fsSync}
+        >
           Save File System
         </Button>
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedFileSystemTour"
+      />
     </>
   );
 };

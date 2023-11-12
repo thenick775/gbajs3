@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useContext } from 'react';
+import { useContext, useId } from 'react';
 import { BiError } from 'react-icons/bi';
 import { PacmanLoader } from 'react-spinners';
 import { styled, useTheme } from 'styled-components';
@@ -10,6 +10,11 @@ import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useUpLoadSave } from '../../hooks/use-upload-save.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
+import { CenteredText } from '../shared/styled.tsx';
 
 type UploadSaveErrorProps = {
   text: string;
@@ -23,11 +28,6 @@ type DynamicBodyProps = {
   isLoading: boolean;
   hasError: boolean;
 };
-
-const CenteredText = styled.p`
-  text-align: center;
-  margin: 0;
-`;
 
 const ErrorWrapper = styled.div`
   display: flex;
@@ -93,12 +93,26 @@ export const UploadSaveToServerModal = () => {
   const theme = useTheme();
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
+  const uploadSaveToServerButtonId = useId();
   const {
     data,
     isLoading,
     error,
     execute: executeUploadSave
   } = useUpLoadSave();
+
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <>
+          <p>Use this button to upload your current save file to the server.</p>
+          <p>Remember to save in game before uploading!</p>
+        </>
+      ),
+      placement: 'right',
+      target: `#${CSS.escape(uploadSaveToServerButtonId)}`
+    }
+  ];
 
   return (
     <>
@@ -112,6 +126,7 @@ export const UploadSaveToServerModal = () => {
       />
       <ModalFooter>
         <Button
+          id={uploadSaveToServerButtonId}
           variant="contained"
           onClick={() => {
             const saveFileBytes = emulator?.getCurrentSave();
@@ -130,6 +145,10 @@ export const UploadSaveToServerModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedUploadSaveToServerTour"
+      />
     </>
   );
 };

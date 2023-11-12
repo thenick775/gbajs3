@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useContext } from 'react';
+import { useContext, useId } from 'react';
 import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
@@ -7,6 +7,11 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
+import { CenteredText } from '../shared/styled.tsx';
 
 const LoadRomButton = styled.button`
   padding: 0.5rem 1rem;
@@ -52,16 +57,32 @@ const RomList = styled.ul`
 export const LoadLocalRomModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
+  const romListId = useId();
   const ignorePaths = ['.', '..'];
   const localRoms = emulator
     ?.listRoms?.()
     ?.filter((romName) => !ignorePaths.includes(romName));
 
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <>
+          <p>
+            Use this area to load local roms that have been saved to your
+            device.
+          </p>
+          <p>Tap the name of your rom file and your game will boot!</p>
+        </>
+      ),
+      target: `#${CSS.escape(romListId)}`
+    }
+  ];
+
   return (
     <>
       <ModalHeader title="Load Local Rom" />
       <ModalBody>
-        <RomList>
+        <RomList id={romListId}>
           {localRoms?.map?.((romName: string, idx: number) => (
             <StyledLi key={`${romName}_${idx}`}>
               <LoadRomButton
@@ -74,6 +95,13 @@ export const LoadLocalRomModal = () => {
               </LoadRomButton>
             </StyledLi>
           ))}
+          {!localRoms?.length && (
+            <li>
+              <CenteredText>
+                No local roms, load a game and save your file system
+              </CenteredText>
+            </li>
+          )}
         </RomList>
       </ModalBody>
       <ModalFooter>
@@ -81,6 +109,10 @@ export const LoadLocalRomModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedLoadLocalRomTour"
+      />
     </>
   );
 };

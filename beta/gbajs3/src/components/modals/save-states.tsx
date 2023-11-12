@@ -10,6 +10,11 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
+import { CenteredText } from '../shared/styled.tsx';
 
 type SaveStateErrorProps = {
   icon?: JSX.Element;
@@ -124,6 +129,8 @@ export const SaveStatesModal = () => {
     0
   );
   const saveStatesFormId = useId();
+  const saveStatesListId = useId();
+  const addStateButtonId = useId();
   const {
     register,
     handleSubmit,
@@ -159,6 +166,39 @@ export const SaveStatesModal = () => {
     setCurrentSlot(formData.saveStateSlot);
   };
 
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <p>
+          Use this input and button to manually update the current save state
+          slot in use.
+        </p>
+      ),
+      placementBeacon: 'bottom-end',
+      target: `#${CSS.escape(saveStatesFormId)}`
+    },
+    {
+      content: (
+        <p>
+          Tap a row to load a save state, or use the trash can icon to delete a
+          save state.
+        </p>
+      ),
+      placementBeacon: 'bottom-end',
+      target: `#${CSS.escape(saveStatesListId)}`
+    },
+    {
+      content: (
+        <p>
+          Use the <i>plus</i> button to add a new save state. This will
+          automatically increase the current save state number!
+        </p>
+      ),
+      placementBeacon: 'bottom-end',
+      target: `#${CSS.escape(addStateButtonId)}`
+    }
+  ];
+
   return (
     <>
       <ModalHeader title="Manage Save States" />
@@ -189,7 +229,7 @@ export const SaveStatesModal = () => {
           </Button>
         </StyledForm>
 
-        <SaveStatesList>
+        <SaveStatesList id={saveStatesListId}>
           {currentSaveStates?.map?.((saveState: string, idx: number) => (
             <StyledLi key={`${saveState}_${idx}`}>
               <LoadSaveStateButton
@@ -223,8 +263,14 @@ export const SaveStatesModal = () => {
               />
             </StyledLi>
           ))}
+          {!currentSaveStates?.length && (
+            <li>
+              <CenteredText>No save states</CenteredText>
+            </li>
+          )}
         </SaveStatesList>
         <StyledBiPlus
+          id={addStateButtonId}
           onClick={() => {
             const hasCreatedSaveState = emulator?.createSaveState(
               currentSlot + 1
@@ -250,6 +296,10 @@ export const SaveStatesModal = () => {
           Close
         </Button>
       </ModalFooter>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedSaveStatesTour"
+      />
     </>
   );
 };

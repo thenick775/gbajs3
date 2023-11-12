@@ -2,6 +2,7 @@ import { Slider, useMediaQuery } from '@mui/material';
 import {
   useContext,
   useEffect,
+  useId,
   useRef,
   useState,
   type Dispatch,
@@ -23,6 +24,10 @@ import { css, styled, useTheme } from 'styled-components';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
+import {
+  EmbeddedProductTour,
+  type TourSteps
+} from '../product-tour/embedded-product-tour.tsx';
 import { ButtonBase } from '../shared/custom-button-base.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
@@ -31,10 +36,11 @@ type ControlPanelProps = {
 };
 
 type PanelControlProps = {
-  children: ReactNode;
-  $shouldGrow?: boolean;
   $onClick?: () => void;
+  $shouldGrow?: boolean;
   ariaLabel: string;
+  children: ReactNode;
+  id: string;
 };
 
 type PanelControlButtonProps = {
@@ -104,17 +110,19 @@ const VolumeSliderControl = styled.li`
 `;
 
 const PanelControl = ({
-  children,
-  $shouldGrow,
   $onClick,
-  ariaLabel
+  $shouldGrow,
+  ariaLabel,
+  children,
+  id
 }: PanelControlProps) => {
   return (
     <PanelControlWrapper>
       <PanelControlButton
-        $shouldGrow={$shouldGrow}
-        onClick={$onClick}
         aria-label={ariaLabel}
+        id={id}
+        onClick={$onClick}
+        $shouldGrow={$shouldGrow}
       >
         {children}
       </PanelControlButton>
@@ -144,6 +152,13 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const dragRef = useRef<Rnd>(null);
   const [isEmulatorPaused, setIsEmulatorPaused] = useState(false);
+  const controlPanelId = useId();
+  const playPanelControlId = useId();
+  const fastForwardPanelControlId = useId();
+  const quitGamePanelControlId = useId();
+  const dragPanelControlId = useId();
+  const resizePanelControlId = useId();
+  const volumeSliderControlId = useId();
   const [currentEmulatorVolume, setCurrentEmulatorVolume] = useLocalStorage(
     'currentEmulatorVolume',
     1
@@ -183,102 +198,191 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
     setCurrentEmulatorVolume(volumePercent);
   };
 
+  const tourSteps: TourSteps = [
+    {
+      content: (
+        <>
+          <p>
+            Use the control panel to quickly perform in game actions and
+            reposition controls.
+          </p>
+          <p>Click next to take a tour of the controls!</p>
+        </>
+      ),
+      placementBeacon: 'bottom',
+      target: `#${CSS.escape(controlPanelId)}`
+    },
+    {
+      content: (
+        <p>
+          Use the this button to pause and resume your game if it is running.
+        </p>
+      ),
+      placementBeacon: 'bottom',
+      target: `#${CSS.escape(playPanelControlId)}`
+    },
+    {
+      content: <p>Use this button to turn fast forward on and off.</p>,
+      placementBeacon: 'bottom',
+      target: `#${CSS.escape(fastForwardPanelControlId)}`
+    },
+    {
+      content: <p>Use this button to quit your current game.</p>,
+      placementBeacon: 'bottom',
+      target: `#${CSS.escape(quitGamePanelControlId)}`
+    },
+    {
+      content: (
+        <p>
+          Use this button to enable dragging and repositioning of the screen,
+          controls, and control panel.
+        </p>
+      ),
+      placement: 'right',
+      placementBeacon: 'bottom',
+      target: `#${CSS.escape(dragPanelControlId)}`
+    },
+    {
+      content: <p>Use this button to resize the screen and control panel.</p>,
+      placement: 'right',
+      placementBeacon: 'bottom',
+      target: `#${CSS.escape(resizePanelControlId)}`
+    },
+    {
+      content: (
+        <>
+          <p>Use this slider to increase and decrease the emulator volume.</p>
+          <p>Your volume setting will be saved between refreshes!</p>
+        </>
+      ),
+      placementBeacon: 'bottom',
+      target: `#${CSS.escape(volumeSliderControlId)}`
+    }
+  ];
+
   return (
-    <DragWrapper
-      disableDragging={!areItemsDraggable}
-      enableResizing={areItemsResizable}
-      resizeHandleComponent={{
-        bottomRight: <GripperHandle variation="bottomRight" />,
-        bottomLeft: <GripperHandle variation="bottomLeft" />
-      }}
-      resizeHandleStyles={{
-        bottomRight: { marginBottom: '15px', marginRight: '15px' },
-        bottomLeft: { marginBottom: '15px', marginLeft: '15px' }
-      }}
-      ref={dragRef}
-      cancel=".noDrag"
-      size={{ width: '', height: 'auto' }}
-      default={{
-        x: Math.floor(canvasBounds.left),
-        y: Math.floor(canvasBounds.bottom + dragWrapperPadding),
-        width: 'auto',
-        height: 'auto'
-      }}
-    >
-      <Panel>
-        <IconContext.Provider value={{ size: '2em' }}>
-          <PanelControl
-            ariaLabel={isEmulatorPaused ? 'Play' : 'Pause'}
-            $shouldGrow
-            $onClick={togglePlay}
-          >
-            {isEmulatorPaused || !isEmulatorRunning ? <BiPlay /> : <BiPause />}
-          </PanelControl>
-          <PanelControl
-            ariaLabel={isFastForwardOn ? 'Fast Forward' : 'Regular Speed'}
-            $shouldGrow
-            $onClick={toggleFastForward}
-          >
-            {isFastForwardOn ? <AiOutlineForward /> : <AiOutlineFastForward />}
-          </PanelControl>
-          <PanelControl ariaLabel="Quit Game" $shouldGrow $onClick={quitGame}>
-            <BiUndo />
-          </PanelControl>
-          <PanelControl
-            ariaLabel={areItemsDraggable ? 'Anchor Items' : 'Drag Items'}
-            $shouldGrow
-            $onClick={() => {
-              setAreItemsDraggable((prevState) => !prevState);
-            }}
-          >
-            {areItemsDraggable ? (
-              <BiMove color={theme.gbaThemeBlue} />
-            ) : (
-              <BiMove />
-            )}
-          </PanelControl>
-          <PanelControl
-            ariaLabel={
-              areItemsResizable ? 'Stop Resizing Items' : 'Resize Items'
-            }
-            $shouldGrow
-            $onClick={() => {
-              setAreItemsResizable((prevState) => !prevState);
-            }}
-          >
-            {areItemsResizable ? (
-              <TbResize color={theme.gbaThemeBlue} />
-            ) : (
-              <TbResize />
-            )}
-          </PanelControl>
-          <VolumeSliderControl>
-            <BiVolumeMute />
-            <MutedMarkSlider
-              aria-label="Volume"
-              value={currentEmulatorVolume}
-              step={0.1}
-              marks
-              min={0}
-              max={1}
-              style={{
-                width: '100px',
-                margin: '0 10px',
-                maxHeight: '40px'
+    <>
+      <DragWrapper
+        id={controlPanelId}
+        disableDragging={!areItemsDraggable}
+        enableResizing={areItemsResizable}
+        resizeHandleComponent={{
+          bottomRight: <GripperHandle variation="bottomRight" />,
+          bottomLeft: <GripperHandle variation="bottomLeft" />
+        }}
+        resizeHandleStyles={{
+          bottomRight: { marginBottom: '15px', marginRight: '15px' },
+          bottomLeft: { marginBottom: '15px', marginLeft: '15px' }
+        }}
+        ref={dragRef}
+        cancel=".noDrag"
+        size={{ width: '', height: 'auto' }}
+        default={{
+          x: Math.floor(canvasBounds.left),
+          y: Math.floor(canvasBounds.bottom + dragWrapperPadding),
+          width: 'auto',
+          height: 'auto'
+        }}
+      >
+        <Panel>
+          <IconContext.Provider value={{ size: '2em' }}>
+            <PanelControl
+              id={playPanelControlId}
+              ariaLabel={isEmulatorPaused ? 'Play' : 'Pause'}
+              $shouldGrow
+              $onClick={togglePlay}
+            >
+              {isEmulatorPaused || !isEmulatorRunning ? (
+                <BiPlay />
+              ) : (
+                <BiPause />
+              )}
+            </PanelControl>
+            <PanelControl
+              id={fastForwardPanelControlId}
+              ariaLabel={isFastForwardOn ? 'Fast Forward' : 'Regular Speed'}
+              $shouldGrow
+              $onClick={toggleFastForward}
+            >
+              {isFastForwardOn ? (
+                <AiOutlineForward />
+              ) : (
+                <AiOutlineFastForward />
+              )}
+            </PanelControl>
+            <PanelControl
+              id={quitGamePanelControlId}
+              ariaLabel="Quit Game"
+              $shouldGrow
+              $onClick={quitGame}
+            >
+              <BiUndo />
+            </PanelControl>
+            <PanelControl
+              id={dragPanelControlId}
+              ariaLabel={areItemsDraggable ? 'Anchor Items' : 'Drag Items'}
+              $shouldGrow
+              $onClick={() => {
+                setAreItemsDraggable((prevState) => !prevState);
               }}
-              onChange={setVolume}
-              onFocus={emulator?.disableKeyboardInput}
-              onBlur={emulator?.enableKeyboardInput}
-              onClick={() => {
-                // click is triggered on keyup, if using mouse this
-                // is the desired behavior after focus is gained
-                emulator?.enableKeyboardInput();
+            >
+              {areItemsDraggable ? (
+                <BiMove color={theme.gbaThemeBlue} />
+              ) : (
+                <BiMove />
+              )}
+            </PanelControl>
+            <PanelControl
+              id={resizePanelControlId}
+              ariaLabel={
+                areItemsResizable ? 'Stop Resizing Items' : 'Resize Items'
+              }
+              $shouldGrow
+              $onClick={() => {
+                setAreItemsResizable((prevState) => !prevState);
               }}
-            />
-            <BiVolumeFull />
-          </VolumeSliderControl>
-        </IconContext.Provider>
-      </Panel>
-    </DragWrapper>
+            >
+              {areItemsResizable ? (
+                <TbResize color={theme.gbaThemeBlue} />
+              ) : (
+                <TbResize />
+              )}
+            </PanelControl>
+            <VolumeSliderControl id={volumeSliderControlId}>
+              <BiVolumeMute />
+              <MutedMarkSlider
+                aria-label="Volume"
+                value={currentEmulatorVolume}
+                step={0.1}
+                marks
+                min={0}
+                max={1}
+                style={{
+                  width: '100px',
+                  margin: '0 10px',
+                  maxHeight: '40px'
+                }}
+                onChange={setVolume}
+                onFocus={emulator?.disableKeyboardInput}
+                onBlur={emulator?.enableKeyboardInput}
+                onClick={() => {
+                  // click is triggered on keyup, if using mouse this
+                  // is the desired behavior after focus is gained
+                  emulator?.enableKeyboardInput();
+                }}
+              />
+              <BiVolumeFull />
+            </VolumeSliderControl>
+          </IconContext.Provider>
+        </Panel>
+      </DragWrapper>
+      <EmbeddedProductTour
+        steps={tourSteps}
+        completedProductTourStepName="hasCompletedControlPanelTour"
+        zIndex={0}
+        renderWithoutDelay
+        isNotInModal
+      />
+    </>
   );
 };

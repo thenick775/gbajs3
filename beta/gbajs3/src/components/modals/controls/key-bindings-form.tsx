@@ -23,7 +23,7 @@ const StyledForm = styled.form`
 `;
 
 export const KeyBindingsForm = ({ id }: KeyBindingsFormProps) => {
-  const { emulator } = useContext(EmulatorContext);
+  const { emulator, isEmulatorRunning } = useContext(EmulatorContext);
   const {
     handleSubmit,
     setValue,
@@ -43,7 +43,7 @@ export const KeyBindingsForm = ({ id }: KeyBindingsFormProps) => {
       .filter(([, v]) => !!v)
       .map(([, k]) => k);
 
-    emulator?.remapKeyBindings(keyBindings);
+    if (isEmulatorRunning) emulator?.remapKeyBindings(keyBindings);
 
     setCurrentKeyBindings(keyBindings);
   };
