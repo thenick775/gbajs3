@@ -359,11 +359,6 @@ export const NavigationMenu = ({
               onClick={executeLogout}
             />
             <NavLeaf
-              title="Quick Reload (Serv.)"
-              $disabled={isMenuItemDisabledByAuth}
-              icon={<BiRedo />}
-            />
-            <NavLeaf
               title="Load Save (Server)"
               $disabled={isMenuItemDisabledByAuth}
               icon={<BiCloudDownload />}
