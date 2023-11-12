@@ -14,12 +14,8 @@ import {
   EmbeddedProductTour,
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
+import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { CenteredText } from '../shared/styled.tsx';
-
-type SaveStateErrorProps = {
-  icon?: JSX.Element;
-  text: string;
-};
 
 type InputProps = {
   saveStateSlot: number;
@@ -87,17 +83,6 @@ const StyledCiCircleRemove = styled(BiTrash)`
   width: 20px;
 `;
 
-const ErrorWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-const ErrorText = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.errorRed};
-`;
-
 const StyledForm = styled.form`
   display: flex;
   justify-content: space-between;
@@ -106,15 +91,6 @@ const StyledForm = styled.form`
   margin-bottom: 16px;
   padding-bottom: 16px;
 `;
-
-const SaveStateError = ({ icon, text }: SaveStateErrorProps) => {
-  return (
-    <ErrorWrapper>
-      {icon}
-      <ErrorText>{text}</ErrorText>
-    </ErrorWrapper>
-  );
-};
 
 export const SaveStatesModal = () => {
   const theme = useTheme();
@@ -285,7 +261,7 @@ export const SaveStatesModal = () => {
           }}
         />
         {saveStateError && (
-          <SaveStateError
+          <ErrorWithIcon
             icon={<BiError style={{ color: theme.errorRed }} />}
             text={saveStateError}
           />

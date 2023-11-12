@@ -38,6 +38,7 @@ import { AboutModal } from '../modals/about.tsx';
 import { CheatsModal } from '../modals/cheats.tsx';
 import { ChooseCoreModal } from '../modals/choose-core.tsx';
 import { ControlsModal } from '../modals/controls.tsx';
+import { DownloadSaveModal } from '../modals/download-save.tsx';
 import { FileSystemModal } from '../modals/file-system.tsx';
 import { LegalModal } from '../modals/legal.tsx';
 import { LoadLocalRomModal } from '../modals/load-local-rom.tsx';
@@ -276,23 +277,8 @@ export const NavigationMenu = ({
               $disabled={!isEmulatorRunning}
               icon={<BiCloudDownload />}
               onClick={() => {
-                const save = emulator?.getCurrentSave();
-                const saveName = emulator?.getCurrentSaveName();
-
-                if (save && saveName) {
-                  const saveFile = new Blob([save], {
-                    type: 'data:application/x-spss-sav'
-                  });
-
-                  const link = document.createElement('a');
-                  link.download = saveName;
-                  link.href = URL.createObjectURL(saveFile);
-                  link.click();
-                } else {
-                  toast.error(
-                    'You must load the rom to download its save file'
-                  );
-                }
+                setModalContent(<DownloadSaveModal />);
+                setIsModalOpen(true);
               }}
             />
             <NavLeaf
