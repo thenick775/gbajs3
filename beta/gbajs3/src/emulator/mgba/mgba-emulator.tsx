@@ -26,7 +26,6 @@ export type ParsedCheats = {
 };
 
 export type GBAEmulator = {
-  // lcdFade: () => void; // put in screen
   autoLoadCheats: () => boolean;
   createSaveState: (slot: number) => boolean;
   defaultKeyBindings: () => KeyBinding[];
@@ -52,7 +51,7 @@ export type GBAEmulator = {
   pause: () => void;
   quickReload: () => void;
   quitGame: () => void;
-  quitMgba: () => void;
+  quitEmulator: () => void;
   remapKeyBindings: (keyBindings: KeyBinding[]) => void;
   resume: () => void;
   run: (romPath: string) => boolean;
@@ -235,7 +234,7 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     pause: mGBA.pauseGame,
     resume: mGBA.resumeGame,
     quitGame: mGBA.quitGame,
-    quitMgba: mGBA.quitMgba,
+    quitEmulator: mGBA.quitMgba,
     quickReload: mGBA.quickReload,
     getCurrentCheatsFile: () => {
       const cheatsName = filepathToFileName(mGBA.gameName, '.cheats');

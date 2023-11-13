@@ -3,6 +3,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
 
+import { renderCanvasWidth, renderCanvasHeight } from './consts.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { NavigationMenuWidth } from '../navigation-menu/consts.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
@@ -94,8 +95,8 @@ export const Screen = () => {
       <RenderCanvas
         ref={canvasRef}
         id="screen"
-        width="240"
-        height="160"
+        width={renderCanvasWidth}
+        height={renderCanvasHeight}
         $pixelated
       />
     </ScreenWrapper>
