@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
+import { fadeCanvas } from '../../components/screen/fade.tsx';
 import { useEmulator } from '../../hooks/use-emulator.tsx';
 
 import type {
@@ -79,11 +80,13 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
         }
       },
       quitGame: () => {
+        fadeCanvas(canvas, emulator.screenShot);
         emulator.quitGame();
         setIsEmulatorRunning(false);
       },
-      quitMgba: () => {
-        emulator.quitMgba();
+      quitEmulator: () => {
+        fadeCanvas(canvas, emulator.screenShot);
+        emulator.quitEmulator();
         setIsEmulatorRunning(false);
       }
     };
@@ -92,7 +95,13 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
       ...emulator,
       ...stateBasedOverrides
     };
-  }, [emulator, isEmulatorRunning, currentEmulatorVolume, currentKeyBindings]);
+  }, [
+    emulator,
+    isEmulatorRunning,
+    canvas,
+    currentEmulatorVolume,
+    currentKeyBindings
+  ]);
 
   return (
     <EmulatorContext.Provider
