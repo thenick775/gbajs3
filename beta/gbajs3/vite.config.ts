@@ -13,7 +13,7 @@ export default defineConfig({
       manifest: {
         name: 'Gbajs3',
         short_name: 'GJ3',
-        description: 'GBA emulator fully in the Browser',
+        description: 'GBA emulator online in the Browser',
         theme_color: '#979597',
         background_color: '#212529',
         icons: [
