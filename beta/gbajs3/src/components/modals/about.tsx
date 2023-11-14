@@ -23,7 +23,7 @@ export const AboutModal = () => {
           online and offline in the browser.
         </p>
         <p>
-          We support the mGBA wasm core, and the gbajs pure javascript core.
+          We currently support the mGBA core through the use of webassembly.
         </p>
         <p>Getting Started:</p>
         <ul>

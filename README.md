@@ -3,7 +3,7 @@ gbajs3 -- A Browser Based Game Boy Advance Emulator
 
 This project is a Game Boy Advance emulator that is freely licensed and works in any modern browser without plugins.
 
-It began as a re-skin of the [gbajs2](https://github.com/andychase/gbajs2) fork by andychase, but now supports both the [mGBA wasm](https://github.com/thenick775/mgba/tree/feature/wasm) core as well as gbajs, a pure javascript GBA core.
+It began as a re-skin of the [gbajs2](https://github.com/andychase/gbajs2) fork by andychase, but now supports the [mGBA wasm](https://github.com/thenick775/mgba/tree/feature/wasm) core as well through the use of emscripten, for a feature rich user experience.
 
 This project was driven specifically by my need to play modern GBA rom hacks outside of desktop applications, without side loading or building through xcode.
 
@@ -20,25 +20,26 @@ Do not attempt to log into the server unless you are the server owner or an appr
 * Movable desktop canvas and controls
 * Mobile UI support
 * Offline PWA Support
-* Functional Surface-level ASM debugger (gbajs only)
-* Save state support (mGBA only)
-* Cheat code support (mGBA only)
-* Interchangeable cores
+* ~~Functional Surface-level ASM debugger (gbajs only)~~ (available in legacy v1)
+* Save state support
+* Cheat code support
+* Core Support
     * mGBA support (wasm based)
-    * gbajs support (pure javascript)
+    * ~~gbajs support (pure javascript)~~ (available in legacy v1)
 * Admin UI
 * Postgres support
-* Persistent file system utilizing IndexedDB (mGBA only)
+* Persistent file system utilizing IndexedDB
 * Interactive Product Tour
 
 ## Existing Feature List
 - Both cores support realtime clock
-- For additional gbajs2 features:
-    - [Compatibility](https://github.com/andychase/gbajs2/wiki/Compatibility-List)
-    - [Emulator features](https://github.com/andychase/gbajs2)
-- For additional mGBA features:
+- For additional mGBA features and information:
+    - [compatibility list](https://wiki.gbatemp.net/wiki/MGBA)
     - [mGBA wasm fork Readme](https://github.com/thenick775/mgba/tree/feature/wasm)
     - [official mGBA Readme](https://github.com/mgba-emu/mgba)
+- ~~For additional gbajs2 features and information:~~ (available in legacy v1)
+    - ~~[Compatibility](https://github.com/andychase/gbajs2/wiki/Compatibility-List)~~
+    - ~~[Emulator features](https://github.com/andychase/gbajs2)~~
 
 ## To Do
 * Debugger enhancements

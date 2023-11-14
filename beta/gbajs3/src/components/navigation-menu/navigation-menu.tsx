@@ -5,7 +5,6 @@ import toast from 'react-hot-toast';
 import {
   BiInfoCircle,
   BiFolderPlus,
-  BiBrain,
   BiCloudUpload,
   BiUpload,
   BiGame,
@@ -20,7 +19,6 @@ import {
   BiLogInCircle,
   BiLogOutCircle,
   BiCheckShield,
-  BiBug,
   BiConversation,
   BiMenu,
   BiFileFind
@@ -36,7 +34,6 @@ import { ModalContext } from '../../context/modal/modal.tsx';
 import { useLogout } from '../../hooks/use-logout.tsx';
 import { AboutModal } from '../modals/about.tsx';
 import { CheatsModal } from '../modals/cheats.tsx';
-import { ChooseCoreModal } from '../modals/choose-core.tsx';
 import { ControlsModal } from '../modals/controls.tsx';
 import { DownloadSaveModal } from '../modals/download-save.tsx';
 import { FileSystemModal } from '../modals/file-system.tsx';
@@ -183,15 +180,6 @@ export const NavigationMenu = ({
             $isExpanded={!isEmulatorRunning}
             icon={<BiFolderPlus />}
           >
-            <NavLeaf
-              title="Choose Core"
-              $disabled={isEmulatorRunning}
-              icon={<BiBrain />}
-              onClick={() => {
-                setModalContent(<ChooseCoreModal />);
-                setIsModalOpen(true);
-              }}
-            />
             <NavLeaf
               title="Upload Save"
               $disabled={isEmulatorRunning}
@@ -391,8 +379,6 @@ export const NavigationMenu = ({
             }}
             $withPadding
           />
-
-          <NavLeaf title="Debugger" icon={<BiBug />} $disabled $withPadding />
 
           <NavLeaf
             title="Contact"
