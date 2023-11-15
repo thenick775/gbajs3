@@ -100,6 +100,5 @@ export default defineConfig({
         }
       }
     }
-  },
-  base: './' // beta development only
+  }
 });

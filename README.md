@@ -95,6 +95,10 @@ openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privateKey.k
 * Admin UI can be found at `/admin`, default password for all admin users are `admin`, **please log in to the admin portal and change the default passwords immediately**
 * Golang api swagger UI can be found at `/api/documentation/`
 
+## Contributing
+
+Feel free to open discussions, issues, and pull requests. Contributions are welcome!
+
 ## License
 Original work by Endrift. Repo: (Archived / No longer maintained)
 https://github.com/endrift/gbajs
