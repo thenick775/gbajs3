@@ -13,12 +13,16 @@ RUN npm run build
 FROM nginx:stable-alpine
 COPY ./docker/server/nginx/nginx.conf.template /etc/nginx/templates/nginx.conf.template
 
-# copy beta build
+# copy build
 COPY --from=builder /app/dist /var/www/
 
 # legacy v1 archived
+ARG CLIENT_HOST
 COPY ./legacy/v1.zip /var/www/
-RUN cd /var/www/ && unzip ./v1.zip
+RUN cd /var/www/ && \
+	unzip ./v1.zip && \
+	rm ./v1.zip && \
+	find ./v1/ -type f -exec sed -i "s;<CLIENT_HOST>;${CLIENT_HOST};" {} +
 
 # install fail2ban, fail2ban config
 RUN apk add rsyslog fail2ban
