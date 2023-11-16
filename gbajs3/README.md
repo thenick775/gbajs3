@@ -53,3 +53,13 @@ To assess vulnerabilities, run:
 ```
 npm audit
 ```
+
+## Additional commands
+
+Use:
+
+```
+npm run;
+```
+
+to list available scripts
