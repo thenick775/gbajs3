@@ -3,7 +3,7 @@ gbajs3 -- A Browser Based Game Boy Advance Emulator
 
 This project is a Game Boy Advance emulator that is freely licensed and works in any modern browser without plugins.
 
-It began as a re-skin of the [gbajs2](https://github.com/andychase/gbajs2) fork by andychase, but now supports the [mGBA wasm](https://github.com/thenick775/mgba/tree/feature/wasm) core as well through the use of emscripten, for a feature rich user experience.
+It began as a re-skin of the [gbajs2](https://github.com/andychase/gbajs2) fork by andychase, but now supports the [mGBA wasm](https://github.com/thenick775/mgba/tree/feature/wasm) core through the use of emscripten, for a feature rich user experience.
 
 This project was driven specifically by my need to play modern GBA rom hacks outside of desktop applications, without side loading or building through xcode.
 
@@ -51,13 +51,11 @@ Do not attempt to log into the server unless you are the server owner or an appr
 
 * Example Desktop
 
-<img src="./readme-graphics/gbajs3-desktop.png">
+<img src="./readme-graphics/gbajs3-desktop-v2.png">
 
 * Example Mobile
 
-<img src="./readme-graphics/gbajs3-mobile-portrait.png" width="400px">
-
-<img src="./readme-graphics/gbajs3-mobile-landscape.png">
+<img src="./readme-graphics/gbajs3-mobile-portrait-v2.png" width="400px">
 
 * Example Admin
 
