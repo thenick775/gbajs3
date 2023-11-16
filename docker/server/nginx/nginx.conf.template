@@ -13,7 +13,7 @@ upstream docker-admin {
 server {
     listen       80;
     listen  [::]:80;
-    return 301 <CLIENT_HOST>$request_uri;
+    return 301 ${CLIENT_HOST}$request_uri;
 }
 
 server {
