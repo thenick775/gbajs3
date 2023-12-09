@@ -2,7 +2,7 @@ import { TextField } from '@mui/material';
 import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { styled } from 'styled-components';
-import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from '../../../hooks/use-local-storage.tsx';
 
 import { emulatorKeyBindingsLocalStorageKey } from '../../../context/emulator/consts.tsx';
 import { EmulatorContext } from '../../../context/emulator/emulator.tsx';

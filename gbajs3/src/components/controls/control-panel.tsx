@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useId,
+  useMemo,
   useState,
   type Dispatch,
   type ReactNode
@@ -20,10 +21,11 @@ import {
 import { TbResize } from 'react-icons/tb';
 import { Rnd } from 'react-rnd';
 import { css, styled, useTheme } from 'styled-components';
-import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import { emulatorVolumeLocalStorageKey } from '../../context/emulator/consts.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
+import { LayoutContext } from '../../context/layout/layout.tsx';
 import {
   EmbeddedProductTour,
   type TourSteps
@@ -46,14 +48,6 @@ type PanelControlProps = {
 type PanelControlButtonProps = {
   $shouldGrow?: boolean;
 };
-
-const DragWrapper = styled(Rnd)`
-  width: 100dvw;
-
-  @media ${({ theme }) => theme.isLargerThanPhone} {
-    width: fit-content;
-  }
-`;
 
 const Panel = styled.ul`
   background-color: ${({ theme }) => theme.panelBlueGray};
@@ -147,6 +141,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
     areItemsResizable,
     setAreItemsResizable
   } = useContext(EmulatorContext);
+  const { layouts, setLayout, hasSetLayout } = useContext(LayoutContext);
   const [isFastForwardOn, setIsFastForwardOn] = useState(false);
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
@@ -168,14 +163,31 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
       setExternalBounds(
         node?.resizableElement.current?.getBoundingClientRect()
       );
+
+      if (
+        hasSetLayout &&
+        !layouts?.controlPanel &&
+        node?.resizableElement?.current
+      )
+        setLayout('controlPanel', {
+          size: {
+            width: node.resizableElement.current.style.width,
+            height: node.resizableElement.current.style.height
+          },
+          position: { ...node.getDraggablePosition() }
+        });
     },
-    [setExternalBounds]
+    [setExternalBounds, setLayout, hasSetLayout, layouts]
   );
 
-  if (!canvas?.parentElement) return null;
+  const canvasBounds = useMemo(
+    () => canvas?.parentElement?.getBoundingClientRect(),
+    [canvas]
+  );
+
+  if (!canvasBounds) return null;
 
   const dragWrapperPadding = isLargerThanPhone ? 5 : 0;
-  const canvasBounds = canvas.parentElement.getBoundingClientRect();
 
   const togglePlay = () => {
     isEmulatorPaused ? emulator?.resume() : emulator?.pause();
@@ -265,9 +277,21 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
     }
   ];
 
+  const defaultPosition = {
+    x: Math.floor(canvasBounds.left),
+    y: Math.floor(canvasBounds.bottom + dragWrapperPadding)
+  };
+  const defaultSize = {
+    width: isLargerThanPhone ? 'auto' : '100dvw',
+    height: 'auto'
+  };
+
+  const position = layouts?.controlPanel?.position ?? defaultPosition;
+  const size = layouts?.controlPanel?.size ?? defaultSize;
+
   return (
     <>
-      <DragWrapper
+      <Rnd
         id={controlPanelId}
         disableDragging={!areItemsDraggable}
         enableResizing={areItemsResizable}
@@ -281,12 +305,20 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
         }}
         ref={refSetExternalBounds}
         cancel=".noDrag"
-        size={{ width: '', height: 'auto' }}
+        position={position}
+        size={size}
+        onDragStop={(_, data) => {
+          setLayout('controlPanel', { position: { x: data.x, y: data.y } });
+        }}
+        onResizeStop={(_1, _2, ref, _3, position) => {
+          setLayout('controlPanel', {
+            size: { width: ref.style.width, height: ref.style.height },
+            position: { ...position }
+          });
+        }}
         default={{
-          x: Math.floor(canvasBounds.left),
-          y: Math.floor(canvasBounds.bottom + dragWrapperPadding),
-          width: 'auto',
-          height: 'auto'
+          ...defaultPosition,
+          ...defaultSize
         }}
       >
         <Panel>
@@ -380,7 +412,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
             </VolumeSliderControl>
           </IconContext.Provider>
         </Panel>
-      </DragWrapper>
+      </Rnd>
       <EmbeddedProductTour
         steps={tourSteps}
         completedProductTourStepName="hasCompletedControlPanelTour"

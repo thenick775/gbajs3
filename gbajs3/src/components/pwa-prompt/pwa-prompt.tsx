@@ -1,5 +1,5 @@
 import { PwaPrompt as IOSPwaPrompt } from 'react-ios-pwa-prompt-ts';
-import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 

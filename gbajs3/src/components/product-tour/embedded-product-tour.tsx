@@ -1,6 +1,8 @@
 import { useContext, useState } from 'react';
 import Joyride, { STATUS, type Step } from 'react-joyride';
-import { useInterval, useLocalStorage } from 'usehooks-ts';
+import { useInterval } from 'usehooks-ts';
+
+import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import { productTourLocalStorageKey } from './consts.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';

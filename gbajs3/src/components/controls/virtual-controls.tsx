@@ -8,7 +8,7 @@ import {
   BiSolidBookmark
 } from 'react-icons/bi';
 import { styled, useTheme } from 'styled-components';
-import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import {
   saveStateSlotLocalStorageKey,
@@ -354,6 +354,7 @@ export const VirtualControls = ({
       {virtualButtons.map((virtualButtonProps) => (
         <VirtualButton
           ariaLabel={keyToAriaLabel(virtualButtonProps.key)}
+          inputName={virtualButtonProps.key}
           {...virtualButtonProps}
         />
       ))}

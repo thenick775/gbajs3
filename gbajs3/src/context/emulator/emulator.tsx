@@ -6,7 +6,7 @@ import {
   type ReactNode,
   type SetStateAction
 } from 'react';
-import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import {
   emulatorKeyBindingsLocalStorageKey,

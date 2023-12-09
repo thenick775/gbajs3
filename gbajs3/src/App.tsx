@@ -10,6 +10,7 @@ import { PwaPrompt } from './components/pwa-prompt/pwa-prompt.tsx';
 import { Screen } from './components/screen/screen.tsx';
 import { AuthProvider } from './context/auth/auth.tsx';
 import { EmulatorProvider } from './context/emulator/emulator.tsx';
+import { LayoutProvider } from './context/layout/layout.tsx';
 import { ModalProvider } from './context/modal/modal.tsx';
 import { GbaDarkTheme } from './context/theme/theme.tsx';
 
@@ -21,12 +22,14 @@ export const App = () => {
       <PwaPrompt />
       <AuthProvider>
         <EmulatorProvider>
-          <ModalProvider>
-            <NavigationMenu />
-            <Screen />
-            <UserControls />
-            <ModalContainer />
-          </ModalProvider>
+          <LayoutProvider>
+            <ModalProvider>
+              <NavigationMenu />
+              <Screen />
+              <UserControls />
+              <ModalContainer />
+            </ModalProvider>
+          </LayoutProvider>
         </EmulatorProvider>
       </AuthProvider>
     </ThemeProvider>
