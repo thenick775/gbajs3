@@ -3,7 +3,6 @@ import {
   useCallback,
   useContext,
   useId,
-  useMemo,
   useState,
   type ReactNode
 } from 'react';
@@ -128,7 +127,6 @@ const MutedMarkSlider = styled(Slider)`
 
 export const ControlPanel = () => {
   const {
-    canvas,
     emulator,
     isEmulatorRunning,
     areItemsDraggable,
@@ -177,10 +175,7 @@ export const ControlPanel = () => {
     [setLayout, hasSetLayout, layouts]
   );
 
-  const canvasBounds = useMemo(
-    () => canvas?.parentElement?.getBoundingClientRect(),
-    [canvas]
-  );
+  const canvasBounds = layouts?.screen?.uncontrolledBounds;
 
   if (!canvasBounds) return null;
 

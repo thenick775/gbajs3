@@ -51,8 +51,14 @@ export const Screen = () => {
     (node: Rnd | null) => {
       if (!hasSetLayout)
         node?.resizableElement?.current?.style?.removeProperty('width');
+
+      if (!layouts?.screen?.uncontrolledBounds && node)
+        setLayout('screen', {
+          uncontrolledBounds:
+            node?.resizableElement.current?.getBoundingClientRect()
+        });
     },
-    [hasSetLayout]
+    [hasSetLayout, layouts, setLayout]
   );
 
   const refSetCanvas = useCallback(
