@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@mui/material';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext } from 'react';
 import { Rnd } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
 
@@ -40,7 +40,6 @@ const ScreenWrapper = styled(Rnd)`
 
 export const Screen = () => {
   const theme = useTheme();
-  const [hasDraggedOrResized, setHasDraggedOrResized] = useState(false);
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const { setCanvas, areItemsDraggable, areItemsResizable } =
     useContext(EmulatorContext);
@@ -50,22 +49,10 @@ export const Screen = () => {
 
   const refUpdateDefaultPosition = useCallback(
     (node: Rnd | null) => {
-      if (!hasDraggedOrResized) {
-        node?.updatePosition({
-          x: screenWrapperXStart,
-          y: screenWrapperYStart
-        });
-      }
-
       if (!hasSetLayout)
         node?.resizableElement?.current?.style?.removeProperty('width');
     },
-    [
-      hasDraggedOrResized,
-      screenWrapperXStart,
-      screenWrapperYStart,
-      hasSetLayout
-    ]
+    [hasSetLayout]
   );
 
   const refSetCanvas = useCallback(
@@ -118,8 +105,6 @@ export const Screen = () => {
         });
       }}
       lockAspectRatio={3 / 2}
-      onResizeStart={() => setHasDraggedOrResized(true)}
-      onDragStart={() => setHasDraggedOrResized(true)}
     >
       <RenderCanvas
         ref={refSetCanvas}
