@@ -2,7 +2,8 @@ import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from 'styled-components';
 
 import './App.css';
-import { UserControls } from './components/controls/user-controls.tsx';
+import { ControlPanel } from './components/controls/control-panel.tsx';
+import { VirtualControls } from './components/controls/virtual-controls.tsx';
 import { ModalContainer } from './components/modals/modal-container.tsx';
 import { NavigationMenu } from './components/navigation-menu/navigation-menu.tsx';
 import { ProductTourIntro } from './components/product-tour/product-tour-intro.tsx';
@@ -26,7 +27,8 @@ export const App = () => {
             <ModalProvider>
               <NavigationMenu />
               <Screen />
-              <UserControls />
+              <ControlPanel />
+              <VirtualControls />
               <ModalContainer />
             </ModalProvider>
           </LayoutProvider>

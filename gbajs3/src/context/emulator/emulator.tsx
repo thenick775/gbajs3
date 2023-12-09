@@ -6,7 +6,6 @@ import {
   type ReactNode,
   type SetStateAction
 } from 'react';
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import {
   emulatorKeyBindingsLocalStorageKey,
@@ -14,6 +13,7 @@ import {
 } from './consts.tsx';
 import { fadeCanvas } from '../../components/screen/fade.tsx';
 import { useEmulator } from '../../hooks/use-emulator.tsx';
+import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import type {
   GBAEmulator,

@@ -5,7 +5,6 @@ import {
   useId,
   useMemo,
   useState,
-  type Dispatch,
   type ReactNode
 } from 'react';
 import { IconContext } from 'react-icons';
@@ -21,21 +20,17 @@ import {
 import { TbResize } from 'react-icons/tb';
 import { Rnd } from 'react-rnd';
 import { css, styled, useTheme } from 'styled-components';
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import { emulatorVolumeLocalStorageKey } from '../../context/emulator/consts.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { LayoutContext } from '../../context/layout/layout.tsx';
+import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 import {
   EmbeddedProductTour,
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
 import { ButtonBase } from '../shared/custom-button-base.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
-
-type ControlPanelProps = {
-  setExternalBounds: Dispatch<DOMRect | undefined>;
-};
 
 type PanelControlProps = {
   $onClick?: () => void;
@@ -131,7 +126,7 @@ const MutedMarkSlider = styled(Slider)`
   }
 `;
 
-export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
+export const ControlPanel = () => {
   const {
     canvas,
     emulator,
@@ -158,15 +153,17 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
     1
   );
 
-  const refSetExternalBounds = useCallback(
+  const refSetLayout = useCallback(
     (node: Rnd | null) => {
-      setExternalBounds(
-        node?.resizableElement.current?.getBoundingClientRect()
-      );
+      if (!layouts?.controlPanel?.uncontrolledBounds && node)
+        setLayout('controlPanel', {
+          uncontrolledBounds:
+            node?.resizableElement.current?.getBoundingClientRect()
+        });
 
       if (
         hasSetLayout &&
-        !layouts?.controlPanel &&
+        (!layouts?.controlPanel?.size || !layouts?.controlPanel?.position) &&
         node?.resizableElement?.current
       )
         setLayout('controlPanel', {
@@ -177,7 +174,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
           position: { ...node.getDraggablePosition() }
         });
     },
-    [setExternalBounds, setLayout, hasSetLayout, layouts]
+    [setLayout, hasSetLayout, layouts]
   );
 
   const canvasBounds = useMemo(
@@ -303,7 +300,7 @@ export const ControlPanel = ({ setExternalBounds }: ControlPanelProps) => {
           bottomRight: { marginBottom: '15px', marginRight: '15px' },
           bottomLeft: { marginBottom: '15px', marginLeft: '15px' }
         }}
-        ref={refSetExternalBounds}
+        ref={refSetLayout}
         cancel=".noDrag"
         position={position}
         size={size}

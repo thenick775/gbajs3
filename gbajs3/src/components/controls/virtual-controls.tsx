@@ -8,7 +8,6 @@ import {
   BiSolidBookmark
 } from 'react-icons/bi';
 import { styled, useTheme } from 'styled-components';
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import {
   saveStateSlotLocalStorageKey,
@@ -18,14 +17,12 @@ import { OPad } from './o-pad.tsx';
 import { VirtualButton } from './virtual-button.tsx';
 import { AuthContext } from '../../context/auth/auth.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
+import { LayoutContext } from '../../context/layout/layout.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 
 import type { AreVirtualControlsEnabledProps } from '../modals/controls/virtual-controls-form.tsx';
-
-type VirtualControlProps = {
-  controlPanelBounds: DOMRect | undefined;
-};
 
 const VirtualButtonTextLarge = styled.p`
   text-align: center;
@@ -49,15 +46,14 @@ const keyToAriaLabel = (key: string) =>
       (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
     );
 
-export const VirtualControls = ({
-  controlPanelBounds
-}: VirtualControlProps) => {
+export const VirtualControls = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const isMobileWithUrlBar = useMediaQuery(theme.isMobileWithUrlBar);
   const { emulator, isEmulatorRunning } = useContext(EmulatorContext);
   const { isAuthenticated } = useContext(AuthContext);
   const { setModalContent, setIsModalOpen } = useContext(ModalContext);
+  const { layouts } = useContext(LayoutContext);
   const [currentSaveStateSlot] = useLocalStorage(
     saveStateSlotLocalStorageKey,
     0
@@ -67,6 +63,8 @@ export const VirtualControls = ({
       virtualControlsLocalStorageKey,
       {}
     );
+
+  const controlPanelBounds = layouts?.controlPanel?.uncontrolledBounds;
 
   if (!controlPanelBounds) return null;
 

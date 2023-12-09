@@ -3,8 +3,9 @@ import { createContext, useCallback, useMemo, type ReactNode } from 'react';
 import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 type Layout = {
-  position: { x: number; y: number };
+  position?: { x: number; y: number };
   size?: { width: string | number; height: string | number };
+  uncontrolledBounds?: DOMRect;
 };
 
 type Layouts = {
@@ -34,14 +35,19 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
     layoutLocalStorageKey,
     {}
   );
-  const hasSetLayout = useMemo(() => !!Object.keys(layouts).length, [layouts]);
+  const hasSetLayout = useMemo(
+    () =>
+      !!Object.keys(layouts).some(
+        (key) => !!layouts[key]?.position || !!layouts[key]?.size
+      ),
+    [layouts]
+  );
 
   const clearLayouts = useCallback(() => setLayouts({}), [setLayouts]);
 
   const setLayout = useCallback(
     (layoutKey: string, layout: Layout) =>
       setLayouts((prevState) => {
-        console.log('vancise prevstate', prevState, layoutKey, layout);
         return {
           ...prevState,
           [layoutKey]: { ...prevState?.[layoutKey], ...layout }

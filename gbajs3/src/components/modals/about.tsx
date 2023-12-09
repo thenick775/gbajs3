@@ -1,11 +1,11 @@
 import { Button } from '@mui/material';
 import { useContext } from 'react';
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
+import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 import type { CompletedProductTourSteps } from '../product-tour/product-tour-intro.tsx';
