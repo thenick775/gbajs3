@@ -134,7 +134,7 @@ export const ControlPanel = () => {
     areItemsResizable,
     setAreItemsResizable
   } = useContext(EmulatorContext);
-  const { layouts, setLayout, hasSetLayout } = useContext(LayoutContext);
+  const { layouts, setLayout } = useContext(LayoutContext);
   const [isFastForwardOn, setIsFastForwardOn] = useState(false);
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
@@ -158,21 +158,8 @@ export const ControlPanel = () => {
           uncontrolledBounds:
             node?.resizableElement.current?.getBoundingClientRect()
         });
-
-      if (
-        hasSetLayout &&
-        (!layouts?.controlPanel?.size || !layouts?.controlPanel?.position) &&
-        node?.resizableElement?.current
-      )
-        setLayout('controlPanel', {
-          size: {
-            width: node.resizableElement.current.style.width,
-            height: node.resizableElement.current.style.height
-          },
-          position: { ...node.getDraggablePosition() }
-        });
     },
-    [setLayout, hasSetLayout, layouts]
+    [setLayout, layouts]
   );
 
   const canvasBounds = layouts?.screen?.uncontrolledBounds;
