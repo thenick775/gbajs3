@@ -1,4 +1,4 @@
-import { useContext, useRef, type ReactNode, useEffect } from 'react';
+import { useContext, useRef, type ReactNode } from 'react';
 import Draggable from 'react-draggable';
 import { styled } from 'styled-components';
 
@@ -94,18 +94,8 @@ export const VirtualButton = ({
   ariaLabel
 }: VirtualButtonProps) => {
   const { emulator, areItemsDraggable } = useContext(EmulatorContext);
-  const { layouts, setLayout, hasSetLayout } = useContext(LayoutContext);
+  const { layouts, setLayout } = useContext(LayoutContext);
   const dragRef = useRef<HTMLButtonElement | null>(null);
-
-  useEffect(() => {
-    if (hasSetLayout && !layouts[inputName])
-      setLayout(inputName, {
-        position: {
-          x: 0,
-          y: 0
-        }
-      });
-  }, [layouts, hasSetLayout, inputName, setLayout]);
 
   if (!enabled) return null;
 
