@@ -1,6 +1,6 @@
+import { useLocalStorage } from '@uidotdev/usehooks';
 import { PwaPrompt as IOSPwaPrompt } from 'react-ios-pwa-prompt-ts';
 
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 import type { CompletedProductTourSteps } from '../product-tour/product-tour-intro';

@@ -1,4 +1,5 @@
 import { useMediaQuery } from '@mui/material';
+import { useLocalStorage } from '@uidotdev/usehooks';
 import { useContext } from 'react';
 import { IconContext } from 'react-icons';
 import {
@@ -19,7 +20,6 @@ import { AuthContext } from '../../context/auth/auth.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { LayoutContext } from '../../context/layout/layout.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 
 import type { AreVirtualControlsEnabledProps } from '../modals/controls/virtual-controls-form.tsx';

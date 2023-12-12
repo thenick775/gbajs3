@@ -1,10 +1,10 @@
 import { Button, useMediaQuery } from '@mui/material';
+import { useLocalStorage } from '@uidotdev/usehooks';
 import { useContext, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { styled, useTheme } from 'styled-components';
 
 import { LayoutContext } from '../../../context/layout/layout.tsx';
-import { useLocalStorage } from '../../../hooks/use-local-storage.tsx';
 import { virtualControlsLocalStorageKey } from '../../controls/consts.tsx';
 import { ManagedCheckbox } from '../../shared/managed-checkbox.tsx';
 

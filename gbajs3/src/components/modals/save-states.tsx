@@ -1,4 +1,5 @@
 import { Button, TextField } from '@mui/material';
+import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useContext, useEffect, useId, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiError, BiPlus, BiTrash } from 'react-icons/bi';
@@ -9,7 +10,6 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 import { saveStateSlotLocalStorageKey } from '../controls/consts.tsx';
 import {
   EmbeddedProductTour,

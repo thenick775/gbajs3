@@ -1,6 +1,5 @@
+import { useLocalStorage } from '@uidotdev/usehooks';
 import { createContext, useCallback, useMemo, type ReactNode } from 'react';
-
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 type Layout = {
   position?: { x: number; y: number };

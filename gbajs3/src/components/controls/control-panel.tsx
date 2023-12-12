@@ -1,4 +1,5 @@
 import { Slider, useMediaQuery } from '@mui/material';
+import { useLocalStorage } from '@uidotdev/usehooks';
 import {
   useCallback,
   useContext,
@@ -23,7 +24,6 @@ import { css, styled, useTheme } from 'styled-components';
 import { emulatorVolumeLocalStorageKey } from '../../context/emulator/consts.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { LayoutContext } from '../../context/layout/layout.tsx';
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 import {
   EmbeddedProductTour,
   type TourSteps

@@ -1,3 +1,4 @@
+import { useLocalStorage } from '@uidotdev/usehooks';
 import {
   createContext,
   useMemo,
@@ -13,7 +14,6 @@ import {
 } from './consts.tsx';
 import { fadeCanvas } from '../../components/screen/fade.tsx';
 import { useEmulator } from '../../hooks/use-emulator.tsx';
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 import type {
   GBAEmulator,

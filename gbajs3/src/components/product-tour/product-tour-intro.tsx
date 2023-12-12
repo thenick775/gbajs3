@@ -1,8 +1,8 @@
+import { useLocalStorage } from '@uidotdev/usehooks';
 import Joyride, { STATUS, type Step } from 'react-joyride';
 import { styled } from 'styled-components';
 
 import { productTourLocalStorageKey } from './consts.tsx';
-import { useLocalStorage } from '../../hooks/use-local-storage.tsx';
 
 export type CompletedProductTourSteps = {
   hasCompletedProductTourIntro?: string | boolean;
