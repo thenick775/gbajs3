@@ -51,44 +51,42 @@ export const KeyBindingsForm = ({ id }: KeyBindingsFormProps) => {
 
   return (
     <StyledForm id={id} onSubmit={handleSubmit(onSubmit)}>
-      {currentKeyBindings?.map((keyBinding) => {
-        return (
-          <Controller
-            key={`gba_input_${keyBinding.gbaInput.toLowerCase()}`}
-            control={control}
-            name={keyBinding.gbaInput}
-            defaultValue={keyBinding}
-            rules={{
-              validate: {
-                noSpace: (value) =>
-                  value.key !== ' ' ||
-                  'Space is reserved for accessibility requirements',
-                noTab: (value) =>
-                  value.key?.toLowerCase() !== 'tab' ||
-                  'Tab is reserved for accessibility requirements'
-              }
-            }}
-            render={({ field: { value } }) => (
-              <TextField
-                variant="outlined"
-                label={value.gbaInput}
-                value={value.key}
-                onKeyDown={(keyboardEvent) => {
-                  if (keyboardEvent.key.toLowerCase() === 'tab') return;
+      {currentKeyBindings?.map((keyBinding) => (
+        <Controller
+          key={`gba_input_${keyBinding.gbaInput.toLowerCase()}`}
+          control={control}
+          name={keyBinding.gbaInput}
+          defaultValue={keyBinding}
+          rules={{
+            validate: {
+              noSpace: (value) =>
+                value.key !== ' ' ||
+                'Space is reserved for accessibility requirements',
+              noTab: (value) =>
+                value.key?.toLowerCase() !== 'tab' ||
+                'Tab is reserved for accessibility requirements'
+            }
+          }}
+          render={({ field: { value } }) => (
+            <TextField
+              variant="outlined"
+              label={value.gbaInput}
+              value={value.key}
+              onKeyDown={(keyboardEvent) => {
+                if (keyboardEvent.key.toLowerCase() === 'tab') return;
 
-                  setValue(value.gbaInput, {
-                    gbaInput: value.gbaInput,
-                    key: keyboardEvent.key,
-                    location: keyboardEvent.location
-                  });
-                }}
-                error={!!errors[keyBinding.gbaInput]}
-                helperText={errors?.[keyBinding.gbaInput]?.message}
-              />
-            )}
-          />
-        );
-      })}
+                setValue(value.gbaInput, {
+                  gbaInput: value.gbaInput,
+                  key: keyboardEvent.key,
+                  location: keyboardEvent.location
+                });
+              }}
+              error={!!errors[keyBinding.gbaInput]}
+              helperText={errors?.[keyBinding.gbaInput]?.message}
+            />
+          )}
+        />
+      ))}
     </StyledForm>
   );
 };
