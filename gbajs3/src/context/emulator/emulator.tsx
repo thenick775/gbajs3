@@ -56,9 +56,8 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
     1
   );
   const emulator = useEmulator(canvas);
-  const [currentKeyBindings] = useLocalStorage<KeyBinding[] | null>(
-    emulatorKeyBindingsLocalStorageKey,
-    null
+  const [currentKeyBindings] = useLocalStorage<KeyBinding[]>(
+    emulatorKeyBindingsLocalStorageKey
   );
 
   const emu = useMemo<GBAEmulator | null>(() => {
