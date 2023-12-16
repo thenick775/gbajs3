@@ -290,7 +290,7 @@ export const ControlPanel = () => {
         }}
         onResizeStop={(_1, _2, ref, _3, position) => {
           setLayout('controlPanel', {
-            size: { width: ref.style.width, height: ref.style.height },
+            size: { width: ref.clientWidth, height: ref.clientHeight },
             position: { ...position }
           });
         }}
