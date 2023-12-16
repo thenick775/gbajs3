@@ -153,16 +153,15 @@ export const ControlPanel = () => {
 
   const refSetLayout = useCallback(
     (node: Rnd | null) => {
-      if (!layouts?.controlPanel?.uncontrolledBounds && node)
+      if (!layouts?.controlPanel?.initialBounds && node)
         setLayout('controlPanel', {
-          uncontrolledBounds:
-            node?.resizableElement.current?.getBoundingClientRect()
+          initialBounds: node.resizableElement.current?.getBoundingClientRect()
         });
     },
     [setLayout, layouts]
   );
 
-  const canvasBounds = layouts?.screen?.uncontrolledBounds;
+  const canvasBounds = layouts?.screen?.initialBounds;
 
   if (!canvasBounds) return null;
 

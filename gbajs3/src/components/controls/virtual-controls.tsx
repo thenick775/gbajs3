@@ -64,7 +64,7 @@ export const VirtualControls = () => {
       {}
     );
 
-  const controlPanelBounds = layouts?.controlPanel?.uncontrolledBounds;
+  const controlPanelBounds = layouts?.controlPanel?.initialBounds;
 
   if (!controlPanelBounds) return null;
 

@@ -52,10 +52,9 @@ export const Screen = () => {
       if (!hasSetLayout)
         node?.resizableElement?.current?.style?.removeProperty('width');
 
-      if (!layouts?.screen?.uncontrolledBounds && node)
+      if (!layouts?.screen?.initialBounds && node)
         setLayout('screen', {
-          uncontrolledBounds:
-            node?.resizableElement.current?.getBoundingClientRect()
+          initialBounds: node.resizableElement.current?.getBoundingClientRect()
         });
     },
     [hasSetLayout, layouts, setLayout]

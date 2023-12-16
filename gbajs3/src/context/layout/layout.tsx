@@ -4,7 +4,7 @@ import { createContext, useCallback, useMemo, type ReactNode } from 'react';
 type Layout = {
   position?: { x: number; y: number };
   size?: { width: string | number; height: string | number };
-  uncontrolledBounds?: DOMRect;
+  initialBounds?: DOMRect;
 };
 
 type Layouts = {
@@ -36,8 +36,8 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
   );
   const hasSetLayout = useMemo(
     () =>
-      !!Object.keys(layouts).some(
-        (key) => !!layouts[key]?.position || !!layouts[key]?.size
+      !!Object.values(layouts).some(
+        (layout) => !!layout?.position || !!layout?.size
       ),
     [layouts]
   );
