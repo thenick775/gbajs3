@@ -41,9 +41,9 @@ export const EmbeddedProductTour = ({
   zIndex = 500 // note, value here is +100 in react joyride/floater
 }: EmbeddedProductTourProps) => {
   const [hasCompletedProductTourSteps, setHasCompletedProductTourSteps] =
-    useLocalStorage<CompletedProductTourSteps>(productTourLocalStorageKey, {
-      [completedProductTourStepName]: false
-    });
+    useLocalStorage<CompletedProductTourSteps | undefined>(
+      productTourLocalStorageKey
+    );
   const { isModalOpen } = useContext(ModalContext);
   const [shouldRender, setShouldRender] = useState(renderWithoutDelay);
 

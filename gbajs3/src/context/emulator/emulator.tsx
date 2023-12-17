@@ -56,7 +56,7 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
     1
   );
   const emulator = useEmulator(canvas);
-  const [currentKeyBindings] = useLocalStorage<KeyBinding[]>(
+  const [currentKeyBindings] = useLocalStorage<KeyBinding[] | undefined>(
     emulatorKeyBindingsLocalStorageKey
   );
 

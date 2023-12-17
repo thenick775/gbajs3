@@ -12,8 +12,9 @@ import type { CompletedProductTourSteps } from '../product-tour/product-tour-int
 
 export const AboutModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
-  const [, setHasCompletedProductTourSteps] =
-    useLocalStorage<CompletedProductTourSteps>(productTourLocalStorageKey, {});
+  const [, setHasCompletedProductTourSteps] = useLocalStorage<
+    CompletedProductTourSteps | undefined
+  >(productTourLocalStorageKey);
 
   return (
     <>

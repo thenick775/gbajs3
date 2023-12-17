@@ -58,11 +58,9 @@ export const VirtualControls = () => {
     saveStateSlotLocalStorageKey,
     0
   );
-  const [areVirtualControlsEnabled] =
-    useLocalStorage<AreVirtualControlsEnabledProps>(
-      virtualControlsLocalStorageKey,
-      {}
-    );
+  const [areVirtualControlsEnabled] = useLocalStorage<
+    AreVirtualControlsEnabledProps | undefined
+  >(virtualControlsLocalStorageKey);
 
   const controlPanelBounds = layouts?.controlPanel?.initialBounds;
 

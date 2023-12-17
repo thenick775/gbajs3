@@ -34,10 +34,9 @@ export const KeyBindingsForm = ({ id }: KeyBindingsFormProps) => {
 
   const defaultKeyBindings = emulator?.defaultKeyBindings();
 
-  const [currentKeyBindings, setCurrentKeyBindings] = useLocalStorage(
-    emulatorKeyBindingsLocalStorageKey,
-    defaultKeyBindings ?? []
-  );
+  const [currentKeyBindings, setCurrentKeyBindings] = useLocalStorage<
+    KeyBinding[] | undefined
+  >(emulatorKeyBindingsLocalStorageKey);
 
   const onSubmit = (formData: KeyBindingInputProps) => {
     const keyBindings = Object.entries(formData)
@@ -49,9 +48,11 @@ export const KeyBindingsForm = ({ id }: KeyBindingsFormProps) => {
     setCurrentKeyBindings(keyBindings);
   };
 
+  const renderedBindings = currentKeyBindings ?? defaultKeyBindings;
+
   return (
     <StyledForm id={id} onSubmit={handleSubmit(onSubmit)}>
-      {currentKeyBindings?.map((keyBinding) => (
+      {renderedBindings?.map((keyBinding) => (
         <Controller
           key={`gba_input_${keyBinding.gbaInput.toLowerCase()}`}
           control={control}

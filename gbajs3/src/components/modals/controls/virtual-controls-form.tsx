@@ -34,9 +34,8 @@ export type AreVirtualControlsEnabledProps = {
 
 export const VirtualControlsForm = ({ id }: VirtualControlsFormProps) => {
   const [areVirtualControlsEnabled, setAreVirtualControlsEnabled] =
-    useLocalStorage<AreVirtualControlsEnabledProps>(
-      virtualControlsLocalStorageKey,
-      {}
+    useLocalStorage<AreVirtualControlsEnabledProps | undefined>(
+      virtualControlsLocalStorageKey
     );
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
