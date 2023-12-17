@@ -1,5 +1,11 @@
 import { useLocalStorage } from '@uidotdev/usehooks';
-import { createContext, useCallback, useMemo, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  type ReactNode
+} from 'react';
 
 type Layout = {
   position?: { x: number; y: number };
@@ -54,6 +60,14 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
       }),
     [setLayouts]
   );
+
+  useEffect(() => {
+    if (!hasSetLayout) {
+      clearLayouts();
+    }
+    // clears the initial bounds if no actual layouts are set on initial render only
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <LayoutContext.Provider
