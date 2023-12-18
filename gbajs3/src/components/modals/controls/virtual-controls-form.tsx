@@ -65,34 +65,32 @@ export const VirtualControlsForm = ({ id }: VirtualControlsFormProps) => {
   };
 
   return (
-    <>
-      <StyledForm id={id} onSubmit={handleSubmit(onSubmit)}>
-        <ManagedCheckbox
-          label="Virtual D-pad/Buttons"
-          watcher={watch('DPadAndButtons')}
-          registerProps={register('DPadAndButtons')}
-        />
-        <ManagedCheckbox
-          label="Save State"
-          watcher={watch('SaveState')}
-          registerProps={register('SaveState')}
-        />
-        <ManagedCheckbox
-          label="Load State"
-          watcher={watch('LoadState')}
-          registerProps={register('LoadState')}
-        />
-        <ManagedCheckbox
-          label="Quick Reload"
-          watcher={watch('QuickReload')}
-          registerProps={register('QuickReload')}
-        />
-        <ManagedCheckbox
-          label="Send save to server"
-          watcher={watch('SendSaveToServer')}
-          registerProps={register('SendSaveToServer')}
-        />
-      </StyledForm>
-    </>
+    <StyledForm id={id} onSubmit={handleSubmit(onSubmit)}>
+      <ManagedCheckbox
+        label="Virtual D-pad/Buttons"
+        watcher={watch('DPadAndButtons')}
+        registerProps={register('DPadAndButtons')}
+      />
+      <ManagedCheckbox
+        label="Save State"
+        watcher={watch('SaveState')}
+        registerProps={register('SaveState')}
+      />
+      <ManagedCheckbox
+        label="Load State"
+        watcher={watch('LoadState')}
+        registerProps={register('LoadState')}
+      />
+      <ManagedCheckbox
+        label="Quick Reload"
+        watcher={watch('QuickReload')}
+        registerProps={register('QuickReload')}
+      />
+      <ManagedCheckbox
+        label="Send save to server"
+        watcher={watch('SendSaveToServer')}
+        registerProps={register('SendSaveToServer')}
+      />
+    </StyledForm>
   );
 };
