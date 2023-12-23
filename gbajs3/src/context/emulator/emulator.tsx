@@ -12,7 +12,7 @@ import {
   emulatorKeyBindingsLocalStorageKey,
   emulatorVolumeLocalStorageKey
 } from './consts.tsx';
-import { fadeCanvas } from '../../components/screen/fade.tsx';
+import { fadeCanvas } from '../../components/screen/fade.ts';
 import { useEmulator } from '../../hooks/use-emulator.tsx';
 
 import type {
