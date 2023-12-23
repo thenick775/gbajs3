@@ -3,7 +3,6 @@ import { useCallback, useContext } from 'react';
 import { Rnd } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
 
-import { renderCanvasWidth, renderCanvasHeight } from './consts.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
 import { LayoutContext } from '../../context/layout/layout.tsx';
 import { NavigationMenuWidth } from '../navigation-menu/consts.tsx';
@@ -12,6 +11,9 @@ import { GripperHandle } from '../shared/gripper-handle.tsx';
 type RenderCanvasProps = {
   $pixelated?: boolean;
 };
+
+const defaultGBACanvasWidth = 240;
+const defaultGBACanvasHeight = 160;
 
 const RenderCanvas = styled.canvas<RenderCanvasProps>`
   background-color: ${({ theme }) => theme.screenLight};
@@ -41,7 +43,7 @@ const ScreenWrapper = styled(Rnd)`
 export const Screen = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
-  const { setCanvas, areItemsDraggable, areItemsResizable } =
+  const { setCanvas, areItemsDraggable, areItemsResizable, videoDimensions } =
     useContext(EmulatorContext);
   const { layouts, setLayout, hasSetLayout } = useContext(LayoutContext);
   const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
@@ -77,6 +79,10 @@ export const Screen = () => {
   const position = layouts?.screen?.position ?? defaultPosition;
   const size = layouts?.screen?.size ?? defaultSize;
 
+  const currentVideoWidth = videoDimensions?.width ?? defaultGBACanvasWidth;
+  const currentVideoHeight = videoDimensions?.height ?? defaultGBACanvasHeight;
+  const currentAspectRatio = currentVideoWidth / currentVideoHeight;
+
   return (
     <ScreenWrapper
       disableDragging={!areItemsDraggable}
@@ -109,12 +115,12 @@ export const Screen = () => {
           position: { ...position }
         });
       }}
-      lockAspectRatio={3 / 2}
+      lockAspectRatio={currentAspectRatio}
     >
       <RenderCanvas
         ref={refSetCanvas}
-        width={renderCanvasWidth}
-        height={renderCanvasHeight}
+        width={currentVideoWidth}
+        height={currentVideoHeight}
         $pixelated
       />
     </ScreenWrapper>

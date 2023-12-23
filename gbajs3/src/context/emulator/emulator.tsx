@@ -23,6 +23,7 @@ import type {
 type EmulatorContextProps = {
   emulator: GBAEmulator | null;
   canvas: HTMLCanvasElement | null;
+  videoDimensions: { width: number; height: number } | null;
   setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
   isEmulatorRunning: boolean;
   areItemsDraggable: boolean;
@@ -38,6 +39,7 @@ type EmulatorProviderProps = {
 export const EmulatorContext = createContext<EmulatorContextProps>({
   emulator: null,
   canvas: null,
+  videoDimensions: null,
   setCanvas: () => undefined,
   isEmulatorRunning: false,
   areItemsDraggable: false,
@@ -59,6 +61,10 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
   const [currentKeyBindings] = useLocalStorage<KeyBinding[] | undefined>(
     emulatorKeyBindingsLocalStorageKey
   );
+  const [videoDimensions, setVideoDimensions] = useLocalStorage<{
+    width: number;
+    height: number;
+  } | null>('videoDimensions', null);
 
   const emu = useMemo<GBAEmulator | null>(() => {
     if (!emulator) return null;
@@ -69,6 +75,9 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
       emulator.setVolume(currentEmulatorVolume);
 
       if (currentKeyBindings) emulator.remapKeyBindings(currentKeyBindings);
+
+      if (canvas)
+        setVideoDimensions({ width: canvas.width, height: canvas.height });
 
       return isSuccessfulRun;
     };
@@ -106,7 +115,8 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
     isEmulatorRunning,
     canvas,
     currentEmulatorVolume,
-    currentKeyBindings
+    currentKeyBindings,
+    setVideoDimensions
   ]);
 
   return (
@@ -114,6 +124,7 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
       value={{
         emulator: emu,
         canvas,
+        videoDimensions,
         setCanvas,
         isEmulatorRunning,
         areItemsDraggable,

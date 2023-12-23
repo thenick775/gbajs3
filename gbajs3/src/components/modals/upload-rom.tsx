@@ -9,6 +9,7 @@ import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
+import { LayoutContext } from '../../context/layout/layout.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import {
   EmbeddedProductTour,
@@ -47,6 +48,7 @@ const BiCloudUploadLarge = styled(BiCloudUpload)`
 export const UploadRomModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
+  const { hasSetLayout, clearLayouts } = useContext(LayoutContext);
   const {
     register,
     reset,
@@ -78,6 +80,7 @@ export const UploadRomModal = () => {
         emulator.filePaths().gamePath + '/' + romFile.name
       );
       if (hasSucceeded) {
+        if (!hasSetLayout) clearLayouts();
         setIsModalOpen(false);
       }
     };
