@@ -4,11 +4,11 @@ on:
   push:
     branches: ['**']
     paths:
-      - './gbajs3'
+      - 'gbajs3/gbajs3'
   pull_request:
     branches: ['**']
     paths:
-      - './gbajs3'
+      - 'gbajs3/gbajs3'
 
 jobs:
   build:
