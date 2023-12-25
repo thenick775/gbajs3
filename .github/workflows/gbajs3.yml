@@ -3,28 +3,30 @@ name: Gbajs3
 on:
   push:
     branches: ['**']
-    paths:
-      - 'gbajs3/gbajs3'
   pull_request:
     branches: ['**']
-    paths:
-      - 'gbajs3/gbajs3'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./gbajs3
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          sparse-checkout: './gbajs3'
+          sparse-checkout: gbajs3
           sparse-checkout-cone-mode: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20.1.0
+
+      - name: Dir List
+        run: ls -R .
 
       - name: Install dependencies
         run: |
@@ -37,3 +39,8 @@ jobs:
       - name: Lint
         run: |
           npm run lint
+
+      # TODO
+      # - name: Test
+      #   run: |
+      #     npm run test
