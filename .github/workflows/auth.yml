@@ -1,0 +1,32 @@
+name: auth
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./docker/server/auth
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.18'
+          check-latest: true
+
+      - name: Format
+        run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+
+      - name: Build
+        run: CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-w -s'
+
+      - name: Test
+        run: go test --v --cover --useosfs --race ./...
