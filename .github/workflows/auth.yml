@@ -14,7 +14,11 @@ jobs:
         working-directory: ./docker/server/auth
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: docker/server/auth
+          sparse-checkout-cone-mode: false
 
       - name: Setup Go
         uses: actions/setup-go@v4
