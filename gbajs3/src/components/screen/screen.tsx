@@ -74,6 +74,8 @@ export const Screen = () => {
     height: 'auto'
   };
 
+  console.log('derp');
+
   const position = layouts?.screen?.position ?? defaultPosition;
   const size = layouts?.screen?.size ?? defaultSize;
 
