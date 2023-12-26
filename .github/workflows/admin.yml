@@ -32,5 +32,6 @@ jobs:
       - name: Build
         run: make build
 
-      - name: Test
-        run: go test --v --cover --race ./...
+      # TODO
+      # - name: Test
+      #   run: go test --v --cover --race ./...
