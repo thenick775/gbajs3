@@ -2,9 +2,9 @@ name: Unprotected
 
 on:
   push:
-    branches: ['!master']
+    branches: ['**', '!master']
   pull_request:
-    branches: ['!master']
+    branches: ['**', '!master']
 
 jobs:
   change-detect:
@@ -28,17 +28,17 @@ jobs:
             gbajs3:
               - 'gbajs3/**'
 
-  call-admin:
+  admin:
     needs: change-detect
-    if: steps.filter.outputs.admin == 'true'
+    if: needs.change-detect.outputs.admin == 'true'
     uses: ./.github/workflows/admin.workflow.yml
 
-  call-auth:
+  auth:
     needs: change-detect
-    if: steps.filter.outputs.auth == 'true'
+    if: needs.change-detect.outputs.auth == 'true'
     uses: ./.github/workflows/auth.workflow.yml
 
-  call-gbajs3:
+  gbajs3:
     needs: change-detect
-    if: steps.filter.outputs.gbajs3 == 'true'
+    if: needs.change-detect.outputs.gbajs3 == 'true'
     uses: ./.github/workflows/gbajs3.workflow.yml
