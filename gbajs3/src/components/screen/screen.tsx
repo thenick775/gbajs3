@@ -20,17 +20,22 @@ const RenderCanvas = styled.canvas<RenderCanvasProps>`
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -moz-crisp-edges;
   image-rendering: -o-crisp-edges;
-  width: 100%;
   height: 100%;
   display: block;
+  margin: 0 auto;
 
   ${({ $pixelated = false }) =>
     $pixelated &&
     `image-rendering: pixelated;
     `}
+
+  @media ${({ theme }) => theme.isLargerThanPhone} {
+    width: 100%;
+  }
 `;
 
 const ScreenWrapper = styled(Rnd)`
+  background-color: black;
   border: solid 1px black;
   overflow: visible;
   width: 100dvw;
@@ -73,7 +78,7 @@ export const Screen = () => {
   };
   const defaultSize = {
     width: isLargerThanPhone ? '' : '100dvw',
-    height: 'auto'
+    height: isLargerThanPhone ? 'auto' : '66.67dvw'
   };
 
   const position = layouts?.screen?.position ?? defaultPosition;
@@ -115,12 +120,12 @@ export const Screen = () => {
           position: { ...position }
         });
       }}
-      lockAspectRatio={currentAspectRatio}
+      lockAspectRatio={isLargerThanPhone ? currentAspectRatio : undefined}
     >
       <RenderCanvas
         ref={refSetCanvas}
-        width={currentVideoWidth}
-        height={currentVideoHeight}
+        width={defaultGBACanvasWidth}
+        height={defaultGBACanvasHeight}
         $pixelated
       />
     </ScreenWrapper>
