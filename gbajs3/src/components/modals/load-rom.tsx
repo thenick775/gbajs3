@@ -8,7 +8,6 @@ import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
-import { LayoutContext } from '../../context/layout/layout.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import { useListRoms } from '../../hooks/use-list-roms.tsx';
 import { useLoadRom } from '../../hooks/use-load-rom.tsx';
@@ -112,7 +111,6 @@ export const LoadRomModal = () => {
   const theme = useTheme();
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
-  const { hasSetLayout, clearLayouts } = useContext(LayoutContext);
   const romListId = useId();
   const {
     data: romList,
@@ -130,26 +128,15 @@ export const LoadRomModal = () => {
   );
 
   useEffect(() => {
-    if (!romLoading && romFile && currentRomLoading) {
+    if (!romLoading && romFile) {
       const runCallback = () => {
-        const hasSucceeded = emulator?.run(
-          emulator.filePaths().gamePath + '/' + romFile.name
-        );
-
-        if (hasSucceeded && !hasSetLayout) clearLayouts();
+        emulator?.run(emulator.filePaths().gamePath + '/' + romFile.name);
       };
 
       emulator?.uploadRom(romFile, runCallback);
       setCurrentRomLoading(null);
     }
-  }, [
-    emulator,
-    romLoading,
-    romFile,
-    clearLayouts,
-    currentRomLoading,
-    hasSetLayout
-  ]);
+  }, [emulator, romLoading, romFile]);
 
   const LoadingIndicator = () => (
     <PacmanLoader

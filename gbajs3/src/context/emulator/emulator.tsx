@@ -14,6 +14,7 @@ import {
 } from './consts.tsx';
 import { fadeCanvas } from '../../components/screen/fade.ts';
 import { useEmulator } from '../../hooks/use-emulator.tsx';
+import { useLayouts } from '../../hooks/use-layouts.tsx';
 
 import type {
   GBAEmulator,
@@ -53,6 +54,7 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
   const [isEmulatorRunning, setIsEmulatorRunning] = useState(false);
   const [areItemsDraggable, setAreItemsDraggable] = useState(false);
   const [areItemsResizable, setAreItemsResizable] = useState(false);
+  const { hasSetLayout, clearLayouts } = useLayouts();
   const [currentEmulatorVolume] = useLocalStorage(
     emulatorVolumeLocalStorageKey,
     1
@@ -78,6 +80,8 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
 
       if (canvas)
         setVideoDimensions({ width: canvas.width, height: canvas.height });
+
+      if (isSuccessfulRun && !hasSetLayout) clearLayouts();
 
       return isSuccessfulRun;
     };
@@ -116,7 +120,9 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
     canvas,
     currentEmulatorVolume,
     currentKeyBindings,
-    setVideoDimensions
+    setVideoDimensions,
+    clearLayouts,
+    hasSetLayout
   ]);
 
   return (

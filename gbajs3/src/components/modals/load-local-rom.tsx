@@ -6,7 +6,6 @@ import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
-import { LayoutContext } from '../../context/layout/layout.tsx';
 import { ModalContext } from '../../context/modal/modal.tsx';
 import {
   EmbeddedProductTour,
@@ -58,7 +57,6 @@ const RomList = styled.ul`
 export const LoadLocalRomModal = () => {
   const { setIsModalOpen } = useContext(ModalContext);
   const { emulator } = useContext(EmulatorContext);
-  const { hasSetLayout, clearLayouts } = useContext(LayoutContext);
   const romListId = useId();
   const ignorePaths = ['.', '..'];
   const localRoms = emulator
@@ -89,11 +87,7 @@ export const LoadLocalRomModal = () => {
             <StyledLi key={`${romName}_${idx}`}>
               <LoadRomButton
                 onClick={() => {
-                  const hasSucceeded = emulator?.run(
-                    emulator.filePaths().gamePath + '/' + romName
-                  );
-                  if (hasSucceeded && !hasSetLayout) clearLayouts();
-
+                  emulator?.run(emulator.filePaths().gamePath + '/' + romName);
                   setIsModalOpen(false);
                 }}
               >
