@@ -16,27 +16,27 @@ const defaultGBACanvasWidth = 240;
 const defaultGBACanvasHeight = 160;
 
 const RenderCanvas = styled.canvas<RenderCanvasProps>`
-  background-color: ${({ theme }) => theme.screenLight};
+  background-color: ${({ theme }) => theme.pureBlack};
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -moz-crisp-edges;
   image-rendering: -o-crisp-edges;
+  width: 100%;
   height: 100%;
   display: block;
   margin: 0 auto;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
 
   ${({ $pixelated = false }) =>
     $pixelated &&
     `image-rendering: pixelated;
     `}
-
-  @media ${({ theme }) => theme.isLargerThanPhone} {
-    width: 100%;
-  }
 `;
 
 const ScreenWrapper = styled(Rnd)`
-  background-color: black;
-  border: solid 1px black;
+  background-color: ${({ theme }) => theme.pureBlack};
+  border: solid 1px ${({ theme }) => theme.pureBlack};
   overflow: visible;
   width: 100dvw;
 
@@ -48,7 +48,7 @@ const ScreenWrapper = styled(Rnd)`
 export const Screen = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
-  const { setCanvas, areItemsDraggable, areItemsResizable, videoDimensions } =
+  const { setCanvas, areItemsDraggable, areItemsResizable } =
     useContext(EmulatorContext);
   const { layouts, setLayout, hasSetLayout } = useContext(LayoutContext);
   const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
@@ -84,10 +84,6 @@ export const Screen = () => {
   const position = layouts?.screen?.position ?? defaultPosition;
   const size = layouts?.screen?.size ?? defaultSize;
 
-  const currentVideoWidth = videoDimensions?.width ?? defaultGBACanvasWidth;
-  const currentVideoHeight = videoDimensions?.height ?? defaultGBACanvasHeight;
-  const currentAspectRatio = currentVideoWidth / currentVideoHeight;
-
   return (
     <ScreenWrapper
       disableDragging={!areItemsDraggable}
@@ -120,7 +116,6 @@ export const Screen = () => {
           position: { ...position }
         });
       }}
-      lockAspectRatio={isLargerThanPhone ? currentAspectRatio : undefined}
     >
       <RenderCanvas
         ref={refSetCanvas}

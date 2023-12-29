@@ -80,6 +80,7 @@ export const fadeCanvas = (
         copyCanvas.style.left = '0';
         copyCanvas.style.right = '0';
         copyCanvas.style.margin = '0 auto';
+        copyCanvas.style.objectFit = 'contain';
         canvas.parentElement?.appendChild(copyCanvas);
 
         lcdFade2d(copyCanvas);
