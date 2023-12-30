@@ -7,7 +7,8 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:jsx-a11y/recommended',
     'plugin:styled-components-a11y/recommended',
-    'plugin:testing-library/react'
+    'plugin:testing-library/react',
+    'plugin:jest-dom/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
@@ -16,7 +17,8 @@ module.exports = {
     'import',
     'jsx-a11y',
     'styled-components-a11y',
-    'testing-library'
+    'testing-library',
+    'jest-dom'
   ],
   rules: {
     '@typescript-eslint/consistent-type-imports': 'error',
