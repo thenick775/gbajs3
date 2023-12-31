@@ -98,7 +98,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './test/setup.ts',
     coverage: {
-      provider: 'v8'
+      provider: 'v8',
+      exclude: ['src/emulator/mgba/wasm/**']
     }
   }
 });
