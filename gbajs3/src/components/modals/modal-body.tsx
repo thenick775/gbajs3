@@ -12,5 +12,5 @@ const BodyWrapper = styled.div`
 `;
 
 export const ModalBody = ({ children }: ModalBodyProps) => {
-  return <BodyWrapper>{children}</BodyWrapper>;
+  return <BodyWrapper data-testid="modal-body:wrapper">{children}</BodyWrapper>;
 };
