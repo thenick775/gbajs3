@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@mui/material';
 import { useCallback, useContext } from 'react';
-import { Rnd } from 'react-rnd';
+import { Rnd, type Props as RndProps } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
 
 import { EmulatorContext } from '../../context/emulator/emulator.tsx';
@@ -34,7 +34,7 @@ const RenderCanvas = styled.canvas<RenderCanvasProps>`
     `}
 `;
 
-const ScreenWrapper = styled(Rnd)`
+const ScreenWrapper = styled(Rnd)<RndProps>`
   background-color: ${({ theme }) => theme.pureBlack};
   border: solid 1px ${({ theme }) => theme.pureBlack};
   overflow: visible;
