@@ -99,7 +99,7 @@ export default defineConfig({
     setupFiles: './test/setup.ts',
     coverage: {
       provider: 'v8',
-      exclude: ['src/emulator/mgba/wasm/**']
+      exclude: ['test/**', 'src/emulator/mgba/wasm/**']
     }
   }
 });
