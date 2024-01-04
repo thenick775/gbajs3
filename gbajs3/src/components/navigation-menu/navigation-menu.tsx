@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@mui/material';
 import { domToPng } from 'modern-screenshot';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import {
   BiInfoCircle,
@@ -28,9 +28,11 @@ import { styled, useTheme } from 'styled-components';
 import { NavigationMenuWidth } from './consts.tsx';
 import { NavComponent } from './nav-component.tsx';
 import { NavLeaf } from './nav-leaf.tsx';
-import { AuthContext } from '../../context/auth/auth.tsx';
-import { EmulatorContext } from '../../context/emulator/emulator.tsx';
-import { ModalContext } from '../../context/modal/modal.tsx';
+import {
+  useEmulatorContext,
+  useAuthContext,
+  useModalContext
+} from '../../hooks/context.tsx';
 import { useLogout } from '../../hooks/use-logout.tsx';
 import { AboutModal } from '../modals/about.tsx';
 import { CheatsModal } from '../modals/cheats.tsx';
@@ -142,9 +144,9 @@ export const NavigationMenu = ({
   $isExpanded = true
 }: ExpandableComponentProps) => {
   const [isExpanded, setIsExpanded] = useState($isExpanded);
-  const { setModalContent, setIsModalOpen } = useContext(ModalContext);
-  const { isAuthenticated } = useContext(AuthContext);
-  const { isEmulatorRunning, canvas, emulator } = useContext(EmulatorContext);
+  const { setModalContent, setIsModalOpen } = useModalContext();
+  const { isAuthenticated } = useAuthContext();
+  const { isEmulatorRunning, canvas, emulator } = useEmulatorContext();
   const { execute: executeLogout } = useLogout();
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);

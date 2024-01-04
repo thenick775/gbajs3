@@ -1,7 +1,7 @@
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 
+import { useAuthContext } from './context.tsx';
 import { useAsyncData } from './use-async-data.tsx';
-import { AuthContext } from '../context/auth/auth.tsx';
 
 type LoadSaveProps = {
   saveName: string;
@@ -9,7 +9,7 @@ type LoadSaveProps = {
 
 export const useLoadSave = () => {
   const apiLocation: string = import.meta.env.VITE_GBA_SERVER_LOCATION;
-  const { accessToken } = useContext(AuthContext);
+  const { accessToken } = useAuthContext();
 
   const executeLoadSave = useCallback(
     async (fetchProps?: LoadSaveProps) => {

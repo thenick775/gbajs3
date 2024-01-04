@@ -1,5 +1,5 @@
 import { Button, TextField, useMediaQuery } from '@mui/material';
-import { useCallback, useContext, useId, useMemo, useState } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { BiPlus } from 'react-icons/bi';
 import { CiSquareRemove } from 'react-icons/ci';
@@ -8,8 +8,7 @@ import { styled, useTheme } from 'styled-components';
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
-import { EmulatorContext } from '../../context/emulator/emulator.tsx';
-import { ModalContext } from '../../context/modal/modal.tsx';
+import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 import {
   EmbeddedProductTour,
   type TourSteps
@@ -88,8 +87,8 @@ const HelpText = styled.p<HelpTextProps>`
 export const CheatsModal = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
-  const { setIsModalOpen } = useContext(ModalContext);
-  const { emulator } = useContext(EmulatorContext);
+  const { setIsModalOpen } = useModalContext();
+  const { emulator } = useEmulatorContext();
   const [viewRawCheats, setViewRawCheats] = useState(false);
   const cheatsFormId = useId();
   const addCheatButtonId = useId();

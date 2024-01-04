@@ -10,7 +10,7 @@ export const useRefreshAccessToken = ({ loadOnMount = false } = {}) => {
     const options: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
+      credentials: 'include'
     };
 
     const res = await fetch(url, options);
@@ -20,7 +20,7 @@ export const useRefreshAccessToken = ({ loadOnMount = false } = {}) => {
   const { data, isLoading, error, clearError, execute } = useAsyncData({
     fetchFn: executeRefresh,
     clearDataOnLoad: true,
-    loadOnMount,
+    loadOnMount
   });
 
   return { data, isLoading, error, clearError, execute };

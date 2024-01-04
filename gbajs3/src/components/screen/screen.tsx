@@ -1,10 +1,9 @@
 import { useMediaQuery } from '@mui/material';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { Rnd, type Props as RndProps } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
 
-import { EmulatorContext } from '../../context/emulator/emulator.tsx';
-import { LayoutContext } from '../../context/layout/layout.tsx';
+import { useEmulatorContext, useLayoutContext } from '../../hooks/context.tsx';
 import { NavigationMenuWidth } from '../navigation-menu/consts.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
@@ -49,8 +48,8 @@ export const Screen = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const { setCanvas, areItemsDraggable, areItemsResizable } =
-    useContext(EmulatorContext);
-  const { layouts, setLayout, hasSetLayout } = useContext(LayoutContext);
+    useEmulatorContext();
+  const { layouts, setLayout, hasSetLayout } = useLayoutContext();
   const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
   const screenWrapperYStart = isLargerThanPhone ? 15 : 0;
 

@@ -1,7 +1,7 @@
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 
+import { useAuthContext } from './context.tsx';
 import { useAsyncData } from './use-async-data.tsx';
-import { AuthContext } from '../context/auth/auth.tsx';
 
 type LoadRomProps = {
   romName: string;
@@ -9,7 +9,7 @@ type LoadRomProps = {
 
 export const useLoadRom = () => {
   const apiLocation: string = import.meta.env.VITE_GBA_SERVER_LOCATION;
-  const { accessToken } = useContext(AuthContext);
+  const { accessToken } = useAuthContext();
 
   const executeLoadRom = useCallback(
     async (fetchProps?: LoadRomProps) => {

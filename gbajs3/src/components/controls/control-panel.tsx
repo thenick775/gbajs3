@@ -1,12 +1,6 @@
 import { Slider, useMediaQuery } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
-import {
-  useCallback,
-  useContext,
-  useId,
-  useState,
-  type ReactNode
-} from 'react';
+import { useCallback, useId, useState, type ReactNode } from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineFastForward, AiOutlineForward } from 'react-icons/ai';
 import {
@@ -22,8 +16,7 @@ import { Rnd } from 'react-rnd';
 import { css, styled, useTheme } from 'styled-components';
 
 import { emulatorVolumeLocalStorageKey } from '../../context/emulator/consts.tsx';
-import { EmulatorContext } from '../../context/emulator/emulator.tsx';
-import { LayoutContext } from '../../context/layout/layout.tsx';
+import { useEmulatorContext, useLayoutContext } from '../../hooks/context.tsx';
 import {
   EmbeddedProductTour,
   type TourSteps
@@ -133,8 +126,8 @@ export const ControlPanel = () => {
     setAreItemsDraggable,
     areItemsResizable,
     setAreItemsResizable
-  } = useContext(EmulatorContext);
-  const { layouts, setLayout } = useContext(LayoutContext);
+  } = useEmulatorContext();
+  const { layouts, setLayout } = useLayoutContext();
   const [isFastForwardOn, setIsFastForwardOn] = useState(false);
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);

@@ -13,6 +13,6 @@ describe('<ModalBody />', () => {
   it('container matches snapshot', () => {
     render(<ModalBody>Test Footer Content</ModalBody>);
 
-    expect(screen.getByTestId(`modal-body:wrapper`)).toMatchSnapshot();
+    expect(screen.getByText('Test Footer Content')).toMatchSnapshot();
   });
 });

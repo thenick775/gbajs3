@@ -3,7 +3,6 @@
 exports[`<ModalBody /> > container matches snapshot 1`] = `
 <div
   class="sc-bcXGCL kmdKjB"
-  data-testid="modal-body:wrapper"
 >
   Test Footer Content
 </div>

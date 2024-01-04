@@ -6,15 +6,14 @@ import {
   treeItemClasses,
   type TreeItemProps
 } from '@mui/x-tree-view';
-import { useCallback, useContext, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { BiTrash } from 'react-icons/bi';
 import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
-import { EmulatorContext } from '../../context/emulator/emulator.tsx';
-import { ModalContext } from '../../context/modal/modal.tsx';
+import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 import {
   EmbeddedProductTour,
   type TourSteps
@@ -122,8 +121,8 @@ const EmulatorFS = ({
 };
 
 export const FileSystemModal = () => {
-  const { setIsModalOpen } = useContext(ModalContext);
-  const { emulator } = useContext(EmulatorContext);
+  const { setIsModalOpen } = useModalContext();
+  const { emulator } = useEmulatorContext();
   const [allFiles, setAllFiles] = useState<FileNode | undefined>();
   const emulatorFsId = useId();
   const saveFileSystemButtonId = useId();

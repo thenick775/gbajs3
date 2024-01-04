@@ -1,6 +1,6 @@
 import { Button, TextField } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
-import { useCallback, useContext, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiError, BiPlus, BiTrash } from 'react-icons/bi';
 import { styled, useTheme } from 'styled-components';
@@ -8,8 +8,7 @@ import { styled, useTheme } from 'styled-components';
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
-import { EmulatorContext } from '../../context/emulator/emulator.tsx';
-import { ModalContext } from '../../context/modal/modal.tsx';
+import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 import { saveStateSlotLocalStorageKey } from '../controls/consts.tsx';
 import {
   EmbeddedProductTour,
@@ -95,8 +94,8 @@ const StyledForm = styled.form`
 
 export const SaveStatesModal = () => {
   const theme = useTheme();
-  const { setIsModalOpen } = useContext(ModalContext);
-  const { emulator } = useContext(EmulatorContext);
+  const { setIsModalOpen } = useModalContext();
+  const { emulator } = useEmulatorContext();
   const [currentSaveStates, setCurrentSaveStates] = useState<
     string[] | undefined
   >();
