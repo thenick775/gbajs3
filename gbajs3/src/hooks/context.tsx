@@ -12,7 +12,7 @@ const useLoadContext = <T,>(context: Context<T>) => {
   if (!loadedContext)
     throw new Error(
       `${displayName ?? 'This context'} must be loaded under the matching ${
-        displayName ? `${displayName}.Provider` : 'provider'
+        displayName ? `${displayName}.Provider` : 'Provider'
       }`
     );
 
