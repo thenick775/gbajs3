@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { AboutModal } from './about.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
@@ -8,6 +8,10 @@ import * as contextHooks from '../../hooks/context.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 describe('<AboutModal>', () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
   it('triggers product tour and closes modal when taking a tour', async () => {
     const setIsModalOpenSpy = vi.fn();
     const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
