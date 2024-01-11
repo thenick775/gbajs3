@@ -132,4 +132,18 @@ describe('<VirtualControlsForm />', () => {
     expect(dpadAndButtonsCheckbox).toBeInTheDocument();
     expect(dpadAndButtonsCheckbox).not.toBeChecked();
   });
+
+  it('renders initial values from storage', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(
+      '{"DPadAndButtons":false,"SaveState":true,"LoadState":true,"QuickReload":true,"SendSaveToServer":true}'
+    );
+
+    renderWithContext(<VirtualControlsForm id="testId" />);
+
+    expect(screen.getByLabelText('Virtual D-pad/Buttons')).not.toBeChecked();
+    expect(screen.getByLabelText('Save State')).toBeChecked();
+    expect(screen.getByLabelText('Load State')).toBeChecked();
+    expect(screen.getByLabelText('Quick Reload')).toBeChecked();
+    expect(screen.getByLabelText('Send save to server')).toBeChecked();
+  });
 });
