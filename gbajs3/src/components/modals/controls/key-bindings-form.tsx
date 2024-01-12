@@ -50,7 +50,11 @@ export const KeyBindingsForm = ({ id }: KeyBindingsFormProps) => {
   const renderedBindings = currentKeyBindings ?? defaultKeyBindings;
 
   return (
-    <StyledForm id={id} onSubmit={handleSubmit(onSubmit)}>
+    <StyledForm
+      aria-label="Key Bindings Form"
+      id={id}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       {renderedBindings?.map((keyBinding) => (
         <Controller
           key={`gba_input_${keyBinding.gbaInput.toLowerCase()}`}
