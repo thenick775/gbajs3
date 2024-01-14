@@ -59,13 +59,14 @@ export const DownloadSaveModal = () => {
 
             if (save && saveName) {
               const saveFile = new Blob([save], {
-                type: 'data:application/x-spss-sav'
+                type: 'data:application/octet-stream'
               });
 
               const link = document.createElement('a');
               link.download = saveName;
               link.href = URL.createObjectURL(saveFile);
               link.click();
+              link.remove();
             } else {
               setError(true);
             }
