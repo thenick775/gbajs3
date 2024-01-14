@@ -8,7 +8,7 @@ type LoadSaveProps = {
 };
 
 export const useLoadSave = () => {
-  const apiLocation: string = import.meta.env.VITE_GBA_SERVER_LOCATION;
+  const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
   const executeLoadSave = useCallback(

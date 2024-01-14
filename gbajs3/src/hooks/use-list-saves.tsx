@@ -4,7 +4,7 @@ import { useAuthContext } from './context.tsx';
 import { useAsyncData } from './use-async-data.tsx';
 
 export const useListSaves = ({ loadOnMount = false } = {}) => {
-  const apiLocation: string = import.meta.env.VITE_GBA_SERVER_LOCATION;
+  const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
   const executeListSaves = useCallback(async () => {

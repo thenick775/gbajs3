@@ -4,7 +4,7 @@ import { useAuthContext } from './context.tsx';
 import { useAsyncData } from './use-async-data.tsx';
 
 export const useListRoms = ({ loadOnMount = false } = {}) => {
-  const apiLocation: string = import.meta.env.VITE_GBA_SERVER_LOCATION;
+  const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
   const executeListRoms = useCallback(async () => {

@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useAsyncData } from './use-async-data.tsx';
 
 export const useRefreshAccessToken = ({ loadOnMount = false } = {}) => {
-  const apiLocation: string = import.meta.env.VITE_GBA_SERVER_LOCATION;
+  const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
 
   const executeRefresh = useCallback(async () => {
     const url = `${apiLocation}/api/tokens/refresh`;
