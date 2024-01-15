@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { LoadLocalRomModal } from './load-local-rom.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
+import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
@@ -104,7 +105,8 @@ describe('<LoadLocalRomModal />', () => {
       isModalOpen: true
     }));
 
-    vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(
+    localStorage.setItem(
+      productTourLocalStorageKey,
       '{"hasCompletedProductTourIntro":"finished"}'
     );
 

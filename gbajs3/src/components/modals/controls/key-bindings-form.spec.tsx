@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { KeyBindingsForm } from './key-bindings-form.tsx';
 import { renderWithContext } from '../../../../test/render-with-context.tsx';
@@ -13,10 +13,6 @@ import type {
 } from '../../../emulator/mgba/mgba-emulator.tsx';
 
 describe('<KeyBindingsForm />', () => {
-  afterEach(() => {
-    localStorage.clear();
-  });
-
   it('renders if emulator is null', () => {
     renderWithContext(<KeyBindingsForm id="testId" />);
 
@@ -160,7 +156,8 @@ describe('<KeyBindingsForm />', () => {
   });
 
   it('renders initial values from storage', () => {
-    vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(
+    localStorage.setItem(
+      emulatorKeyBindingsLocalStorageKey,
       '[{ "gbaInput": "L", "key": "A", "location": 0 },{ "gbaInput": "R", "key": "S", "location": 0 }]'
     );
 

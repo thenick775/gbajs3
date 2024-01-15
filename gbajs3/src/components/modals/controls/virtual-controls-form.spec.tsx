@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { VirtualControlsForm } from './virtual-controls-form.tsx';
 import { renderWithContext } from '../../../../test/render-with-context.tsx';
@@ -8,10 +8,6 @@ import { GbaDarkTheme } from '../../../context/theme/theme.tsx';
 import { virtualControlsLocalStorageKey } from '../../controls/consts.tsx';
 
 describe('<VirtualControlsForm />', () => {
-  afterEach(() => {
-    localStorage.clear();
-  });
-
   it('renders form with required fields', () => {
     renderWithContext(<VirtualControlsForm id="testId" />);
 
@@ -134,7 +130,8 @@ describe('<VirtualControlsForm />', () => {
   });
 
   it('renders initial values from storage', () => {
-    vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(
+    localStorage.setItem(
+      virtualControlsLocalStorageKey,
       '{"DPadAndButtons":false,"SaveState":true,"LoadState":true,"QuickReload":true,"SendSaveToServer":true}'
     );
 

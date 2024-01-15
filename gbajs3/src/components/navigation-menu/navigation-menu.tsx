@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@mui/material';
 import { domToPng } from 'modern-screenshot';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import toast from 'react-hot-toast';
 import {
   BiInfoCircle,
@@ -71,7 +71,7 @@ const NavigationMenuWrapper = styled.div<ExpandableComponentProps>`
 
   ${({ $isExpanded = false }) =>
     !$isExpanded &&
-    `left: -255px;
+    `left: -${NavigationMenuWidth + 5}px;
     `}
 
   &::-webkit-scrollbar {
@@ -108,7 +108,7 @@ const HamburgerButton = styled(ButtonBase)<ExpandableComponentProps>`
   color: ${({ theme }) => theme.pureWhite};
   z-index: 200;
   position: fixed;
-  left: 244px;
+  left: ${NavigationMenuWidth - 6}px;
   top: 12px;
   transition: 0.4s ease-in-out;
   -webkit-transition: 0.4s ease-in-out;
@@ -140,16 +140,15 @@ const NavigationMenuClearDismiss = styled.button`
   border: none;
 `;
 
-export const NavigationMenu = ({
-  $isExpanded = true
-}: ExpandableComponentProps) => {
-  const [isExpanded, setIsExpanded] = useState($isExpanded);
+export const NavigationMenu = () => {
+  const [isExpanded, setIsExpanded] = useState(true);
   const { setModalContent, setIsModalOpen } = useModalContext();
   const { isAuthenticated } = useAuthContext();
   const { isEmulatorRunning, canvas, emulator } = useEmulatorContext();
   const { execute: executeLogout } = useLogout();
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
+  const menuHeaderId = useId();
 
   const isMenuItemDisabledByAuth = !isAuthenticated();
 
@@ -159,13 +158,17 @@ export const NavigationMenu = ({
         id="menu-btn"
         $isExpanded={isExpanded}
         onClick={() => setIsExpanded((prevState) => !prevState)}
-        aria-label="Menu Dismiss"
+        aria-label="Menu Toggle"
       >
         <BiMenu />
       </HamburgerButton>
-      <NavigationMenuWrapper id="menu-wrapper" $isExpanded={isExpanded}>
-        <StyledMenuHeader>Menu</StyledMenuHeader>
-        <MenuItemWrapper>
+      <NavigationMenuWrapper
+        data-testid="menu-wrapper"
+        id="menu-wrapper"
+        $isExpanded={isExpanded}
+      >
+        <StyledMenuHeader id={menuHeaderId}>Menu</StyledMenuHeader>
+        <MenuItemWrapper aria-labelledby={menuHeaderId}>
           <NavLeaf
             title="About"
             icon={<BiInfoCircle />}
@@ -245,6 +248,7 @@ export const NavigationMenu = ({
                       link.download = screenshotName;
                       link.href = dataUrl;
                       link.click();
+                      link.remove();
                     })
                     .catch(() => {
                       toast.error('Screenshot has failed');
@@ -275,9 +279,7 @@ export const NavigationMenu = ({
               title="Quick Reload"
               $disabled={!isEmulatorRunning}
               icon={<BiRedo />}
-              onClick={() => {
-                emulator?.quickReload();
-              }}
+              onClick={emulator?.quickReload}
             />
             <NavLeaf
               title="Manage Save States"
