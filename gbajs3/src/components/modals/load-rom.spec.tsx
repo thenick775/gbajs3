@@ -41,7 +41,7 @@ describe('<LoadRomModal />', () => {
 
     renderWithContext(<LoadRomModal />);
 
-    expect(await screen.findByText('rom1.gba'));
+    expect(await screen.findByText('rom1.gba')).toBeInTheDocument();
 
     await userEvent.click(screen.getByText('rom1.gba'));
 

@@ -32,7 +32,11 @@ const DynamicBody = ({
   hasError
 }: DynamicBodyProps) => {
   const LoadingIndicator = () => (
-    <PacmanLoader color={loadingColor} cssOverride={{ margin: '0 auto' }} />
+    <PacmanLoader
+      data-testid="upload-save-spinner"
+      color={loadingColor}
+      cssOverride={{ margin: '0 auto' }}
+    />
   );
 
   let BodyContents = null;

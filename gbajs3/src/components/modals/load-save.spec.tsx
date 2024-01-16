@@ -38,7 +38,7 @@ describe('<LoadSaveModal />', () => {
 
     renderWithContext(<LoadSaveModal />);
 
-    expect(await screen.findByText('save1.sav'));
+    expect(await screen.findByText('save1.sav')).toBeInTheDocument();
 
     await userEvent.click(screen.getByText('save1.sav'));
 

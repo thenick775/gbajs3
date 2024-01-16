@@ -57,5 +57,17 @@ export const handlers = [
         return new HttpResponse(null, { status: 400 });
       }
     }
-  )
+  ),
+
+  http.post(`${gbaServerLocationPlaceholder}/api/rom/upload`, async () => {
+    await delay();
+
+    return new HttpResponse(null, { status: 200 });
+  }),
+
+  http.post(`${gbaServerLocationPlaceholder}/api/save/upload`, async () => {
+    await delay();
+
+    return new HttpResponse(null, { status: 200 });
+  })
 ];
