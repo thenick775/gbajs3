@@ -59,6 +59,12 @@ export const handlers = [
     }
   ),
 
+  http.post(`${gbaServerLocationPlaceholder}/api/account/login`, async () => {
+    await delay();
+
+    return HttpResponse.json('some token', { status: 200 });
+  }),
+
   http.post(`${gbaServerLocationPlaceholder}/api/rom/upload`, async () => {
     await delay();
 

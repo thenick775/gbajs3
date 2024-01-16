@@ -89,11 +89,16 @@ export const LoginModal = () => {
       <ModalBody>
         {loginLoading ? (
           <PacmanLoader
+            data-testid="login-spinner"
             color={theme.gbaThemeBlue}
             cssOverride={{ margin: '0 auto' }}
           />
         ) : (
-          <StyledForm id={loginFormId} onSubmit={handleSubmit(onSubmit)}>
+          <StyledForm
+            aria-label="Login Form"
+            id={loginFormId}
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <TextField
               error={!!errors?.username}
               label="Username"
