@@ -127,7 +127,7 @@ export const LoadRomModal = () => {
   );
 
   useEffect(() => {
-    if (!romLoading && romFile) {
+    if (!romLoading && romFile && currentRomLoading) {
       const runCallback = () => {
         emulator?.run(emulator.filePaths().gamePath + '/' + romFile.name);
       };
@@ -135,7 +135,7 @@ export const LoadRomModal = () => {
       emulator?.uploadRom(romFile, runCallback);
       setCurrentRomLoading(null);
     }
-  }, [emulator, romLoading, romFile]);
+  }, [emulator, romLoading, romFile, currentRomLoading]);
 
   const LoadingIndicator = () => (
     <PacmanLoader

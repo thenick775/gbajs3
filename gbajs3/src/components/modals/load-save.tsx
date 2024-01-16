@@ -127,11 +127,11 @@ export const LoadSaveModal = () => {
   );
 
   useEffect(() => {
-    if (!saveLoading && saveFile) {
+    if (!saveLoading && saveFile && currentSaveLoading) {
       emulator?.uploadSaveOrSaveState(saveFile);
       setCurrentSaveLoading(null);
     }
-  }, [emulator, saveLoading, saveFile]);
+  }, [emulator, saveLoading, saveFile, currentSaveLoading]);
 
   const LoadingIndicator = () => (
     <PacmanLoader
