@@ -76,7 +76,7 @@ const EmulatorFS = ({ id, allFiles, deleteFile }: EmulatorFSProps) => {
       <LeafLabelWrapper>
         <p>{nodeName}</p>
         <IconButton
-          aria-label={`delete ${nodeName}`}
+          aria-label={`Delete ${nodeName}`}
           sx={{ padding: 0 }}
           onClick={() => deleteFile(node.path)}
         >

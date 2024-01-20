@@ -132,7 +132,7 @@ describe('<FileSystemModal />', () => {
     listAllFilesSpy.mockClear(); // clear calls from initial render
 
     await userEvent.click(screen.getByText('games'));
-    await userEvent.click(screen.getByLabelText('delete rom1.gba'));
+    await userEvent.click(screen.getByLabelText('Delete rom1.gba'));
 
     expect(deleteFileSpy).toHaveBeenCalledOnce();
     expect(deleteFileSpy).toHaveBeenCalledWith('/data/games/rom1.gba');

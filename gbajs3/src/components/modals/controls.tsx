@@ -74,7 +74,7 @@ const ControlTabs = ({
       <TabsWithBorder
         value={value}
         onChange={handleChange}
-        aria-label="control tabs"
+        aria-label="Control tabs"
       >
         <Tab label="Virtual Controls" {...a11yProps(0)} />
         <Tab label="Key Bindings" {...a11yProps(1)} />
