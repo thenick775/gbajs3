@@ -83,8 +83,8 @@ describe('<KeyBindingsForm />', () => {
 
     await userEvent.click(submitButton);
 
-    expect(screen.getByText('Space' + errorPostfix)).toBeInTheDocument();
-    expect(screen.getByText('Tab' + errorPostfix)).toBeInTheDocument();
+    expect(screen.getByText('Space' + errorPostfix)).toBeVisible();
+    expect(screen.getByText('Tab' + errorPostfix)).toBeVisible();
   });
 
   it('form values can be changed and properly persisted', async () => {
