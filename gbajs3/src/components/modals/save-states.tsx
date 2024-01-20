@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Button, IconButton, TextField } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useEffect, useId, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -44,11 +44,6 @@ const StyledLi = styled.li`
   color: ${({ theme }) => theme.blueCharcoal};
   background-color: ${({ theme }) => theme.pureWhite};
   border: 1px solid rgba(0, 0, 0, 0.125);
-
-  &:hover {
-    color: ${({ theme }) => theme.darkGrayBlue};
-    background-color: ${({ theme }) => theme.aliceBlue1};
-  }
 `;
 
 const SaveStatesList = styled.ul`
@@ -127,20 +122,16 @@ export const SaveStatesModal = () => {
   }, [emulator]);
 
   useEffect(() => {
-    refreshSaveStates();
-  }, [refreshSaveStates]);
-
-  useEffect(() => {
     setValue('saveStateSlot', currentSlot);
   }, [currentSlot, setValue]);
-
-  const incrementCurrentSlot = () => {
-    setCurrentSlot((prevState) => prevState + 1);
-  };
 
   const onSubmit: SubmitHandler<InputProps> = async (formData) => {
     setCurrentSlot(formData.saveStateSlot);
   };
+
+  const renderedSaveStates =
+    currentSaveStates ??
+    emulator?.listSaveStates()?.filter((ss) => ss !== '.' && ss !== '..');
 
   const tourSteps: TourSteps = [
     {
@@ -206,7 +197,7 @@ export const SaveStatesModal = () => {
         </StyledForm>
 
         <SaveStatesList id={saveStatesListId}>
-          {currentSaveStates?.map?.((saveState: string, idx: number) => (
+          {renderedSaveStates?.map?.((saveState: string, idx: number) => (
             <StyledLi key={`${saveState}_${idx}`}>
               <LoadSaveStateButton
                 onClick={() => {
@@ -226,7 +217,9 @@ export const SaveStatesModal = () => {
               >
                 {saveState}
               </LoadSaveStateButton>
-              <StyledCiCircleRemove
+              <IconButton
+                aria-label={`Delete ${saveState}`}
+                sx={{ padding: 0 }}
                 onClick={() => {
                   const ext = saveState.split('.').pop();
                   const slotString = ext?.replace('ss', '');
@@ -236,30 +229,36 @@ export const SaveStatesModal = () => {
                     refreshSaveStates();
                   }
                 }}
-              />
+              >
+                <StyledCiCircleRemove />
+              </IconButton>
             </StyledLi>
           ))}
-          {!currentSaveStates?.length && (
+          {!renderedSaveStates?.length && (
             <li>
               <CenteredText>No save states</CenteredText>
             </li>
           )}
         </SaveStatesList>
-        <StyledBiPlus
+        <IconButton
           id={addStateButtonId}
+          aria-label={`Create new save state`}
+          sx={{ padding: 0 }}
           onClick={() => {
             const hasCreatedSaveState = emulator?.createSaveState(
               currentSlot + 1
             );
             if (hasCreatedSaveState) {
               refreshSaveStates();
-              incrementCurrentSlot();
+              setCurrentSlot((prevState) => prevState + 1);
               setSaveStateError(null);
             } else {
               setSaveStateError('Failed to create save state');
             }
           }}
-        />
+        >
+          <StyledBiPlus />
+        </IconButton>
         {saveStateError && (
           <ErrorWithIcon
             icon={<BiError style={{ color: theme.errorRed }} />}
