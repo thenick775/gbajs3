@@ -1,5 +1,5 @@
 import { Button, Tabs, Tab } from '@mui/material';
-import { useId, useState, type ReactNode } from 'react';
+import { useId, useState, type Dispatch, type ReactNode } from 'react';
 import { styled } from 'styled-components';
 
 import { KeyBindingsForm } from './controls/key-bindings-form.tsx';
@@ -20,7 +20,7 @@ type TabPanelProps = {
 };
 
 type ControlTabsProps = {
-  setFormId: React.Dispatch<React.SetStateAction<string | null>>;
+  setFormId: Dispatch<React.SetStateAction<string>>;
   virtualControlsFormId: string;
   keyBindingsFormId: string;
   resetPositionsButtonId: string;
@@ -102,7 +102,7 @@ export const ControlsModal = () => {
   const keyBindingsFormId = useId();
   const saveChangesButtonId = useId();
   const resetPositionsButtonId = useId();
-  const [formId, setFormId] = useState<string | null>(virtualControlsFormId);
+  const [formId, setFormId] = useState<string>(virtualControlsFormId);
 
   const tourSteps: TourSteps = [
     {
@@ -173,7 +173,7 @@ export const ControlsModal = () => {
       <ModalFooter>
         <Button
           id={saveChangesButtonId}
-          form={formId ?? ''}
+          form={formId}
           type="submit"
           variant="contained"
         >
