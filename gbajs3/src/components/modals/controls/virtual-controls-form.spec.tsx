@@ -71,7 +71,7 @@ describe('<VirtualControlsForm />', () => {
 
     const checkBoxes = screen.getAllByRole('checkbox');
 
-    expect(checkBoxes.length).toEqual(5);
+    expect(checkBoxes).toHaveLength(5);
 
     checkBoxes.forEach(async (checkbox) => {
       await userEvent.click(checkbox);
