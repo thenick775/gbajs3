@@ -1,4 +1,4 @@
-import { Button, TextField, useMediaQuery } from '@mui/material';
+import { Button, IconButton, TextField, useMediaQuery } from '@mui/material';
 import { useCallback, useId, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { BiPlus } from 'react-icons/bi';
@@ -53,10 +53,9 @@ const StyledCiSquareRemove = styled(CiSquareRemove)`
   min-width: 40px;
 `;
 
-const StyledBiPlus = styled(BiPlus)<OptionallyHiddenProps>`
+const StyledBiPlus = styled(BiPlus)`
   width: 25px;
   height: 25px;
-  display: ${({ $shouldHide = false }) => ($shouldHide ? 'none' : 'flex')};
 `;
 
 const CheatsFormSeparator = styled.div<CheatsFormSeparatorProps>`
@@ -141,7 +140,7 @@ export const CheatsModal = () => {
       target: `#${CSS.escape(cheatsFormId)}`
     },
     {
-      content: <p>This form field is for what you want to call the cheat.</p>,
+      content: <p>This form field is for the name of the cheat.</p>,
       target: `#${CSS.escape(firstNameFieldId)}`
     },
     {
@@ -154,12 +153,12 @@ export const CheatsModal = () => {
       target: `#${CSS.escape(firstCheatCodeFieldId)}`
     },
     {
-      content: <p>Use this checkbox to enable/disable a cheat.</p>,
+      content: <p>Use the checkbox to enable/disable a cheat.</p>,
       placement: 'right',
       target: `#${CSS.escape(firstEnabledFieldId)}`
     },
     {
-      content: <p>Use this icon to remove a cheat entirely.</p>,
+      content: <p>Use the trash button to remove a cheat entirely.</p>,
       placement: 'right',
       target: `#${CSS.escape(firstRemoveIconId)}`
     },
@@ -183,8 +182,8 @@ export const CheatsModal = () => {
     {
       content: (
         <p>
-          Use the <i>{viewRawCheats ? 'Parsed' : 'Raw'}</i> button to toggle
-          between viewing parsed cheats or raw cheats in libretro file format.
+          Use this button to toggle between viewing parsed cheats or raw cheats
+          in libretro file format.
         </p>
       ),
       placement: 'right',
@@ -197,6 +196,7 @@ export const CheatsModal = () => {
       <ModalHeader title="Manage Cheats" />
       <ModalBody>
         <form
+          aria-label="Cheats Form"
           id={cheatsFormId}
           onSubmit={handleSubmit((data) => {
             const cheatsFile = viewRawCheats
@@ -269,20 +269,35 @@ export const CheatsModal = () => {
                     watcher={watch(`cheats.${index}.enable`)}
                     registerProps={register(`cheats.${index}.enable`)}
                   />
-                  <StyledCiSquareRemove
+                  <IconButton
+                    aria-label="Delete"
                     id={index === 0 ? firstRemoveIconId : undefined}
+                    sx={{
+                      padding: 0,
+                      marginRight: 'auto',
+                      '&:hover': { borderRadius: '10px' },
+                      '&:focus': { borderRadius: '10px' },
+                      '& .MuiTouchRipple-root .MuiTouchRipple-child': {
+                        borderRadius: '10px'
+                      }
+                    }}
                     onClick={() => remove(index)}
-                  />
+                  >
+                    <StyledCiSquareRemove />
+                  </IconButton>
                 </CheatsFormSeparator>
               </Cheat>
             ))}
           </CheatsList>
           <RowContainer>
-            <StyledBiPlus
+            <IconButton
+              aria-label="Create new cheat"
               id={addCheatButtonId}
+              sx={{ padding: 0, display: viewRawCheats ? 'none' : 'flex' }}
               onClick={() => append(defaultCheat)}
-              $shouldHide={viewRawCheats}
-            />
+            >
+              <StyledBiPlus />
+            </IconButton>
             <HelpText $withMargin={viewRawCheats}>
               Join multi-line codes with '+'
             </HelpText>
