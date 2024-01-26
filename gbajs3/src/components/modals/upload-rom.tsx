@@ -121,7 +121,8 @@ export const UploadRomModal = () => {
             id: uploadRomFormId,
             onSubmit: handleSubmit(onSubmit),
             $isDragActive: isDragActive,
-            onClick: triggerFileInputOnClick
+            onClick: triggerFileInputOnClick,
+            'aria-label': 'Upload Rom'
           })}
         >
           <HiddenInput
@@ -131,7 +132,8 @@ export const UploadRomModal = () => {
                   (!!rom && validateFileName(rom)) ||
                   'One .gba, .gbc, or .gb file is required'
               }),
-              ref: hiddenInputRef
+              ref: hiddenInputRef,
+              'data-testid': 'romfile-hidden-input'
             })}
           />
           <BiCloudUploadLarge />

@@ -117,7 +117,8 @@ export const UploadCheatsModal = () => {
             id: cheatsFormId,
             onSubmit: handleSubmit(onSubmit),
             $isDragActive: isDragActive,
-            onClick: triggerFileInputOnClick
+            onClick: triggerFileInputOnClick,
+            'aria-label': 'Upload Cheats'
           })}
         >
           <HiddenInput
@@ -127,7 +128,8 @@ export const UploadCheatsModal = () => {
                   (cheatsList?.length > 0 && validateFileNames(cheatsList)) ||
                   'At least one .cheats file is required'
               }),
-              ref: hiddenInputRef
+              ref: hiddenInputRef,
+              'data-testid': 'cheatfiles-hidden-input'
             })}
           />
           <BiCloudUploadLarge />

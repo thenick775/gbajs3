@@ -113,7 +113,8 @@ export const UploadSavesModal = () => {
             id: uploadSavesFormId,
             onSubmit: handleSubmit(onSubmit),
             $isDragActive: isDragActive,
-            onClick: triggerFileInputOnClick
+            onClick: triggerFileInputOnClick,
+            'aria-label': 'Upload Saves'
           })}
         >
           <HiddenInput
@@ -123,7 +124,8 @@ export const UploadSavesModal = () => {
                   (savList?.length > 0 && validateFileNames(savList)) ||
                   'At least one .sav file is required'
               }),
-              ref: hiddenInputRef
+              ref: hiddenInputRef,
+              'data-testid': 'savefiles-hidden-input'
             })}
           />
           <BiCloudUploadLarge />
