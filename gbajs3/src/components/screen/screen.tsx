@@ -7,14 +7,10 @@ import { useEmulatorContext, useLayoutContext } from '../../hooks/context.tsx';
 import { NavigationMenuWidth } from '../navigation-menu/consts.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
-type RenderCanvasProps = {
-  $pixelated?: boolean;
-};
-
 const defaultGBACanvasWidth = 240;
 const defaultGBACanvasHeight = 160;
 
-const RenderCanvas = styled.canvas<RenderCanvasProps>`
+const RenderCanvas = styled.canvas`
   background-color: ${({ theme }) => theme.pureBlack};
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -moz-crisp-edges;
@@ -26,11 +22,7 @@ const RenderCanvas = styled.canvas<RenderCanvasProps>`
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
-
-  ${({ $pixelated = false }) =>
-    $pixelated &&
-    `image-rendering: pixelated;
-    `}
+  image-rendering: pixelated;
 `;
 
 const ScreenWrapper = styled(Rnd)<RndProps>`
@@ -72,8 +64,8 @@ export const Screen = () => {
   );
 
   const defaultPosition = {
-    x: isLargerThanPhone ? screenWrapperXStart : 0,
-    y: isLargerThanPhone ? screenWrapperYStart : 0
+    x: screenWrapperXStart,
+    y: screenWrapperYStart
   };
   const defaultSize = {
     width: isLargerThanPhone ? '' : '100dvw',
@@ -85,6 +77,7 @@ export const Screen = () => {
 
   return (
     <ScreenWrapper
+      data-testid="screen-wrapper"
       disableDragging={!areItemsDraggable}
       ref={refUpdateDefaultPosition}
       enableResizing={areItemsResizable}
@@ -117,10 +110,10 @@ export const Screen = () => {
       }}
     >
       <RenderCanvas
+        data-testid="screen-wrapper:render-canvas"
         ref={refSetCanvas}
         width={defaultGBACanvasWidth}
         height={defaultGBACanvasHeight}
-        $pixelated
       />
     </ScreenWrapper>
   );
