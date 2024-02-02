@@ -7,8 +7,6 @@ import { GbaDarkTheme } from '../../context/theme/theme.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
 import { NavigationMenuWidth } from '../navigation-menu/consts.tsx';
 
-import type { Dispatch } from 'react';
-
 vi.mock('../../hooks/use-emulator.tsx', () => ({
   useEmulator: () => null
 }));
@@ -24,9 +22,7 @@ describe('<Screen />', () => {
   ];
 
   it('sets context canvas when rendered', async () => {
-    const setCanvasSpy: Dispatch<
-      React.SetStateAction<HTMLCanvasElement | null>
-    > = vi.fn();
+    const setCanvasSpy = vi.fn();
     const { useEmulatorContext: originalEmulator } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
@@ -42,6 +38,25 @@ describe('<Screen />', () => {
 
     expect(setCanvasSpy).toHaveBeenCalledOnce();
     expect(setCanvasSpy).toHaveBeenCalledWith(canvas);
+  });
+
+  it('sets initial bounds when rendered', async () => {
+    const setLayoutSpy = vi.fn();
+
+    const { useLayoutContext: originalLayout } = await vi.importActual<
+      typeof contextHooks
+    >('../../hooks/context.tsx');
+
+    vi.spyOn(contextHooks, 'useLayoutContext').mockImplementation(() => ({
+      ...originalLayout(),
+      setLayout: setLayoutSpy
+    }));
+
+    renderWithContext(<Screen />);
+
+    expect(setLayoutSpy).toHaveBeenCalledWith('screen', {
+      initialBounds: expect.anything()
+    });
   });
 
   it('renders with default mobile position and width', () => {
