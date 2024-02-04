@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<Screen /> > renders with default desktop position and width 1`] = `
+exports[`<Screen /> > renders with default desktop position and size 1`] = `
 <div
   class="sc-guDLey fnLDoY react-draggable"
   data-testid="screen-wrapper"
@@ -16,7 +16,7 @@ exports[`<Screen /> > renders with default desktop position and width 1`] = `
 </div>
 `;
 
-exports[`<Screen /> > renders with default mobile position and width 1`] = `
+exports[`<Screen /> > renders with default mobile position and size 1`] = `
 <div
   class="sc-guDLey fnLDoY react-draggable"
   data-testid="screen-wrapper"

@@ -59,7 +59,7 @@ describe('<Screen />', () => {
     });
   });
 
-  it('renders with default mobile position and width', () => {
+  it('renders with default mobile position and size', () => {
     renderWithContext(<Screen />);
 
     const canvas = screen.getByTestId('screen-wrapper:render-canvas');
@@ -79,7 +79,7 @@ describe('<Screen />', () => {
     expect(screenWrapper).toMatchSnapshot();
   });
 
-  it('renders with default desktop position and width', () => {
+  it('renders with default desktop position and size', () => {
     vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
       matches: query === GbaDarkTheme.isLargerThanPhone,
       media: '',
