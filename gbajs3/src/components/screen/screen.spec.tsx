@@ -165,7 +165,7 @@ describe('<Screen />', () => {
 
     renderWithContext(<Screen />);
 
-    fireEvent.resize(screen.getByTestId('screen-wrapper'));
+    expect(screen.getAllByTestId('gripper-handle')).toHaveLength(4);
 
     // simulate mouse events on a resize handle
     fireEvent.mouseDown(screen.getAllByTestId('gripper-handle')[0], initialPos);
