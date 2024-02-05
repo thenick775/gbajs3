@@ -332,5 +332,5 @@ describe('<CheatsModal />', () => {
             'Use this button to toggle between viewing parsed cheats or raw cheats in libretro file format.'
       )
     ).toBeVisible();
-  }, 8000);
+  });
 });
