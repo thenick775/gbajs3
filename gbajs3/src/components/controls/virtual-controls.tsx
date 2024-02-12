@@ -311,15 +311,13 @@ export const VirtualControls = () => {
     {
       children: <BiSolidCloudUpload />,
       onClick: () => {
-        if (areNotificationsEnabled) {
-          if (isAuthenticated() && isEmulatorRunning) {
-            setModalContent(<UploadSaveToServerModal />);
-            setIsModalOpen(true);
-          } else {
-            toast.error('Please log in and load a game', {
-              id: virtualControlToastId
-            });
-          }
+        if (isAuthenticated() && isEmulatorRunning) {
+          setModalContent(<UploadSaveToServerModal />);
+          setIsModalOpen(true);
+        } else if (areNotificationsEnabled) {
+          toast.error('Please log in and load a game', {
+            id: virtualControlToastId
+          });
         }
       },
       width: 40,
