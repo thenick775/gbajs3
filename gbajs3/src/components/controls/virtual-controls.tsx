@@ -78,8 +78,8 @@ export const VirtualControls = () => {
     areVirtualControlsEnabled?.NotificationsEnabled ?? true;
 
   // align with initial control panel positioning
-  const verticalStartPos = controlPanelBounds?.bottom ?? 0;
-  const horizontalStartPos = controlPanelBounds?.left ?? 0;
+  const verticalStartPos = controlPanelBounds.bottom;
+  const horizontalStartPos = controlPanelBounds.left;
 
   const positionVariations: {
     [key: string]: {
