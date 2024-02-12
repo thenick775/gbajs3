@@ -1,5 +1,7 @@
 import { useMediaQuery } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
+import { useId } from 'react';
+import toast from 'react-hot-toast';
 import { IconContext } from 'react-icons';
 import {
   BiRefresh,
@@ -55,6 +57,7 @@ export const VirtualControls = () => {
   const { isAuthenticated } = useAuthContext();
   const { setModalContent, setIsModalOpen } = useModalContext();
   const { layouts } = useLayoutContext();
+  const virtualControlToastId = useId();
   const [currentSaveStateSlot] = useLocalStorage(
     saveStateSlotLocalStorageKey,
     0
@@ -290,7 +293,14 @@ export const VirtualControls = () => {
     },
     {
       children: <BiRefresh />,
-      onClick: emulator?.quickReload,
+      onClick: () => {
+        emulator?.quickReload();
+
+        if (!emulator?.getCurrentGameName())
+          toast.error('Load a game to quick reload', {
+            id: virtualControlToastId
+          });
+      },
       width: 40,
       initialPosition: initialPositionForKey('quickreload-button'),
       key: 'quickreload-button',
@@ -302,6 +312,10 @@ export const VirtualControls = () => {
         if (isAuthenticated() && isEmulatorRunning) {
           setModalContent(<UploadSaveToServerModal />);
           setIsModalOpen(true);
+        } else {
+          toast.error('Please log in and load a game', {
+            id: virtualControlToastId
+          });
         }
       },
       width: 40,
@@ -316,7 +330,16 @@ export const VirtualControls = () => {
     {
       children: <BiSolidBookmark />,
       onClick: () => {
-        emulator?.loadSaveState(currentSaveStateSlot);
+        const wasSuccessful = emulator?.loadSaveState(currentSaveStateSlot);
+        if (wasSuccessful) {
+          toast.success(`Loaded slot: ${currentSaveStateSlot}`, {
+            id: virtualControlToastId
+          });
+        } else {
+          toast.error(`Failed to load slot: ${currentSaveStateSlot}`, {
+            id: virtualControlToastId
+          });
+        }
       },
       width: 40,
       initialPosition: initialPositionForKey('loadstate-button'),
@@ -330,7 +353,16 @@ export const VirtualControls = () => {
     {
       children: <BiSave />,
       onClick: () => {
-        emulator?.createSaveState(currentSaveStateSlot);
+        const wasSuccessful = emulator?.createSaveState(currentSaveStateSlot);
+        if (wasSuccessful) {
+          toast.success(`Saved slot: ${currentSaveStateSlot}`, {
+            id: virtualControlToastId
+          });
+        } else {
+          toast.error(`Failed to save slot: ${currentSaveStateSlot}`, {
+            id: virtualControlToastId
+          });
+        }
       },
       width: 40,
       initialPosition: initialPositionForKey('savestate-button'),
