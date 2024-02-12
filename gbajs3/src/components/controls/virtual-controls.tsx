@@ -74,6 +74,8 @@ export const VirtualControls = () => {
     (areVirtualControlsEnabled?.DPadAndButtons === undefined &&
       !isLargerThanPhone) ||
     areVirtualControlsEnabled?.DPadAndButtons;
+  const areNotificationsEnabled =
+    areVirtualControlsEnabled?.NotificationsEnabled ?? true;
 
   // align with initial control panel positioning
   const verticalStartPos = controlPanelBounds?.bottom ?? 0;
@@ -296,7 +298,7 @@ export const VirtualControls = () => {
       onClick: () => {
         emulator?.quickReload();
 
-        if (!emulator?.getCurrentGameName())
+        if (!emulator?.getCurrentGameName() && areNotificationsEnabled)
           toast.error('Load a game to quick reload', {
             id: virtualControlToastId
           });
@@ -309,13 +311,15 @@ export const VirtualControls = () => {
     {
       children: <BiSolidCloudUpload />,
       onClick: () => {
-        if (isAuthenticated() && isEmulatorRunning) {
-          setModalContent(<UploadSaveToServerModal />);
-          setIsModalOpen(true);
-        } else {
-          toast.error('Please log in and load a game', {
-            id: virtualControlToastId
-          });
+        if (areNotificationsEnabled) {
+          if (isAuthenticated() && isEmulatorRunning) {
+            setModalContent(<UploadSaveToServerModal />);
+            setIsModalOpen(true);
+          } else {
+            toast.error('Please log in and load a game', {
+              id: virtualControlToastId
+            });
+          }
         }
       },
       width: 40,
@@ -331,14 +335,16 @@ export const VirtualControls = () => {
       children: <BiSolidBookmark />,
       onClick: () => {
         const wasSuccessful = emulator?.loadSaveState(currentSaveStateSlot);
-        if (wasSuccessful) {
-          toast.success(`Loaded slot: ${currentSaveStateSlot}`, {
-            id: virtualControlToastId
-          });
-        } else {
-          toast.error(`Failed to load slot: ${currentSaveStateSlot}`, {
-            id: virtualControlToastId
-          });
+        if (areNotificationsEnabled) {
+          if (wasSuccessful) {
+            toast.success(`Loaded slot: ${currentSaveStateSlot}`, {
+              id: virtualControlToastId
+            });
+          } else {
+            toast.error(`Failed to load slot: ${currentSaveStateSlot}`, {
+              id: virtualControlToastId
+            });
+          }
         }
       },
       width: 40,
@@ -354,14 +360,16 @@ export const VirtualControls = () => {
       children: <BiSave />,
       onClick: () => {
         const wasSuccessful = emulator?.createSaveState(currentSaveStateSlot);
-        if (wasSuccessful) {
-          toast.success(`Saved slot: ${currentSaveStateSlot}`, {
-            id: virtualControlToastId
-          });
-        } else {
-          toast.error(`Failed to save slot: ${currentSaveStateSlot}`, {
-            id: virtualControlToastId
-          });
+        if (areNotificationsEnabled) {
+          if (wasSuccessful) {
+            toast.success(`Saved slot: ${currentSaveStateSlot}`, {
+              id: virtualControlToastId
+            });
+          } else {
+            toast.error(`Failed to save slot: ${currentSaveStateSlot}`, {
+              id: virtualControlToastId
+            });
+          }
         }
       },
       width: 40,
