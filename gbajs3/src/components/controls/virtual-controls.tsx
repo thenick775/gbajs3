@@ -234,6 +234,18 @@ export const VirtualControls = () => {
     };
   };
 
+  const toastOnCondition = (
+    condition: boolean,
+    successMessage: string,
+    errorMessage: string
+  ) => {
+    if (areNotificationsEnabled)
+      toast[condition ? 'success' : 'error'](
+        condition ? successMessage : errorMessage,
+        { id: virtualControlToastId }
+      );
+  };
+
   const virtualButtons = [
     {
       keyId: 'A',
@@ -333,17 +345,12 @@ export const VirtualControls = () => {
       children: <BiSolidBookmark />,
       onClick: () => {
         const wasSuccessful = emulator?.loadSaveState(currentSaveStateSlot);
-        if (areNotificationsEnabled) {
-          if (wasSuccessful) {
-            toast.success(`Loaded slot: ${currentSaveStateSlot}`, {
-              id: virtualControlToastId
-            });
-          } else {
-            toast.error(`Failed to load slot: ${currentSaveStateSlot}`, {
-              id: virtualControlToastId
-            });
-          }
-        }
+
+        toastOnCondition(
+          !!wasSuccessful,
+          `Loaded slot: ${currentSaveStateSlot}`,
+          `Failed to load slot: ${currentSaveStateSlot}`
+        );
       },
       width: 40,
       initialPosition: initialPositionForKey('loadstate-button'),
@@ -358,17 +365,12 @@ export const VirtualControls = () => {
       children: <BiSave />,
       onClick: () => {
         const wasSuccessful = emulator?.createSaveState(currentSaveStateSlot);
-        if (areNotificationsEnabled) {
-          if (wasSuccessful) {
-            toast.success(`Saved slot: ${currentSaveStateSlot}`, {
-              id: virtualControlToastId
-            });
-          } else {
-            toast.error(`Failed to save slot: ${currentSaveStateSlot}`, {
-              id: virtualControlToastId
-            });
-          }
-        }
+
+        toastOnCondition(
+          !!wasSuccessful,
+          `Saved slot: ${currentSaveStateSlot}`,
+          `Failed to save slot: ${currentSaveStateSlot}`
+        );
       },
       width: 40,
       initialPosition: initialPositionForKey('savestate-button'),
