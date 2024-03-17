@@ -108,17 +108,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	new_tokenid := uuid.Must(uuid.NewV4(), err)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	new_tokenslug := uuid.Must(uuid.NewV4(), err)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	new_tokenid := uuid.NewV4()
+	new_tokenslug := uuid.NewV4()
 
 	err = updateUserTokenFields(user, new_tokenid, new_tokenslug)
 	if err != nil {
