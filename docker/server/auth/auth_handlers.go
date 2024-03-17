@@ -23,7 +23,7 @@ func authorize(endpoint func(http.ResponseWriter, *http.Request)) http.Handler {
 			claims, valid := isValidAccessJWT(token) // validate the access token
 
 			if valid { // if valid go to our desired endpoint
-				ctx := context.WithValue(r.Context(), "claims", claims) // pass claims as context
+				ctx := context.WithValue(r.Context(), ContextClaimsKey, claims) // pass claims as context
 				endpoint(w, r.WithContext(ctx))
 			} else { // otherwise the attempted user is unauthorized
 				w.WriteHeader(http.StatusUnauthorized)
