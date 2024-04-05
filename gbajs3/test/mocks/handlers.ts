@@ -1,6 +1,7 @@
 import { HttpResponse, delay, http } from 'msw';
 
 export const gbaServerLocationPlaceholder = 'https://server_location.test';
+export const testRomLocation = 'https://rom_location.test';
 
 export const handlers = [
   http.post(`${gbaServerLocationPlaceholder}/api/tokens/refresh`, () => {
@@ -75,5 +76,21 @@ export const handlers = [
     await delay();
 
     return new HttpResponse(null, { status: 200 });
+  }),
+
+  http.get(`${testRomLocation}/good_rom.gba`, async () => {
+    await delay();
+
+    return new HttpResponse(`test external rom`, {
+      headers: {
+        'Content-Type': 'application/octet-stream'
+      }
+    });
+  }),
+
+  http.get(`${testRomLocation}/bad_rom.gba`, async () => {
+    await delay();
+
+    return new HttpResponse(null, { status: 400 });
   })
 ];

@@ -30,6 +30,10 @@ export const useLoadExternalRom = () => {
         fetchProps.url.pathname.split('/').pop() ?? 'unknown_external.gba'
       );
 
+      if (res.status > 299) {
+        throw new Error(`Received unexpected status code: ${res.status}`);
+      }
+
       const blob = await res.blob();
       const file = new File([blob], fileName ?? fallbackFileName);
 
