@@ -5,11 +5,11 @@ export const testRomLocation = 'https://rom_location.test';
 
 export const handlers = [
   http.post(`${gbaServerLocationPlaceholder}/api/tokens/refresh`, () => {
-    return HttpResponse.json('', { status: 401 });
+    return new HttpResponse(null, { status: 401 });
   }),
 
   http.post(`${gbaServerLocationPlaceholder}/api/account/logout`, () => {
-    return HttpResponse.json(null, { status: 200 });
+    return new HttpResponse(null, { status: 200 });
   }),
 
   http.get(`${gbaServerLocationPlaceholder}/api/rom/list`, () => {
@@ -60,11 +60,28 @@ export const handlers = [
     }
   ),
 
-  http.post(`${gbaServerLocationPlaceholder}/api/account/login`, async () => {
-    await delay();
+  http.post(
+    `${gbaServerLocationPlaceholder}/api/account/login`,
+    async ({ request }) => {
+      const data = (await request.json()) as {
+        username?: string;
+        password?: string;
+      };
+      const isValidUser =
+        data.username?.startsWith('valid') &&
+        data.password?.startsWith('valid');
 
-    return HttpResponse.json('some token', { status: 200 });
-  }),
+      await delay();
+
+      if (isValidUser) {
+        return HttpResponse.json('some token', {
+          status: 200
+        });
+      } else {
+        return new HttpResponse(null, { status: 401 });
+      }
+    }
+  ),
 
   http.post(
     `${gbaServerLocationPlaceholder}/api/rom/upload`,
