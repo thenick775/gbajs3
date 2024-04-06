@@ -27,7 +27,7 @@ export const handlers = [
 
         return new HttpResponse(`test ${romName} rom`, {
           headers: {
-            'Content-Type': 'application/octet-stream'
+            'Content-Type': 'application/x-gba-rom'
           }
         });
       } else {
@@ -66,17 +66,31 @@ export const handlers = [
     return HttpResponse.json('some token', { status: 200 });
   }),
 
-  http.post(`${gbaServerLocationPlaceholder}/api/rom/upload`, async () => {
-    await delay();
+  http.post(
+    `${gbaServerLocationPlaceholder}/api/rom/upload`,
+    async ({ request }) => {
+      const formData = await request.formData();
+      const rom = formData.get('rom') as File;
+      const romName = rom.name;
 
-    return new HttpResponse(null, { status: 200 });
-  }),
+      await delay();
 
-  http.post(`${gbaServerLocationPlaceholder}/api/save/upload`, async () => {
-    await delay();
+      return new HttpResponse(null, { status: romName == '400' ? 400 : 200 });
+    }
+  ),
 
-    return new HttpResponse(null, { status: 200 });
-  }),
+  http.post(
+    `${gbaServerLocationPlaceholder}/api/save/upload`,
+    async ({ request }) => {
+      const formData = await request.formData();
+      const save = formData.get('save') as File;
+      const saveName = save.name;
+
+      await delay();
+
+      return new HttpResponse(null, { status: saveName == '400' ? 400 : 200 });
+    }
+  ),
 
   http.get(`${testRomLocation}/good_rom.gba`, async () => {
     await delay();
