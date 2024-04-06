@@ -117,6 +117,7 @@ export const UploadRomModal = () => {
     execute: executeLoadExternalRom
   } = useLoadExternalRom();
   const uploadRomFormId = useId();
+  const dragAndDropFieldId = useId();
   const romURLFieldId = useId();
 
   useEffect(() => {
@@ -205,7 +206,7 @@ export const UploadRomModal = () => {
           </p>
         </>
       ),
-      target: `#${CSS.escape(uploadRomFormId)}`
+      target: `#${CSS.escape(dragAndDropFieldId)}`
     },
     {
       content: (
@@ -236,6 +237,7 @@ export const UploadRomModal = () => {
           >
             <StyledDragAndDrop
               {...getRootProps({
+                id: dragAndDropFieldId,
                 $isDragActive: isDragActive,
                 onClick: triggerFileInputOnClick,
                 'aria-label': 'Upload Rom'
