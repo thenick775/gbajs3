@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import { defineConfig, splitVendorChunkPlugin } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -64,18 +64,17 @@ export default defineConfig({
         ]
       }
     }),
-    splitVendorChunkPlugin(),
     visualizer({ gzipSize: true })
   ],
   build: {
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          const vendorPrefix = 'vendor_';
+          const vendorPrefix = 'vendor';
           if (id.indexOf('node_modules') > -1) {
             if (id.indexOf('@mui') > -1) {
               // vendor mui
-              return vendorPrefix + '@mui';
+              return vendorPrefix + '_@mui';
             }
 
             if (
@@ -84,10 +83,10 @@ export default defineConfig({
               id.indexOf('popper.js') > -1
             ) {
               // vendor react joyride + large deps
-              return vendorPrefix + 'react-joyride';
+              return vendorPrefix + '_react-joyride';
             }
 
-            // returning void defaults to splitVendorChunkPlugin logic
+            return vendorPrefix;
           }
         }
       }
