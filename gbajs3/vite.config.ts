@@ -61,6 +61,22 @@ export default defineConfig({
             type: 'image/png',
             purpose: 'maskable'
           }
+        ],
+        screenshots: [
+          {
+            src: 'img/desktop.png',
+            sizes: '2054x1324',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Desktop Gbajs3'
+          },
+          {
+            src: 'img/mobile.png',
+            sizes: '1170x2532',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Mobile Gbajs3'
+          }
         ]
       },
       workbox: {
