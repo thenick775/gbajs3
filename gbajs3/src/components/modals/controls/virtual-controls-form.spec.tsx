@@ -50,7 +50,7 @@ describe('<VirtualControlsForm />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       virtualControlsLocalStorageKey,
-      '{"OpadAndButtons":true,"NotificationsEnabled":true,"SaveState":true,"LoadState":true,"QuickReload":true,"SendSaveToServer":true}'
+      '{"OpadAndButtons":true,"SaveState":true,"LoadState":true,"QuickReload":true,"SendSaveToServer":true,"NotificationsEnabled":true}'
     );
   });
 
@@ -82,11 +82,11 @@ describe('<VirtualControlsForm />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       virtualControlsLocalStorageKey,
-      '{"OpadAndButtons":false,"NotificationsEnabled":false,"SaveState":false,"LoadState":false,"QuickReload":false,"SendSaveToServer":false}'
+      '{"OpadAndButtons":false,"SaveState":false,"LoadState":false,"QuickReload":false,"SendSaveToServer":false,"NotificationsEnabled":false}'
     );
   });
 
-  it('virtual controls true by default on mobile resolutions', () => {
+  it('virtual controls are true by default on mobile resolutions', () => {
     vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
       matches: query !== GbaDarkTheme.isLargerThanPhone,
       media: '',
@@ -131,7 +131,7 @@ describe('<VirtualControlsForm />', () => {
   it('renders initial values from storage', () => {
     localStorage.setItem(
       virtualControlsLocalStorageKey,
-      '{"OpadAndButtons":false,"NotificationsEnabled":false,"SaveState":true,"LoadState":true,"QuickReload":true,"SendSaveToServer":true}'
+      '{"OpadAndButtons":false,"SaveState":true,"LoadState":true,"QuickReload":true,"SendSaveToServer":true,"NotificationsEnabled":false}'
     );
 
     renderWithContext(<VirtualControlsForm id="testId" />);

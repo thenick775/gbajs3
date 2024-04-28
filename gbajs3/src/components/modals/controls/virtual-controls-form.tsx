@@ -11,15 +11,6 @@ type VirtualControlsFormProps = {
   id: string;
 };
 
-type ControlsInputProps = {
-  OpadAndButtons: boolean;
-  SaveState: boolean;
-  LoadState: boolean;
-  QuickReload: boolean;
-  SendSaveToServer: boolean;
-  NotificationsEnabled: boolean;
-};
-
 export type AreVirtualControlsEnabledProps = {
   OpadAndButtons: boolean;
   SaveState: boolean;
@@ -28,6 +19,8 @@ export type AreVirtualControlsEnabledProps = {
   SendSaveToServer: boolean;
   NotificationsEnabled: boolean;
 };
+
+type ControlsInputProps = AreVirtualControlsEnabledProps;
 
 const StyledForm = styled.form`
   display: flex;
@@ -49,29 +42,15 @@ export const VirtualControlsForm = ({ id }: VirtualControlsFormProps) => {
     );
   };
 
-  const areVirtualControlsEnabledWithDefaults = Object.fromEntries(
-    Object.entries(
-      areVirtualControlsEnabled ?? {
-        OpadAndButtons: undefined,
-        NotificationsEnabled: undefined,
-        SaveState: undefined,
-        LoadState: undefined,
-        QuickReload: undefined,
-        SendSaveToServer: undefined
-      }
-    ).map(([key, value]) => {
-      return [
-        key,
-        key !== 'NotificationsEnabled'
-          ? shouldShowVirtualControl(value)
-          : value ?? true
-      ];
-    })
-  );
-
   const { register, handleSubmit, watch } = useForm<ControlsInputProps>({
-    values:
-      areVirtualControlsEnabledWithDefaults as AreVirtualControlsEnabledProps,
+    values: areVirtualControlsEnabled ?? {
+      OpadAndButtons: shouldShowVirtualControl(undefined),
+      SaveState: shouldShowVirtualControl(undefined),
+      LoadState: shouldShowVirtualControl(undefined),
+      QuickReload: shouldShowVirtualControl(undefined),
+      SendSaveToServer: shouldShowVirtualControl(undefined),
+      NotificationsEnabled: true
+    },
     resetOptions: {
       keepDirtyValues: true
     }
