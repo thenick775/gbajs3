@@ -187,12 +187,7 @@ export const SaveStatesModal = () => {
               valueAsNumber: true
             })}
           />
-          <Button
-            form={`${baseId}--save-state-slot-form`}
-            type="submit"
-            variant="outlined"
-            size="small"
-          >
+          <Button type="submit" variant="outlined" size="small">
             Update Slot
           </Button>
         </StyledForm>
