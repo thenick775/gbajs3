@@ -12,6 +12,7 @@ import {
   EmbeddedProductTour,
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
+import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 
 type TabPanelProps = {
   children: ReactNode;
@@ -170,14 +171,12 @@ export const ControlsModal = () => {
         />
       </ModalBody>
       <ModalFooter>
-        <Button
-          id={`${baseId}--save-changes-button`}
+        <CircleCheckButton
+          copy="Save Changes"
           form={formId}
+          id={`${baseId}--save-changes-button`}
           type="submit"
-          variant="contained"
-        >
-          Save Changes
-        </Button>
+        />
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
           Close
         </Button>
