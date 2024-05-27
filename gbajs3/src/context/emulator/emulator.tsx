@@ -9,9 +9,8 @@ import {
 } from 'react';
 
 import {
-  emTimingSetTimeout,
+  emulatorFFMultiplierLocalStorageKey,
   emulatorGameNameLocalStorageKey,
-  emulatorIsFastForwardOnStorageKey,
   emulatorKeyBindingsLocalStorageKey,
   emulatorVolumeLocalStorageKey
 } from './consts.tsx';
@@ -60,9 +59,9 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
   const [storedGameName, setStoredGameName] = useLocalStorage<
     string | undefined
   >(emulatorGameNameLocalStorageKey);
-  const [isFastForwardOn] = useLocalStorage(
-    emulatorIsFastForwardOnStorageKey,
-    false
+  const [fastForwardMultiplier] = useLocalStorage(
+    emulatorFFMultiplierLocalStorageKey,
+    1
   );
 
   const emu = useMemo<GBAEmulator | null>(() => {
@@ -72,8 +71,8 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
     if (!emulator.getCurrentGameName())
       emulator.setCurrentGameName(storedGameName);
 
-    if (isFastForwardOn && !emulator.isFastForwardEnabled())
-      emulator.setFastForward(emTimingSetTimeout, 0);
+    if (fastForwardMultiplier > 1 && !emulator.isFastForwardEnabled())
+      emulator.setFastForwardMultiplier(fastForwardMultiplier);
 
     const run = (romPath: string) => {
       const isSuccessfulRun = emulator.run(romPath);
@@ -126,7 +125,7 @@ export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
     hasSetLayout,
     storedGameName,
     setStoredGameName,
-    isFastForwardOn
+    fastForwardMultiplier
   ]);
 
   return (
