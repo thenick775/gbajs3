@@ -8,8 +8,10 @@ export const useQuitGame = () => {
   const { setIsRunning } = useRunningContext();
 
   const run = useCallback(() => {
-    if (emulator) fadeCanvas(canvas, emulator.screenShot);
-    emulator?.quitGame();
+    if (emulator) {
+      fadeCanvas(canvas, emulator.screenShot);
+      emulator.quitGame();
+    }
     setIsRunning(false);
   }, [canvas, emulator, setIsRunning]);
 
