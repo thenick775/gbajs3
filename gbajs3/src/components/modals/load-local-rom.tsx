@@ -6,6 +6,7 @@ import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
+import { useRunGame } from '../../hooks/emulator/run-game.tsx';
 import {
   EmbeddedProductTour,
   type TourSteps
@@ -62,6 +63,8 @@ export const LoadLocalRomModal = () => {
     ?.listRoms?.()
     ?.filter((romName) => !ignorePaths.includes(romName));
 
+  const runGame = useRunGame();
+
   const tourSteps: TourSteps = [
     {
       content: (
@@ -90,7 +93,7 @@ export const LoadLocalRomModal = () => {
             <StyledLi key={`${romName}_${idx}`}>
               <LoadRomButton
                 onClick={() => {
-                  emulator?.run(emulator.filePaths().gamePath + '/' + romName);
+                  runGame(emulator?.filePaths().gamePath + '/' + romName);
                   setIsModalOpen(false);
                 }}
               >

@@ -8,7 +8,9 @@ import { VirtualControls } from './virtual-controls.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
 import { GbaDarkTheme } from '../../context/theme/theme.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
+import * as quickReloadHooks from '../../hooks/emulator/quick-reload.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
+
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
@@ -100,10 +102,13 @@ describe('<VirtualControls />', () => {
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...original(),
         emulator: {
-          quickReload: quickReloadSpy,
           getCurrentGameName: () => 'some_rom.gba'
         } as GBAEmulator
       }));
+
+      vi.spyOn(quickReloadHooks, 'useQuickReload').mockReturnValue(
+        quickReloadSpy
+      );
 
       const toastErrorSpy = vi.spyOn(toast.default, 'error');
 
@@ -124,10 +129,13 @@ describe('<VirtualControls />', () => {
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...original(),
         emulator: {
-          quickReload: quickReloadSpy,
           getCurrentGameName: () => undefined
         } as GBAEmulator
       }));
+
+      vi.spyOn(quickReloadHooks, 'useQuickReload').mockReturnValue(
+        quickReloadSpy
+      );
 
       const toastErrorSpy = vi.spyOn(toast.default, 'error');
 
@@ -147,8 +155,8 @@ describe('<VirtualControls />', () => {
       const setModalContextSpy = vi.fn();
       const {
         useAuthContext: originalAuth,
-        useEmulatorContext: originalEmulator,
-        useModalContext: originalContext
+        useModalContext: originalContext,
+        useRunningContext: originalRunning
       } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
 
       vi.spyOn(contextHooks, 'useAuthContext').mockImplementation(() => ({
@@ -156,9 +164,9 @@ describe('<VirtualControls />', () => {
         isAuthenticated: () => true
       }));
 
-      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-        ...originalEmulator(),
-        isEmulatorRunning: true
+      vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
+        ...originalRunning(),
+        isRunning: true
       }));
 
       vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({

@@ -10,9 +10,11 @@ import { UploadRomModal } from './upload-rom.tsx';
 import { testRomLocation } from '../../../test/mocks/handlers.ts';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
+import * as runGameHooks from '../../hooks/emulator/run-game.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
+
 
 describe('<UploadRomModal />', () => {
   it('clicks file input when drag and drop is clicked', async () => {
@@ -32,7 +34,7 @@ describe('<UploadRomModal />', () => {
     const uploadRomSpy: (file: File, cb?: () => void) => void = vi.fn(
       (_file, cb) => cb && cb()
     );
-    const emulatorRunSpy: (romPath: string) => boolean = vi.fn(() => true);
+    const runGameSpy = vi.fn(() => true);
 
     const {
       useEmulatorContext: originalEmulator,
@@ -48,12 +50,13 @@ describe('<UploadRomModal />', () => {
       ...originalEmulator(),
       emulator: {
         uploadRom: uploadRomSpy,
-        run: emulatorRunSpy,
         filePaths: () => ({
           gamePath: '/games'
         })
       } as GBAEmulator
     }));
+
+    vi.spyOn(runGameHooks, 'useRunGame').mockReturnValue(runGameSpy);
 
     const testRom = new File(['Some rom file contents'], 'rom1.gba');
 
@@ -72,8 +75,8 @@ describe('<UploadRomModal />', () => {
 
     expect(uploadRomSpy).toHaveBeenCalledWith(testRom, expect.anything());
 
-    expect(emulatorRunSpy).toHaveBeenCalledOnce();
-    expect(emulatorRunSpy).toHaveBeenCalledWith('/games/rom1.gba');
+    expect(runGameSpy).toHaveBeenCalledOnce();
+    expect(runGameSpy).toHaveBeenCalledWith('/games/rom1.gba');
     expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
@@ -86,7 +89,7 @@ describe('<UploadRomModal />', () => {
     const uploadRomSpy: (file: File, cb?: () => void) => void = vi.fn(
       (_file, cb) => cb && cb()
     );
-    const emulatorRunSpy: (romPath: string) => boolean = vi.fn(() => true);
+    const runGameSpy = vi.fn(() => true);
 
     const {
       useEmulatorContext: originalEmulator,
@@ -102,12 +105,13 @@ describe('<UploadRomModal />', () => {
       ...originalEmulator(),
       emulator: {
         uploadRom: uploadRomSpy,
-        run: emulatorRunSpy,
         filePaths: () => ({
           gamePath: '/games'
         })
       } as GBAEmulator
     }));
+
+    vi.spyOn(runGameHooks, 'useRunGame').mockReturnValue(runGameSpy);
 
     const testRoms = [new File(['Some rom file contents'], 'rom1.gba')];
     const data = {
@@ -138,8 +142,8 @@ describe('<UploadRomModal />', () => {
 
     expect(uploadRomSpy).toHaveBeenCalledWith(testRoms[0], expect.anything());
 
-    expect(emulatorRunSpy).toHaveBeenCalledOnce();
-    expect(emulatorRunSpy).toHaveBeenCalledWith('/games/rom1.gba');
+    expect(runGameSpy).toHaveBeenCalledOnce();
+    expect(runGameSpy).toHaveBeenCalledWith('/games/rom1.gba');
     expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
@@ -152,7 +156,7 @@ describe('<UploadRomModal />', () => {
     const uploadRomSpy: (file: File, cb?: () => void) => void = vi.fn(
       (_file, cb) => cb && cb()
     );
-    const emulatorRunSpy: (romPath: string) => boolean = vi.fn(() => true);
+    const runGameSpy = vi.fn(() => true);
 
     const {
       useEmulatorContext: originalEmulator,
@@ -161,7 +165,6 @@ describe('<UploadRomModal />', () => {
     // needs to be a consistent object
     const testEmu = {
       uploadRom: uploadRomSpy,
-      run: emulatorRunSpy,
       filePaths: () => ({
         gamePath: '/games'
       })
@@ -176,6 +179,8 @@ describe('<UploadRomModal />', () => {
       ...originalEmulator(),
       emulator: testEmu
     }));
+
+    vi.spyOn(runGameHooks, 'useRunGame').mockReturnValue(runGameSpy);
 
     renderWithContext(<UploadRomModal />);
 
@@ -198,8 +203,8 @@ describe('<UploadRomModal />', () => {
 
     expect(uploadRomSpy).toHaveBeenCalledOnce();
 
-    expect(emulatorRunSpy).toHaveBeenCalledOnce();
-    expect(emulatorRunSpy).toHaveBeenCalledWith('/games/good_rom.gba');
+    expect(runGameSpy).toHaveBeenCalledOnce();
+    expect(runGameSpy).toHaveBeenCalledWith('/games/good_rom.gba');
     expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
 
     expect(await screen.findByText('Upload complete!')).toBeVisible();

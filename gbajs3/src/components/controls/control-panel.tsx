@@ -20,8 +20,15 @@ import {
   emTimingSetTimeout,
   emulatorIsFastForwardOnStorageKey,
   emulatorVolumeLocalStorageKey
-} from '../../context/emulator/consts.tsx';
-import { useEmulatorContext, useLayoutContext } from '../../hooks/context.tsx';
+} from '../../context/emulator/consts.ts';
+import {
+  useDragContext,
+  useEmulatorContext,
+  useLayoutContext,
+  useResizeContext,
+  useRunningContext
+} from '../../hooks/context.tsx';
+import { useQuitGame } from '../../hooks/emulator/quit-game.tsx';
 import {
   EmbeddedProductTour,
   type TourSteps
@@ -113,14 +120,11 @@ const MutedMarkSlider = styled(Slider)`
 `;
 
 export const ControlPanel = () => {
-  const {
-    emulator,
-    isEmulatorRunning,
-    areItemsDraggable,
-    setAreItemsDraggable,
-    areItemsResizable,
-    setAreItemsResizable
-  } = useEmulatorContext();
+  const { emulator } = useEmulatorContext();
+  const { isRunning } = useRunningContext();
+  const { areItemsDraggable, setAreItemsDraggable } = useDragContext();
+  const { areItemsResizable, setAreItemsResizable } = useResizeContext();
+
   const { layouts, setLayout } = useLayoutContext();
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
@@ -134,6 +138,8 @@ export const ControlPanel = () => {
     emulatorIsFastForwardOnStorageKey,
     false
   );
+
+  const quitGame = useQuitGame();
 
   const refSetLayout = useCallback(
     (node: Rnd | null) => {
@@ -152,7 +158,7 @@ export const ControlPanel = () => {
   const dragWrapperPadding = isLargerThanPhone ? 5 : 0;
 
   const togglePlay = () => {
-    if (isEmulatorRunning) {
+    if (isRunning) {
       isEmulatorPaused ? emulator?.resume() : emulator?.pause();
       setIsEmulatorPaused((prevState) => !prevState);
     }
@@ -165,11 +171,6 @@ export const ControlPanel = () => {
 
     emulator?.setFastForward(mode, delay);
     setIsFastForwardOn((prevState) => !prevState);
-  };
-
-  const quitGame = () => {
-    emulator?.quitGame();
-    setIsEmulatorPaused(false);
   };
 
   const setVolume = (volumePercent: number) => {
@@ -256,6 +257,8 @@ export const ControlPanel = () => {
   const position = layouts?.controlPanel?.position ?? defaultPosition;
   const size = layouts?.controlPanel?.size ?? defaultSize;
 
+  console.log('vancise control panel', isEmulatorPaused, isRunning);
+
   return (
     <>
       <Rnd
@@ -293,16 +296,10 @@ export const ControlPanel = () => {
           <IconContext.Provider value={{ size: '2em' }}>
             <PanelControl
               id={`${controlPanelId}--play`}
-              ariaLabel={
-                isEmulatorPaused || !isEmulatorRunning ? 'Play' : 'Pause'
-              }
+              ariaLabel={isEmulatorPaused || !isRunning ? 'Play' : 'Pause'}
               $onClick={togglePlay}
             >
-              {isEmulatorPaused || !isEmulatorRunning ? (
-                <BiPlay />
-              ) : (
-                <BiPause />
-              )}
+              {isEmulatorPaused || !isRunning ? <BiPlay /> : <BiPause />}
             </PanelControl>
             <PanelControl
               id={`${controlPanelId}--fast-forward`}
@@ -318,7 +315,10 @@ export const ControlPanel = () => {
             <PanelControl
               id={`${controlPanelId}--quit-game`}
               ariaLabel="Quit Game"
-              $onClick={quitGame}
+              $onClick={() => {
+                quitGame();
+                setIsEmulatorPaused(false);
+              }}
             >
               <BiUndo />
             </PanelControl>
