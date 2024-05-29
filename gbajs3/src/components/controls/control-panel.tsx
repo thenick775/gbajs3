@@ -124,12 +124,12 @@ export const ControlPanel = () => {
   const { isRunning } = useRunningContext();
   const { areItemsDraggable, setAreItemsDraggable } = useDragContext();
   const { areItemsResizable, setAreItemsResizable } = useResizeContext();
-
   const { layouts, setLayout } = useLayoutContext();
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
-  const [isEmulatorPaused, setIsEmulatorPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const controlPanelId = useId();
+  const quitGame = useQuitGame();
   const [currentEmulatorVolume, setCurrentEmulatorVolume] = useLocalStorage(
     emulatorVolumeLocalStorageKey,
     1
@@ -138,8 +138,6 @@ export const ControlPanel = () => {
     emulatorIsFastForwardOnStorageKey,
     false
   );
-
-  const quitGame = useQuitGame();
 
   const refSetLayout = useCallback(
     (node: Rnd | null) => {
@@ -159,8 +157,8 @@ export const ControlPanel = () => {
 
   const togglePlay = () => {
     if (isRunning) {
-      isEmulatorPaused ? emulator?.resume() : emulator?.pause();
-      setIsEmulatorPaused((prevState) => !prevState);
+      isPaused ? emulator?.resume() : emulator?.pause();
+      setIsPaused((prevState) => !prevState);
     }
   };
 
@@ -294,10 +292,10 @@ export const ControlPanel = () => {
           <IconContext.Provider value={{ size: '2em' }}>
             <PanelControl
               id={`${controlPanelId}--play`}
-              ariaLabel={isEmulatorPaused || !isRunning ? 'Play' : 'Pause'}
+              ariaLabel={isPaused || !isRunning ? 'Play' : 'Pause'}
               $onClick={togglePlay}
             >
-              {isEmulatorPaused || !isRunning ? <BiPlay /> : <BiPause />}
+              {isPaused || !isRunning ? <BiPlay /> : <BiPause />}
             </PanelControl>
             <PanelControl
               id={`${controlPanelId}--fast-forward`}
@@ -315,7 +313,7 @@ export const ControlPanel = () => {
               ariaLabel="Quit Game"
               $onClick={() => {
                 quitGame();
-                setIsEmulatorPaused(false);
+                setIsPaused(false);
               }}
             >
               <BiUndo />

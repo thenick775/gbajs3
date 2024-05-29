@@ -61,6 +61,7 @@ export const VirtualControls = () => {
   const { setModalContent, setIsModalOpen } = useModalContext();
   const { layouts } = useLayoutContext();
   const virtualControlToastId = useId();
+  const quickReload = useQuickReload();
   const [currentSaveStateSlot] = useLocalStorage(
     saveStateSlotLocalStorageKey,
     0
@@ -68,8 +69,6 @@ export const VirtualControls = () => {
   const [areVirtualControlsEnabled] = useLocalStorage<
     AreVirtualControlsEnabledProps | undefined
   >(virtualControlsLocalStorageKey);
-
-  const quickReload = useQuickReload();
 
   const controlPanelBounds = layouts?.controlPanel?.initialBounds;
 

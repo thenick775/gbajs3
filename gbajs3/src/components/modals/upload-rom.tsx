@@ -118,7 +118,6 @@ export const UploadRomModal = () => {
     execute: executeLoadExternalRom
   } = useLoadExternalRom();
   const uploadRomFormId = useId();
-
   const runGame = useRunGame();
 
   useEffect(() => {

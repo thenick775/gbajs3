@@ -10,7 +10,6 @@ import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
-
 describe('<LoadLocalRomModal />', () => {
   it('renders help text if there are no local roms', () => {
     renderWithContext(<LoadLocalRomModal />);

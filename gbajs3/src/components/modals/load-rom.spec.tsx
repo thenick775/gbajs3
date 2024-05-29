@@ -10,7 +10,6 @@ import * as listRomHooks from '../../hooks/use-list-roms.tsx';
 import * as loadRomHooks from '../../hooks/use-load-rom.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
-
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
 describe('<LoadRomModal />', () => {

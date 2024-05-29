@@ -112,6 +112,7 @@ export const LoadRomModal = () => {
   const { setIsModalOpen } = useModalContext();
   const { emulator } = useEmulatorContext();
   const romListId = useId();
+  const runGame = useRunGame();
   const {
     data: romList,
     isLoading: romListLoading,
@@ -126,8 +127,6 @@ export const LoadRomModal = () => {
   const [currentRomLoading, setCurrentRomLoading] = useState<string | null>(
     null
   );
-
-  const runGame = useRunGame();
 
   useEffect(() => {
     if (!romLoading && romFile && currentRomLoading) {

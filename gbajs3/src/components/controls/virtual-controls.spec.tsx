@@ -11,7 +11,6 @@ import * as contextHooks from '../../hooks/context.tsx';
 import * as quickReloadHooks from '../../hooks/emulator/quick-reload.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 
-
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
 describe('<VirtualControls />', () => {

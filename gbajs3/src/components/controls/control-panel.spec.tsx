@@ -17,7 +17,6 @@ import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
-
 describe('<ControlPanel />', () => {
   const initialPos = {
     clientX: 0,

@@ -26,7 +26,6 @@ import { UploadRomModal } from '../modals/upload-rom.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 import { UploadSavesModal } from '../modals/upload-saves.tsx';
 
-
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
 vi.mock('modern-screenshot', () => ({

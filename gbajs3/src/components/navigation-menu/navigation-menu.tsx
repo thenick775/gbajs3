@@ -152,7 +152,6 @@ export const NavigationMenu = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const menuHeaderId = useId();
-
   const quickReload = useQuickReload();
 
   const isMenuItemDisabledByAuth = !isAuthenticated();

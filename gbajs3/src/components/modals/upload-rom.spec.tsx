@@ -15,7 +15,6 @@ import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
-
 describe('<UploadRomModal />', () => {
   it('clicks file input when drag and drop is clicked', async () => {
     const inputClickSpy = vi.spyOn(HTMLInputElement.prototype, 'click');
