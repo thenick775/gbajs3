@@ -257,8 +257,6 @@ export const ControlPanel = () => {
   const position = layouts?.controlPanel?.position ?? defaultPosition;
   const size = layouts?.controlPanel?.size ?? defaultSize;
 
-  console.log('vancise control panel', isEmulatorPaused, isRunning);
-
   return (
     <>
       <Rnd

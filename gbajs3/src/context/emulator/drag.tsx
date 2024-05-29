@@ -22,8 +22,6 @@ DragContext.displayName = 'DragContext';
 export const DragProvider = ({ children }: DragProviderProps) => {
   const [areItemsDraggable, setAreItemsDraggable] = useState(false);
 
-  // console.log('vancise re-rendering drag provider');
-
   return (
     <DragContext.Provider value={{ areItemsDraggable, setAreItemsDraggable }}>
       {children}

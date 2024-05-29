@@ -80,9 +80,7 @@ describe('<ModalContainer />', () => {
   });
 
   it('disables keyboard input after open', async () => {
-    const disableKeyboardInputSpy: () => void = vi.fn(() =>
-      console.log('vancise in disableKeyboardInputSpy')
-    );
+    const disableKeyboardInputSpy: () => void = vi.fn();
     const {
       useModalContext: originalModal,
       useEmulatorContext: originalEmulator

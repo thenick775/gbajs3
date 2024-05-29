@@ -2,7 +2,9 @@ import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback } from 'react';
 
 import {
+  emTimingSetTimeout,
   emulatorGameNameLocalStorageKey,
+  emulatorIsFastForwardOnStorageKey,
   emulatorKeyBindingsLocalStorageKey,
   emulatorVolumeLocalStorageKey
 } from '../../context/emulator/consts.ts';
@@ -23,6 +25,10 @@ export const useRunGame = () => {
     emulatorVolumeLocalStorageKey,
     1
   );
+  const [isFastForwardOn] = useLocalStorage(
+    emulatorIsFastForwardOnStorageKey,
+    false
+  );
 
   const run = useCallback(
     (romPath: string) => {
@@ -31,7 +37,12 @@ export const useRunGame = () => {
       setStoredGameName(romPath);
       emulator?.setVolume(currentEmulatorVolume);
 
-      if (currentKeyBindings) emulator?.remapKeyBindings(currentKeyBindings);
+      if (isSuccessfulRun) {
+        if (currentKeyBindings) emulator?.remapKeyBindings(currentKeyBindings);
+
+        if (isFastForwardOn && !emulator?.isFastForwardEnabled())
+          emulator?.setFastForward(emTimingSetTimeout, 0);
+      }
 
       return !!isSuccessfulRun;
     },
@@ -39,6 +50,7 @@ export const useRunGame = () => {
       currentEmulatorVolume,
       currentKeyBindings,
       emulator,
+      isFastForwardOn,
       setIsRunning,
       setStoredGameName
     ]

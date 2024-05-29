@@ -22,8 +22,6 @@ ResizeContext.displayName = 'ResizeContext';
 export const ResizeProvider = ({ children }: ResizeProviderProps) => {
   const [areItemsResizable, setAreItemsResizable] = useState(false);
 
-  // console.log('vancise re-rendering resize provider');
-
   return (
     <ResizeContext.Provider value={{ areItemsResizable, setAreItemsResizable }}>
       {children}

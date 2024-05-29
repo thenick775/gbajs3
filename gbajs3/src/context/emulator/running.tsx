@@ -22,8 +22,6 @@ RunningContext.displayName = 'RunningContext';
 export const RunningProvider = ({ children }: RunningProviderProps) => {
   const [isRunning, setIsRunning] = useState(false);
 
-  // console.log('vancise re-rendering running provider');
-
   return (
     <RunningContext.Provider value={{ isRunning, setIsRunning }}>
       {children}
