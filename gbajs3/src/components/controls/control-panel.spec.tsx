@@ -9,9 +9,10 @@ import {
   emTimingSetTimeout,
   emulatorIsFastForwardOnStorageKey,
   emulatorVolumeLocalStorageKey
-} from '../../context/emulator/consts.tsx';
+} from '../../context/emulator/consts.ts';
 import { GbaDarkTheme } from '../../context/theme/theme.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
+import * as quitGameHooks from '../../hooks/emulator/quit-game.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
@@ -116,13 +117,11 @@ describe('<ControlPanel />', () => {
 
   it('sets layout on drag', async () => {
     const setLayoutSpy = vi.fn();
-    const {
-      useEmulatorContext: originalEmulator,
-      useLayoutContext: originalLayout
-    } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+    const { useLayoutContext: originalLayout, useDragContext: originalDrag } =
+      await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
 
-    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-      ...originalEmulator(),
+    vi.spyOn(contextHooks, 'useDragContext').mockImplementation(() => ({
+      ...originalDrag(),
       areItemsDraggable: true
     }));
 
@@ -157,12 +156,12 @@ describe('<ControlPanel />', () => {
   it('sets layout on resize', async () => {
     const setLayoutSpy = vi.fn();
     const {
-      useEmulatorContext: originalEmulator,
-      useLayoutContext: originalLayout
+      useLayoutContext: originalLayout,
+      useResizeContext: originalResize
     } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
 
-    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-      ...originalEmulator(),
+    vi.spyOn(contextHooks, 'useResizeContext').mockImplementation(() => ({
+      ...originalResize(),
       areItemsResizable: true
     }));
 
@@ -201,17 +200,22 @@ describe('<ControlPanel />', () => {
     it('toggles emulator play', async () => {
       const emulatorPauseSpy: () => void = vi.fn();
       const emulatorResumeSpy: () => void = vi.fn();
-      const { useEmulatorContext: originalEmulator } = await vi.importActual<
-        typeof contextHooks
-      >('../../hooks/context.tsx');
+      const {
+        useEmulatorContext: originalEmulator,
+        useRunningContext: originalRunning
+      } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...originalEmulator(),
-        isEmulatorRunning: true,
         emulator: {
           pause: emulatorPauseSpy,
           resume: emulatorResumeSpy
         } as GBAEmulator
+      }));
+
+      vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
+        ...originalRunning(),
+        isRunning: true
       }));
 
       renderWithContext(<ControlPanel />);
@@ -235,7 +239,6 @@ describe('<ControlPanel />', () => {
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...originalEmulator(),
-        isEmulatorRunning: true,
         emulator: {
           setFastForward: emulatorSetFastForwardSpy as (
             mode: number,
@@ -275,19 +278,17 @@ describe('<ControlPanel />', () => {
     });
 
     it('quits the emulated game', async () => {
-      const emulatorQuitGameSpy: () => void = vi.fn();
-      const { useEmulatorContext: originalEmulator } = await vi.importActual<
+      const quitGameSpy: () => void = vi.fn();
+      const { useRunningContext: originalRunning } = await vi.importActual<
         typeof contextHooks
       >('../../hooks/context.tsx');
 
-      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-        ...originalEmulator(),
-        isEmulatorRunning: true,
-        emulator: {
-          quitGame: emulatorQuitGameSpy,
-          pause: vi.fn() as () => void
-        } as GBAEmulator
+      vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
+        ...originalRunning(),
+        isRunning: true
       }));
+
+      vi.spyOn(quitGameHooks, 'useQuitGame').mockReturnValue(quitGameSpy);
 
       renderWithContext(<ControlPanel />);
       // game is running and paused
@@ -296,7 +297,7 @@ describe('<ControlPanel />', () => {
 
       await userEvent.click(screen.getByLabelText('Quit Game'));
 
-      expect(emulatorQuitGameSpy).toHaveBeenCalledOnce();
+      expect(quitGameSpy).toHaveBeenCalledOnce();
       // sets paused to false, note emulator still running due to mock
       expect(screen.getByLabelText('Pause')).toBeVisible();
     });
@@ -336,7 +337,6 @@ describe('<ControlPanel />', () => {
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...originalEmulator(),
-        isEmulatorRunning: true,
         emulator: {
           setVolume: emulatorSetVolumeSpy
         } as GBAEmulator
@@ -363,7 +363,6 @@ describe('<ControlPanel />', () => {
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...originalEmulator(),
-        isEmulatorRunning: true,
         emulator: {
           setVolume: emulatorSetVolumeSpy
         } as GBAEmulator
@@ -392,7 +391,6 @@ describe('<ControlPanel />', () => {
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...originalEmulator(),
-        isEmulatorRunning: true,
         emulator: {
           setVolume: emulatorSetVolumeSpy
         } as GBAEmulator
