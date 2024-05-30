@@ -225,8 +225,8 @@ export const VirtualControls = () => {
         left: '10px'
       },
       largerThanPhone: {
-        top: `calc(${verticalStartPos}px - 55px)`,
-        left: `calc(${horizontalStartPos}px + 475px)`
+        top: `calc(${verticalStartPos}px + 10px)`,
+        left: `calc(${horizontalStartPos}px + 450px)`
       }
     }
   };
