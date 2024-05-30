@@ -1,4 +1,8 @@
-import { IconButton, Slider, useMediaQuery } from '@mui/material';
+import {
+  IconButton,
+  Slider,
+  useMediaQuery
+} from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useId, useState, type ReactNode } from 'react';
 import { IconContext } from 'react-icons';
@@ -16,10 +20,8 @@ import { Rnd } from 'react-rnd';
 import { css, styled, useTheme } from 'styled-components';
 
 import {
-  emTimingRAF,
-  emTimingSetTimeout,
-  emulatorIsFastForwardOnStorageKey,
-  emulatorVolumeLocalStorageKey
+  emulatorVolumeLocalStorageKey,
+  emulatorFFMultiplierLocalStorageKey
 } from '../../context/emulator/consts.ts';
 import {
   useDragContext,
@@ -36,12 +38,20 @@ import {
 import { ButtonBase } from '../shared/custom-button-base.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
+import type {
+  IconButtonProps,
+  SliderProps} from '@mui/material';
+
 type PanelControlProps = {
   $onClick?: () => void;
   ariaLabel: string;
   children: ReactNode;
   id: string;
 };
+
+type SliderIconButtonProps = {
+  icon: ReactNode;
+} & IconButtonProps;
 
 const Panel = styled.ul`
   background-color: ${({ theme }) => theme.panelBlueGray};
@@ -93,11 +103,19 @@ const PanelControlButton = styled(ButtonBase).attrs({
   }
 `;
 
-const VolumeSliderControl = styled.li`
+const PanelControlSlider = styled.li`
   ${InteractivePanelControlStyle}
+  flex-grow: 1;
 `;
 
-const PanelControl = ({
+const MutedMarkSlider = styled(Slider)`
+  > .MuiSlider-markActive {
+    opacity: 1;
+    background-color: currentColor;
+  }
+`;
+
+const PanelButton = ({
   $onClick,
   ariaLabel,
   children,
@@ -112,12 +130,50 @@ const PanelControl = ({
   );
 };
 
-const MutedMarkSlider = styled(Slider)`
-  > .MuiSlider-markActive {
-    opacity: 1;
-    background-color: currentColor;
-  }
-`;
+const SliderIconButton = ({ icon, ...rest }: SliderIconButtonProps) => {
+  const theme = useTheme();
+
+  return (
+    <IconButton
+      size="small"
+      sx={{
+        padding: 0,
+        color: theme.pureBlack,
+        '&:active': { color: theme.gbaThemeBlue }
+      }}
+      {...rest}
+    >
+      {icon}
+    </IconButton>
+  );
+};
+
+const PanelSlider = ({
+  id,
+  minIcon,
+  maxIcon,
+  ...rest
+}: {
+  minIcon: ReactNode;
+  maxIcon: ReactNode;
+} & SliderProps) => {
+  return (
+    <PanelControlSlider id={id}>
+      {minIcon}
+      <MutedMarkSlider
+        marks
+        style={{
+          width: '80px',
+          margin: '0 10px',
+          maxHeight: '40px'
+        }}
+        valueLabelDisplay="auto"
+        {...rest}
+      />
+      {maxIcon}
+    </PanelControlSlider>
+  );
+};
 
 export const ControlPanel = () => {
   const { emulator } = useEmulatorContext();
@@ -134,9 +190,9 @@ export const ControlPanel = () => {
     emulatorVolumeLocalStorageKey,
     1
   );
-  const [isFastForwardOn, setIsFastForwardOn] = useLocalStorage(
-    emulatorIsFastForwardOnStorageKey,
-    false
+  const [fastForwardMultiplier, setFastForwardMultiplier] = useLocalStorage(
+    emulatorFFMultiplierLocalStorageKey,
+    1
   );
 
   const refSetLayout = useCallback(
@@ -162,15 +218,6 @@ export const ControlPanel = () => {
     }
   };
 
-  const toggleFastForward = () => {
-    const mode = isFastForwardOn ? emTimingRAF : emTimingSetTimeout;
-    // no delay for settimeout mode, means 60fps with RAF
-    const delay = 0;
-
-    emulator?.setFastForward(mode, delay);
-    setIsFastForwardOn((prevState) => !prevState);
-  };
-
   const setVolume = (volumePercent: number) => {
     emulator?.setVolume(volumePercent);
     setCurrentEmulatorVolume(volumePercent);
@@ -179,6 +226,17 @@ export const ControlPanel = () => {
   const setVolumeFromEvent = (event: Event) => {
     const volumePercent = Number((event.target as HTMLInputElement)?.value);
     setVolume(volumePercent);
+  };
+
+  const setFastForward = (ffMultiplier: number) => {
+    emulator?.setFastForwardMultiplier(ffMultiplier);
+    setFastForwardMultiplier(ffMultiplier);
+  };
+
+  const setFastForwardFromEvent = (event: Event) => {
+    const ffMultiplier = Number((event.target as HTMLInputElement)?.value);
+    emulator?.setFastForwardMultiplier(ffMultiplier);
+    setFastForwardMultiplier(ffMultiplier);
   };
 
   const tourSteps: TourSteps = [
@@ -203,11 +261,6 @@ export const ControlPanel = () => {
       ),
       placementBeacon: 'bottom',
       target: `#${CSS.escape(`${controlPanelId}--play`)}`
-    },
-    {
-      content: <p>Use this button to turn fast forward on and off.</p>,
-      placementBeacon: 'bottom',
-      target: `#${CSS.escape(`${controlPanelId}--fast-forward`)}`
     },
     {
       content: <p>Use this button to quit your current game.</p>,
@@ -240,6 +293,18 @@ export const ControlPanel = () => {
       ),
       placementBeacon: 'bottom',
       target: `#${CSS.escape(`${controlPanelId}--volume-slider`)}`
+    },
+    {
+      content: (
+        <>
+          <p>
+            Use this slider to increase and decrease the fast forward speed.
+          </p>
+          <p>Your fast forward setting will be saved between refreshes!</p>
+        </>
+      ),
+      placementBeacon: 'bottom',
+      target: `#${CSS.escape(`${controlPanelId}--fast-forward`)}`
     }
   ];
 
@@ -254,6 +319,14 @@ export const ControlPanel = () => {
 
   const position = layouts?.controlPanel?.position ?? defaultPosition;
   const size = layouts?.controlPanel?.size ?? defaultSize;
+
+  const defaultSliderEvents = {
+    onFocus: emulator?.disableKeyboardInput,
+    onBlur: emulator?.enableKeyboardInput,
+    // click is triggered on keyup, if using mouse this
+    // is the desired behavior after focus is gained
+    onClick: emulator?.enableKeyboardInput
+  };
 
   return (
     <>
@@ -290,25 +363,14 @@ export const ControlPanel = () => {
       >
         <Panel>
           <IconContext.Provider value={{ size: '2em' }}>
-            <PanelControl
+            <PanelButton
               id={`${controlPanelId}--play`}
               ariaLabel={isPaused || !isRunning ? 'Play' : 'Pause'}
               $onClick={togglePlay}
             >
               {isPaused || !isRunning ? <BiPlay /> : <BiPause />}
-            </PanelControl>
-            <PanelControl
-              id={`${controlPanelId}--fast-forward`}
-              ariaLabel={isFastForwardOn ? 'Regular Speed' : 'Fast Forward'}
-              $onClick={toggleFastForward}
-            >
-              {isFastForwardOn ? (
-                <AiOutlineForward />
-              ) : (
-                <AiOutlineFastForward />
-              )}
-            </PanelControl>
-            <PanelControl
+            </PanelButton>
+            <PanelButton
               id={`${controlPanelId}--quit-game`}
               ariaLabel="Quit Game"
               $onClick={() => {
@@ -317,8 +379,8 @@ export const ControlPanel = () => {
               }}
             >
               <BiUndo />
-            </PanelControl>
-            <PanelControl
+            </PanelButton>
+            <PanelButton
               id={`${controlPanelId}--drag`}
               ariaLabel={areItemsDraggable ? 'Anchor Items' : 'Drag Items'}
               $onClick={() => {
@@ -330,8 +392,8 @@ export const ControlPanel = () => {
               ) : (
                 <BiMove />
               )}
-            </PanelControl>
-            <PanelControl
+            </PanelButton>
+            <PanelButton
               id={`${controlPanelId}--resize`}
               ariaLabel={
                 areItemsResizable ? 'Stop Resizing Items' : 'Resize Items'
@@ -345,52 +407,57 @@ export const ControlPanel = () => {
               ) : (
                 <TbResize />
               )}
-            </PanelControl>
-            <VolumeSliderControl id={`${controlPanelId}--volume-slider`}>
-              <IconButton
-                aria-label="Mute Volume"
-                size="small"
-                sx={{
-                  padding: 0,
-                  color: theme.pureBlack,
-                  '&:active': { color: theme.gbaThemeBlue }
-                }}
-                onClick={() => setVolume(0)}
-              >
-                <BiVolumeMute style={{ maxHeight: '100%' }} />
-              </IconButton>
-              <MutedMarkSlider
-                aria-label="Volume Slider"
-                value={currentEmulatorVolume}
-                step={0.1}
-                marks
-                min={0}
-                max={1}
-                style={{
-                  width: '100px',
-                  margin: '0 10px',
-                  maxHeight: '40px'
-                }}
-                onChange={setVolumeFromEvent}
-                onFocus={emulator?.disableKeyboardInput}
-                onBlur={emulator?.enableKeyboardInput}
-                // click is triggered on keyup, if using mouse this
-                // is the desired behavior after focus is gained
-                onClick={emulator?.enableKeyboardInput}
-              />
-              <IconButton
-                aria-label="Max Volume"
-                size="small"
-                sx={{
-                  padding: 0,
-                  color: theme.pureBlack,
-                  '&:active': { color: theme.gbaThemeBlue }
-                }}
-                onClick={() => setVolume(1)}
-              >
-                <BiVolumeFull />
-              </IconButton>
-            </VolumeSliderControl>
+            </PanelButton>
+            <PanelSlider
+              id={`${controlPanelId}--volume-slider`}
+              aria-label="Volume Slider"
+              value={currentEmulatorVolume}
+              step={0.1}
+              min={0}
+              max={1}
+              minIcon={
+                <SliderIconButton
+                  aria-label="Mute Volume"
+                  icon={<BiVolumeMute style={{ maxHeight: '100%' }} />}
+                  onClick={() => setVolume(0)}
+                />
+              }
+              maxIcon={
+                <SliderIconButton
+                  aria-label="Max Volume"
+                  icon={<BiVolumeFull style={{ maxHeight: '100%' }} />}
+                  onClick={() => setVolume(1)}
+                />
+              }
+              valueLabelFormat={`${currentEmulatorVolume * 100}`}
+              onChange={setVolumeFromEvent}
+              {...defaultSliderEvents}
+            />
+            <PanelSlider
+              id={`${controlPanelId}--fast-forward`}
+              aria-label="Fast Forward Slider"
+              value={fastForwardMultiplier}
+              step={1}
+              min={1}
+              max={5}
+              minIcon={
+                <SliderIconButton
+                  aria-label="Regular Speed"
+                  icon={<AiOutlineForward style={{ maxHeight: '100%' }} />}
+                  onClick={() => setFastForward(1)}
+                />
+              }
+              maxIcon={
+                <SliderIconButton
+                  aria-label="Max Fast Forward"
+                  icon={<AiOutlineFastForward style={{ maxHeight: '100%' }} />}
+                  onClick={() => setFastForward(5)}
+                />
+              }
+              valueLabelFormat={`x${fastForwardMultiplier}`}
+              onChange={setFastForwardFromEvent}
+              {...defaultSliderEvents}
+            />
           </IconContext.Provider>
         </Panel>
       </Rnd>
