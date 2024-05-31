@@ -11,14 +11,19 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 .c0 {
   background-color: #4f555a;
   list-style: none;
+  padding: 10px;
+  margin: 0;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px 10px;
+  grid-template-areas: '. . . .' 'volume volume fastForward fastForward';
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
   gap: 10px;
-  padding: 10px;
-  margin: 0;
-  max-width: 100%;
 }
 
 .c1 {
@@ -37,6 +42,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   align-items: center;
   justify-content: center;
   color: #000;
+  width: 100%;
   border: none;
   flex-grow: 1;
   margin: 0;
@@ -63,12 +69,53 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   align-items: center;
   justify-content: center;
   color: #000;
+  width: 100%;
+  grid-area: volume;
+  max-height: 40px;
+}
+
+.c6 {
+  cursor: pointer;
+  background-color: #a9a9a9;
+  border-radius: 0.25rem;
+  min-width: 40px;
+  min-height: 40px;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  width: 100%;
+  grid-area: fastForward;
+  max-height: 40px;
+}
+
+.c5 {
   flex-grow: 1;
 }
 
 .c5 >.MuiSlider-markActive {
   opacity: 1;
   background-color: currentColor;
+}
+
+@media only screen and (min-width: 600px) {
+  .c3 {
+    width: auto;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .c4 {
+    width: auto;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .c6 {
+    width: auto;
+  }
 }
 
 <div
@@ -206,8 +253,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
         />
       </button>
       <span
-        class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c5 css-188mx6n-MuiSlider-root"
-        style="width: 80px; margin: 0px 10px; max-height: 40px;"
+        class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c5 css-vhj176-MuiSlider-root"
       >
         <span
           class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -335,7 +381,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="c4"
+      class="c6"
       id=":r2:--fast-forward"
     >
       <button
@@ -363,8 +409,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
         />
       </button>
       <span
-        class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c5 css-188mx6n-MuiSlider-root"
-        style="width: 80px; margin: 0px 10px; max-height: 40px;"
+        class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c5 css-vhj176-MuiSlider-root"
       >
         <span
           class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -474,14 +519,14 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 .c0 {
   background-color: #4f555a;
   list-style: none;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 10px;
   padding: 10px;
   margin: 0;
   max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px 10px;
+  grid-template-areas: '. . . .' 'volume volume fastForward fastForward';
 }
 
 .c1 {
@@ -500,6 +545,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   align-items: center;
   justify-content: center;
   color: #000;
+  width: 100%;
   border: none;
   flex-grow: 1;
   margin: 0;
@@ -526,12 +572,53 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   align-items: center;
   justify-content: center;
   color: #000;
+  width: 100%;
+  grid-area: volume;
+  max-height: 40px;
+}
+
+.c6 {
+  cursor: pointer;
+  background-color: #a9a9a9;
+  border-radius: 0.25rem;
+  min-width: 40px;
+  min-height: 40px;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  width: 100%;
+  grid-area: fastForward;
+  max-height: 40px;
+}
+
+.c5 {
   flex-grow: 1;
 }
 
 .c5 >.MuiSlider-markActive {
   opacity: 1;
   background-color: currentColor;
+}
+
+@media only screen and (min-width: 600px) {
+  .c3 {
+    width: auto;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .c4 {
+    width: auto;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .c6 {
+    width: auto;
+  }
 }
 
 <div
@@ -669,8 +756,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
         />
       </button>
       <span
-        class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c5 css-188mx6n-MuiSlider-root"
-        style="width: 80px; margin: 0px 10px; max-height: 40px;"
+        class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c5 css-vhj176-MuiSlider-root"
       >
         <span
           class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -798,7 +884,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="c4"
+      class="c6"
       id=":r1:--fast-forward"
     >
       <button
@@ -826,8 +912,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
         />
       </button>
       <span
-        class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c5 css-188mx6n-MuiSlider-root"
-        style="width: 80px; margin: 0px 10px; max-height: 40px;"
+        class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c5 css-vhj176-MuiSlider-root"
       >
         <span
           class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"

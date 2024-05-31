@@ -153,22 +153,26 @@ describe('<ControlPanel />', () => {
 
   it('sets layout on resize', async () => {
     const setLayoutSpy = vi.fn();
-    const {
-      useLayoutContext: originalLayout,
-      useResizeContext: originalResize
-    } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+    const { useResizeContext: originalResize } = await vi.importActual<
+      typeof contextHooks
+    >('../../hooks/context.tsx');
 
     vi.spyOn(contextHooks, 'useResizeContext').mockImplementation(() => ({
       ...originalResize(),
       areItemsResizable: true
     }));
 
-    vi.spyOn(contextHooks, 'useLayoutContext').mockImplementation(() => ({
-      ...originalLayout(),
+    // needs to be a consistent object
+    const testLayout = {
+      clearLayouts: vi.fn(),
       setLayout: setLayoutSpy,
       hasSetLayout: true,
       layouts: { screen: { initialBounds: new DOMRect() } }
-    }));
+    };
+
+    vi.spyOn(contextHooks, 'useLayoutContext').mockImplementation(
+      () => testLayout
+    );
 
     renderWithContext(<ControlPanel />);
 

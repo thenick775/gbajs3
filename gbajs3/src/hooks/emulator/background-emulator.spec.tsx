@@ -47,6 +47,6 @@ describe('useQuickReload hook', () => {
     rerender();
 
     // resumes emulator when coming back from background
-    expect(emulatorPauseSpy).toHaveBeenCalledOnce();
+    expect(emulatorResumeSpy).toHaveBeenCalledOnce();
   });
 });

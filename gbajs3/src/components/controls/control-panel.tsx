@@ -37,35 +37,68 @@ import { GripperHandle } from '../shared/gripper-handle.tsx';
 
 import type { IconButtonProps, SliderProps } from '@mui/material';
 
-type PanelControlProps = {
-  $onClick?: () => void;
-  ariaLabel: string;
-  children: ReactNode;
-  id: string;
+type PanelProps = {
+  $controlled: boolean;
+  $isLargerThanPhone: boolean;
 };
 
 type SliderIconButtonProps = {
   icon: ReactNode;
 } & IconButtonProps;
 
-const Panel = styled.ul`
+type PanelControlProps = {
+  ariaLabel: string;
+  children: ReactNode;
+  controlled: boolean;
+  id: string;
+  onClick?: () => void;
+};
+
+type PanelSliderProps = {
+  controlled: boolean;
+  gridArea: string;
+  maxIcon: ReactNode;
+  minIcon: ReactNode;
+} & SliderProps;
+
+type ControlledProps = {
+  $controlled: boolean;
+};
+
+type PanelControlSliderProps = {
+  $gridArea: string;
+} & ControlledProps;
+
+const Panel = styled.ul<PanelProps>`
   background-color: ${({ theme }) => theme.panelBlueGray};
   list-style: none;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 10px;
   padding: 10px;
   margin: 0;
   max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px 10px;
+  grid-template-areas:
+    '. . . .'
+    'volume volume fastForward fastForward';
+
+  ${({ $controlled, $isLargerThanPhone }) =>
+    ($controlled || $isLargerThanPhone) &&
+    `
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 10px;
+  `}
 `;
 
 const PanelControlWrapper = styled.li`
   display: contents;
 `;
 
-const InteractivePanelControlStyle = css`
+const InteractivePanelControlStyle = css<ControlledProps>`
   cursor: pointer;
   background-color: ${({ theme }) => theme.panelControlGray};
   border-radius: 0.25rem;
@@ -77,11 +110,20 @@ const InteractivePanelControlStyle = css`
   align-items: center;
   justify-content: center;
   color: ${({ theme }) => theme.pureBlack};
+  width: ${({ $controlled }) => ($controlled ? 'auto' : '100%')};
+
+  ${({ $controlled, theme }) =>
+    !$controlled &&
+    `
+    @media ${theme.isLargerThanPhone} {
+      width: auto;
+    }
+  `}
 `;
 
 const PanelControlButton = styled(ButtonBase).attrs({
   className: 'noDrag'
-})`
+})<ControlledProps>`
   ${InteractivePanelControlStyle}
 
   border: none;
@@ -98,12 +140,15 @@ const PanelControlButton = styled(ButtonBase).attrs({
   }
 `;
 
-const PanelControlSlider = styled.li`
+const PanelControlSlider = styled.li<PanelControlSliderProps>`
   ${InteractivePanelControlStyle}
-  flex-grow: 1;
+  grid-area: ${({ $gridArea }) => $gridArea};
+  max-height: 40px;
 `;
 
 const MutedMarkSlider = styled(Slider)`
+  flex-grow: 1;
+
   > .MuiSlider-markActive {
     opacity: 1;
     background-color: currentColor;
@@ -111,14 +156,20 @@ const MutedMarkSlider = styled(Slider)`
 `;
 
 const PanelButton = ({
-  $onClick,
   ariaLabel,
   children,
-  id
+  controlled,
+  id,
+  onClick
 }: PanelControlProps) => {
   return (
     <PanelControlWrapper>
-      <PanelControlButton aria-label={ariaLabel} id={id} onClick={$onClick}>
+      <PanelControlButton
+        aria-label={ariaLabel}
+        id={id}
+        onClick={onClick}
+        $controlled={controlled}
+      >
         {children}
       </PanelControlButton>
     </PanelControlWrapper>
@@ -144,21 +195,20 @@ const SliderIconButton = ({ icon, ...rest }: SliderIconButtonProps) => {
 };
 
 const PanelSlider = ({
+  controlled,
+  gridArea,
   id,
-  minIcon,
   maxIcon,
+  minIcon,
   ...rest
-}: {
-  minIcon: ReactNode;
-  maxIcon: ReactNode;
-} & SliderProps) => {
+}: PanelSliderProps) => {
   return (
-    <PanelControlSlider id={id}>
+    <PanelControlSlider id={id} $gridArea={gridArea} $controlled={controlled}>
       {minIcon}
       <MutedMarkSlider
         marks
-        style={{
-          width: '80px',
+        sx={{
+          width: '85px',
           margin: '0 10px',
           maxHeight: '40px'
         }}
@@ -179,6 +229,7 @@ export const ControlPanel = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const [isPaused, setIsPaused] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
   const controlPanelId = useId();
   const quitGame = useQuitGame();
   const [currentEmulatorVolume, setCurrentEmulatorVolume] = useLocalStorage(
@@ -209,6 +260,7 @@ export const ControlPanel = () => {
   if (!canvasBounds) return null;
 
   const dragWrapperPadding = isLargerThanPhone ? 5 : 0;
+  const isControlled = !!layouts?.controlPanel?.size || isResizing;
 
   const togglePlay = () => {
     if (isRunning) {
@@ -349,42 +401,50 @@ export const ControlPanel = () => {
         onDragStop={(_, data) => {
           setLayout('controlPanel', { position: { x: data.x, y: data.y } });
         }}
+        onResizeStart={() => setIsResizing(true)}
         onResizeStop={(_1, _2, ref, _3, position) => {
           setLayout('controlPanel', {
             size: { width: ref.clientWidth, height: ref.clientHeight },
             position: { ...position }
           });
+          setIsResizing(false);
         }}
         default={{
           ...defaultPosition,
           ...defaultSize
         }}
       >
-        <Panel>
+        <Panel
+          $controlled={isControlled}
+          $isLargerThanPhone={isLargerThanPhone}
+        >
           <IconContext.Provider value={{ size: '2em' }}>
             <PanelButton
               id={`${controlPanelId}--play`}
               ariaLabel={isPaused || !isRunning ? 'Play' : 'Pause'}
-              $onClick={togglePlay}
+              onClick={togglePlay}
+              controlled={isControlled}
             >
               {isPaused || !isRunning ? <BiPlay /> : <BiPause />}
             </PanelButton>
             <PanelButton
               id={`${controlPanelId}--quit-game`}
               ariaLabel="Quit Game"
-              $onClick={() => {
+              onClick={() => {
                 quitGame();
                 setIsPaused(false);
               }}
+              controlled={isControlled}
             >
               <BiUndo />
             </PanelButton>
             <PanelButton
               id={`${controlPanelId}--drag`}
               ariaLabel={areItemsDraggable ? 'Anchor Items' : 'Drag Items'}
-              $onClick={() => {
+              onClick={() => {
                 setAreItemsDraggable((prevState) => !prevState);
               }}
+              controlled={isControlled}
             >
               {areItemsDraggable ? (
                 <BiMove color={theme.gbaThemeBlue} />
@@ -397,9 +457,10 @@ export const ControlPanel = () => {
               ariaLabel={
                 areItemsResizable ? 'Stop Resizing Items' : 'Resize Items'
               }
-              $onClick={() => {
+              onClick={() => {
                 setAreItemsResizable((prevState) => !prevState);
               }}
+              controlled={isControlled}
             >
               {areItemsResizable ? (
                 <TbResize color={theme.gbaThemeBlue} />
@@ -410,6 +471,8 @@ export const ControlPanel = () => {
             <PanelSlider
               id={`${controlPanelId}--volume-slider`}
               aria-label="Volume Slider"
+              gridArea="volume"
+              controlled={isControlled}
               value={currentEmulatorVolume}
               step={0.1}
               min={0}
@@ -435,6 +498,8 @@ export const ControlPanel = () => {
             <PanelSlider
               id={`${controlPanelId}--fast-forward`}
               aria-label="Fast Forward Slider"
+              gridArea="fastForward"
+              controlled={isControlled}
               value={fastForwardMultiplier}
               step={1}
               min={1}
