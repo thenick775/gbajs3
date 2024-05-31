@@ -1,7 +1,7 @@
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback } from 'react';
 
-import { useRunGame } from './run-game.tsx';
+import { useRunGame } from './use-run-game.tsx';
 import { emulatorGameNameLocalStorageKey } from '../../context/emulator/consts.ts';
 import { useEmulatorContext, useRunningContext } from '../context.tsx';
 

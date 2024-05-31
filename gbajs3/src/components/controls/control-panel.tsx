@@ -26,8 +26,8 @@ import {
   useResizeContext,
   useRunningContext
 } from '../../hooks/context.tsx';
-import { useBackgroundEmulator } from '../../hooks/emulator/background-emulator.tsx';
-import { useQuitGame } from '../../hooks/emulator/quit-game.tsx';
+import { useBackgroundEmulator } from '../../hooks/emulator/use-background-emulator.tsx';
+import { useQuitGame } from '../../hooks/emulator/use-quit-game.tsx';
 import {
   EmbeddedProductTour,
   type TourSteps

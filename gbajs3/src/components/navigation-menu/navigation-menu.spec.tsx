@@ -7,7 +7,7 @@ import { NavigationMenuWidth } from './consts.tsx';
 import { NavigationMenu } from './navigation-menu.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
-import * as quickReloadHooks from '../../hooks/emulator/quick-reload.tsx';
+import * as quickReloadHooks from '../../hooks/emulator/use-quick-reload.tsx';
 import * as logoutHooks from '../../hooks/use-logout.tsx';
 import { AboutModal } from '../modals/about.tsx';
 import { CheatsModal } from '../modals/cheats.tsx';

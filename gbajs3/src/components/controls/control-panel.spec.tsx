@@ -10,7 +10,7 @@ import {
 } from '../../context/emulator/consts.ts';
 import { GbaDarkTheme } from '../../context/theme/theme.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
-import * as quitGameHooks from '../../hooks/emulator/quit-game.tsx';
+import * as quitGameHooks from '../../hooks/emulator/use-quit-game.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';

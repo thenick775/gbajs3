@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { LoadRomModal } from './load-rom.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
-import * as runGameHooks from '../../hooks/emulator/run-game.tsx';
+import * as runGameHooks from '../../hooks/emulator/use-run-game.tsx';
 import * as listRomHooks from '../../hooks/use-list-roms.tsx';
 import * as loadRomHooks from '../../hooks/use-load-rom.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';

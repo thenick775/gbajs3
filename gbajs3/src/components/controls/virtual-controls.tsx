@@ -24,7 +24,7 @@ import {
   useModalContext,
   useRunningContext
 } from '../../hooks/context.tsx';
-import { useQuickReload } from '../../hooks/emulator/quick-reload.tsx';
+import { useQuickReload } from '../../hooks/emulator/use-quick-reload.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 
 import type { AreVirtualControlsEnabledProps } from '../modals/controls/virtual-controls-form.tsx';
