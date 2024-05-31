@@ -4,9 +4,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { useRunGame } from './run-game.tsx';
 import { renderHookWithContext } from '../../../test/render-hook-with-context.tsx';
 import {
-  emTimingSetTimeout,
   emulatorGameNameLocalStorageKey,
-  emulatorIsFastForwardOnStorageKey,
+  emulatorFFMultiplierLocalStorageKey,
   emulatorKeyBindingsLocalStorageKey
 } from '../../context/emulator/consts.ts';
 import * as contextHooks from '../../hooks/context.tsx';
@@ -67,13 +66,13 @@ describe('useRunGame hook', () => {
       '"some set of keybindings"'
     );
 
-    localStorage.setItem(emulatorIsFastForwardOnStorageKey, 'true');
+    localStorage.setItem(emulatorFFMultiplierLocalStorageKey, '2');
 
     const setIsRunningSpy = vi.fn();
     const emulatorRunSpy: (romPath: string) => boolean = vi.fn(() => true);
     const emulatorRemapKeyBindingsSpy: (keyBindings: KeyBinding[]) => void =
       vi.fn();
-    const emulatorSetFastForwardSpy: (mode: number, value: number) => void =
+    const emulatorSetFastForwardMultiplierSpy: (multiplier: number) => void =
       vi.fn();
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -84,7 +83,7 @@ describe('useRunGame hook', () => {
         isFastForwardEnabled: () => false,
         setVolume: vi.fn() as (v: number) => void,
         remapKeyBindings: emulatorRemapKeyBindingsSpy,
-        setFastForward: emulatorSetFastForwardSpy
+        setFastForwardMultiplier: emulatorSetFastForwardMultiplierSpy
       } as GBAEmulator
     }));
 
@@ -104,10 +103,7 @@ describe('useRunGame hook', () => {
       'some set of keybindings'
     );
 
-    expect(emulatorSetFastForwardSpy).toHaveBeenCalledOnce();
-    expect(emulatorSetFastForwardSpy).toHaveBeenCalledWith(
-      emTimingSetTimeout,
-      0
-    );
+    expect(emulatorSetFastForwardMultiplierSpy).toHaveBeenCalledOnce();
+    expect(emulatorSetFastForwardMultiplierSpy).toHaveBeenCalledWith(2);
   });
 });

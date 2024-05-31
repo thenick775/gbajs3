@@ -2,9 +2,8 @@ import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback } from 'react';
 
 import {
-  emTimingSetTimeout,
+  emulatorFFMultiplierLocalStorageKey,
   emulatorGameNameLocalStorageKey,
-  emulatorIsFastForwardOnStorageKey,
   emulatorKeyBindingsLocalStorageKey,
   emulatorVolumeLocalStorageKey
 } from '../../context/emulator/consts.ts';
@@ -25,9 +24,9 @@ export const useRunGame = () => {
     emulatorVolumeLocalStorageKey,
     1
   );
-  const [isFastForwardOn] = useLocalStorage(
-    emulatorIsFastForwardOnStorageKey,
-    false
+  const [fastForwardMultiplier] = useLocalStorage(
+    emulatorFFMultiplierLocalStorageKey,
+    1
   );
 
   const run = useCallback(
@@ -40,8 +39,8 @@ export const useRunGame = () => {
       if (isSuccessfulRun) {
         if (currentKeyBindings) emulator?.remapKeyBindings(currentKeyBindings);
 
-        if (isFastForwardOn && !emulator?.isFastForwardEnabled())
-          emulator?.setFastForward(emTimingSetTimeout, 0);
+        if (fastForwardMultiplier > 1 && !emulator?.isFastForwardEnabled())
+          emulator?.setFastForwardMultiplier(fastForwardMultiplier);
       }
 
       return !!isSuccessfulRun;
@@ -50,7 +49,7 @@ export const useRunGame = () => {
       currentEmulatorVolume,
       currentKeyBindings,
       emulator,
-      isFastForwardOn,
+      fastForwardMultiplier,
       setIsRunning,
       setStoredGameName
     ]

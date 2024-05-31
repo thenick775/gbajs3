@@ -28,7 +28,7 @@ describe('<VirtualControls />', () => {
     }));
   });
 
-  it('renders dpad and default virtual controls on mobile', () => {
+  it('renders opad and default virtual controls on mobile', () => {
     renderWithContext(<VirtualControls />);
 
     expect(screen.getByLabelText('A Button')).toBeVisible();
