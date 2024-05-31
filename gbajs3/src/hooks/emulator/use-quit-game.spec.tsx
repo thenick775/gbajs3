@@ -1,7 +1,7 @@
 import { act } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useQuitGame } from './quit-game.tsx';
+import { useQuitGame } from './use-quit-game.tsx';
 import { renderHookWithContext } from '../../../test/render-hook-with-context.tsx';
 import * as fadeCanvas from '../../components/screen/fade.ts';
 import * as contextHooks from '../../hooks/context.tsx';

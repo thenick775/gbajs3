@@ -34,7 +34,7 @@ import {
   useModalContext,
   useRunningContext
 } from '../../hooks/context.tsx';
-import { useQuickReload } from '../../hooks/emulator/quick-reload.tsx';
+import { useQuickReload } from '../../hooks/emulator/use-quick-reload.tsx';
 import { useLogout } from '../../hooks/use-logout.tsx';
 import { AboutModal } from '../modals/about.tsx';
 import { CheatsModal } from '../modals/cheats.tsx';

@@ -8,7 +8,7 @@ import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
-import { useRunGame } from '../../hooks/emulator/run-game.tsx';
+import { useRunGame } from '../../hooks/emulator/use-run-game.tsx';
 import { useListRoms } from '../../hooks/use-list-roms.tsx';
 import { useLoadRom } from '../../hooks/use-load-rom.tsx';
 import {

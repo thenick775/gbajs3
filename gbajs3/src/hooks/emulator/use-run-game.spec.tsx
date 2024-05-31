@@ -1,7 +1,7 @@
 import { act } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useRunGame } from './run-game.tsx';
+import { useRunGame } from './use-run-game.tsx';
 import { renderHookWithContext } from '../../../test/render-hook-with-context.tsx';
 import {
   emulatorGameNameLocalStorageKey,

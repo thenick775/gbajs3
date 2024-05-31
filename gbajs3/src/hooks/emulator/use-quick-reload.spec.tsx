@@ -1,11 +1,11 @@
 import { act } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useQuickReload } from './quick-reload.tsx';
+import { useQuickReload } from './use-quick-reload.tsx';
+import * as runGameHooks from './use-run-game.tsx';
 import { renderHookWithContext } from '../../../test/render-hook-with-context.tsx';
 import { emulatorGameNameLocalStorageKey } from '../../context/emulator/consts.ts';
 import * as contextHooks from '../../hooks/context.tsx';
-import * as runGameHooks from '../../hooks/emulator/run-game.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 

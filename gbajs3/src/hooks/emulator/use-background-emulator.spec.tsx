@@ -1,7 +1,7 @@
 import * as usehooks from '@uidotdev/usehooks';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useBackgroundEmulator } from './background-emulator.tsx';
+import { useBackgroundEmulator } from './use-background-emulator.tsx';
 import { renderHookWithContext } from '../../../test/render-hook-with-context.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
 
