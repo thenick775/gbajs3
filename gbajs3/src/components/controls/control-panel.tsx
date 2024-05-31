@@ -1,8 +1,4 @@
-import {
-  IconButton,
-  Slider,
-  useMediaQuery
-} from '@mui/material';
+import { IconButton, Slider, useMediaQuery } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useId, useState, type ReactNode } from 'react';
 import { IconContext } from 'react-icons';
@@ -30,6 +26,7 @@ import {
   useResizeContext,
   useRunningContext
 } from '../../hooks/context.tsx';
+import { useBackgroundEmulator } from '../../hooks/emulator/background-emulator.tsx';
 import { useQuitGame } from '../../hooks/emulator/quit-game.tsx';
 import {
   EmbeddedProductTour,
@@ -38,9 +35,7 @@ import {
 import { ButtonBase } from '../shared/custom-button-base.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
-import type {
-  IconButtonProps,
-  SliderProps} from '@mui/material';
+import type { IconButtonProps, SliderProps } from '@mui/material';
 
 type PanelControlProps = {
   $onClick?: () => void;
@@ -194,6 +189,10 @@ export const ControlPanel = () => {
     emulatorFFMultiplierLocalStorageKey,
     1
   );
+
+  // pause emulator when document is not visible,
+  // resumes if applicable when document is visible
+  useBackgroundEmulator({ isPaused });
 
   const refSetLayout = useCallback(
     (node: Rnd | null) => {
