@@ -105,7 +105,7 @@ export const SaveStatesModal = () => {
     register,
     handleSubmit,
     setValue,
-    formState: { errors }
+    formState: { errors, isSubmitSuccessful }
   } = useForm<InputProps>({
     defaultValues: {
       saveStateSlot: currentSlot
@@ -188,7 +188,13 @@ export const SaveStatesModal = () => {
               valueAsNumber: true
             })}
           />
-          <CircleCheckButton copy="Update Slot" size="small" type="submit" />
+          <CircleCheckButton
+            copy="Update Slot"
+            showSuccess={isSubmitSuccessful}
+            size="small"
+            type="submit"
+            sx={{ maxHeight: '40px' }}
+          />
         </StyledForm>
 
         <SaveStatesList id={`${baseId}--save-state-list`}>

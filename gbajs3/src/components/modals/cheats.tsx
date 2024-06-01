@@ -106,7 +106,7 @@ export const CheatsModal = () => {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors }
+    formState: { errors, isSubmitSuccessful }
   } = useForm({
     defaultValues: {
       rawCheats: rawCheats,
@@ -318,6 +318,7 @@ export const CheatsModal = () => {
           copy="Submit"
           form={`${baseId}--cheats-form`}
           id={`${baseId}--submit-button`}
+          showSuccess={isSubmitSuccessful}
           type="submit"
         />
         <Button

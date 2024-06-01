@@ -4,20 +4,15 @@ import { styled, keyframes } from 'styled-components';
 import { useInterval } from 'usehooks-ts';
 
 import type { ButtonProps } from '@mui/material';
-import type { SyntheticEvent } from 'react';
 
 type CircleCheckButtonProps = {
   copy: string;
-  form?: ButtonProps['form'];
-  id?: string;
   msDuration?: number;
-  onClick?: (e: SyntheticEvent) => void;
-  size?: ButtonProps['size'];
-  type?: ButtonProps['type'];
-};
+  showSuccess?: boolean;
+} & Omit<ButtonProps, 'children'>;
 
 type CopyWrapperProps = {
-  $isPushed: boolean;
+  $isSuccessCheckVisible: boolean;
 };
 
 const stroke = keyframes`
@@ -76,34 +71,37 @@ const CheckPath = styled.path`
 `;
 
 const CopyWrapper = styled.span<CopyWrapperProps>`
-  ${({ $isPushed = false }) => $isPushed && 'visibility: hidden;'}
+  ${({ $isSuccessCheckVisible = false }) =>
+    $isSuccessCheckVisible && 'visibility: hidden;'}
 `;
 
 export const CircleCheckButton = ({
   copy,
   msDuration = 1100,
   onClick,
+  showSuccess = true,
   ...rest
 }: CircleCheckButtonProps) => {
   const labeledById = useId();
-  const [isPushed, setIsPushed] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+
+  const showSuccessAnimation = !!showSuccess && isClicked;
+
   useInterval(
-    () => {
-      setIsPushed(false);
-    },
-    isPushed ? msDuration : null
+    () => setIsClicked(false),
+    showSuccessAnimation ? msDuration : null
   );
 
   return (
     <Button
       onClick={(e) => {
-        setIsPushed(true);
+        setIsClicked(true);
         onClick?.(e);
       }}
       variant="contained"
       {...rest}
     >
-      {isPushed && (
+      {showSuccessAnimation && (
         <StyledSvg
           role="graphics-symbol"
           aria-labelledby={labeledById}
@@ -115,7 +113,9 @@ export const CircleCheckButton = ({
           <CheckPath fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
         </StyledSvg>
       )}
-      <CopyWrapper $isPushed={isPushed}>{copy}</CopyWrapper>
+      <CopyWrapper $isSuccessCheckVisible={showSuccessAnimation}>
+        {copy}
+      </CopyWrapper>
     </Button>
   );
 };
