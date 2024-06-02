@@ -100,6 +100,7 @@ export const KeyBindingsForm = ({
               helperText={errors?.[keyBinding.gbaInput]?.message}
             />
           )}
+          shouldUnregister
         />
       ))}
     </StyledForm>
