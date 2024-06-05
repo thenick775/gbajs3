@@ -21,7 +21,7 @@ type InputProps = {
   saveFiles: File[];
 };
 
-const validFileExtensions = ['.ss', '.sav'];
+const validFileExtensions = [/\.ss[0-9]+/, '.sav'];
 
 export const UploadSavesModal = () => {
   const theme = useTheme();
@@ -81,7 +81,7 @@ export const UploadSavesModal = () => {
             name="saveFiles"
             rules={{
               validate: (saveFiles) =>
-                saveFiles?.length > 0 || // vancise why do I need ? here-> if just for tests lets get rid of it
+                saveFiles?.length > 0 ||
                 'At least one .sav or .ss file is required'
             }}
             render={({ field: { name }, fieldState: { error } }) => (
@@ -96,7 +96,6 @@ export const UploadSavesModal = () => {
                 multiple
               />
             )}
-            shouldUnregister
           />
           {isSubmitSuccessful && (
             <CenteredTextContainer>

@@ -6,6 +6,8 @@ import { styled, useTheme } from 'styled-components';
 import { ErrorWithIcon } from './error-with-icon.tsx';
 import { CenteredTextContainer } from './styled.tsx';
 
+type ExtensionList = (RegExp | string)[];
+
 type DragAndDropInputProps = {
   ariaLabel: string;
   copy: string;
@@ -14,7 +16,7 @@ type DragAndDropInputProps = {
   multiple?: boolean;
   name: string;
   onDrop: (acceptedFiles: File[]) => void;
-  validFileExtensions: string[];
+  validFileExtensions: ExtensionList;
 };
 
 type DropAreaProps = {
@@ -37,7 +39,15 @@ const BiCloudUploadLarge = styled(BiCloudUpload)`
   width: auto;
 `;
 
-const validateFile = (validFileExtensions: string[]) => {
+const hasValidFileExtension = (file: File, validExtensions: ExtensionList) => {
+  const fileExtension = `.${file.name.split('.').pop()}`;
+
+  return validExtensions.some((r) =>
+    r instanceof RegExp ? !!r.exec(fileExtension) : r === fileExtension
+  );
+};
+
+const validateFile = (validFileExtensions: ExtensionList) => {
   let fileRequiredError =
     'One ' +
     validFileExtensions.slice(0, -1).join(', ') +
@@ -49,8 +59,8 @@ const validateFile = (validFileExtensions: string[]) => {
 
   return (file?: File | DataTransferItem) => {
     if (
-      !(file instanceof File) ||
-      (!!file && validFileExtensions.includes(`.${file.name.split('.').pop()}`))
+      !(file instanceof File) || // could be data transfer, ignore
+      (!!file && hasValidFileExtension(file, validFileExtensions))
     )
       return null;
 
@@ -95,6 +105,10 @@ export const DragAndDropInput = ({
     )
   ];
 
+  const accept = validFileExtensions.every((e) => typeof e === 'string')
+    ? validFileExtensions.map((ext) => `${ext}`).join(',')
+    : undefined;
+
   return (
     <>
       <DropArea
@@ -105,11 +119,8 @@ export const DragAndDropInput = ({
         })}
       >
         <input
-          data-testid={`file-hidden-input`}
-          {...getInputProps({
-            name,
-            accept: validFileExtensions.map((ext) => `${ext}`).join(',')
-          })}
+          data-testid={`hidden-file-input`}
+          {...getInputProps({ name, accept })}
         />
         <BiCloudUploadLarge />
         <p>{copy}</p>

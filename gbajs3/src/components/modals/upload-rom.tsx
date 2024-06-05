@@ -116,8 +116,7 @@ export const UploadRomModal = () => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       reset();
-      if (acceptedFiles.length)
-        setValue('romFile', acceptedFiles[0], { shouldValidate: true });
+      setValue('romFile', acceptedFiles[0], { shouldValidate: true });
     },
     [reset, setValue]
   );
@@ -209,7 +208,6 @@ export const UploadRomModal = () => {
                   hideErrors={!!error}
                 />
               )}
-              shouldUnregister
             />
             {!isRomFileSet && (
               <>
