@@ -82,7 +82,7 @@ export const UploadCheatsModal = () => {
                 cheatFiles?.length > 0 ||
                 'At least one .cheats file is required'
             }}
-            render={({ field: { name }, fieldState: { error } }) => (
+            render={({ field: { name, value }, fieldState: { error } }) => (
               <DragAndDropInput
                 ariaLabel="Upload Cheats"
                 id={`${cheatsFormId}--drag-and-drop`}
@@ -91,6 +91,7 @@ export const UploadCheatsModal = () => {
                 copy="Drag and drop cheat files here, or click to upload files"
                 validFileExtensions={['.cheats']}
                 hideErrors={!!error}
+                hideAcceptedFiles={!value?.length}
                 multiple
               />
             )}

@@ -45,8 +45,8 @@ describe('<UploadCheatsModal />', () => {
     expect(uploadCheatsSpy).toHaveBeenCalledWith(testCheatFile);
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
-    // expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
-    // expect(screen.queryByText('rom1.cheats')).not.toBeInTheDocument();
+    expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
+    expect(screen.queryByText('rom1.cheats')).not.toBeInTheDocument();
   });
 
   it('uploads multiple files', async () => {
@@ -89,9 +89,9 @@ describe('<UploadCheatsModal />', () => {
     expect(uploadCheatsSpy).toHaveBeenCalledWith(testCheatFiles[1]);
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
-    // expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
-    // expect(screen.queryByText('rom1.cheats')).not.toBeInTheDocument();
-    // expect(screen.queryByText('rom2.cheats')).not.toBeInTheDocument();
+    expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
+    expect(screen.queryByText('rom1.cheats')).not.toBeInTheDocument();
+    expect(screen.queryByText('rom2.cheats')).not.toBeInTheDocument();
   });
 
   it('renders form validation error', async () => {

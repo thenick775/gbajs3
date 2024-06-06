@@ -84,7 +84,7 @@ export const UploadSavesModal = () => {
                 saveFiles?.length > 0 ||
                 'At least one .sav or .ss file is required'
             }}
-            render={({ field: { name }, fieldState: { error } }) => (
+            render={({ field: { name, value }, fieldState: { error } }) => (
               <DragAndDropInput
                 ariaLabel="Upload Saves"
                 id={`${uploadSavesFormId}--drag-and-drop`}
@@ -93,6 +93,7 @@ export const UploadSavesModal = () => {
                 copy="Drag and drop save or save state files here, or click to upload files"
                 validFileExtensions={validFileExtensions}
                 hideErrors={!!error}
+                hideAcceptedFiles={!value?.length}
                 multiple
               />
             )}

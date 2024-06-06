@@ -44,8 +44,8 @@ describe('<UploadSavesModal />', () => {
     expect(uploadSaveOrSaveStateSpy).toHaveBeenCalledWith(testSaveFile);
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
-    // expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
-    // expect(screen.queryByText('rom1.sav')).not.toBeInTheDocument();
+    expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
+    expect(screen.queryByText('rom1.sav')).not.toBeInTheDocument();
   });
 
   it('uploads multiple files', async () => {
@@ -88,9 +88,9 @@ describe('<UploadSavesModal />', () => {
     expect(uploadSaveSpy).toHaveBeenCalledWith(testSaveFiles[1]);
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
-    // expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
-    // expect(screen.queryByText('rom1.sav')).not.toBeInTheDocument();
-    // expect(screen.queryByText('rom2.sav')).not.toBeInTheDocument();
+    expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
+    expect(screen.queryByText('rom1.sav')).not.toBeInTheDocument();
+    expect(screen.queryByText('rom2.sav')).not.toBeInTheDocument();
   });
 
   it('renders form validation error', async () => {

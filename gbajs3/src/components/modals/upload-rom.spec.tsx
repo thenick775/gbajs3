@@ -61,10 +61,6 @@ describe('<UploadRomModal />', () => {
     expect(runGameSpy).toHaveBeenCalledOnce();
     expect(runGameSpy).toHaveBeenCalledWith('/games/rom1.gba');
     expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
-
-    // expect(screen.getByText('Upload complete!')).toBeVisible();
-    // expect(screen.queryByText('File to upload:')).not.toBeInTheDocument();
-    // expect(screen.queryByText('rom1.gba')).not.toBeInTheDocument();
   });
 
   it('uploads rom from external url', async () => {
@@ -122,8 +118,6 @@ describe('<UploadRomModal />', () => {
     expect(runGameSpy).toHaveBeenCalledOnce();
     expect(runGameSpy).toHaveBeenCalledWith('/games/good_rom.gba');
     expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
-
-    // expect(await screen.findByText('Upload complete!')).toBeVisible();
   });
 
   it('renders external rom error', async () => {

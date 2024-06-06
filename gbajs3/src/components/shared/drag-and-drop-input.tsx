@@ -11,6 +11,7 @@ type ExtensionList = (RegExp | string)[];
 type DragAndDropInputProps = {
   ariaLabel: string;
   copy: string;
+  hideAcceptedFiles?: boolean;
   hideErrors?: boolean;
   id: string;
   multiple?: boolean;
@@ -74,6 +75,7 @@ const validateFile = (validFileExtensions: ExtensionList) => {
 export const DragAndDropInput = ({
   ariaLabel,
   copy,
+  hideAcceptedFiles,
   hideErrors,
   id,
   multiple = false,
@@ -120,12 +122,12 @@ export const DragAndDropInput = ({
       >
         <input
           data-testid={`hidden-file-input`}
-          {...getInputProps({ name, accept })}
+          {...getInputProps({ accept, name })}
         />
         <BiCloudUploadLarge />
         <p>{copy}</p>
       </DropArea>
-      {!!acceptedFileNames.length && (
+      {!!acceptedFileNames.length && !hideAcceptedFiles && (
         <CenteredTextContainer>
           <p>File{multiple && 's'} to upload:</p>
           {acceptedFileNames.map((name, idx) => (
@@ -135,9 +137,9 @@ export const DragAndDropInput = ({
       )}
       {!!fileRejections.length &&
         !hideErrors &&
-        rejectedFileErrors.map((msg, idx) => (
+        rejectedFileErrors.map((msg) => (
           <ErrorWithIcon
-            key={`${msg}_${idx}`}
+            key={msg}
             icon={<BiError style={{ color: theme.errorRed }} />}
             text={msg}
           />
