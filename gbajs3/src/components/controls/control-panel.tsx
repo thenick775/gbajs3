@@ -354,6 +354,7 @@ export const ControlPanel = () => {
           <p>Your fast forward setting will be saved between refreshes!</p>
         </>
       ),
+      placement: 'right',
       placementBeacon: 'bottom',
       target: `#${CSS.escape(`${controlPanelId}--fast-forward`)}`
     }
