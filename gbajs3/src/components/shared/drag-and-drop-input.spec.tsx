@@ -11,11 +11,12 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={vi.fn()}
         validFileExtensions={[]}
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     expect(screen.getByLabelText('Upload File')).toHaveAttribute(
@@ -32,11 +33,12 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={vi.fn()}
         validFileExtensions={[]}
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     await userEvent.click(screen.getByLabelText('Upload File'));
@@ -52,11 +54,12 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={onDropSpy}
         validFileExtensions={['.test']}
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     await userEvent.upload(screen.getByTestId('hidden-file-input'), testFile);
@@ -79,12 +82,13 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={onDropSpy}
         validFileExtensions={['.test']}
         multiple
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     await userEvent.upload(screen.getByTestId('hidden-file-input'), testFiles);
@@ -117,11 +121,12 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={onDropSpy}
         validFileExtensions={['.test']}
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     const dropArea = screen.getByLabelText('Upload File');
@@ -160,12 +165,13 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={onDropSpy}
         validFileExtensions={['.test']}
         multiple
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     const dropArea = screen.getByLabelText('Upload File');
@@ -189,12 +195,13 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={onDropSpy}
         validFileExtensions={['.test']}
         multiple
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     await userEvent.click(screen.getByLabelText('Upload File'));
@@ -229,11 +236,12 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={onDropSpy}
         validFileExtensions={['.test']}
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     const dropArea = screen.getByLabelText('Upload File');
@@ -269,11 +277,12 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={onDropSpy}
         validFileExtensions={['.test']}
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     const dropArea = screen.getByLabelText('Upload File');
@@ -311,11 +320,12 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={onDropSpy}
         validFileExtensions={[/.test[0-9+]/]}
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     const dropArea = screen.getByLabelText('Upload File');
@@ -337,11 +347,12 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={vi.fn()}
         validFileExtensions={['.test1', '.test2']}
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     expect(screen.getByTestId('hidden-file-input')).toHaveAttribute(
@@ -358,11 +369,12 @@ describe('<DragAndDropInput />', () => {
       <DragAndDropInput
         id="testId"
         ariaLabel="Upload File"
-        copy="Upload file here"
         name="testFile"
         onDrop={onDropSpy}
         validFileExtensions={['.test1', '.test2']}
-      />
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
     );
 
     await userEvent.upload(screen.getByTestId('hidden-file-input'), testFile);

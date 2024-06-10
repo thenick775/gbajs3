@@ -90,12 +90,16 @@ export const UploadSavesModal = () => {
                 id={`${uploadSavesFormId}--drag-and-drop`}
                 onDrop={onDrop}
                 name={name}
-                copy="Drag and drop save or save state files here, or click to upload files"
                 validFileExtensions={validFileExtensions}
                 hideErrors={!!error}
                 hideAcceptedFiles={!value?.length}
                 multiple
-              />
+              >
+                <p>
+                  Drag and drop save or save state files here, or click to
+                  upload files
+                </p>
+              </DragAndDropInput>
             )}
           />
           {isSubmitSuccessful && (

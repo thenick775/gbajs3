@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Button, Divider, TextField } from '@mui/material';
 import { useCallback, useEffect, useId, useState, type ReactNode } from 'react';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { BiError } from 'react-icons/bi';
@@ -203,19 +203,23 @@ export const UploadRomModal = () => {
                   id={`${uploadRomFormId}--drag-and-drop`}
                   onDrop={onDrop}
                   name={name}
-                  copy="Drag and drop a rom or zipped rom file here, or click to upload a file"
                   validFileExtensions={validFileExtensions}
                   hideErrors={!!error}
-                />
+                >
+                  <p>
+                    Drag and drop a rom or zipped rom file here, or click to
+                    upload a file
+                  </p>
+                </DragAndDropInput>
               )}
             />
             {!isRomFileSet && (
               <>
-                <p>Or upload from a URL:</p>
+                <Divider sx={{ padding: '10px 0' }}>or</Divider>
                 <TextField
                   id={`${uploadRomFormId}--rom-url`}
                   error={!!errors?.romURL}
-                  label="Rom URL"
+                  label="Upload from a URL"
                   size="small"
                   autoComplete="romURL"
                   variant="filled"

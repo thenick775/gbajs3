@@ -88,12 +88,17 @@ export const UploadCheatsModal = () => {
                 id={`${cheatsFormId}--drag-and-drop`}
                 onDrop={onDrop}
                 name={name}
-                copy="Drag and drop cheat files here, or click to upload files"
                 validFileExtensions={['.cheats']}
                 hideErrors={!!error}
                 hideAcceptedFiles={!value?.length}
                 multiple
-              />
+              >
+                <p>
+                  Drag and drop cheat files here,
+                  <br />
+                  or click to upload files
+                </p>
+              </DragAndDropInput>
             )}
           />
           {isSubmitSuccessful && (

@@ -96,7 +96,7 @@ describe('<UploadRomModal />', () => {
 
     renderWithContext(<UploadRomModal />);
 
-    const uploadRomFromURLInput = screen.getByLabelText('Rom URL');
+    const uploadRomFromURLInput = screen.getByLabelText('Upload from a URL');
 
     await userEvent.type(
       uploadRomFromURLInput,
@@ -143,7 +143,7 @@ describe('<UploadRomModal />', () => {
 
     renderWithContext(<UploadRomModal />);
 
-    const uploadRomFromURLInput = screen.getByLabelText('Rom URL');
+    const uploadRomFromURLInput = screen.getByLabelText('Upload from a URL');
 
     await userEvent.type(
       uploadRomFromURLInput,

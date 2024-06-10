@@ -6,11 +6,13 @@ import { styled, useTheme } from 'styled-components';
 import { ErrorWithIcon } from './error-with-icon.tsx';
 import { CenteredTextContainer } from './styled.tsx';
 
+import type { ReactNode } from 'react';
+
 type ExtensionList = (RegExp | string)[];
 
 type DragAndDropInputProps = {
   ariaLabel: string;
-  copy: string;
+  children: ReactNode;
   hideAcceptedFiles?: boolean;
   hideErrors?: boolean;
   id: string;
@@ -74,7 +76,7 @@ const validateFile = (validFileExtensions: ExtensionList) => {
 
 export const DragAndDropInput = ({
   ariaLabel,
-  copy,
+  children,
   hideAcceptedFiles,
   hideErrors,
   id,
@@ -90,11 +92,11 @@ export const DragAndDropInput = ({
       multiple,
       onDrop: (acceptedFiles) => {
         setAcceptedFileNames(acceptedFiles.map((file) => file.name));
-        onDrop?.(acceptedFiles);
+        onDrop(acceptedFiles);
       },
       onFileDialogCancel: () => {
         setAcceptedFileNames([]);
-        onDrop?.([]);
+        onDrop([]);
       },
       validator: validateFile(validFileExtensions)
     });
@@ -125,7 +127,7 @@ export const DragAndDropInput = ({
           {...getInputProps({ accept, name })}
         />
         <BiCloudUploadLarge />
-        <p>{copy}</p>
+        {children}
       </DropArea>
       {!!acceptedFileNames.length && !hideAcceptedFiles && (
         <CenteredTextContainer>
