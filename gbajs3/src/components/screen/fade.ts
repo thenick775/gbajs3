@@ -1,4 +1,4 @@
-import { domToCanvas } from 'modern-screenshot';
+import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator';
 
 // uses a webgl canvas context,
 // clears the canvas to all black immediately
@@ -56,39 +56,52 @@ const lcdFade2d = (canvas: HTMLCanvasElement) => {
   }, drawIntervalTimeout);
 };
 
-// takes in a canvas ref, and a func to render to ensure our canvas has content.
-// copies the canvas given to a new 2d canvas under the same parent,
-// then lcd fades the copied canvas before clearing the original canvas
+// takes in a canvas ref, and the emulator to take a screenshot.
+// copies the screenshot image to a new 2d canvas under the same parent,
+// then lcd fades the copied canvas and clears the original canvas
 export const fadeCanvas = (
   canvas: HTMLCanvasElement | null,
-  renderFunc: (callback: () => void) => void
+  emulator: GBAEmulator | null
 ) => {
-  if (!canvas) return;
+  if (!canvas || !emulator) return;
 
-  renderFunc(() =>
-    domToCanvas(canvas, {
-      width: canvas.width,
-      height: canvas.height
-    })
-      .then((copyCanvas) => {
-        copyCanvas.style.width = `${canvas.clientWidth}px`;
-        copyCanvas.style.height = `${canvas.clientHeight}px`;
-        copyCanvas.style.backgroundColor = 'black';
-        copyCanvas.style.imageRendering = 'pixelated';
-        copyCanvas.style.position = 'absolute';
-        copyCanvas.style.top = '0';
-        copyCanvas.style.left = '0';
-        copyCanvas.style.right = '0';
-        copyCanvas.style.margin = '0 auto';
-        copyCanvas.style.objectFit = 'contain';
-        canvas.parentElement?.appendChild(copyCanvas);
+  const copyCanvas = document.createElement('canvas');
+  const context = copyCanvas.getContext('2d');
 
-        lcdFade2d(copyCanvas);
-        clearWebGlCanvas(canvas);
-        // if necessary additionally clear 2d canvas
-      })
-      .catch((e) => {
-        console.error(`screen to canvas has failed: ${e}`);
-      })
+  emulator.screenshot('fade-copy');
+
+  const fileBytes = emulator.getFile(
+    emulator?.filePaths().screenshotsPath + '/' + 'fade-copy-0.png'
   );
+
+  emulator?.deleteFile(
+    emulator?.filePaths().screenshotsPath + '/' + 'fade-copy-0.png'
+  );
+
+  const blob = new Blob([fileBytes], { type: 'image/png' });
+  const url = URL.createObjectURL(blob);
+
+  copyCanvas.style.width = `${canvas.clientWidth}px`;
+  copyCanvas.style.height = `${canvas.clientHeight}px`;
+  copyCanvas.style.backgroundColor = 'black';
+  copyCanvas.style.imageRendering = 'pixelated';
+  copyCanvas.style.position = 'absolute';
+  copyCanvas.style.top = '0';
+  copyCanvas.style.left = '0';
+  copyCanvas.style.right = '0';
+  copyCanvas.style.margin = '0 auto';
+  copyCanvas.width = canvas.width;
+  copyCanvas.height = canvas.height;
+  copyCanvas.className = canvas.className;
+  copyCanvas.style.objectFit = 'contain';
+
+  const fadeImage = new Image();
+  fadeImage.onload = () => {
+    context?.drawImage(fadeImage, 0, 0);
+    canvas.parentElement?.appendChild(copyCanvas);
+
+    clearWebGlCanvas(canvas);
+    lcdFade2d(copyCanvas);
+  };
+  fadeImage.src = url;
 };

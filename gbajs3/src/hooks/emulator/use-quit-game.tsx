@@ -5,15 +5,15 @@ import { useEmulatorContext, useRunningContext } from '../context.tsx';
 
 export const useQuitGame = () => {
   const { canvas, emulator } = useEmulatorContext();
-  const { setIsRunning } = useRunningContext();
+  const { isRunning, setIsRunning } = useRunningContext();
 
-  const run = useCallback(() => {
-    if (emulator) {
-      fadeCanvas(canvas, emulator.screenShot);
-      emulator.quitGame();
+  const quitGame = useCallback(() => {
+    if (isRunning) {
+      fadeCanvas(canvas, emulator);
+      emulator?.quitGame();
     }
     setIsRunning(false);
-  }, [canvas, emulator, setIsRunning]);
+  }, [canvas, emulator, isRunning, setIsRunning]);
 
-  return run;
+  return quitGame;
 };
