@@ -11,13 +11,22 @@ import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 describe('useQuitGame hook', () => {
   it('quits game if the emulator exists', async () => {
     const emulatorQuitGameSpy: () => void = vi.fn();
-    const screenshotSpy: (baseName?: string) => boolean = vi.fn(() => true);
+    const screenshotSpy: (fileName?: string) => boolean = vi.fn(() => true);
+    const getFileSpy: (p: string) => Uint8Array = vi.fn(() =>
+      new TextEncoder().encode('Some screenshot file contents')
+    );
+    const deleteFileSpy: (filePath: string) => void = vi.fn();
     const setIsRunningSpy = vi.fn();
     const fadeCanvasSpy = vi.fn();
     const testCanvas = {} as HTMLCanvasElement;
     const emu = {
       quitGame: emulatorQuitGameSpy,
-      screenshot: screenshotSpy
+      screenshot: screenshotSpy,
+      filePaths: () => ({
+        screenshotsPath: '/screenshots'
+      }),
+      getFile: getFileSpy,
+      deleteFile: deleteFileSpy
     } as GBAEmulator;
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -40,9 +49,20 @@ describe('useQuitGame hook', () => {
     });
 
     expect(fadeCanvasSpy).toHaveBeenCalledOnce();
-    expect(fadeCanvasSpy).toHaveBeenCalledWith(testCanvas, emu);
+    // blob is not implemented, but we can check the type
+    expect(fadeCanvasSpy).toHaveBeenCalledWith(testCanvas, new Blob());
+
+    expect(screenshotSpy).toHaveBeenCalledOnce();
+    expect(screenshotSpy).toHaveBeenCalledWith('fade-copy.png');
+
+    expect(getFileSpy).toHaveBeenCalledOnce();
+    expect(getFileSpy).toHaveBeenCalledWith('/screenshots/fade-copy.png');
+
+    expect(deleteFileSpy).toHaveBeenCalledOnce();
+    expect(deleteFileSpy).toHaveBeenCalledWith('/screenshots/fade-copy.png');
 
     expect(emulatorQuitGameSpy).toHaveBeenCalledOnce();
+
     expect(setIsRunningSpy).toHaveBeenCalledOnce();
     expect(setIsRunningSpy).toHaveBeenCalledWith(false);
   });

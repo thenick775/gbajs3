@@ -184,7 +184,7 @@ describe('<NavigationMenu />', () => {
     });
 
     it('Screenshot calls emulator screenshot and toasts on success', async () => {
-      const screenshotSpy: (baseName: string) => boolean = vi.fn(() => true);
+      const screenshotSpy: (fileName: string) => boolean = vi.fn(() => true);
       const {
         useEmulatorContext: originalEmulator,
         useRunningContext: originalRunning

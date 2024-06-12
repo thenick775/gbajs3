@@ -1,5 +1,3 @@
-import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator';
-
 // uses a webgl canvas context,
 // clears the canvas to all black immediately
 const clearWebGlCanvas = (canvas: HTMLCanvasElement) => {
@@ -56,44 +54,32 @@ const lcdFade2d = (canvas: HTMLCanvasElement) => {
   }, drawIntervalTimeout);
 };
 
-// takes in a canvas ref, and the emulator to take a screenshot.
-// copies the screenshot image to a new 2d canvas under the same parent,
+// fadeCanvas takes in a canvas ref, and a blob representing the last frame rendered.
+// It copies the screenshot frame to a new 2d canvas under the same parent,
 // then lcd fades the copied canvas and clears the original canvas
 export const fadeCanvas = (
   canvas: HTMLCanvasElement | null,
-  emulator: GBAEmulator | null
+  screenshot: Blob | null
 ) => {
-  if (!canvas || !emulator) return;
+  if (!canvas || !screenshot) return;
 
   const copyCanvas = document.createElement('canvas');
   const context = copyCanvas.getContext('2d');
+  const url = URL.createObjectURL(screenshot);
 
-  emulator.screenshot('fade-copy');
-
-  const fileBytes = emulator.getFile(
-    emulator?.filePaths().screenshotsPath + '/' + 'fade-copy-0.png'
-  );
-
-  emulator?.deleteFile(
-    emulator?.filePaths().screenshotsPath + '/' + 'fade-copy-0.png'
-  );
-
-  const blob = new Blob([fileBytes], { type: 'image/png' });
-  const url = URL.createObjectURL(blob);
-
-  copyCanvas.style.width = `${canvas.clientWidth}px`;
+  copyCanvas.className = canvas.className;
+  copyCanvas.height = canvas.height;
+  copyCanvas.width = canvas.width;
+  copyCanvas.style.backgroundColor = canvas.style.backgroundColor;
   copyCanvas.style.height = `${canvas.clientHeight}px`;
-  copyCanvas.style.backgroundColor = 'black';
-  copyCanvas.style.imageRendering = 'pixelated';
+  copyCanvas.style.imageRendering = canvas.style.imageRendering;
+  copyCanvas.style.margin = canvas.style.margin;
+  copyCanvas.style.objectFit = canvas.style.objectFit;
+  copyCanvas.style.width = `${canvas.clientWidth}px`;
   copyCanvas.style.position = 'absolute';
   copyCanvas.style.top = '0';
   copyCanvas.style.left = '0';
   copyCanvas.style.right = '0';
-  copyCanvas.style.margin = '0 auto';
-  copyCanvas.width = canvas.width;
-  copyCanvas.height = canvas.height;
-  copyCanvas.className = canvas.className;
-  copyCanvas.style.objectFit = 'contain';
 
   const fadeImage = new Image();
   fadeImage.onload = () => {

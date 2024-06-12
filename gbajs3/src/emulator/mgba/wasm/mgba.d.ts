@@ -37,7 +37,7 @@ declare namespace mGBA {
     quitMgba(): void;
     resumeGame(): void;
     saveState(slot: number): boolean;
-    screenshot(baseFileName?: string): boolean;
+    screenshot(fileName?: string): boolean;
     setFastForwardMultiplier(multiplier: number): void;
     setMainLoopTiming(mode: number, value: number): void;
     setVolume(percent: number): void;
