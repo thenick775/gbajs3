@@ -1,8 +1,6 @@
 import { Button } from '@mui/material';
 import { useCallback, useId } from 'react';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
-import { BiError } from 'react-icons/bi';
-import { useTheme } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -14,7 +12,6 @@ import {
 } from '../product-tour/embedded-product-tour.tsx';
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 import { DragAndDropInput } from '../shared/drag-and-drop-input.tsx';
-import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { CenteredTextContainer } from '../shared/styled.tsx';
 
 type InputProps = {
@@ -24,14 +21,13 @@ type InputProps = {
 const validFileExtensions = [/\.ss[0-9]+/, '.sav'];
 
 export const UploadSavesModal = () => {
-  const theme = useTheme();
   const { setIsModalOpen } = useModalContext();
   const { emulator } = useEmulatorContext();
   const {
     reset,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitSuccessful },
+    formState: { isSubmitSuccessful },
     control
   } = useForm<InputProps>();
   const uploadSavesFormId = useId();
@@ -91,7 +87,7 @@ export const UploadSavesModal = () => {
                 onDrop={onDrop}
                 name={name}
                 validFileExtensions={validFileExtensions}
-                hideErrors={!!error}
+                error={error?.message}
                 hideAcceptedFiles={!value?.length}
                 multiple
               >
@@ -106,12 +102,6 @@ export const UploadSavesModal = () => {
             <CenteredTextContainer>
               <p>Upload complete!</p>
             </CenteredTextContainer>
-          )}
-          {errors.saveFiles?.message && (
-            <ErrorWithIcon
-              icon={<BiError style={{ color: theme.errorRed }} />}
-              text={errors.saveFiles.message}
-            />
           )}
         </form>
       </ModalBody>

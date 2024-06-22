@@ -13,6 +13,7 @@ type ExtensionList = (RegExp | string)[];
 type DragAndDropInputProps = {
   ariaLabel: string;
   children: ReactNode;
+  error?: string;
   hideAcceptedFiles?: boolean;
   hideErrors?: boolean;
   id: string;
@@ -62,7 +63,7 @@ const validateFile = (validFileExtensions: ExtensionList) => {
 
   return (file?: File | DataTransferItem) => {
     if (
-      !(file instanceof File) || // could be data transfer, ignore
+      !(file instanceof File) ||
       (!!file && hasValidFileExtension(file, validFileExtensions))
     )
       return null;
@@ -77,6 +78,7 @@ const validateFile = (validFileExtensions: ExtensionList) => {
 export const DragAndDropInput = ({
   ariaLabel,
   children,
+  error,
   hideAcceptedFiles,
   hideErrors,
   id,
@@ -101,13 +103,15 @@ export const DragAndDropInput = ({
       validator: validateFile(validFileExtensions)
     });
 
-  const rejectedFileErrors = [
-    ...new Set(
-      fileRejections
-        .flatMap((rejection) => rejection.errors)
-        .map((error) => error.message)
-    )
-  ];
+  const rejectedFileErrors = error
+    ? [error]
+    : [
+        ...new Set(
+          fileRejections
+            .flatMap((rejection) => rejection.errors)
+            .map((error) => error.message)
+        )
+      ];
 
   const accept = validFileExtensions.every((e) => typeof e === 'string')
     ? validFileExtensions.map((ext) => `${ext}`).join(',')
@@ -137,7 +141,7 @@ export const DragAndDropInput = ({
           ))}
         </CenteredTextContainer>
       )}
-      {!!fileRejections.length &&
+      {!!rejectedFileErrors.length &&
         !hideErrors &&
         rejectedFileErrors.map((msg) => (
           <ErrorWithIcon
