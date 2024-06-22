@@ -18,7 +18,10 @@ type InputProps = {
   saveFiles: File[];
 };
 
-const validFileExtensions = [/\.ss[0-9]+/, '.sav'];
+const validFileExtensions = [
+  { regex: /\.ss[0-9]+/, displayText: '.ss' },
+  '.sav'
+];
 
 export const UploadSavesModal = () => {
   const { setIsModalOpen } = useModalContext();

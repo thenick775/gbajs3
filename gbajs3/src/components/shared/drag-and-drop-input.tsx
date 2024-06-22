@@ -8,7 +8,12 @@ import { CenteredTextContainer } from './styled.tsx';
 
 import type { ReactNode } from 'react';
 
-type ExtensionList = (RegExp | string)[];
+type Extension = RegexValidator | string;
+
+type RegexValidator = {
+  regex: RegExp;
+  displayText: string;
+};
 
 type DragAndDropInputProps = {
   ariaLabel: string;
@@ -20,7 +25,7 @@ type DragAndDropInputProps = {
   multiple?: boolean;
   name: string;
   onDrop: (acceptedFiles: File[]) => void;
-  validFileExtensions: ExtensionList;
+  validFileExtensions: Extension[];
 };
 
 type DropAreaProps = {
@@ -43,22 +48,27 @@ const BiCloudUploadLarge = styled(BiCloudUpload)`
   width: auto;
 `;
 
-const hasValidFileExtension = (file: File, validExtensions: ExtensionList) => {
+const hasValidFileExtension = (file: File, validExtensions: Extension[]) => {
   const fileExtension = `.${file.name.split('.').pop()}`;
 
-  return validExtensions.some((r) =>
-    r instanceof RegExp ? !!r.exec(fileExtension) : r === fileExtension
+  return validExtensions.some((e) =>
+    typeof e === 'string' ? e === fileExtension : !!e.regex.exec(fileExtension)
   );
 };
 
-const validateFile = (validFileExtensions: ExtensionList) => {
+const getDescription = (extension: Extension) =>
+  typeof extension === 'string' ? extension : extension.displayText;
+
+const validateFile = (validFileExtensions: Extension[]) => {
   let fileRequiredError =
     'One ' +
-    validFileExtensions.slice(0, -1).join(', ') +
+    validFileExtensions.slice(0, -1).map(getDescription).join(', ') +
     `, or ${validFileExtensions.slice(-1)} file is required`;
 
   if (validFileExtensions.length == 1) {
-    fileRequiredError = `At least one ${validFileExtensions[0]} file is required`;
+    fileRequiredError = `At least one ${getDescription(
+      validFileExtensions[0]
+    )} file is required`;
   }
 
   return (file?: File | DataTransferItem) => {

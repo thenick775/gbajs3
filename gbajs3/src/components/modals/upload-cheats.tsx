@@ -18,6 +18,8 @@ type InputProps = {
   cheatFiles: File[];
 };
 
+const validFileExtensions = ['.cheats'];
+
 export const UploadCheatsModal = () => {
   const { setIsModalOpen } = useModalContext();
   const { emulator } = useEmulatorContext();
@@ -84,7 +86,7 @@ export const UploadCheatsModal = () => {
                 id={`${cheatsFormId}--drag-and-drop`}
                 onDrop={onDrop}
                 name={name}
-                validFileExtensions={['.cheats']}
+                validFileExtensions={validFileExtensions}
                 error={error?.message}
                 hideAcceptedFiles={!value?.length}
                 multiple

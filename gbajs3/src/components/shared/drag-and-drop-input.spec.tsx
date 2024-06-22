@@ -322,7 +322,7 @@ describe('<DragAndDropInput />', () => {
         ariaLabel="Upload File"
         name="testFile"
         onDrop={onDropSpy}
-        validFileExtensions={[/.test[0-9+]/]}
+        validFileExtensions={[{ regex: /.test[0-9+]/, displayText: '.test' }]}
       >
         <p>Upload file here</p>
       </DragAndDropInput>
@@ -334,8 +334,7 @@ describe('<DragAndDropInput />', () => {
     fireEvent.drop(dropArea, data);
 
     expect(
-      // TODO not sure if I like this display
-      await screen.findByText('At least one /.test[0-9+]/ file is required')
+      await screen.findByText('At least one .test file is required')
     ).toBeVisible();
 
     expect(onDropSpy).toHaveBeenCalledOnce();
