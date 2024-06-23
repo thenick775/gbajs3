@@ -340,46 +340,4 @@ describe('<DragAndDropInput />', () => {
     expect(onDropSpy).toHaveBeenCalledOnce();
     expect(onDropSpy).toHaveBeenCalledWith([]);
   });
-
-  it('renders input with accept if all file extensions are strings', () => {
-    renderWithContext(
-      <DragAndDropInput
-        id="testId"
-        ariaLabel="Upload File"
-        name="testFile"
-        onDrop={vi.fn()}
-        validFileExtensions={['.test1', '.test2']}
-      >
-        <p>Upload file here</p>
-      </DragAndDropInput>
-    );
-
-    expect(screen.getByTestId('hidden-file-input')).toHaveAttribute(
-      'accept',
-      '.test1,.test2'
-    );
-  });
-
-  it('does not call onDrop if files are rejected by accept', async () => {
-    const testFile = new File(['Some test file contents'], 'test_file.test');
-    const onDropSpy = vi.fn();
-
-    renderWithContext(
-      <DragAndDropInput
-        id="testId"
-        ariaLabel="Upload File"
-        name="testFile"
-        onDrop={onDropSpy}
-        validFileExtensions={['.test1', '.test2']}
-      >
-        <p>Upload file here</p>
-      </DragAndDropInput>
-    );
-
-    await userEvent.upload(screen.getByTestId('hidden-file-input'), testFile);
-
-    expect(onDropSpy).not.toHaveBeenCalledOnce();
-    expect(screen.queryByText('File to upload:')).not.toBeInTheDocument();
-    expect(screen.queryByText('test_file.test')).not.toBeInTheDocument();
-  });
 });

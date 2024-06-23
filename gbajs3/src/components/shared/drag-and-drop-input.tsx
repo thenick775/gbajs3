@@ -123,10 +123,6 @@ export const DragAndDropInput = ({
         )
       ];
 
-  const accept = validFileExtensions.every((e) => typeof e === 'string')
-    ? validFileExtensions.map((ext) => `${ext}`).join(',')
-    : undefined;
-
   return (
     <>
       <DropArea
@@ -136,10 +132,7 @@ export const DragAndDropInput = ({
           'aria-label': ariaLabel
         })}
       >
-        <input
-          data-testid={`hidden-file-input`}
-          {...getInputProps({ accept, name })}
-        />
+        <input data-testid={`hidden-file-input`} {...getInputProps({ name })} />
         <BiCloudUploadLarge />
         {children}
       </DropArea>
