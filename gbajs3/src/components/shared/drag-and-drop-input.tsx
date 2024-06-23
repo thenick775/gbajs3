@@ -106,10 +106,6 @@ export const DragAndDropInput = ({
         setAcceptedFileNames(acceptedFiles.map((file) => file.name));
         onDrop(acceptedFiles);
       },
-      onFileDialogCancel: () => {
-        setAcceptedFileNames([]);
-        onDrop([]);
-      },
       validator: validateFile(validFileExtensions)
     });
 

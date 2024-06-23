@@ -188,31 +188,6 @@ describe('<DragAndDropInput />', () => {
     expect(screen.getByText('test_file2.test')).toBeVisible();
   });
 
-  it('calls onDrop with empty array if file dialog is canceled', async () => {
-    const onDropSpy = vi.fn();
-
-    renderWithContext(
-      <DragAndDropInput
-        id="testId"
-        ariaLabel="Upload File"
-        name="testFile"
-        onDrop={onDropSpy}
-        validFileExtensions={['.test']}
-        multiple
-      >
-        <p>Upload file here</p>
-      </DragAndDropInput>
-    );
-
-    await userEvent.click(screen.getByLabelText('Upload File'));
-
-    // we can only test this indirectly, dropzone is listening for body focus
-    fireEvent.focus(document.body, { bubbles: true });
-
-    await waitFor(() => expect(onDropSpy).toHaveBeenCalledOnce());
-    expect(onDropSpy).toHaveBeenCalledWith([]);
-  });
-
   it('renders error if too many files are specified', async () => {
     const testFiles = [
       new File(['Some test file contents 1'], 'test_file1.test'),
