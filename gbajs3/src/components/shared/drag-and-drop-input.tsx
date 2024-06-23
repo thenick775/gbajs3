@@ -48,6 +48,10 @@ const BiCloudUploadLarge = styled(BiCloudUpload)`
   width: auto;
 `;
 
+const ErrorContainer = styled.div`
+  padding-top: 3px;
+`;
+
 const hasValidFileExtension = (file: File, validExtensions: Extension[]) => {
   const fileExtension = `.${file.name.split('.').pop()}`;
 
@@ -140,15 +144,17 @@ export const DragAndDropInput = ({
           ))}
         </CenteredTextContainer>
       )}
-      {!!rejectedFileErrors.length &&
-        !hideErrors &&
-        rejectedFileErrors.map((msg) => (
-          <ErrorWithIcon
-            key={msg}
-            icon={<BiError style={{ color: theme.errorRed }} />}
-            text={msg}
-          />
-        ))}
+      {!!rejectedFileErrors.length && !hideErrors && (
+        <ErrorContainer>
+          {rejectedFileErrors.map((msg) => (
+            <ErrorWithIcon
+              key={msg}
+              icon={<BiError style={{ color: theme.errorRed }} />}
+              text={msg}
+            />
+          ))}
+        </ErrorContainer>
+      )}
     </>
   );
 };
