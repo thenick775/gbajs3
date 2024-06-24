@@ -35,7 +35,7 @@ describe('<UploadSavesModal />', () => {
 
     await userEvent.upload(savesInput, testSaveFile);
 
-    expect(screen.getByText('Files to upload:')).toBeVisible();
+    expect(screen.getByText('File to upload:')).toBeVisible();
     expect(screen.getByText('rom1.sav')).toBeVisible();
 
     await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
@@ -44,7 +44,7 @@ describe('<UploadSavesModal />', () => {
     expect(uploadSaveOrSaveStateSpy).toHaveBeenCalledWith(testSaveFile);
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
-    expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
+    expect(screen.queryByText('File to upload:')).not.toBeInTheDocument();
     expect(screen.queryByText('rom1.sav')).not.toBeInTheDocument();
   });
 
@@ -99,7 +99,7 @@ describe('<UploadSavesModal />', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
 
     expect(
-      screen.getByText(/At least one .sav or .ss file is required/)
+      screen.getByText(/At least one .sav, or .ss file is required/)
     ).toBeVisible();
   });
 

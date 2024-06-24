@@ -36,7 +36,7 @@ describe('<UploadCheatsModal />', () => {
 
     await userEvent.upload(cheatsInput, testCheatFile);
 
-    expect(screen.getByText('Files to upload:')).toBeVisible();
+    expect(screen.getByText('File to upload:')).toBeVisible();
     expect(screen.getByText('rom1.cheats')).toBeVisible();
 
     await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
@@ -45,7 +45,7 @@ describe('<UploadCheatsModal />', () => {
     expect(uploadCheatsSpy).toHaveBeenCalledWith(testCheatFile);
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
-    expect(screen.queryByText('Files to upload:')).not.toBeInTheDocument();
+    expect(screen.queryByText('File to upload:')).not.toBeInTheDocument();
     expect(screen.queryByText('rom1.cheats')).not.toBeInTheDocument();
   });
 

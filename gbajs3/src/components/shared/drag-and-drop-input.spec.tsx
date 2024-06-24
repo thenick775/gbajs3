@@ -265,9 +265,7 @@ describe('<DragAndDropInput />', () => {
     fireEvent.dragEnter(dropArea, data);
     fireEvent.drop(dropArea, data);
 
-    expect(
-      await screen.findByText('At least one .test file is required')
-    ).toBeVisible();
+    expect(await screen.findByText('One .test file is required')).toBeVisible();
 
     expect(onDropSpy).toHaveBeenCalledOnce();
     expect(onDropSpy).toHaveBeenCalledWith([]);
@@ -308,11 +306,72 @@ describe('<DragAndDropInput />', () => {
     fireEvent.dragEnter(dropArea, data);
     fireEvent.drop(dropArea, data);
 
-    expect(
-      await screen.findByText('At least one .test file is required')
-    ).toBeVisible();
+    expect(await screen.findByText('One .test file is required')).toBeVisible();
 
     expect(onDropSpy).toHaveBeenCalledOnce();
     expect(onDropSpy).toHaveBeenCalledWith([]);
+  });
+
+  it('renders error if files are partially rejected', async () => {
+    const testFiles = [
+      new File(['Some test file contents'], 'test_file.test'),
+      new File(['Some unknown file contents'], 'test_file.unknown')
+    ];
+    const onDropSpy = vi.fn();
+
+    renderWithContext(
+      <DragAndDropInput
+        id="testId"
+        ariaLabel="Upload File"
+        name="testFile"
+        onDrop={onDropSpy}
+        validFileExtensions={['.test']}
+        multiple
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
+    );
+
+    await userEvent.upload(screen.getByTestId('hidden-file-input'), testFiles);
+
+    expect(screen.getByText('File to upload:')).toBeVisible();
+    expect(screen.getByText('test_file.test')).toBeVisible();
+    expect(screen.getByText('Some files were rejected')).toBeVisible();
+  });
+
+  it('deletes file from the accepted file list', async () => {
+    const testFiles = [
+      new File(['Some test file contents 1'], 'test_file1.test'),
+      new File(['Some test file contents 2'], 'test_file2.test')
+    ];
+    const onDropSpy = vi.fn();
+
+    renderWithContext(
+      <DragAndDropInput
+        id="testId"
+        ariaLabel="Upload File"
+        name="testFile"
+        onDrop={onDropSpy}
+        validFileExtensions={['.test']}
+        multiple
+      >
+        <p>Upload file here</p>
+      </DragAndDropInput>
+    );
+
+    await userEvent.upload(screen.getByTestId('hidden-file-input'), testFiles);
+
+    expect(screen.getByText('Files to upload:')).toBeVisible();
+    expect(screen.getByText('test_file1.test')).toBeVisible();
+    expect(screen.getByText('test_file2.test')).toBeVisible();
+
+    await userEvent.click(screen.getByLabelText('Delete test_file2.test'));
+
+    expect(onDropSpy).toHaveBeenCalledTimes(2);
+    expect(onDropSpy).toHaveBeenLastCalledWith([testFiles[0]]);
+
+    expect(screen.getByText('File to upload:')).toBeVisible();
+    expect(screen.getByText('test_file1.test')).toBeVisible();
+    expect(screen.queryByText('test_file2.test')).not.toBeInTheDocument();
   });
 });

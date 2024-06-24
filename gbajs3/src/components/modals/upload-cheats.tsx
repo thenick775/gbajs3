@@ -34,9 +34,10 @@ export const UploadCheatsModal = () => {
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
+      reset();
       setValue('cheatFiles', acceptedFiles, { shouldValidate: true });
     },
-    [setValue]
+    [reset, setValue]
   );
 
   const onSubmit: SubmitHandler<InputProps> = ({ cheatFiles }) => {
@@ -89,6 +90,7 @@ export const UploadCheatsModal = () => {
                 validFileExtensions={validFileExtensions}
                 error={error?.message}
                 hideAcceptedFiles={!value?.length}
+                hideErrors={isSubmitSuccessful}
                 multiple
               >
                 <p>

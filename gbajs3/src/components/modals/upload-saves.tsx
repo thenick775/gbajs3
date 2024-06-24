@@ -19,8 +19,8 @@ type InputProps = {
 };
 
 const validFileExtensions = [
-  { regex: /\.ss[0-9]+/, displayText: '.ss' },
-  '.sav'
+  '.sav',
+  { regex: /\.ss[0-9]+/, displayText: '.ss' }
 ];
 
 export const UploadSavesModal = () => {
@@ -37,9 +37,10 @@ export const UploadSavesModal = () => {
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
+      reset();
       setValue('saveFiles', acceptedFiles, { shouldValidate: true });
     },
-    [setValue]
+    [reset, setValue]
   );
 
   const onSubmit: SubmitHandler<InputProps> = ({ saveFiles }) => {
@@ -81,7 +82,7 @@ export const UploadSavesModal = () => {
             rules={{
               validate: (saveFiles) =>
                 saveFiles?.length > 0 ||
-                'At least one .sav or .ss file is required'
+                'At least one .sav, or .ss file is required'
             }}
             render={({ field: { name, value }, fieldState: { error } }) => (
               <DragAndDropInput
@@ -92,6 +93,7 @@ export const UploadSavesModal = () => {
                 validFileExtensions={validFileExtensions}
                 error={error?.message}
                 hideAcceptedFiles={!value?.length}
+                hideErrors={isSubmitSuccessful}
                 multiple
               >
                 <p>

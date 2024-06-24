@@ -1,12 +1,10 @@
-import { useState } from 'react';
+import { IconButton } from '@mui/material';
+import { useState, type ReactNode } from 'react';
 import { ErrorCode, useDropzone } from 'react-dropzone';
-import { BiCloudUpload, BiError } from 'react-icons/bi';
+import { BiCloudUpload, BiError, BiTrash } from 'react-icons/bi';
 import { styled, useTheme } from 'styled-components';
 
 import { ErrorWithIcon } from './error-with-icon.tsx';
-import { CenteredTextContainer } from './styled.tsx';
-
-import type { ReactNode } from 'react';
 
 type Extension = RegexValidator | string;
 
@@ -52,6 +50,67 @@ const ErrorContainer = styled.div`
   padding-top: 3px;
 `;
 
+const FileList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  max-width: 100%;
+  padding: 10px 5px 5px 5px;
+
+  > p {
+    margin: 0;
+  }
+`;
+
+const AcceptedFile = styled.li`
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+
+  > p {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;
+
+const IconSeparator = styled.div`
+  display: flex;
+  gap: 15px;
+`;
+
+const AcceptedFiles = ({
+  fileNames,
+  onDeleteFile
+}: {
+  fileNames: string[];
+  onDeleteFile: (fileName: string) => void;
+}) => {
+  return (
+    <FileList>
+      <p>File{fileNames.length > 1 && 's'} to upload:</p>
+      {fileNames.map((name, idx) => (
+        <AcceptedFile key={`${name}_${idx}`}>
+          <p>{name}</p>
+          <IconSeparator>
+            <IconButton
+              aria-label={`Delete ${name}`}
+              sx={{ padding: 0 }}
+              onClick={() => onDeleteFile(name)}
+            >
+              <BiTrash />
+            </IconButton>
+          </IconSeparator>
+        </AcceptedFile>
+      ))}
+    </FileList>
+  );
+};
+
 const hasValidFileExtension = (file: File, validExtensions: Extension[]) => {
   const fileExtension = `.${file.name.split('.').pop()}`;
 
@@ -63,14 +122,18 @@ const hasValidFileExtension = (file: File, validExtensions: Extension[]) => {
 const getDescription = (extension: Extension) =>
   typeof extension === 'string' ? extension : extension.displayText;
 
-const validateFile = (validFileExtensions: Extension[]) => {
+const validateFile = (validFileExtensions: Extension[], multiple: boolean) => {
+  if (!validFileExtensions.length) return undefined;
+
+  const prefix = multiple ? 'At least one' : 'One';
+
   let fileRequiredError =
-    'One ' +
+    `${prefix} ` +
     validFileExtensions.slice(0, -1).map(getDescription).join(', ') +
-    `, or ${validFileExtensions.slice(-1)} file is required`;
+    `, or ${getDescription(validFileExtensions.slice(-1)[0])} file is required`;
 
   if (validFileExtensions.length == 1) {
-    fileRequiredError = `At least one ${getDescription(
+    fileRequiredError = `${prefix} ${getDescription(
       validFileExtensions[0]
     )} file is required`;
   }
@@ -102,19 +165,21 @@ export const DragAndDropInput = ({
   validFileExtensions
 }: DragAndDropInputProps) => {
   const theme = useTheme();
-  const [acceptedFileNames, setAcceptedFileNames] = useState<string[]>([]);
+  const [acceptedFiles, setAcceptedFiles] = useState<File[]>([]);
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
       multiple,
       onDrop: (acceptedFiles) => {
-        setAcceptedFileNames(acceptedFiles.map((file) => file.name));
+        setAcceptedFiles(acceptedFiles);
         onDrop(acceptedFiles);
       },
-      validator: validateFile(validFileExtensions)
+      validator: validateFile(validFileExtensions, multiple)
     });
 
   const rejectedFileErrors = error
     ? [error]
+    : fileRejections.length && acceptedFiles.length
+    ? ['Some files were rejected']
     : [
         ...new Set(
           fileRejections
@@ -122,6 +187,14 @@ export const DragAndDropInput = ({
             .map((error) => error.message)
         )
       ];
+
+  const onDeleteFile = (name: string) => {
+    const files = acceptedFiles.filter((file) => file.name !== name);
+    setAcceptedFiles(files);
+    onDrop(files);
+  };
+
+  const acceptedFileNames = acceptedFiles.map((file) => file.name);
 
   return (
     <>
@@ -137,12 +210,10 @@ export const DragAndDropInput = ({
         {children}
       </DropArea>
       {!!acceptedFileNames.length && !hideAcceptedFiles && (
-        <CenteredTextContainer>
-          <p>File{multiple && 's'} to upload:</p>
-          {acceptedFileNames.map((name, idx) => (
-            <p key={`${name}_${idx}`}>{name}</p>
-          ))}
-        </CenteredTextContainer>
+        <AcceptedFiles
+          fileNames={acceptedFileNames}
+          onDeleteFile={onDeleteFile}
+        />
       )}
       {!!rejectedFileErrors.length && !hideErrors && (
         <ErrorContainer>
