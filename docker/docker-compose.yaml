@@ -1,7 +1,7 @@
 version: '2.1'
 services:
-    webserver:
-        image: nginx
+    gba-webserver:
+        image: gba-webserver
         logging:
             options:
                 max-size: '20m'
@@ -9,7 +9,7 @@ services:
             driver: json-file
         build:
             context: ..
-            dockerfile: ./docker/server/nginx/Dockerfile
+            dockerfile: ./gbajs3/Dockerfile
             args:
                 CLIENT_HOST: ${CLIENT_HOST}
         ports:
@@ -20,9 +20,6 @@ services:
             - gba-admin-server
         environment:
             - CLIENT_HOST=${CLIENT_HOST}
-        cap_add:
-            - NET_ADMIN
-            - NET_RAW
         volumes:
             - ${CERT_LOC}:/certs/fullchain.pem
             - ${KEY_LOC}:/certs/privkey.pem
@@ -35,8 +32,8 @@ services:
                 max-file: '3'
             driver: json-file
         build:
-            context: .
-            dockerfile: ./server/admin/Dockerfile
+            context: ..
+            dockerfile: ./admin/Dockerfile
         depends_on:
             gba-postgres:
                 condition: service_healthy
@@ -62,8 +59,8 @@ services:
                 max-file: '3'
             driver: json-file
         build:
-            context: .
-            dockerfile: ./server/auth/Dockerfile
+            context: ..
+            dockerfile: ./auth/Dockerfile
         depends_on:
             gba-postgres:
                 condition: service_healthy
@@ -89,8 +86,8 @@ services:
                 max-file: '3'
             driver: json-file
         build:
-            context: .
-            dockerfile: ./server/postgres/Dockerfile
+            context: ..
+            dockerfile: ./postgres/Dockerfile
             args:
                 PG_DB_USER: ${PG_DB_USER}
         environment:
