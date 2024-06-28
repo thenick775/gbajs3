@@ -80,9 +80,10 @@ Do not attempt to log into the server unless you are the server owner or an appr
 * This will generate a `.env` file of the format:
     ```
     # gbajs3
-    ROM_PATH=./<local-server-rom-path>/
-    SAVE_PATH=./<local-server-save-path>/
-    CLIENT_HOST=https://<your-client-location>
+    ROM_PATH=./<local server rom path>/
+    SAVE_PATH=./<local server save path>/
+    CLIENT_HOST=https://<your client location>
+    CERT_DIR=./<path to your certificate root directory>
     CERT_LOC=./<path to your certificate>
     KEY_LOC=./<path to your key>
 
@@ -97,7 +98,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
     ADMIN_DB_NAME=<your goadmin database name, default `goadmin`>
     PG_DB_PORT=<postgres db port, default 5432>
     PG_SSL_MODE=<pg ssl mode>
-    PG_DATA_LOCATION=./<path to postgres persistent mount point>
+    PG_DATA_LOCATION=./<path to postgres persistent bind mount point>
     ```
 
     Leaving all default values in place will work for local development.
@@ -107,7 +108,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
     source ./.env;
     ```
 
-* Create some configuration paths that don't yet exist:
+* Create configuration paths if they don't yet exist:
     ```
     mkdir $ROM_PATH;
     mkdir $SAVE_PATH;
@@ -120,7 +121,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
 
     Ex. [openssl](https://formulae.brew.sh/formula/openssl@1.1)
     ```
-    openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout $KEY_LOC -out $CERT_LOC 
+    openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout $KEY_LOC -out $CERT_LOC;
     ``` 
 
 * If your developing on a mac, you will need to share the bind mount location(s) manually, and ensure they have the correct permissions
