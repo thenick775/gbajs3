@@ -70,19 +70,20 @@ Do not attempt to log into the server unless you are the server owner or an appr
 
 - Local builds require [docker](https://www.docker.com)
 
-- From the project root, navigate to the `docker` directory:
+- Run the bootstrap script and follow the interactive prompts:
 
   ```
-  cd ./docker;
+  ./bin/boostrap.sh;
   ```
 
-- Copy the `.env.example` for local builds:
+- The bootstrap script will do the following:
 
-  ```
-  cp .env.example .env;
-  ```
+  - copy env files from the examples in all directories
+  - create default local directories
+    - note: the database mount directory will be created by the container with the correct permissions
+  - generate a local test ssl certificate pair
 
-- This will generate a `.env` file of the format:
+- This script will generate a top level `.env` file of the following format merging all service specific env files:
 
   ```
   # gbajs3
@@ -109,30 +110,6 @@ Do not attempt to log into the server unless you are the server owner or an appr
 
   Leaving all default values in place will work for local development.
 
-- Source this env file to get easy access to the default paths:
-
-  ```
-  source ./.env;
-  ```
-
-- Create configuration paths if they don't yet exist:
-
-  ```
-  mkdir $ROM_PATH;
-  mkdir $SAVE_PATH;
-  mkdir $CERT_DIR;
-  ```
-
-  The database mount directory will be created by the container with the correct permissions for your user.
-
-- Generate test SSL certificates using your desired mechanism and move them to the default locations:
-
-  Ex. [openssl](https://formulae.brew.sh/formula/openssl@1.1)
-
-  ```
-  openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout $KEY_LOC -out $CERT_LOC;
-  ```
-
 - If your developing on a mac, you will need to share the bind mount location(s) manually, and ensure they have the correct permissions
 
   These settings are located in `Settings -> Resources -> File Sharing`
@@ -140,7 +117,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
 - Build and run the docker containers:
 
   ```
-  docker compose up --build;
+  docker compose up;
   ```
 
 - Once docker has created the containers, the web server will be available at https://localhost
@@ -151,7 +128,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
 
 - Golang api swagger UI can be found at https://localhost/api/documentation/
 
-- To run each service individually without docker, see the nested READMEs under `./docker/server/`
+- To run each service individually, with or without docker, see the nested READMEs under each top level service directory
 
 ## Contributing
 
