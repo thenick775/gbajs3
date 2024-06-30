@@ -9,7 +9,7 @@ read "REPLY?Do you want to copy .env.example to .env in all directories? (y/n) "
 if [[ $REPLY == "y" || $REPLY == "Y" ]]; then
   for dir in "${env_directories[@]}"; do
     if [ -d "$dir" ]; then
-      cp "$dir/.env.example" "$dir/.env"
+      cp "$dir/.env.example" "$dir/.env" && \
       echo "Copied .env.example to .env in $dir"
     else
       echo "Directory $dir does not exist."
@@ -21,7 +21,7 @@ fi
 
 # source the root env file for easy access to pre-defined paths
 if [ -f ./.env ]; then
-    source ./.env
+    source ./.env && \
     echo "root .env file sourced successfully."
 fi
 
@@ -40,7 +40,7 @@ done
 if [[ $REPLY == "y" || $REPLY == "Y" ]]; then
   for dir in "$ROM_PATH" "$SAVE_PATH" "$CERT_DIR"; do
     if [ ! -d "$dir" ]; then
-      mkdir -p "$dir"
+      mkdir -p "$dir" && \
       echo "Created directory: $dir"
     else
       echo "Directory already exists: $dir"
