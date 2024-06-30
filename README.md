@@ -99,8 +99,8 @@ Do not attempt to log into the server unless you are the server owner or an appr
 
   # postgres
   PG_DB_HOST=<database host>
-  PG_DB_USER=<databse user>
-  PG_DB_PASSWORD=<databse user password>
+  PG_DB_USER=<database user>
+  PG_DB_PASSWORD=<database user password>
   GBAJS_DB_NAME=<your gbajs3 database name, default `gbajs3`>
   ADMIN_DB_NAME=<your goadmin database name, default `goadmin`>
   PG_DB_PORT=<postgres db port, default 5432>
