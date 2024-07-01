@@ -8,8 +8,6 @@ This project was driven specifically by a need to play modern GBA rom hacks outs
 
 Use it online! <https://gba.nicholas-vancise.dev>
 
-Note: legacy features are still available in the [v1 link](https://gba.nicholas-vancise.dev/v1/), you may need to clear your cookies to use v1.
-
 Do not attempt to log into the server unless you are the server owner or an approved user, your IP may be banned.
 
 ## New Feature List
@@ -22,12 +20,10 @@ Do not attempt to log into the server unless you are the server owner or an appr
 - Movable desktop canvas and controls
 - Mobile UI support
 - Offline PWA Support
-- ~~Functional Surface-level ASM debugger (gbajs only)~~ (available in legacy v1)
 - Save state support
 - Cheat code support
 - Core Support
   - mGBA support (wasm based)
-  - ~~gbajs support (pure javascript)~~ (available in legacy v1)
 - Admin UI
 - Postgres support
 - Persistent file system utilizing IndexedDB
@@ -40,9 +36,6 @@ Do not attempt to log into the server unless you are the server owner or an appr
   - [compatibility list](https://wiki.gbatemp.net/wiki/MGBA)
   - [mGBA wasm fork Readme](https://github.com/thenick775/mgba/tree/feature/wasm)
   - [official mGBA Readme](https://github.com/mgba-emu/mgba)
-- ~~For additional gbajs2 features and information:~~ (available in legacy v1)
-  - ~~[Compatibility](https://github.com/andychase/gbajs2/wiki/Compatibility-List)~~
-  - ~~[Emulator features](https://github.com/andychase/gbajs2)~~
 
 ## To Do
 
