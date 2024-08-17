@@ -126,7 +126,7 @@ const fallbackRender = ({
         <Button
           color="secondary"
           variant="contained"
-          onClick={() => resetErrorBoundary()}
+          onClick={resetErrorBoundary}
         >
           Dismiss and reset
         </Button>
