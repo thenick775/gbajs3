@@ -6,9 +6,9 @@ import { FileSystemOptionsForm } from './file-system-options-form.tsx';
 import { renderWithContext } from '../../../../test/render-with-context.tsx';
 import * as addCallbacksHooks from '../../../hooks/emulator/use-add-callbacks.tsx';
 
-import type { FileSystemOptions } from '../../../hooks/emulator/use-add-callbacks.tsx';
+import type { CoreCallbackOptions } from '../../../hooks/emulator/use-add-callbacks.tsx';
 
-describe('', () => {
+describe('<FileSystemOptionsForm />', () => {
   it('shows title and plus icon when collapsed', () => {
     renderWithContext(<FileSystemOptionsForm id="testId" />);
 
@@ -32,7 +32,7 @@ describe('', () => {
   });
 
   it('saves file system options', async () => {
-    const addCallbacksAndSaveSettingsSpy: (f: FileSystemOptions) => void =
+    const addCallbacksAndSaveSettingsSpy: (f: CoreCallbackOptions) => void =
       vi.fn();
 
     vi.spyOn(addCallbacksHooks, 'useAddCallbacks').mockImplementation(() => ({
@@ -46,10 +46,11 @@ describe('', () => {
 
     const submitButton = screen.getByRole('button', { name: 'Save Options' });
 
-    // change checkbox value
+    // change values
     await userEvent.click(
       screen.getByLabelText('Save file system on in-game save')
     );
+    await userEvent.click(screen.getByLabelText('Enable Notifications'));
     // submit form
     await userEvent.click(submitButton);
 
@@ -57,7 +58,7 @@ describe('', () => {
     expect(addCallbacksAndSaveSettingsSpy).toHaveBeenCalledWith(
       {
         saveFileSystemOnInGameSave: true,
-        notificationsEnabled: false
+        notificationsEnabled: true
       },
       expect.anything()
     );

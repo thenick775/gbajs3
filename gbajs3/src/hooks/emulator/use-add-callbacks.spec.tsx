@@ -3,16 +3,16 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { useAddCallbacks } from './use-add-callbacks.tsx';
 import { renderHookWithContext } from '../../../test/render-hook-with-context.tsx';
-import { emulatorFSOptionsLocalStorageKey } from '../../context/emulator/consts.ts';
+import { emulatorCoreCallbacksLocalStorageKey } from '../../context/emulator/consts.ts';
 import * as contextHooks from '../../hooks/context.tsx';
 
-import type { FileSystemOptions } from './use-add-callbacks';
+import type { CoreCallbackOptions } from './use-add-callbacks.tsx';
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
 describe('useAddCallbacks hook', () => {
   describe('addCallbacks', () => {
     it('adds saveDataUpdatedCallback to emulator', () => {
-      const emulatorAddCoreCallbacksSpy: (f: FileSystemOptions) => void =
+      const emulatorAddCoreCallbacksSpy: (f: CoreCallbackOptions) => void =
         vi.fn();
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -36,7 +36,7 @@ describe('useAddCallbacks hook', () => {
     });
 
     it('clears saveDataUpdatedCallback', () => {
-      const emulatorAddCoreCallbacksSpy: (f: FileSystemOptions) => void =
+      const emulatorAddCoreCallbacksSpy: (f: CoreCallbackOptions) => void =
         vi.fn();
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -62,7 +62,7 @@ describe('useAddCallbacks hook', () => {
 
   describe('addCallbacksAndSaveSettings', () => {
     it('persists args to storage and adds callbacks if emulator is running', () => {
-      const emulatorAddCoreCallbacksSpy: (f: FileSystemOptions) => void =
+      const emulatorAddCoreCallbacksSpy: (f: CoreCallbackOptions) => void =
         vi.fn();
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -84,13 +84,14 @@ describe('useAddCallbacks hook', () => {
 
       act(() => {
         result.current.addCallbacksAndSaveSettings({
-          saveFileSystemOnInGameSave: true
+          saveFileSystemOnInGameSave: true,
+          notificationsEnabled: true
         });
       });
 
       expect(setItemSpy).toHaveBeenCalledWith(
-        emulatorFSOptionsLocalStorageKey,
-        '{"saveFileSystemOnInGameSave":true}'
+        emulatorCoreCallbacksLocalStorageKey,
+        '{"saveFileSystemOnInGameSave":true,"notificationsEnabled":true}'
       );
 
       expect(emulatorAddCoreCallbacksSpy).toHaveBeenCalledOnce();
@@ -100,7 +101,7 @@ describe('useAddCallbacks hook', () => {
     });
 
     it('persists args to storage and clears callbacks if emulator is running', () => {
-      const emulatorAddCoreCallbacksSpy: (f: FileSystemOptions) => void =
+      const emulatorAddCoreCallbacksSpy: (f: CoreCallbackOptions) => void =
         vi.fn();
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -127,7 +128,7 @@ describe('useAddCallbacks hook', () => {
       });
 
       expect(setItemSpy).toHaveBeenCalledWith(
-        emulatorFSOptionsLocalStorageKey,
+        emulatorCoreCallbacksLocalStorageKey,
         '{"saveFileSystemOnInGameSave":false}'
       );
 
@@ -138,7 +139,7 @@ describe('useAddCallbacks hook', () => {
     });
 
     it('persists args to storage and does not call emulator if not running', () => {
-      const emulatorAddCoreCallbacksSpy: (f: FileSystemOptions) => void =
+      const emulatorAddCoreCallbacksSpy: (f: CoreCallbackOptions) => void =
         vi.fn();
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -155,13 +156,14 @@ describe('useAddCallbacks hook', () => {
 
       act(() => {
         result.current.addCallbacksAndSaveSettings({
-          saveFileSystemOnInGameSave: true
+          saveFileSystemOnInGameSave: true,
+          notificationsEnabled: true
         });
       });
 
       expect(setItemSpy).toHaveBeenCalledWith(
-        emulatorFSOptionsLocalStorageKey,
-        '{"saveFileSystemOnInGameSave":true}'
+        emulatorCoreCallbacksLocalStorageKey,
+        '{"saveFileSystemOnInGameSave":true,"notificationsEnabled":true}'
       );
 
       expect(emulatorAddCoreCallbacksSpy).not.toHaveBeenCalled();

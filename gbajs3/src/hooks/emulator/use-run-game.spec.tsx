@@ -7,12 +7,12 @@ import {
   emulatorGameNameLocalStorageKey,
   emulatorFFMultiplierLocalStorageKey,
   emulatorKeyBindingsLocalStorageKey,
-  emulatorFSOptionsLocalStorageKey
+  emulatorCoreCallbacksLocalStorageKey
 } from '../../context/emulator/consts.ts';
 import * as contextHooks from '../../hooks/context.tsx';
 import * as addCallbacksHooks from '../../hooks/emulator/use-add-callbacks.tsx';
 
-import type { FileSystemOptions } from './use-add-callbacks.tsx';
+import type { CoreCallbackOptions } from './use-add-callbacks.tsx';
 import type {
   GBAEmulator,
   KeyBinding
@@ -76,7 +76,7 @@ describe('useRunGame hook', () => {
 
     localStorage.setItem(emulatorFFMultiplierLocalStorageKey, '2');
     localStorage.setItem(
-      emulatorFSOptionsLocalStorageKey,
+      emulatorCoreCallbacksLocalStorageKey,
       '{"saveFileSystemOnInGameSave": true}'
     );
 
@@ -86,7 +86,7 @@ describe('useRunGame hook', () => {
       vi.fn();
     const emulatorSetFastForwardMultiplierSpy: (multiplier: number) => void =
       vi.fn();
-    const addCallbacksSpy: (f: FileSystemOptions) => void = vi.fn();
+    const addCallbacksSpy: (f: CoreCallbackOptions) => void = vi.fn();
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       setCanvas: vi.fn(),

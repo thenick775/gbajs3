@@ -4,14 +4,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { css, styled } from 'styled-components';
 
-import { emulatorFSOptionsLocalStorageKey } from '../../../context/emulator/consts.ts';
+import { emulatorCoreCallbacksLocalStorageKey } from '../../../context/emulator/consts.ts';
 import { useAddCallbacks } from '../../../hooks/emulator/use-add-callbacks.tsx';
 import { MinusSquare, PlusSquare } from '../../shared/action-box-icons.tsx';
 import { ButtonBase } from '../../shared/custom-button-base.tsx';
 import { ManagedCheckbox } from '../../shared/managed-checkbox.tsx';
 import { ManagedSwitch } from '../../shared/managed-switch.tsx';
 
-import type { FileSystemOptions } from '../../../hooks/emulator/use-add-callbacks.tsx';
+import type { CoreCallbackOptions } from '../../../hooks/emulator/use-add-callbacks.tsx';
 
 type FileSystemOptionsFormProps = {
   id: string;
@@ -52,14 +52,14 @@ const OptionsFormToggle = styled(ButtonBase)`
 `;
 
 export const FileSystemOptionsForm = ({ id }: FileSystemOptionsFormProps) => {
-  const [fileSystemOptions] = useLocalStorage<FileSystemOptions | undefined>(
-    emulatorFSOptionsLocalStorageKey
-  );
+  const [coreCallbackOptions] = useLocalStorage<
+    CoreCallbackOptions | undefined
+  >(emulatorCoreCallbacksLocalStorageKey);
   const { addCallbacksAndSaveSettings } = useAddCallbacks();
   const [areOptionsVisible, setAreOptionsVisible] = useState(false);
 
-  const { register, handleSubmit, watch } = useForm<FileSystemOptions>({
-    values: fileSystemOptions,
+  const { register, handleSubmit, watch } = useForm<CoreCallbackOptions>({
+    values: coreCallbackOptions,
     resetOptions: {
       keepDirtyValues: true
     }

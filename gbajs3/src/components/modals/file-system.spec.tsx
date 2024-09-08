@@ -32,7 +32,6 @@ describe('<FileSystemModal />', () => {
   };
 
   it('renders main sections', async () => {
-    const listAllFilesSpy = vi.fn(() => defaultFSData);
     const { useEmulatorContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
@@ -41,7 +40,7 @@ describe('<FileSystemModal />', () => {
       return {
         ...original(),
         emulator: {
-          listAllFiles: listAllFilesSpy as () => FileNode
+          listAllFiles: () => defaultFSData
         } as GBAEmulator
       };
     });
