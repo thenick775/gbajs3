@@ -1,14 +1,17 @@
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback } from 'react';
 
+import { useAddCallbacks } from './use-add-callbacks.tsx';
 import {
   emulatorFFMultiplierLocalStorageKey,
   emulatorGameNameLocalStorageKey,
   emulatorKeyBindingsLocalStorageKey,
-  emulatorVolumeLocalStorageKey
+  emulatorVolumeLocalStorageKey,
+  emulatorFSOptionsLocalStorageKey
 } from '../../context/emulator/consts.ts';
 import { useEmulatorContext, useRunningContext } from '../context.tsx';
 
+import type { FileSystemOptions } from './use-add-callbacks.tsx';
 import type { KeyBinding } from '../../emulator/mgba/mgba-emulator.tsx';
 
 export const useRunGame = () => {
@@ -28,6 +31,11 @@ export const useRunGame = () => {
     emulatorFFMultiplierLocalStorageKey,
     1
   );
+  const [fileSystemOptions] = useLocalStorage<FileSystemOptions>(
+    emulatorFSOptionsLocalStorageKey,
+    { saveFileSystemOnInGameSave: false }
+  );
+  const { addCallbacks } = useAddCallbacks();
 
   const run = useCallback(
     (romPath: string) => {
@@ -41,15 +49,19 @@ export const useRunGame = () => {
 
         if (fastForwardMultiplier > 1 && !emulator?.isFastForwardEnabled())
           emulator?.setFastForwardMultiplier(fastForwardMultiplier);
+
+        addCallbacks(fileSystemOptions);
       }
 
       return !!isSuccessfulRun;
     },
     [
+      addCallbacks,
       currentEmulatorVolume,
       currentKeyBindings,
       emulator,
       fastForwardMultiplier,
+      fileSystemOptions,
       setIsRunning,
       setStoredGameName
     ]
