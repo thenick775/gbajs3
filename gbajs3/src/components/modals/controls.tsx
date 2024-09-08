@@ -13,6 +13,7 @@ import {
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
+import { ControlProfilesForm } from './controls/control-profiles-form.tsx';
 
 type TabPanelProps = {
   children: ReactNode;
@@ -78,12 +79,15 @@ const ControlTabs = ({
   return (
     <>
       <TabsWithBorder
+        variant="scrollable"
         value={value}
         onChange={handleTabChange}
         aria-label="Control tabs"
+        allowScrollButtonsMobile
       >
         <Tab label="Virtual Controls" {...a11yProps(0)} />
         <Tab label="Key Bindings" {...a11yProps(1)} />
+        <Tab label="Profiles" {...a11yProps(1)} />
       </TabsWithBorder>
       <TabPanel value={value} index={0}>
         <VirtualControlsForm
@@ -100,6 +104,12 @@ const ControlTabs = ({
       </TabPanel>
       <TabPanel value={value} index={1}>
         <KeyBindingsForm id={keyBindingsFormId} onAfterSubmit={onAfterSubmit} />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <ControlProfilesForm
+          id={virtualControlsFormId}
+          onAfterSubmit={onAfterSubmit}
+        />
       </TabPanel>
     </>
   );
