@@ -1,5 +1,6 @@
-import { IconButton } from '@mui/material';
+import { Collapse, IconButton } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
+import { useState } from 'react';
 import { BiPlus, BiTrash, BiShow, BiEdit } from 'react-icons/bi';
 import { styled } from 'styled-components';
 
@@ -97,6 +98,7 @@ ControlProfilesFormProps) => {
     VirtualControlProfiles | undefined
   >(virtualControlProfilesLocalStorageKey);
   const { layouts, setLayouts } = useLayoutContext();
+  const [shownProfile, setShownProfile] = useState<string | undefined>();
 
   const addProfile = () => {
     setVirtualControlProfiles((prevState) => [
@@ -120,36 +122,44 @@ ControlProfilesFormProps) => {
       <ProfilesList id={id}>
         {virtualControlProfiles?.map?.(
           (profile: VirtualControlProfile, idx: number) => (
-            <StyledLi key={`${profile.name}_${idx}`}>
-              <LoadProfileButton onClick={() => setLayouts(profile.layouts)}>
-                {profile.name}
-              </LoadProfileButton>
-              <IconButton
-                aria-label={`Edit ${profile.name}`}
-                sx={{ padding: 0 }}
-                onClick={() => {
-                  console.log('edit', profile.name);
-                }}
-              >
-                <StyledBiEdit />
-              </IconButton>
-              <IconButton
-                aria-label={`Show ${profile.name}`}
-                sx={{ padding: 0 }}
-                onClick={() => {
-                  console.log('show', profile.name);
-                }}
-              >
-                <StyledBiShow />
-              </IconButton>
-              <IconButton
-                aria-label={`Delete ${profile.name}`}
-                sx={{ padding: 0 }}
-                onClick={() => deleteProfile(profile.name)}
-              >
-                <StyledCiCircleRemove />
-              </IconButton>
-            </StyledLi>
+            <>
+              <StyledLi key={`${profile.name}_${idx}`}>
+                <LoadProfileButton onClick={() => setLayouts(profile.layouts)}>
+                  {profile.name}
+                </LoadProfileButton>
+                <IconButton
+                  aria-label={`Edit ${profile.name}`}
+                  sx={{ padding: 0 }}
+                  onClick={() => {
+                    console.log('edit', profile.name);
+                  }}
+                >
+                  <StyledBiEdit />
+                </IconButton>
+                <IconButton
+                  aria-label={`Show ${profile.name}`}
+                  sx={{ padding: 0 }}
+                  onClick={() => {
+                    console.log('show', profile.name);
+                    setShownProfile(
+                      profile.name === shownProfile ? undefined : profile.name
+                    );
+                  }}
+                >
+                  <StyledBiShow />
+                </IconButton>
+                <IconButton
+                  aria-label={`Delete ${profile.name}`}
+                  sx={{ padding: 0 }}
+                  onClick={() => deleteProfile(profile.name)}
+                >
+                  <StyledCiCircleRemove />
+                </IconButton>
+              </StyledLi>
+              <Collapse in={shownProfile == profile.name}>
+                <pre>{JSON.stringify(profile.layouts, null, 2)}</pre>
+              </Collapse>
+            </>
           )
         )}
         {!virtualControlProfiles?.length && (
