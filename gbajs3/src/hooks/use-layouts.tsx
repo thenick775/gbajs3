@@ -1,13 +1,13 @@
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useMemo } from 'react';
 
-type Layout = {
+export type Layout = {
   position?: { x: number; y: number };
   size?: { width: string | number; height: string | number };
   initialBounds?: DOMRect;
 };
 
-type Layouts = {
+export type Layouts = {
   [key: string]: Layout;
 };
 

@@ -86,8 +86,8 @@ const ControlTabs = ({
         allowScrollButtonsMobile
       >
         <Tab label="Virtual Controls" {...a11yProps(0)} />
-        <Tab label="Key Bindings" {...a11yProps(1)} />
         <Tab label="Profiles" {...a11yProps(1)} />
+        <Tab label="Key Bindings" {...a11yProps(2)} />
       </TabsWithBorder>
       <TabPanel value={value} index={0}>
         <VirtualControlsForm
@@ -103,13 +103,13 @@ const ControlTabs = ({
         </Button>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <KeyBindingsForm id={keyBindingsFormId} onAfterSubmit={onAfterSubmit} />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
         <ControlProfilesForm
           id={virtualControlsFormId}
           onAfterSubmit={onAfterSubmit}
         />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <KeyBindingsForm id={keyBindingsFormId} onAfterSubmit={onAfterSubmit} />
       </TabPanel>
     </>
   );

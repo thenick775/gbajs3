@@ -1,77 +1,170 @@
-import { useMediaQuery } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { styled, useTheme } from 'styled-components';
+import { BiPlus, BiTrash, BiShow, BiEdit } from 'react-icons/bi';
+import { styled } from 'styled-components';
 
-import { virtualControlsLocalStorageKey } from '../../controls/consts.tsx';
+import { useLayoutContext } from '../../../hooks/context.tsx';
+import { virtualControlProfilesLocalStorageKey } from '../../controls/consts.tsx';
+import { CenteredText } from '../../shared/styled.tsx';
 
-type VirtualControlsFormProps = {
+import type { Layouts } from '../../../hooks/use-layouts.tsx';
+
+type ControlProfilesFormProps = {
   id: string;
   onAfterSubmit: () => void;
 };
 
-export type AreVirtualControlsEnabledProps = {
-  OpadAndButtons: boolean;
-  SaveState: boolean;
-  LoadState: boolean;
-  QuickReload: boolean;
-  SendSaveToServer: boolean;
-  NotificationsEnabled: boolean;
+type VirtualControlProfile = {
+  name: string;
+  active: boolean;
+  layouts: Layouts;
 };
 
-type ControlsInputProps = AreVirtualControlsEnabledProps;
+type VirtualControlProfiles = VirtualControlProfile[];
 
-const StyledForm = styled.form`
+const StyledBiPlus = styled(BiPlus)`
+  width: 25px;
+  height: 25px;
+`;
+
+const StyledLi = styled.li`
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto 32px 32px 32px;
+  gap: 10px;
+
+  color: ${({ theme }) => theme.blueCharcoal};
+  background-color: ${({ theme }) => theme.pureWhite};
+  border: 1px solid rgba(0, 0, 0, 0.125);
+`;
+
+const ProfilesList = styled.ul`
+  list-style-type: none;
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+
+  & > ${StyledLi}:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+  & > ${StyledLi}:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  & > ${StyledLi}:not(:first-child) {
+    border-top-width: 0;
+  }
+`;
+
+const StyledCiCircleRemove = styled(BiTrash)`
+  height: 100%;
+  width: 20px;
+`;
+
+const StyledBiShow = styled(BiShow)`
+  height: 100%;
+  width: 20px;
+`;
+
+const StyledBiEdit = styled(BiEdit)`
+  height: 100%;
+  width: 20px;
+`;
+
+const LoadProfileButton = styled.button`
+  padding: 0.5rem 0.5rem;
+  width: 100%;
+  color: ${({ theme }) => theme.blueCharcoal};
+  background-color: ${({ theme }) => theme.pureWhite};
+  border: none;
+  text-align: left;
+
+  &:hover {
+    color: ${({ theme }) => theme.darkGrayBlue};
+    background-color: ${({ theme }) => theme.aliceBlue1};
+  }
 `;
 
 export const ControlProfilesForm = ({
-  id,
-  onAfterSubmit
-}: VirtualControlsFormProps) => {
-  const [areVirtualControlsEnabled, setAreVirtualControlsEnabled] =
-    useLocalStorage<AreVirtualControlsEnabledProps | undefined>(
-      virtualControlsLocalStorageKey
-    );
-  const theme = useTheme();
-  const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
+  id
+}: // onAfterSubmit?
+ControlProfilesFormProps) => {
+  const [virtualControlProfiles, setVirtualControlProfiles] = useLocalStorage<
+    VirtualControlProfiles | undefined
+  >(virtualControlProfilesLocalStorageKey);
+  const { layouts, setLayouts } = useLayoutContext();
 
-  const shouldShowVirtualControl = (virtualControlEnabled?: boolean) => {
-    return (
-      (virtualControlEnabled === undefined && !isLargerThanPhone) ||
-      !!virtualControlEnabled
-    );
+  const addProfile = () => {
+    setVirtualControlProfiles((prevState) => [
+      ...(prevState ?? []),
+      {
+        name: `Profile-${prevState?.length ?? 0}`,
+        layouts: layouts,
+        active: true
+      }
+    ]);
   };
 
-  const { /*register,*/ handleSubmit /*, watch */ } =
-    useForm<ControlsInputProps>({
-      values: areVirtualControlsEnabled ?? {
-        OpadAndButtons: shouldShowVirtualControl(undefined),
-        SaveState: shouldShowVirtualControl(undefined),
-        LoadState: shouldShowVirtualControl(undefined),
-        QuickReload: shouldShowVirtualControl(undefined),
-        SendSaveToServer: shouldShowVirtualControl(undefined),
-        NotificationsEnabled: true
-      },
-      resetOptions: {
-        keepDirtyValues: true
-      }
-    });
-
-  const onSubmit: SubmitHandler<ControlsInputProps> = async (formData) => {
-    setAreVirtualControlsEnabled((prevState) => ({
-      ...prevState,
-      ...formData
-    }));
-    onAfterSubmit();
+  const deleteProfile = (name: string) => {
+    setVirtualControlProfiles((prevState) =>
+      prevState?.filter((p) => p.name !== name)
+    );
   };
 
   return (
-    <StyledForm
-      aria-label="Control Profiles Form"
-      id={id}
-      onSubmit={handleSubmit(onSubmit)}
-    ></StyledForm>
+    <>
+      <ProfilesList id={id}>
+        {virtualControlProfiles?.map?.(
+          (profile: VirtualControlProfile, idx: number) => (
+            <StyledLi key={`${profile.name}_${idx}`}>
+              <LoadProfileButton onClick={() => setLayouts(profile.layouts)}>
+                {profile.name}
+              </LoadProfileButton>
+              <IconButton
+                aria-label={`Edit ${profile.name}`}
+                sx={{ padding: 0 }}
+                onClick={() => {
+                  console.log('edit', profile.name);
+                }}
+              >
+                <StyledBiEdit />
+              </IconButton>
+              <IconButton
+                aria-label={`Show ${profile.name}`}
+                sx={{ padding: 0 }}
+                onClick={() => {
+                  console.log('show', profile.name);
+                }}
+              >
+                <StyledBiShow />
+              </IconButton>
+              <IconButton
+                aria-label={`Delete ${profile.name}`}
+                sx={{ padding: 0 }}
+                onClick={() => deleteProfile(profile.name)}
+              >
+                <StyledCiCircleRemove />
+              </IconButton>
+            </StyledLi>
+          )
+        )}
+        {!virtualControlProfiles?.length && (
+          <li>
+            <CenteredText>No control profiles</CenteredText>
+          </li>
+        )}
+      </ProfilesList>
+      <IconButton
+        aria-label={`Create new profile`}
+        sx={{ padding: 0 }}
+        onClick={() => addProfile()}
+      >
+        <StyledBiPlus />
+      </IconButton>
+    </>
   );
 };
