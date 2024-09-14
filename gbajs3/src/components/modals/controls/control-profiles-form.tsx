@@ -1,7 +1,14 @@
 import { Collapse, IconButton, TextField } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useState } from 'react';
-import { BiPlus, BiTrash, BiShow, BiEdit } from 'react-icons/bi';
+import {
+  BiPlus,
+  BiTrash,
+  BiShow,
+  BiHide,
+  BiEdit,
+  BiSave
+} from 'react-icons/bi';
 import { styled } from 'styled-components';
 
 import { useLayoutContext } from '../../../hooks/context.tsx';
@@ -9,6 +16,8 @@ import { virtualControlProfilesLocalStorageKey } from '../../controls/consts.tsx
 import { CenteredText } from '../../shared/styled.tsx';
 
 import type { Layouts } from '../../../hooks/use-layouts.tsx';
+import type { IconButtonProps } from '@mui/material';
+import type { ReactNode } from 'react';
 
 type ControlProfilesFormProps = {
   id: string;
@@ -71,7 +80,17 @@ const StyledBiShow = styled(BiShow)`
   width: 20px;
 `;
 
+const StyledBiHide = styled(BiHide)`
+  height: 100%;
+  width: 20px;
+`;
+
 const StyledBiEdit = styled(BiEdit)`
+  height: 100%;
+  width: 20px;
+`;
+
+const StyledBiSave = styled(BiSave)`
   height: 100%;
   width: 20px;
 `;
@@ -89,6 +108,21 @@ const LoadProfileButton = styled.button`
     background-color: ${({ theme }) => theme.aliceBlue1};
   }
 `;
+
+const StatefulIconButton = ({
+  condition,
+  truthyIcon,
+  falsyIcon,
+  ...rest
+}: {
+  condition: boolean;
+  truthyIcon: ReactNode;
+  falsyIcon: ReactNode;
+} & IconButtonProps) => (
+  <IconButton sx={{ padding: 0 }} {...rest}>
+    {condition ? truthyIcon : falsyIcon}
+  </IconButton>
+);
 
 export const ControlProfilesForm = ({
   id
@@ -112,6 +146,20 @@ ControlProfilesFormProps) => {
     ]);
   };
 
+  const updateProfile = (name: string, updatedName: string) => {
+    setVirtualControlProfiles((prevState) =>
+      prevState?.map((profile) => {
+        if (profile.name == name)
+          return {
+            ...profile,
+            name: updatedName
+          };
+
+        return profile;
+      })
+    );
+  };
+
   const deleteProfile = (name: string) => {
     setVirtualControlProfiles((prevState) =>
       prevState?.filter((p) => p.name !== name)
@@ -128,9 +176,14 @@ ControlProfilesFormProps) => {
                 {editProfile === profile.name ? (
                   <TextField
                     variant="standard"
-                    value={profile.name}
-                    size="small"
-                    sx={{ padding: '0 0.5rem' }}
+                    defaultValue={profile.name}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: 13,
+                        height: 16,
+                        padding: 1
+                      }
+                    }}
                   />
                 ) : (
                   <LoadProfileButton
@@ -139,28 +192,31 @@ ControlProfilesFormProps) => {
                     {profile.name}
                   </LoadProfileButton>
                 )}
-                <IconButton
+                <StatefulIconButton
+                  condition={editProfile == profile.name}
+                  truthyIcon={<StyledBiSave />}
+                  falsyIcon={<StyledBiEdit />}
                   aria-label={`Edit ${profile.name}`}
-                  sx={{ padding: 0 }}
-                  onClick={() =>
-                    setEditProfile(
-                      profile.name === editProfile ? undefined : profile.name
-                    )
+                  onClick={
+                    editProfile == profile.name
+                      ? () => {
+                          updateProfile(profile.name, '123');
+                          setEditProfile(undefined);
+                        }
+                      : () => setEditProfile(profile.name)
                   }
-                >
-                  <StyledBiEdit />
-                </IconButton>
-                <IconButton
+                />
+                <StatefulIconButton
+                  condition={shownProfile == profile.name}
                   aria-label={`Show ${profile.name}`}
-                  sx={{ padding: 0 }}
+                  truthyIcon={<StyledBiHide />}
+                  falsyIcon={<StyledBiShow />}
                   onClick={() =>
                     setShownProfile(
                       profile.name === shownProfile ? undefined : profile.name
                     )
                   }
-                >
-                  <StyledBiShow />
-                </IconButton>
+                />
                 <IconButton
                   aria-label={`Delete ${profile.name}`}
                   sx={{ padding: 0 }}
