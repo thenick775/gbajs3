@@ -1,6 +1,7 @@
 import { Collapse, IconButton, TextField } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   BiPlus,
   BiTrash,
@@ -19,9 +20,8 @@ import type { Layouts } from '../../../hooks/use-layouts.tsx';
 import type { IconButtonProps } from '@mui/material';
 import type { ReactNode } from 'react';
 
-type ControlProfilesFormProps = {
+type ControlProfilesProps = {
   id: string;
-  onAfterSubmit: () => void;
 };
 
 type VirtualControlProfile = {
@@ -40,7 +40,7 @@ const StyledBiPlus = styled(BiPlus)`
 const StyledLi = styled.li`
   cursor: pointer;
   display: grid;
-  grid-template-columns: auto repeat(3, 32px);
+  grid-template-columns: auto repeat(2, 32px);
   gap: 10px;
 
   color: ${({ theme }) => theme.blueCharcoal};
@@ -109,6 +109,10 @@ const LoadProfileButton = styled.button`
   }
 `;
 
+const StyledForm = styled.form`
+  display: flex;
+`;
+
 const StatefulIconButton = ({
   condition,
   truthyIcon,
@@ -124,16 +128,58 @@ const StatefulIconButton = ({
   </IconButton>
 );
 
-export const ControlProfilesForm = ({
-  id
-}: // onAfterSubmit?
-ControlProfilesFormProps) => {
+const EditableProfileLoadButton = ({
+  name,
+  onProfileLoad,
+  onSubmit
+}: {
+  name: string;
+  onProfileLoad: () => void;
+  onSubmit: ({ name }: { name: string }) => void;
+}) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const { register, handleSubmit } = useForm<{ name: string }>({
+    defaultValues: {
+      name: name
+    }
+  });
+
+  return (
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+      {isEditing ? (
+        <TextField
+          variant="standard"
+          sx={{
+            width: '100%',
+            '& .MuiInputBase-input': {
+              fontSize: 13,
+              height: 16,
+              padding: 1
+            }
+          }}
+          {...register('name', { required: true })}
+        />
+      ) : (
+        <LoadProfileButton onClick={onProfileLoad}>{name}</LoadProfileButton>
+      )}
+      <StatefulIconButton
+        condition={isEditing}
+        truthyIcon={<StyledBiSave />}
+        falsyIcon={<StyledBiEdit />}
+        aria-label={`${isEditing ? 'Save' : 'Edit'} Profile Name`}
+        type="submit"
+        onClick={() => setIsEditing((prevState) => !prevState)}
+      />
+    </StyledForm>
+  );
+};
+
+export const ControlProfiles = ({ id }: ControlProfilesProps) => {
   const [virtualControlProfiles, setVirtualControlProfiles] = useLocalStorage<
     VirtualControlProfiles | undefined
   >(virtualControlProfilesLocalStorageKey);
   const { layouts, setLayouts } = useLayoutContext();
   const [shownProfile, setShownProfile] = useState<string | undefined>();
-  const [editProfile, setEditProfile] = useState<string | undefined>();
 
   const addProfile = () => {
     setVirtualControlProfiles((prevState) => [
@@ -172,39 +218,11 @@ ControlProfilesFormProps) => {
         {virtualControlProfiles?.map?.(
           (profile: VirtualControlProfile, idx: number) => (
             <>
-              <StyledLi key={`${profile.name}_${idx}`}>
-                {editProfile === profile.name ? (
-                  <TextField
-                    variant="standard"
-                    defaultValue={profile.name}
-                    sx={{
-                      '& .MuiInputBase-input': {
-                        fontSize: 13,
-                        height: 16,
-                        padding: 1
-                      }
-                    }}
-                  />
-                ) : (
-                  <LoadProfileButton
-                    onClick={() => setLayouts(profile.layouts)}
-                  >
-                    {profile.name}
-                  </LoadProfileButton>
-                )}
-                <StatefulIconButton
-                  condition={editProfile == profile.name}
-                  truthyIcon={<StyledBiSave />}
-                  falsyIcon={<StyledBiEdit />}
-                  aria-label={`Edit ${profile.name}`}
-                  onClick={
-                    editProfile == profile.name
-                      ? () => {
-                          updateProfile(profile.name, '123');
-                          setEditProfile(undefined);
-                        }
-                      : () => setEditProfile(profile.name)
-                  }
+              <StyledLi key={`${profile.name}_${idx}_action_list_item`}>
+                <EditableProfileLoadButton
+                  name={profile.name}
+                  onProfileLoad={() => setLayouts(profile.layouts)}
+                  onSubmit={({ name }) => updateProfile(profile.name, name)}
                 />
                 <StatefulIconButton
                   condition={shownProfile == profile.name}
@@ -226,6 +244,7 @@ ControlProfilesFormProps) => {
                 </IconButton>
               </StyledLi>
               <Collapse
+                key={`${profile.name}_${idx}_details`}
                 sx={{
                   border: '1px solid rgba(0, 0, 0, 0.125)',
                   borderTop: 'none',

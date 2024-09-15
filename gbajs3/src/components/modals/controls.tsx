@@ -13,7 +13,7 @@ import {
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
-import { ControlProfilesForm } from './controls/control-profiles-form.tsx';
+import { ControlProfiles } from './controls/control-profiles.tsx';
 
 type TabPanelProps = {
   children: ReactNode;
@@ -24,6 +24,7 @@ type TabPanelProps = {
 type ControlTabsProps = {
   setFormId: Dispatch<React.SetStateAction<string>>;
   virtualControlsFormId: string;
+  controlProfilesFormId: string;
   keyBindingsFormId: string;
   resetPositionsButtonId: string;
   setIsSuccessfulSubmit: (successfulSubmit: boolean) => void;
@@ -32,6 +33,10 @@ type ControlTabsProps = {
 const TabsWithBorder = styled(Tabs)`
   border-bottom: 1px solid;
   border-color: rgba(0, 0, 0, 0.12);
+
+  & .MuiTabs-scrollButtons {
+    width: fit-content;
+  }
 `;
 
 const TabWrapper = styled.div`
@@ -61,6 +66,7 @@ const TabPanel = ({ children, index, value }: TabPanelProps) => {
 const ControlTabs = ({
   setFormId,
   virtualControlsFormId,
+  controlProfilesFormId,
   keyBindingsFormId,
   resetPositionsButtonId,
   setIsSuccessfulSubmit
@@ -68,9 +74,22 @@ const ControlTabs = ({
   const { clearLayouts } = useLayoutContext();
   const [value, setValue] = useState(0);
 
+  const tabToFormId = (tabIndex: number) => {
+    switch (tabIndex) {
+      case 0:
+        return virtualControlsFormId;
+      case 1:
+        return controlProfilesFormId;
+      case 2:
+        return keyBindingsFormId;
+      default:
+        return virtualControlsFormId;
+    }
+  };
+
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-    setFormId(newValue === 0 ? virtualControlsFormId : keyBindingsFormId);
+    setFormId(tabToFormId(newValue));
     setIsSuccessfulSubmit(false);
   };
 
@@ -103,10 +122,7 @@ const ControlTabs = ({
         </Button>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ControlProfilesForm
-          id={virtualControlsFormId}
-          onAfterSubmit={onAfterSubmit}
-        />
+        <ControlProfiles id={controlProfilesFormId} />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <KeyBindingsForm id={keyBindingsFormId} onAfterSubmit={onAfterSubmit} />
@@ -185,19 +201,22 @@ export const ControlsModal = () => {
         <ControlTabs
           setFormId={setFormId}
           virtualControlsFormId={`${baseId}--virtual-controls-form`}
+          controlProfilesFormId={`${baseId}--control-profiles-form`}
           keyBindingsFormId={`${baseId}--key-bindings-form`}
           resetPositionsButtonId={`${baseId}--reset-positions-button`}
           setIsSuccessfulSubmit={setIsSuccessfulSubmit}
         />
       </ModalBody>
       <ModalFooter>
-        <CircleCheckButton
-          copy="Save Changes"
-          form={formId}
-          id={`${baseId}--save-changes-button`}
-          type="submit"
-          showSuccess={isSuccessfulSubmit}
-        />
+        {formId !== `${baseId}--control-profiles-form` && (
+          <CircleCheckButton
+            copy="Save Changes"
+            form={formId}
+            id={`${baseId}--save-changes-button`}
+            type="submit"
+            showSuccess={isSuccessfulSubmit}
+          />
+        )}
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
           Close
         </Button>
