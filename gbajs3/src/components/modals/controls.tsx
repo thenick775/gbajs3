@@ -74,7 +74,7 @@ const ControlTabs = ({
   const { clearLayouts } = useLayoutContext();
   const [value, setValue] = useState(0);
 
-  const tabToFormId = (tabIndex: number) => {
+  const tabIndexToFormId = (tabIndex: number) => {
     switch (tabIndex) {
       case 0:
         return virtualControlsFormId;
@@ -87,9 +87,9 @@ const ControlTabs = ({
     }
   };
 
-  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-    setFormId(tabToFormId(newValue));
+  const handleTabChange = (_: React.SyntheticEvent, tabIndex: number) => {
+    setValue(tabIndex);
+    setFormId(tabIndexToFormId(tabIndex));
     setIsSuccessfulSubmit(false);
   };
 

@@ -1,15 +1,8 @@
-import { Collapse, IconButton, TextField } from '@mui/material';
+import { IconButton, TextField } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  BiPlus,
-  BiTrash,
-  BiShow,
-  BiHide,
-  BiEdit,
-  BiSave
-} from 'react-icons/bi';
+import { BiPlus, BiTrash, BiEdit, BiSave } from 'react-icons/bi';
 import { styled } from 'styled-components';
 
 import { useLayoutContext } from '../../../hooks/context.tsx';
@@ -32,6 +25,18 @@ type VirtualControlProfile = {
 
 type VirtualControlProfiles = VirtualControlProfile[];
 
+type StatefulIconButtonProps = {
+  condition: boolean;
+  truthyIcon: ReactNode;
+  falsyIcon: ReactNode;
+} & IconButtonProps;
+
+type EditableProfileLoadButtonProps = {
+  name: string;
+  loadProfile: () => void;
+  onSubmit: ({ name }: { name: string }) => void;
+};
+
 const StyledBiPlus = styled(BiPlus)`
   width: 25px;
   height: 25px;
@@ -40,7 +45,7 @@ const StyledBiPlus = styled(BiPlus)`
 const StyledLi = styled.li`
   cursor: pointer;
   display: grid;
-  grid-template-columns: auto repeat(2, 32px);
+  grid-template-columns: auto 32px;
   gap: 10px;
 
   color: ${({ theme }) => theme.blueCharcoal};
@@ -75,16 +80,6 @@ const StyledCiCircleRemove = styled(BiTrash)`
   width: 20px;
 `;
 
-const StyledBiShow = styled(BiShow)`
-  height: 100%;
-  width: 20px;
-`;
-
-const StyledBiHide = styled(BiHide)`
-  height: 100%;
-  width: 20px;
-`;
-
 const StyledBiEdit = styled(BiEdit)`
   height: 100%;
   width: 20px;
@@ -111,6 +106,7 @@ const LoadProfileButton = styled.button`
 
 const StyledForm = styled.form`
   display: flex;
+  gap: 10px;
 `;
 
 const StatefulIconButton = ({
@@ -118,11 +114,7 @@ const StatefulIconButton = ({
   truthyIcon,
   falsyIcon,
   ...rest
-}: {
-  condition: boolean;
-  truthyIcon: ReactNode;
-  falsyIcon: ReactNode;
-} & IconButtonProps) => (
+}: StatefulIconButtonProps) => (
   <IconButton sx={{ padding: 0 }} {...rest}>
     {condition ? truthyIcon : falsyIcon}
   </IconButton>
@@ -130,15 +122,15 @@ const StatefulIconButton = ({
 
 const EditableProfileLoadButton = ({
   name,
-  onProfileLoad,
+  loadProfile,
   onSubmit
-}: {
-  name: string;
-  onProfileLoad: () => void;
-  onSubmit: ({ name }: { name: string }) => void;
-}) => {
+}: EditableProfileLoadButtonProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const { register, handleSubmit } = useForm<{ name: string }>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid }
+  } = useForm<{ name: string }>({
     defaultValues: {
       name: name
     }
@@ -157,10 +149,11 @@ const EditableProfileLoadButton = ({
               padding: 1
             }
           }}
+          error={!!errors?.name}
           {...register('name', { required: true })}
         />
       ) : (
-        <LoadProfileButton onClick={onProfileLoad}>{name}</LoadProfileButton>
+        <LoadProfileButton onClick={loadProfile}>{name}</LoadProfileButton>
       )}
       <StatefulIconButton
         condition={isEditing}
@@ -168,7 +161,7 @@ const EditableProfileLoadButton = ({
         falsyIcon={<StyledBiEdit />}
         aria-label={`${isEditing ? 'Save' : 'Edit'} Profile Name`}
         type="submit"
-        onClick={() => setIsEditing((prevState) => !prevState)}
+        onClick={() => isValid && setIsEditing((prevState) => !prevState)}
       />
     </StyledForm>
   );
@@ -179,13 +172,12 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
     VirtualControlProfiles | undefined
   >(virtualControlProfilesLocalStorageKey);
   const { layouts, setLayouts } = useLayoutContext();
-  const [shownProfile, setShownProfile] = useState<string | undefined>();
 
   const addProfile = () => {
     setVirtualControlProfiles((prevState) => [
       ...(prevState ?? []),
       {
-        name: `Profile-${prevState?.length ?? 0}`,
+        name: `Profile-${(prevState?.length ?? 0) + 1}`,
         layouts: layouts,
         active: true
       }
@@ -217,44 +209,20 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
       <ProfilesList id={id}>
         {virtualControlProfiles?.map?.(
           (profile: VirtualControlProfile, idx: number) => (
-            <>
-              <StyledLi key={`${profile.name}_${idx}_action_list_item`}>
-                <EditableProfileLoadButton
-                  name={profile.name}
-                  onProfileLoad={() => setLayouts(profile.layouts)}
-                  onSubmit={({ name }) => updateProfile(profile.name, name)}
-                />
-                <StatefulIconButton
-                  condition={shownProfile == profile.name}
-                  aria-label={`Show ${profile.name}`}
-                  truthyIcon={<StyledBiHide />}
-                  falsyIcon={<StyledBiShow />}
-                  onClick={() =>
-                    setShownProfile(
-                      profile.name === shownProfile ? undefined : profile.name
-                    )
-                  }
-                />
-                <IconButton
-                  aria-label={`Delete ${profile.name}`}
-                  sx={{ padding: 0 }}
-                  onClick={() => deleteProfile(profile.name)}
-                >
-                  <StyledCiCircleRemove />
-                </IconButton>
-              </StyledLi>
-              <Collapse
-                key={`${profile.name}_${idx}_details`}
-                sx={{
-                  border: '1px solid rgba(0, 0, 0, 0.125)',
-                  borderTop: 'none',
-                  overflowX: 'auto'
-                }}
-                in={shownProfile == profile.name}
+            <StyledLi key={`${profile.name}_${idx}_action_list_item`}>
+              <EditableProfileLoadButton
+                name={profile.name}
+                loadProfile={() => setLayouts(profile.layouts)}
+                onSubmit={({ name }) => updateProfile(profile.name, name)}
+              />
+              <IconButton
+                aria-label={`Delete ${profile.name}`}
+                sx={{ padding: 0 }}
+                onClick={() => deleteProfile(profile.name)}
               >
-                <pre>{JSON.stringify(profile.layouts, null, 2)}</pre>
-              </Collapse>
-            </>
+                <StyledCiCircleRemove />
+              </IconButton>
+            </StyledLi>
           )
         )}
         {!virtualControlProfiles?.length && (
