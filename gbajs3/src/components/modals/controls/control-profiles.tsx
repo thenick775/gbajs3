@@ -2,14 +2,14 @@ import { IconButton, TextField } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BiPlus, BiTrash, BiEdit, BiSave } from 'react-icons/bi';
+import { BiTrash, BiEdit, BiSave } from 'react-icons/bi';
 import { styled } from 'styled-components';
 
 import { useLayoutContext } from '../../../hooks/context.tsx';
 import { virtualControlProfilesLocalStorageKey } from '../../controls/consts.tsx';
-import { CenteredText } from '../../shared/styled.tsx';
+import { CenteredText, StyledBiPlus } from '../../shared/styled.tsx';
 
-import type { Layouts } from '../../../hooks/use-layouts.tsx';
+import type { Layouts } from '../../../context/layout/layout.tsx';
 import type { IconButtonProps } from '@mui/material';
 import type { ReactNode } from 'react';
 
@@ -36,11 +36,6 @@ type EditableProfileLoadButtonProps = {
   loadProfile: () => void;
   onSubmit: ({ name }: { name: string }) => void;
 };
-
-const StyledBiPlus = styled(BiPlus)`
-  width: 25px;
-  height: 25px;
-`;
 
 const StyledLi = styled.li`
   cursor: pointer;

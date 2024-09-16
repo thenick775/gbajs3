@@ -2,7 +2,15 @@ import { createContext, useCallback, useEffect, type ReactNode } from 'react';
 
 import { useLayouts } from '../../hooks/use-layouts.tsx';
 
-import type { Layout, Layouts } from '../../hooks/use-layouts.tsx';
+export type Layout = {
+  position?: { x: number; y: number };
+  size?: { width: string | number; height: string | number };
+  initialBounds?: DOMRect;
+};
+
+export type Layouts = {
+  [key: string]: Layout;
+};
 
 type LayoutContextProps = {
   layouts: Layouts;
