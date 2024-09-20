@@ -201,14 +201,14 @@ export const ControlsModal = () => {
         <ControlTabs
           setFormId={setFormId}
           virtualControlsFormId={`${baseId}--virtual-controls-form`}
-          controlProfilesFormId={`${baseId}--control-profiles-form`}
+          controlProfilesFormId={`${baseId}--control-profiles`}
           keyBindingsFormId={`${baseId}--key-bindings-form`}
           resetPositionsButtonId={`${baseId}--reset-positions-button`}
           setIsSuccessfulSubmit={setIsSuccessfulSubmit}
         />
       </ModalBody>
       <ModalFooter>
-        {formId !== `${baseId}--control-profiles-form` && (
+        {formId !== `${baseId}--control-profiles` && (
           <CircleCheckButton
             copy="Save Changes"
             form={formId}

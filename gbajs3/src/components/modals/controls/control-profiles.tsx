@@ -156,8 +156,9 @@ const EditableProfileLoadButton = ({
         condition={isEditing}
         truthyIcon={<StyledBiSave />}
         falsyIcon={<StyledBiEdit />}
-        aria-label={`${isEditing ? 'Save' : 'Edit'} Profile Name`}
+        aria-label={`${isEditing ? 'Save' : 'Edit'} ${name}'s name`}
         type="submit"
+        data-is-valid={isValid}
         onClick={() => isValid && setIsEditing((prevState) => !prevState)}
       />
     </StyledForm>
@@ -204,7 +205,7 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
 
   return (
     <>
-      <ProfilesList id={id}>
+      <ProfilesList id={id} aria-label="Profiles List">
         {virtualControlProfiles?.map?.(
           (profile: VirtualControlProfile, idx: number) => (
             <StyledLi key={`${profile.name}_${idx}_action_list_item`}>
@@ -230,7 +231,7 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
         )}
       </ProfilesList>
       <IconButton
-        aria-label={`Create new profile`}
+        aria-label={`Create New Profile`}
         sx={{ padding: 0 }}
         onClick={() => addProfile()}
       >
