@@ -1,5 +1,6 @@
 import { IconButton, TextField } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
+import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BiTrash, BiEdit, BiSave } from 'react-icons/bi';
@@ -18,6 +19,7 @@ type ControlProfilesProps = {
 };
 
 type VirtualControlProfile = {
+  id: string;
   name: string;
   active: boolean;
   layouts: Layouts;
@@ -172,6 +174,7 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
     setVirtualControlProfiles((prevState) => [
       ...(prevState ?? []),
       {
+        id: nanoid(),
         name: `Profile-${(prevState?.length ?? 0) + 1}`,
         layouts: layouts,
         active: true
@@ -179,10 +182,10 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
     ]);
   };
 
-  const updateProfile = (name: string, updatedName: string) => {
+  const updateProfile = (id: string, updatedName: string) => {
     setVirtualControlProfiles((prevState) =>
       prevState?.map((profile) => {
-        if (profile.name == name)
+        if (profile.id == id)
           return {
             ...profile,
             name: updatedName
@@ -193,9 +196,9 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
     );
   };
 
-  const deleteProfile = (name: string) => {
+  const deleteProfile = (id: string) => {
     setVirtualControlProfiles((prevState) =>
-      prevState?.filter((p) => p.name !== name)
+      prevState?.filter((p) => p.id !== id)
     );
   };
 
@@ -208,12 +211,12 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
               <EditableProfileLoadButton
                 name={profile.name}
                 loadProfile={() => setLayouts(profile.layouts)}
-                onSubmit={({ name }) => updateProfile(profile.name, name)}
+                onSubmit={({ name }) => updateProfile(profile.id, name)}
               />
               <IconButton
                 aria-label={`Delete ${profile.name}`}
                 sx={{ padding: 0 }}
-                onClick={() => deleteProfile(profile.name)}
+                onClick={() => deleteProfile(profile.id)}
               >
                 <StyledCiCircleRemove />
               </IconButton>
