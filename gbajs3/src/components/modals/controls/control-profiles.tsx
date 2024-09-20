@@ -94,6 +94,8 @@ const LoadProfileButton = styled.button`
   background-color: ${({ theme }) => theme.pureWhite};
   border: none;
   text-align: left;
+  font-size: 16px;
+  height: 32px;
 
   &:hover {
     color: ${({ theme }) => theme.darkGrayBlue};
@@ -141,9 +143,7 @@ const EditableProfileLoadButton = ({
           sx={{
             width: '100%',
             '& .MuiInputBase-input': {
-              fontSize: 13,
-              height: 16,
-              padding: 1
+              paddingLeft: '8px'
             }
           }}
           error={!!errors?.name}
