@@ -6,6 +6,8 @@ type LoadExternalRomProps = {
   url: URL;
 };
 
+// Note: query parameters are NOT persisted when saving the app as a PWA to the home screen.
+// This is still an outstanding issue that needs to be addressed through other means.
 export const useLoadExternalRom = () => {
   const executeLoadExternalRom = useCallback(
     async (fetchProps?: LoadExternalRomProps) => {
