@@ -82,20 +82,17 @@ describe('<EmulatorFileSystem />', () => {
       }
 
       /* see: https://github.com/testing-library/eslint-plugin-testing-library/issues/683 */
-      /* eslint-disable testing-library/no-node-access */
       if (fileNode.children?.length) {
         fileNode.children.forEach((child) =>
           assertFileTree(child, stopDepth, acc + 1)
         );
       }
-      /* eslint-enable testing-library/no-node-access */
     };
 
     // first node should be expanded by default, renders children
     assertFileTree(defaultFSData, 1);
 
     // expand default directories
-    // eslint-disable-next-line testing-library/no-node-access
     for (const child of defaultFSData.children ?? []) {
       const childPath = child.path.split('/').pop() ?? 'invalid_path';
       await userEvent.click(screen.getByText(childPath));
