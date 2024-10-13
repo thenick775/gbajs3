@@ -45,6 +45,7 @@ describe('<UploadPublicExternalRomsModal />', () => {
       <UploadPublicExternalRomsModal
         url={new URL(`${testRomLocation}/good_rom.gba`)}
         onLoadOrDismiss={onLoadOrDismissSpy}
+        onModalDismiss={() => {}}
       />
     );
 
@@ -104,6 +105,7 @@ describe('<UploadPublicExternalRomsModal />', () => {
       <UploadPublicExternalRomsModal
         url={new URL(`${testRomLocation}/bad_rom.gba`)}
         onLoadOrDismiss={onLoadOrDismissSpy}
+        onModalDismiss={() => {}}
       />
     );
 
@@ -133,7 +135,8 @@ describe('<UploadPublicExternalRomsModal />', () => {
     expect(onLoadOrDismissSpy).toHaveBeenCalledWith('skipped-error');
   });
 
-  it('closes modal using the close button', async () => {
+  it('temporarily dismisses modal', async () => {
+    const onModalDismissSpy = vi.fn();
     const onLoadOrDismissSpy = vi.fn();
     const setIsModalOpenSpy = vi.fn();
     const { useModalContext: original } = await vi.importActual<
@@ -149,15 +152,46 @@ describe('<UploadPublicExternalRomsModal />', () => {
       <UploadPublicExternalRomsModal
         url={new URL(`${testRomLocation}/good_rom.gba`)}
         onLoadOrDismiss={onLoadOrDismissSpy}
+        onModalDismiss={onModalDismissSpy}
+      />
+    );
+
+    // click the modal dismiss button
+    const modalDismissButton = screen.getByRole('button', {
+      name: 'Close'
+    });
+    expect(modalDismissButton).toBeInTheDocument();
+    await userEvent.click(modalDismissButton);
+
+    expect(onModalDismissSpy).toHaveBeenCalledOnce();
+  });
+
+  it('closes modal using the permanently dismiss button', async () => {
+    const onLoadOrDismissSpy = vi.fn();
+    const setIsModalOpenSpy = vi.fn();
+    const { useModalContext: original } = await vi.importActual<
+      typeof contextHooks
+    >('../../hooks/context.tsx');
+
+    vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+      ...original(),
+      setIsModalOpen: setIsModalOpenSpy
+    }));
+
+    renderWithContext(
+      <UploadPublicExternalRomsModal
+        url={new URL(`${testRomLocation}/good_rom.gba`)}
+        onLoadOrDismiss={onLoadOrDismissSpy}
+        onModalDismiss={() => {}}
       />
     );
 
     // click the close button
-    const closeButton = screen.getByText("Don't ask again", {
+    const permanentlyDismissButton = screen.getByText("Don't ask again", {
       selector: 'button'
     });
-    expect(closeButton).toBeInTheDocument();
-    await userEvent.click(closeButton);
+    expect(permanentlyDismissButton).toBeInTheDocument();
+    await userEvent.click(permanentlyDismissButton);
 
     // marks rom as skipped
     expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();

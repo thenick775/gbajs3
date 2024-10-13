@@ -1,5 +1,5 @@
-import { useIsFirstRender, useLocalStorage } from '@uidotdev/usehooks';
-import { useEffect } from 'react';
+import { useLocalStorage } from '@uidotdev/usehooks';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import {
   PromptLocalStorageKey,
@@ -27,7 +27,6 @@ const loadedPublicRomsLocalStorageKey = 'hasLoadedPublicExternalRoms';
 
 export const useShowLoadPublicRoms = () => {
   const { setModalContent, setIsModalOpen, isModalOpen } = useModalContext();
-  const isFirstRender = useIsFirstRender();
   const [hasLoadedPublicRoms, setHasLoadedPublicRoms] = useLocalStorage<
     HasLoadedPublicRoms | undefined
   >(loadedPublicRomsLocalStorageKey);
@@ -38,6 +37,7 @@ export const useShowLoadPublicRoms = () => {
     promptLocalStorageKey: PromptLocalStorageKey,
     withOutDefaults: true
   });
+  const [isTemporarilyDismissed, setIsTemporarilyDismissed] = useState(false);
 
   const params = new URLSearchParams(window?.location?.search);
   const romURL = params.get(romURLQueryParamName);
@@ -50,7 +50,7 @@ export const useShowLoadPublicRoms = () => {
     iosPwaPrompt && // ensure install prompt has come first
     !shouldShowPrompt &&
     !isModalOpen &&
-    isFirstRender;
+    !isTemporarilyDismissed;
 
   useEffect(() => {
     if (shouldShowPublicRomModal) {
@@ -68,6 +68,7 @@ export const useShowLoadPublicRoms = () => {
           <UploadPublicExternalRomsModal
             url={url}
             onLoadOrDismiss={storeResult}
+            onModalDismiss={() => setIsTemporarilyDismissed(true)}
           />
         );
         setIsModalOpen(true);
