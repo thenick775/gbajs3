@@ -31,9 +31,7 @@ type UploadPublicExternalRomsModalProps = {
 };
 
 const LinkBreakWord = styled.a`
-  word-wrap: break-word;
-  max-width: 100%;
-  margin: 0;
+  word-break: break-all;
 `;
 
 const Copy = styled.p`
@@ -43,11 +41,7 @@ const Copy = styled.p`
 const URLDisplay = ({ url }: { url: URL }) => {
   return (
     <Accordion>
-      <AccordionSummary
-        expandIcon={<FaArrowDown />}
-        aria-controls="panel1-content"
-        id="panel1-header"
-      >
+      <AccordionSummary expandIcon={<FaArrowDown />}>
         <Copy>View Full URL</Copy>
       </AccordionSummary>
       <AccordionDetails>
