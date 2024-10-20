@@ -27,7 +27,6 @@ import type { PublicRomUploadStatus } from '../../hooks/use-show-load-public-rom
 type UploadPublicExternalRomsModalProps = {
   url: URL;
   onLoadOrDismiss: (statusMsg: PublicRomUploadStatus) => void;
-  onModalDismiss: () => void;
 };
 
 const LinkBreakWord = styled.a`
@@ -55,8 +54,7 @@ const URLDisplay = ({ url }: { url: URL }) => {
 
 export const UploadPublicExternalRomsModal = ({
   url,
-  onLoadOrDismiss,
-  onModalDismiss
+  onLoadOrDismiss
 }: UploadPublicExternalRomsModalProps) => {
   const theme = useTheme();
   const { setIsModalOpen } = useModalContext();
@@ -100,7 +98,10 @@ export const UploadPublicExternalRomsModal = ({
 
   return (
     <>
-      <ModalHeader title="Upload Public Rom" onClose={onModalDismiss} />
+      <ModalHeader
+        title="Upload Public Rom"
+        onClose={() => onLoadOrDismiss('temporarily-dismissed')}
+      />
       <ModalBody>
         <LoadingIndicator
           isLoading={isExternalRomLoading}

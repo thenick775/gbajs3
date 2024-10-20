@@ -1,10 +1,6 @@
-import { useLocalStorage } from '@uidotdev/usehooks';
-import { useEffect, useState } from 'react';
+import { useIsFirstRender, useLocalStorage } from '@uidotdev/usehooks';
+import { useEffect } from 'react';
 import toast from 'react-hot-toast';
-import {
-  PromptLocalStorageKey,
-  useShouldShowPrompt
-} from 'react-ios-pwa-prompt-ts';
 
 import { useModalContext } from './context.tsx';
 import { UploadPublicExternalRomsModal } from '../components/modals/upload-public-external-roms.tsx';
@@ -16,7 +12,9 @@ export type PublicRomUploadStatus =
   | 'loaded'
   | 'error'
   | 'skipped-error'
-  | 'skipped';
+  | 'skipped'
+  | 'temporarily-dismissed'
+  | 'pending';
 
 export type HasLoadedPublicRoms = {
   [url: string]: PublicRomUploadStatus;
@@ -25,35 +23,51 @@ export type HasLoadedPublicRoms = {
 const romURLQueryParamName = 'romURL';
 const loadedPublicRomsLocalStorageKey = 'hasLoadedPublicExternalRoms';
 
-export const useShowLoadPublicRoms = () => {
-  const { setModalContent, setIsModalOpen, isModalOpen } = useModalContext();
+export const usePublicRoms = () => {
   const [hasLoadedPublicRoms, setHasLoadedPublicRoms] = useLocalStorage<
     HasLoadedPublicRoms | undefined
   >(loadedPublicRomsLocalStorageKey);
   const [hasCompletedProductTourSteps] = useLocalStorage<
     CompletedProductTourSteps | undefined
   >(productTourLocalStorageKey);
-  const { iosPwaPrompt, shouldShowPrompt } = useShouldShowPrompt({
-    promptLocalStorageKey: PromptLocalStorageKey,
-    withOutDefaults: true
-  });
-  const [isTemporarilyDismissed, setIsTemporarilyDismissed] = useState(false);
+  const isFirstRender = useIsFirstRender();
 
   const params = new URLSearchParams(window?.location?.search);
   const romURL = params.get(romURLQueryParamName);
 
   const shouldShowPublicRomModal =
-    romURL &&
+    !!romURL &&
     hasLoadedPublicRoms?.[romURL] != 'loaded' &&
     hasLoadedPublicRoms?.[romURL] != 'skipped' &&
-    hasCompletedProductTourSteps?.hasCompletedProductTourIntro &&
-    iosPwaPrompt && // ensure install prompt has come first
-    !shouldShowPrompt &&
-    !isModalOpen &&
-    !isTemporarilyDismissed;
+    hasLoadedPublicRoms?.[romURL] != 'temporarily-dismissed' &&
+    !!hasCompletedProductTourSteps?.hasCompletedProductTourIntro;
+
+  if (isFirstRender)
+    setHasLoadedPublicRoms((prevState) =>
+      Object.fromEntries(
+        Object.entries(prevState ?? {}).map(([key, value]) => [
+          key,
+          value === 'temporarily-dismissed' ? 'pending' : value
+        ])
+      )
+    );
+
+  return {
+    shouldShowPublicRomModal,
+    setHasLoadedPublicRoms,
+    romURL
+  };
+};
+
+// Note: query parameters are NOT persisted when saving the app as a PWA to the home screen.
+// This is still an outstanding issue that needs to be addressed through other means.
+export const useShowLoadPublicRoms = () => {
+  const { setModalContent, isModalOpen, setIsModalOpen } = useModalContext();
+  const { shouldShowPublicRomModal, setHasLoadedPublicRoms, romURL } =
+    usePublicRoms();
 
   useEffect(() => {
-    if (shouldShowPublicRomModal) {
+    if (shouldShowPublicRomModal && romURL && !isModalOpen) {
       try {
         const url = new URL(romURL);
 
@@ -68,7 +82,6 @@ export const useShowLoadPublicRoms = () => {
           <UploadPublicExternalRomsModal
             url={url}
             onLoadOrDismiss={storeResult}
-            onModalDismiss={() => setIsTemporarilyDismissed(true)}
           />
         );
         setIsModalOpen(true);
@@ -85,6 +98,7 @@ export const useShowLoadPublicRoms = () => {
     shouldShowPublicRomModal,
     setIsModalOpen,
     setModalContent,
-    setHasLoadedPublicRoms
+    setHasLoadedPublicRoms,
+    isModalOpen
   ]);
 };

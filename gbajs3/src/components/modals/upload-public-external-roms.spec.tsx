@@ -45,7 +45,6 @@ describe('<UploadPublicExternalRomsModal />', () => {
       <UploadPublicExternalRomsModal
         url={new URL(`${testRomLocation}/good_rom.gba`)}
         onLoadOrDismiss={onLoadOrDismissSpy}
-        onModalDismiss={() => {}}
       />
     );
 
@@ -105,7 +104,6 @@ describe('<UploadPublicExternalRomsModal />', () => {
       <UploadPublicExternalRomsModal
         url={new URL(`${testRomLocation}/bad_rom.gba`)}
         onLoadOrDismiss={onLoadOrDismissSpy}
-        onModalDismiss={() => {}}
       />
     );
 
@@ -130,13 +128,12 @@ describe('<UploadPublicExternalRomsModal />', () => {
       screen.getByText("Don't ask again", { selector: 'button' })
     );
 
-    // if dismissed here, should mark rom as skipped and error
+    // if dismissed here, should mark rom as skipped with error
     expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();
     expect(onLoadOrDismissSpy).toHaveBeenCalledWith('skipped-error');
   });
 
   it('temporarily dismisses modal', async () => {
-    const onModalDismissSpy = vi.fn();
     const onLoadOrDismissSpy = vi.fn();
     const setIsModalOpenSpy = vi.fn();
     const { useModalContext: original } = await vi.importActual<
@@ -152,7 +149,6 @@ describe('<UploadPublicExternalRomsModal />', () => {
       <UploadPublicExternalRomsModal
         url={new URL(`${testRomLocation}/good_rom.gba`)}
         onLoadOrDismiss={onLoadOrDismissSpy}
-        onModalDismiss={onModalDismissSpy}
       />
     );
 
@@ -163,7 +159,9 @@ describe('<UploadPublicExternalRomsModal />', () => {
     expect(modalDismissButton).toBeInTheDocument();
     await userEvent.click(modalDismissButton);
 
-    expect(onModalDismissSpy).toHaveBeenCalledOnce();
+    expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();
+    expect(onLoadOrDismissSpy).toHaveBeenCalledWith('temporarily-dismissed');
+    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
   });
 
   it('closes modal using the permanently dismiss button', async () => {
@@ -182,7 +180,6 @@ describe('<UploadPublicExternalRomsModal />', () => {
       <UploadPublicExternalRomsModal
         url={new URL(`${testRomLocation}/good_rom.gba`)}
         onLoadOrDismiss={onLoadOrDismissSpy}
-        onModalDismiss={() => {}}
       />
     );
 
