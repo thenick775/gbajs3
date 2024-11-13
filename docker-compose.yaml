@@ -1,13 +1,33 @@
+x-restart-policy: &default-restart-policy
+  condition: on-failure
+  max_attempts: 50
+  window: 30s
+
 services:
+    gba-postgres:
+        deploy:
+            restart_policy: *default-restart-policy
+            labels:
+                - shepherd.auth.config=github
     gba-auth-server:
         depends_on:
-            gba-postgres:
-                condition: service_healthy
+            - gba-postgres
+        deploy:
+            restart_policy: *default-restart-policy
+            labels:
+                - shepherd.auth.config=github
     gba-admin-server:
         depends_on:
-            gba-postgres:
-                condition: service_healthy
+            - gba-postgres
+        deploy:
+            restart_policy: *default-restart-policy
+            labels:
+                - shepherd.auth.config=github
     gba-webserver:
         depends_on:
             - gba-auth-server
             - gba-admin-server
+        deploy:
+            restart_policy: *default-restart-policy
+            labels:
+                - shepherd.auth.config=github
