@@ -13,10 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: gbajs3
+          sparse-checkout-cone-mode: false
+          fetch-depth: 0
+
       - id: build-publish
         uses: bitovi/github-actions-react-to-github-pages@v1.2.4
         with:
-          checkout-sparse-checkout: gbajs3
-          checkout-sparse-checkout-cone-mode: false
+          checkout: false
           install_command: cd ./gbajs3 && npm ci
           path: ./gbajs3/dist

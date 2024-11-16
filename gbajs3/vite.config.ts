@@ -4,6 +4,7 @@ import { coverageConfigDefaults } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
+import Info from 'unplugin-info/vite';
 
 export default defineConfig({
   base: './',
@@ -85,6 +86,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,wasm}']
       }
     }),
+    Info(),
     visualizer({ gzipSize: true })
   ],
   optimizeDeps: {

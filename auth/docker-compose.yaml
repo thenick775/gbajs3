@@ -7,7 +7,7 @@ services:
                 max-file: '3'
             driver: json-file
         build:
-            context: ${SERVICE_AUTH:-.}
+            context: ${AUTH_CONTEXT:-.}
         environment:
             - CLIENT_HOST=${CLIENT_HOST}
             - PG_DB_HOST=${PG_DB_HOST}

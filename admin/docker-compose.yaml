@@ -7,7 +7,7 @@ services:
                 max-file: '3'
             driver: json-file
         build:
-            context: ${SERVICE_ADMIN:-.}
+            context: ${ADMIN_CONTEXT:-.}
         environment:
             - CLIENT_HOST=${CLIENT_HOST}
             - APP_ID=${ADMIN_APP_ID}

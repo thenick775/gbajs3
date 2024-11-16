@@ -118,10 +118,10 @@ Do not attempt to log into the server unless you are the server owner or an appr
   # compose for merging yaml definitions
   COMPOSE_FILE_SEPARATOR=:
   COMPOSE_FILE=<colon separated list of compose files to merge>
-  SERVICE_POSTGRES=<relative path of postgres service>
-  SERVICE_GBAJS3=<relative path of gbajs3 service>
-  SERVICE_AUTH=<relative path of auth service>
-  SERVICE_ADMIN=<relative path of admin service>
+  POSTGRES_CONTEXT=<relative path of postgres service build context>
+  GBAJS3_CONTEXT=<relative path of gbajs3 service build context>
+  AUTH_CONTEXT=<relative path of auth service build context>
+  ADMIN_CONTEXT=<relative path of admin service build context>
   ```
 
   Leaving all default values in place will work for local development.

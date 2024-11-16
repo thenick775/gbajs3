@@ -31,6 +31,7 @@ jobs:
           - name: gba-webserver
             directory: ./gbajs3
             build_arg_name: CLIENT_HOST
+            dockerfile_location: ./gbajs3/Dockerfile
           - name: gba-auth-server
             directory: ./auth
           - name: gba-admin-server
@@ -39,6 +40,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Login to Registry
         run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -49,17 +52,19 @@ jobs:
           IMAGE_TAG: ${{ needs.setup.outputs.image_tag }}
           BUILD_ARG_NAME: ${{ matrix.image.build_arg_name }}
           BUILD_ARG_VALUE: ${{ secrets[matrix.image.build_arg_name] || '' }}
+          DOCKERFILE_LOCATION: ${{matrix.image.dockerfile_location}}
         run: |
+          BUILD_ARG_FLAG=""
+          DOCKERFILE_FLAG=""
           if [ -n "$BUILD_ARG_NAME" ] && [ -n "$BUILD_ARG_VALUE" ]; then
-            docker build --build-arg $BUILD_ARG_NAME=$BUILD_ARG_VALUE \
+            BUILD_ARG_FLAG="--build-arg $BUILD_ARG_NAME=$BUILD_ARG_VALUE"
+          if [-n $DOCKERFILE_LOCATION]
+            DOCKERFILE_FLAG="-f ${DOCKERFILE_LOCATION}"
+
+          docker build $BUILD_ARG_FLAG $DOCKERFILE_FLAG \
               -t ghcr.io/${{ github.actor }}/${REPO_NAME}/${{ matrix.image.name }}:${IMAGE_TAG} \
               -t ghcr.io/${{ github.actor }}/${REPO_NAME}/${{ matrix.image.name }}:latest \
               ${{ matrix.image.directory }}
-          else
-            docker build -t ghcr.io/${{ github.actor }}/${REPO_NAME}/${{ matrix.image.name }}:${IMAGE_TAG} \
-              -t ghcr.io/${{ github.actor }}/${REPO_NAME}/${{ matrix.image.name }}:latest \
-              ${{ matrix.image.directory }}
-          fi
 
       - name: Push
         env:

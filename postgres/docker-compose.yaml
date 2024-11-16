@@ -7,7 +7,7 @@ services:
                 max-file: '3'
             driver: json-file
         build:
-            context: ${SERVICE_POSTGRES:-.}
+            context: ${POSTGRES_CONTEXT:-.}
             args:
                 PG_DB_USER: ${PG_DB_USER}
         environment:

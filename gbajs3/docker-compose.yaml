@@ -7,7 +7,8 @@ services:
                 max-file: '3'
             driver: json-file
         build:
-            context: ${SERVICE_GBAJS3:-.}
+            context: ${GBAJS3_CONTEXT:-..}
+            dockerfile: ./gbajs3/Dockerfile
             args:
                 CLIENT_HOST: ${CLIENT_HOST}
         ports:
