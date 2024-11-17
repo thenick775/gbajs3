@@ -277,7 +277,8 @@ describe('<VirtualControls />', () => {
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...original(),
         emulator: {
-          createSaveState: createSaveStateSpy
+          createSaveState: createSaveStateSpy,
+          fsSync: vi.fn() as () => Promise<void>
         } as GBAEmulator
       }));
 
