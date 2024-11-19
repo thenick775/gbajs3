@@ -42,8 +42,16 @@ export const UploadCheatsModal = () => {
     [reset, setValue]
   );
 
-  const onSubmit: SubmitHandler<InputProps> = ({ cheatFiles }) => {
-    cheatFiles.forEach((cheatFiles) => emulator?.uploadCheats(cheatFiles));
+  const onSubmit: SubmitHandler<InputProps> = async ({ cheatFiles }) => {
+    await Promise.all(
+      cheatFiles.map(
+        (cheatFile) =>
+          new Promise<void>((resolve) => {
+            emulator?.uploadCheats(cheatFile, resolve);
+          })
+      )
+    );
+
     reset();
     syncActionIfEnabled();
   };

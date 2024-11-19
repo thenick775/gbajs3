@@ -52,7 +52,10 @@ describe('<UploadCheatsModal />', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
 
     expect(uploadCheatsSpy).toHaveBeenCalledOnce();
-    expect(uploadCheatsSpy).toHaveBeenCalledWith(testCheatFile);
+    expect(uploadCheatsSpy).toHaveBeenCalledWith(
+      testCheatFile,
+      expect.anything()
+    );
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
@@ -105,8 +108,14 @@ describe('<UploadCheatsModal />', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
 
     expect(uploadCheatsSpy).toHaveBeenCalledTimes(2);
-    expect(uploadCheatsSpy).toHaveBeenCalledWith(testCheatFiles[0]);
-    expect(uploadCheatsSpy).toHaveBeenCalledWith(testCheatFiles[1]);
+    expect(uploadCheatsSpy).toHaveBeenCalledWith(
+      testCheatFiles[0],
+      expect.anything()
+    );
+    expect(uploadCheatsSpy).toHaveBeenCalledWith(
+      testCheatFiles[1],
+      expect.anything()
+    );
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
 
     expect(screen.getByText('Upload complete!')).toBeVisible();

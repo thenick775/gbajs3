@@ -45,8 +45,16 @@ export const UploadSavesModal = () => {
     [reset, setValue]
   );
 
-  const onSubmit: SubmitHandler<InputProps> = ({ saveFiles }) => {
-    saveFiles.forEach((saveFile) => emulator?.uploadSaveOrSaveState(saveFile));
+  const onSubmit: SubmitHandler<InputProps> = async ({ saveFiles }) => {
+    await Promise.all(
+      saveFiles.map(
+        (saveFile) =>
+          new Promise<void>((resolve) => {
+            emulator?.uploadSaveOrSaveState(saveFile, resolve);
+          })
+      )
+    );
+
     reset();
     syncActionIfEnabled();
   };

@@ -51,7 +51,10 @@ describe('<UploadSavesModal />', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
 
     expect(uploadSaveOrSaveStateSpy).toHaveBeenCalledOnce();
-    expect(uploadSaveOrSaveStateSpy).toHaveBeenCalledWith(testSaveFile);
+    expect(uploadSaveOrSaveStateSpy).toHaveBeenCalledWith(
+      testSaveFile,
+      expect.anything()
+    );
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
@@ -104,8 +107,14 @@ describe('<UploadSavesModal />', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
 
     expect(uploadSaveSpy).toHaveBeenCalledTimes(2);
-    expect(uploadSaveSpy).toHaveBeenCalledWith(testSaveFiles[0]);
-    expect(uploadSaveSpy).toHaveBeenCalledWith(testSaveFiles[1]);
+    expect(uploadSaveSpy).toHaveBeenCalledWith(
+      testSaveFiles[0],
+      expect.anything()
+    );
+    expect(uploadSaveSpy).toHaveBeenCalledWith(
+      testSaveFiles[1],
+      expect.anything()
+    );
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
 
     expect(screen.getByText('Upload complete!')).toBeVisible();
