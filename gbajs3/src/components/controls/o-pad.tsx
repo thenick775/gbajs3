@@ -65,6 +65,10 @@ const BackgroundContainer = styled.section<BackgroundContainerProps>`
     top: ${$initialPosition.top};
     left: ${$initialPosition.left};
     `};
+
+  @media ${({ theme }) => theme.isMobileLandscape} {
+    background-color: transparent;
+  }
 `;
 
 const CenterKnob = styled.div<CenterKnobProps>`

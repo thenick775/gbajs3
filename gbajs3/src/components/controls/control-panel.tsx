@@ -15,6 +15,7 @@ import { TbResize } from 'react-icons/tb';
 import { Rnd } from 'react-rnd';
 import { css, styled, useTheme } from 'styled-components';
 
+import { ControlPanelLandscapeCollapsedWidth } from './consts.tsx';
 import {
   emulatorVolumeLocalStorageKey,
   emulatorFFMultiplierLocalStorageKey
@@ -138,6 +139,11 @@ const PanelControlButton = styled(ButtonBase).attrs({
   &:active {
     color: ${({ theme }) => theme.gbaThemeBlue};
   }
+
+  @media ${({ theme }) => theme.isMobileLandscape} {
+    flex-shrink: 1;
+    min-width: unset;
+  }
 `;
 
 const PanelControlSlider = styled.li<PanelControlSliderProps>`
@@ -228,6 +234,7 @@ export const ControlPanel = () => {
   const { layouts, setLayout } = useLayoutContext();
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
+  const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
   const [isPaused, setIsPaused] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const controlPanelId = useId();
@@ -362,14 +369,21 @@ export const ControlPanel = () => {
     }
   ];
 
-  const defaultPosition = {
-    x: Math.floor(canvasBounds.left),
-    y: Math.floor(canvasBounds.bottom + dragWrapperPadding)
-  };
-  const defaultSize = {
-    width: isLargerThanPhone ? 'auto' : '100dvw',
-    height: 'auto'
-  };
+  const defaultPosition = isMobileLandscape
+    ? { x: 0, y: 0 }
+    : {
+        x: Math.floor(canvasBounds.left),
+        y: Math.floor(canvasBounds.bottom + dragWrapperPadding)
+      };
+  const defaultSize = isMobileLandscape
+    ? {
+        width: ControlPanelLandscapeCollapsedWidth,
+        height: 'auto'
+      }
+    : {
+        width: isLargerThanPhone ? 'auto' : '100dvw',
+        height: 'auto'
+      };
 
   const position = layouts?.controlPanel?.position ?? defaultPosition;
   const size = layouts?.controlPanel?.size ?? defaultSize;

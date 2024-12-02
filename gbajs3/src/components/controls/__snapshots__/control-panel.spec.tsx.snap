@@ -106,6 +106,13 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   }
 }
 
+@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
+  .c3 {
+    flex-shrink: 1;
+    min-width: unset;
+  }
+}
+
 @media only screen and (min-width: 600px) {
   .c4 {
     width: auto;
@@ -595,6 +602,13 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 @media only screen and (min-width: 600px) {
   .c3 {
     width: auto;
+  }
+}
+
+@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
+  .c3 {
+    flex-shrink: 1;
+    min-width: unset;
   }
 }
 

@@ -9,6 +9,7 @@ import {
   useLayoutContext,
   useResizeContext
 } from '../../hooks/context.tsx';
+import { ControlPanelLandscapeCollapsedWidth } from '../controls/consts.tsx';
 import { NavigationMenuWidth } from '../navigation-menu/consts.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
@@ -44,6 +45,11 @@ const ScreenWrapper = styled(Rnd)<RndProps>`
     );
     height: 85dvh;
   }
+
+  @media ${({ theme }) => theme.isMobileLandscape} {
+    width: calc(100dvh * (3 / 2));
+    height: 100dvh;
+  }
 `;
 
 // overrides rnd styles to fallback to css
@@ -55,12 +61,17 @@ const defaultSize = {
 export const Screen = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
+  const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
   const { setCanvas } = useEmulatorContext();
   const { areItemsDraggable } = useDragContext();
   const { areItemsResizable } = useResizeContext();
   const { layouts, setLayout, hasSetLayout } = useLayoutContext();
-  const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
-  const screenWrapperYStart = isLargerThanPhone ? 15 : 0;
+  const screenWrapperXStart = isMobileLandscape
+    ? ControlPanelLandscapeCollapsedWidth
+    : isLargerThanPhone
+    ? NavigationMenuWidth + 10
+    : 0;
+  const screenWrapperYStart = isLargerThanPhone && !isMobileLandscape ? 15 : 0;
 
   const refUpdateDefaultPosition = useCallback(
     (node: Rnd | null) => {

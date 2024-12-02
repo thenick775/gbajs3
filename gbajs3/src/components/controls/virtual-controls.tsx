@@ -56,6 +56,7 @@ export const VirtualControls = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const isMobileWithUrlBar = useMediaQuery(theme.isMobileWithUrlBar);
+  const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
   const { emulator } = useEmulatorContext();
   const { isRunning } = useRunningContext();
   const { isAuthenticated } = useAuthContext();
@@ -78,7 +79,8 @@ export const VirtualControls = () => {
 
   const shouldShowVirtualControl = (virtualControlEnabled?: boolean) => {
     return (
-      (virtualControlEnabled === undefined && !isLargerThanPhone) ||
+      (virtualControlEnabled === undefined &&
+        (!isLargerThanPhone || isMobileLandscape)) ||
       !!virtualControlEnabled
     );
   };
@@ -99,6 +101,7 @@ export const VirtualControls = () => {
       mobileWithUrlBar?: { top?: string; left?: string };
       largerThanPhone?: { top?: string; left?: string };
       defaultMobile: { top: string; left: string };
+      mobileLandscape?: { top: string; left: string };
     };
   } = {
     'a-button': {
@@ -112,6 +115,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 35px - 3%)`,
         left: `calc(${horizontalStartPos}px + 450px)`
+      },
+      mobileLandscape: {
+        top: '235px',
+        left: 'calc(100dvw - 25px)'
       }
     },
     'b-button': {
@@ -125,6 +132,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 35px)`,
         left: `calc(${horizontalStartPos}px + 375px)`
+      },
+      mobileLandscape: {
+        top: 'calc(235px + 3%)',
+        left: 'calc(100dvw - 100px)'
       }
     },
     'start-button': {
@@ -139,6 +150,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 60px)`,
         left: `${horizontalStartPos}px`
+      },
+      mobileLandscape: {
+        top: 'calc(100dvh - 45px)',
+        left: '310px'
       }
     },
     'select-button': {
@@ -153,6 +168,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 60px)`,
         left: `calc(${horizontalStartPos}px + 103px)`
+      },
+      mobileLandscape: {
+        top: 'calc(100dvh - 45px)',
+        left: 'calc(100dvw - 255px)'
       }
     },
     'l-button': {
@@ -163,6 +182,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 15px)`,
         left: `${horizontalStartPos}px`
+      },
+      mobileLandscape: {
+        top: 'calc(100dvh - 45px)',
+        left: '210px'
       }
     },
     'r-button': {
@@ -173,6 +196,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 15px)`,
         left: `calc(${horizontalStartPos}px + 190px)`
+      },
+      mobileLandscape: {
+        top: 'calc(100dvh - 45px)',
+        left: 'calc(100dvw - 65px)'
       }
     },
     'quickreload-button': {
@@ -183,6 +210,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 10px)`,
         left: `calc(${horizontalStartPos}px + 205px)`
+      },
+      mobileLandscape: {
+        top: '15px',
+        left: 'calc(100dvw - 60px)'
       }
     },
     'uploadsave-button': {
@@ -193,6 +224,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 10px)`,
         left: `calc(${horizontalStartPos}px + 300px)`
+      },
+      mobileLandscape: {
+        top: '65px',
+        left: 'calc(100dvw - 16px)'
       }
     },
     'loadstate-button': {
@@ -206,6 +241,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 60px)`,
         left: `calc(${horizontalStartPos}px + 248px)`
+      },
+      mobileLandscape: {
+        top: '115px',
+        left: 'calc(100dvw - 16px)'
       }
     },
     'savestate-button': {
@@ -219,6 +258,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 60px)`,
         left: `calc(${horizontalStartPos}px + 300px)`
+      },
+      mobileLandscape: {
+        top: '165px',
+        left: 'calc(100dvw - 16px)'
       }
     },
     'o-pad': {
@@ -229,6 +272,10 @@ export const VirtualControls = () => {
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 10px)`,
         left: `calc(${horizontalStartPos}px + 450px)`
+      },
+      mobileLandscape: {
+        top: 'calc(100dvh - 205px)',
+        left: '25px'
       }
     }
   };
@@ -237,6 +284,8 @@ export const VirtualControls = () => {
     let variation = undefined;
     if (isMobileWithUrlBar && positionVariations[key]?.mobileWithUrlBar) {
       variation = positionVariations[key]?.mobileWithUrlBar;
+    } else if (isMobileLandscape && positionVariations[key]?.mobileLandscape) {
+      variation = positionVariations[key]?.mobileLandscape;
     } else if (isLargerThanPhone && positionVariations[key]?.largerThanPhone) {
       variation = positionVariations[key]?.largerThanPhone;
     }
