@@ -9,7 +9,6 @@ import {
   useLayoutContext,
   useResizeContext
 } from '../../hooks/context.tsx';
-import { ControlPanelLandscapeCollapsedWidth } from '../controls/consts.tsx';
 import { NavigationMenuWidth } from '../navigation-menu/consts.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
@@ -49,6 +48,10 @@ const ScreenWrapper = styled(Rnd)<RndProps>`
   @media ${({ theme }) => theme.isMobileLandscape} {
     width: calc(100dvh * (3 / 2));
     height: 100dvh;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: unset !important;
   }
 `;
 
@@ -66,11 +69,7 @@ export const Screen = () => {
   const { areItemsDraggable } = useDragContext();
   const { areItemsResizable } = useResizeContext();
   const { layouts, setLayout, hasSetLayout } = useLayoutContext();
-  const screenWrapperXStart = isMobileLandscape
-    ? ControlPanelLandscapeCollapsedWidth
-    : isLargerThanPhone
-    ? NavigationMenuWidth + 10
-    : 0;
+  const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
   const screenWrapperYStart = isLargerThanPhone && !isMobileLandscape ? 15 : 0;
 
   const refUpdateDefaultPosition = useCallback(

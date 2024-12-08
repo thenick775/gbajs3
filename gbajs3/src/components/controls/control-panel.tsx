@@ -1,6 +1,19 @@
-import { IconButton, Slider, useMediaQuery } from '@mui/material';
+import {
+  ClickAwayListener,
+  IconButton,
+  Slider,
+  Tooltip,
+  tooltipClasses,
+  useMediaQuery
+} from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
-import { useCallback, useId, useState, type ReactNode } from 'react';
+import {
+  useCallback,
+  useId,
+  useState,
+  forwardRef,
+  type ReactNode
+} from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineFastForward, AiOutlineForward } from 'react-icons/ai';
 import {
@@ -15,7 +28,6 @@ import { TbResize } from 'react-icons/tb';
 import { Rnd } from 'react-rnd';
 import { css, styled, useTheme } from 'styled-components';
 
-import { ControlPanelLandscapeCollapsedWidth } from './consts.tsx';
 import {
   emulatorVolumeLocalStorageKey,
   emulatorFFMultiplierLocalStorageKey
@@ -37,6 +49,7 @@ import { ButtonBase } from '../shared/custom-button-base.tsx';
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 
 import type { IconButtonProps, SliderProps } from '@mui/material';
+import type { IconType } from 'react-icons';
 
 type PanelProps = {
   $controlled: boolean;
@@ -60,7 +73,12 @@ type PanelSliderProps = {
   gridArea: string;
   maxIcon: ReactNode;
   minIcon: ReactNode;
+  asTooltip?: boolean;
 } & SliderProps;
+
+type TooltipSliderProps = PanelSliderProps & {
+  ButtonIcon: IconType;
+};
 
 type ControlledProps = {
   $controlled: boolean;
@@ -161,6 +179,10 @@ const MutedMarkSlider = styled(Slider)`
   }
 `;
 
+const ContentSpan = styled.span`
+  display: contents;
+`;
+
 const PanelButton = ({
   ariaLabel,
   children,
@@ -200,29 +222,78 @@ const SliderIconButton = ({ icon, ...rest }: SliderIconButtonProps) => {
   );
 };
 
-const PanelSlider = ({
-  controlled,
-  gridArea,
-  id,
-  maxIcon,
-  minIcon,
-  ...rest
-}: PanelSliderProps) => {
+const PanelSlider = forwardRef<HTMLSpanElement, PanelSliderProps>(
+  ({ controlled, gridArea, id, maxIcon, minIcon, ...rest }, ref) => {
+    return (
+      <ContentSpan ref={ref}>
+        <PanelControlSlider
+          id={id}
+          $gridArea={gridArea}
+          $controlled={controlled}
+        >
+          {minIcon}
+          <MutedMarkSlider
+            marks
+            sx={{
+              width: '85px',
+              margin: '0 10px',
+              maxHeight: '40px'
+            }}
+            valueLabelDisplay="auto"
+            {...rest}
+          />
+          {maxIcon}
+        </PanelControlSlider>
+      </ContentSpan>
+    );
+  }
+);
+
+const popperStyles = {
+  [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+    {
+      marginTop: '16px'
+    },
+  [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+    {
+      marginBottom: '16px'
+    },
+  [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+    {
+      marginLeft: '16px'
+    },
+  [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+    {
+      marginRight: '16px'
+    }
+};
+
+const TooltipPanelSlider = ({ ButtonIcon, ...rest }: TooltipSliderProps) => {
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+
   return (
-    <PanelControlSlider id={id} $gridArea={gridArea} $controlled={controlled}>
-      {minIcon}
-      <MutedMarkSlider
-        marks
-        sx={{
-          width: '85px',
-          margin: '0 10px',
-          maxHeight: '40px'
+    <ClickAwayListener onClickAway={() => setIsTooltipOpen(false)}>
+      <Tooltip
+        open={isTooltipOpen}
+        title={<PanelSlider {...rest} />}
+        arrow
+        sx={{ marginTop: '25px' }}
+        slotProps={{
+          popper: {
+            sx: popperStyles
+          },
+          tooltip: { sx: { padding: '8px 16px' } }
         }}
-        valueLabelDisplay="auto"
-        {...rest}
-      />
-      {maxIcon}
-    </PanelControlSlider>
+        placement="bottom-end"
+      >
+        <PanelControlButton
+          onClick={() => setIsTooltipOpen((prevState) => !prevState)}
+          $controlled={rest.controlled}
+        >
+          <ButtonIcon style={{ maxHeight: '100%' }} />
+        </PanelControlButton>
+      </Tooltip>
+    </ClickAwayListener>
   );
 };
 
@@ -377,7 +448,7 @@ export const ControlPanel = () => {
       };
   const defaultSize = isMobileLandscape
     ? {
-        width: ControlPanelLandscapeCollapsedWidth,
+        width: Math.floor(canvasBounds.left),
         height: 'auto'
       }
     : {
@@ -485,7 +556,8 @@ export const ControlPanel = () => {
                 <TbResize />
               )}
             </PanelButton>
-            <PanelSlider
+            <TooltipPanelSlider
+              asTooltip={isMobileLandscape}
               id={`${controlPanelId}--volume-slider`}
               aria-label="Volume Slider"
               gridArea="volume"
@@ -510,9 +582,11 @@ export const ControlPanel = () => {
               }
               valueLabelFormat={`${currentEmulatorVolume * 100}`}
               onChange={setVolumeFromEvent}
+              ButtonIcon={BiVolumeFull}
               {...defaultSliderEvents}
             />
-            <PanelSlider
+            <TooltipPanelSlider
+              asTooltip={isMobileLandscape}
               id={`${controlPanelId}--fast-forward`}
               aria-label="Fast Forward Slider"
               gridArea="fastForward"
@@ -537,6 +611,7 @@ export const ControlPanel = () => {
               }
               valueLabelFormat={`x${fastForwardMultiplier}`}
               onChange={setFastForwardFromEvent}
+              ButtonIcon={AiOutlineFastForward}
               {...defaultSliderEvents}
             />
           </IconContext.Provider>
