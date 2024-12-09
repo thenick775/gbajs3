@@ -51,7 +51,8 @@ const ScreenWrapper = styled(Rnd)<RndProps>`
     left: 0;
     right: 0;
     margin: 0 auto;
-    transform: unset !important;
+    transform: translate(0, 0) !important;
+    padding-left: env(safe-area-inset-left);
   }
 `;
 
