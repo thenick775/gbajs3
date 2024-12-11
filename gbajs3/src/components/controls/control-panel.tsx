@@ -73,7 +73,6 @@ type PanelSliderProps = {
   gridArea: string;
   maxIcon: ReactNode;
   minIcon: ReactNode;
-  asTooltip?: boolean;
 } & SliderProps;
 
 type TooltipSliderProps = PanelSliderProps & {
@@ -269,9 +268,11 @@ const popperStyles = {
 };
 
 const TooltipPanelSlider = ({ ButtonIcon, ...rest }: TooltipSliderProps) => {
+  const theme = useTheme();
+  const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
-  return (
+  return isMobileLandscape ? (
     <ClickAwayListener onClickAway={() => setIsTooltipOpen(false)}>
       <Tooltip
         open={isTooltipOpen}
@@ -294,6 +295,8 @@ const TooltipPanelSlider = ({ ButtonIcon, ...rest }: TooltipSliderProps) => {
         </PanelControlButton>
       </Tooltip>
     </ClickAwayListener>
+  ) : (
+    <PanelSlider {...rest} />
   );
 };
 
@@ -557,7 +560,6 @@ export const ControlPanel = () => {
               )}
             </PanelButton>
             <TooltipPanelSlider
-              asTooltip={isMobileLandscape}
               id={`${controlPanelId}--volume-slider`}
               aria-label="Volume Slider"
               gridArea="volume"
@@ -586,7 +588,6 @@ export const ControlPanel = () => {
               {...defaultSliderEvents}
             />
             <TooltipPanelSlider
-              asTooltip={isMobileLandscape}
               id={`${controlPanelId}--fast-forward`}
               aria-label="Fast Forward Slider"
               gridArea="fastForward"
