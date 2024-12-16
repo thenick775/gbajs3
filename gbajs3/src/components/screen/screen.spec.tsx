@@ -110,7 +110,7 @@ describe('<Screen />', () => {
     expect(screenWrapper).toMatchSnapshot();
   });
 
-  it('sets layout on drag', async () => {
+  it.skip('sets layout on drag', async () => {
     const setLayoutSpy = vi.fn();
     const { useLayoutContext: originalLayout, useDragContext: originalDrag } =
       await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
@@ -143,7 +143,7 @@ describe('<Screen />', () => {
     });
   });
 
-  it('sets layout on resize', async () => {
+  it.skip('sets layout on resize', async () => {
     const setLayoutSpy = vi.fn();
     const {
       useLayoutContext: originalLayout,

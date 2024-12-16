@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@mui/material';
-import { useCallback } from 'react';
+import { useCallback, useLayoutEffect, useRef } from 'react';
 import { Rnd, type Props as RndProps } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
 
@@ -44,6 +44,11 @@ const ScreenWrapper = styled(Rnd)<RndProps>`
     );
     height: 85dvh;
   }
+
+  @media ${({ theme }) => theme.isMobileLandscape} {
+    width: calc(100dvh * (3 / 2));
+    height: 100dvh;
+  }
 `;
 
 // overrides rnd styles to fallback to css
@@ -55,12 +60,14 @@ const defaultSize = {
 export const Screen = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
+  const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
   const { setCanvas } = useEmulatorContext();
   const { areItemsDraggable } = useDragContext();
   const { areItemsResizable } = useResizeContext();
   const { layouts, setLayout, hasSetLayout } = useLayoutContext();
   const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
-  const screenWrapperYStart = isLargerThanPhone ? 15 : 0;
+  const screenWrapperYStart = isLargerThanPhone && !isMobileLandscape ? 15 : 0;
+  const rndRef = useRef<Rnd | null>();
 
   const refUpdateDefaultPosition = useCallback(
     (node: Rnd | null) => {
@@ -73,19 +80,48 @@ export const Screen = () => {
         setLayout('screen', {
           initialBounds: node.resizableElement.current?.getBoundingClientRect()
         });
+
+      if (!rndRef.current) rndRef.current = node;
     },
     [hasSetLayout, layouts, setLayout]
   );
+
+  useLayoutEffect(() => {
+    if (layouts?.screen?.position || layouts?.screen?.size) return;
+
+    const x = Math.floor(
+      window.innerWidth / 2 - (layouts?.screen?.initialBounds?.width ?? 0) / 2
+    );
+    const y = Math.floor(
+      window.innerHeight / 2 - (layouts?.screen?.initialBounds?.height ?? 0) / 2
+    );
+
+    if (isMobileLandscape) rndRef?.current?.updatePosition({ x, y });
+
+    setLayout('screen', {
+      initialBounds:
+        rndRef.current?.resizableElement?.current?.getBoundingClientRect()
+    });
+  }, [
+    isMobileLandscape,
+    layouts?.screen?.initialBounds?.width,
+    layouts?.screen?.initialBounds?.height,
+    layouts?.screen?.position,
+    layouts?.screen?.size,
+    setLayout
+  ]);
 
   const refSetCanvas = useCallback(
     (node: HTMLCanvasElement | null) => setCanvas(node),
     [setCanvas]
   );
 
-  const position = layouts?.screen?.position ?? {
-    x: screenWrapperXStart,
-    y: screenWrapperYStart
-  };
+  const position = isMobileLandscape
+    ? undefined
+    : layouts?.screen?.position ?? {
+        x: screenWrapperXStart,
+        y: screenWrapperYStart
+      };
   const size = layouts?.screen?.size ?? defaultSize;
 
   return (
