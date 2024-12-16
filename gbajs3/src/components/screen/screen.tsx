@@ -64,7 +64,7 @@ export const Screen = () => {
   const { setCanvas } = useEmulatorContext();
   const { areItemsDraggable } = useDragContext();
   const { areItemsResizable } = useResizeContext();
-  const { layouts, setLayout, hasSetLayout } = useLayoutContext();
+  const { layouts, setLayout, hasSetLayout, clearLayouts } = useLayoutContext();
   const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
   const screenWrapperYStart = isLargerThanPhone && !isMobileLandscape ? 15 : 0;
   const rndRef = useRef<Rnd | null>();
@@ -89,19 +89,29 @@ export const Screen = () => {
   useLayoutEffect(() => {
     if (layouts?.screen?.position || layouts?.screen?.size) return;
 
-    const x = Math.floor(
-      window.innerWidth / 2 - (layouts?.screen?.initialBounds?.width ?? 0) / 2
-    );
-    const y = Math.floor(
-      window.innerHeight / 2 - (layouts?.screen?.initialBounds?.height ?? 0) / 2
-    );
+    const timeout = setTimeout(() => {
+      const currentDimensions =
+        rndRef?.current?.resizableElement?.current?.getBoundingClientRect();
+      const width = currentDimensions?.width;
+      const height = currentDimensions?.height;
 
-    if (isMobileLandscape) rndRef?.current?.updatePosition({ x, y });
+      const x = Math.floor(
+        document.documentElement.clientWidth / 2 - (width ?? 0) / 2
+      );
+      const y = Math.floor(
+        document.documentElement.clientHeight / 2 - (height ?? 0) / 2
+      );
 
-    setLayout('screen', {
-      initialBounds:
-        rndRef.current?.resizableElement?.current?.getBoundingClientRect()
-    });
+      if (isMobileLandscape) rndRef?.current?.updatePosition({ x, y });
+
+      clearLayouts();
+      setLayout('screen', {
+        initialBounds:
+          rndRef.current?.resizableElement?.current?.getBoundingClientRect()
+      });
+    }, 100);
+
+    return () => clearTimeout(timeout);
   }, [
     isMobileLandscape,
     layouts?.screen?.initialBounds?.width,
