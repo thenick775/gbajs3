@@ -1,4 +1,5 @@
 import { useMediaQuery } from '@mui/material';
+import { useOrientation } from '@uidotdev/usehooks';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import { Rnd, type Props as RndProps } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
@@ -64,10 +65,11 @@ export const Screen = () => {
   const { setCanvas } = useEmulatorContext();
   const { areItemsDraggable } = useDragContext();
   const { areItemsResizable } = useResizeContext();
-  const { layouts, setLayout, hasSetLayout, clearLayouts } = useLayoutContext();
+  const { layouts, setLayout, hasSetLayout } = useLayoutContext();
   const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
   const screenWrapperYStart = isLargerThanPhone && !isMobileLandscape ? 15 : 0;
   const rndRef = useRef<Rnd | null>();
+  const orientation = useOrientation();
 
   const refUpdateDefaultPosition = useCallback(
     (node: Rnd | null) => {
@@ -76,62 +78,44 @@ export const Screen = () => {
         node?.resizableElement?.current?.style?.removeProperty('height');
       }
 
-      if (!layouts?.screen?.initialBounds && node)
+      if (!hasSetLayout && node)
         setLayout('screen', {
           initialBounds: node.resizableElement.current?.getBoundingClientRect()
         });
 
       if (!rndRef.current) rndRef.current = node;
     },
-    [hasSetLayout, layouts, setLayout]
+    [hasSetLayout, setLayout]
   );
 
   useLayoutEffect(() => {
-    if (layouts?.screen?.position || layouts?.screen?.size) return;
-
-    const timeout = setTimeout(() => {
-      const currentDimensions =
-        rndRef?.current?.resizableElement?.current?.getBoundingClientRect();
-      const width = currentDimensions?.width;
-      const height = currentDimensions?.height;
-
-      const x = Math.floor(
-        document.documentElement.clientWidth / 2 - (width ?? 0) / 2
-      );
-      const y = Math.floor(
-        document.documentElement.clientHeight / 2 - (height ?? 0) / 2
-      );
-
-      if (isMobileLandscape) rndRef?.current?.updatePosition({ x, y });
-
-      clearLayouts();
+    if (!hasSetLayout && [0, 90, 270].includes(orientation.angle))
       setLayout('screen', {
         initialBounds:
           rndRef.current?.resizableElement?.current?.getBoundingClientRect()
       });
-    }, 100);
-
-    return () => clearTimeout(timeout);
-  }, [
-    isMobileLandscape,
-    layouts?.screen?.initialBounds?.width,
-    layouts?.screen?.initialBounds?.height,
-    layouts?.screen?.position,
-    layouts?.screen?.size,
-    setLayout
-  ]);
+  }, [hasSetLayout, isMobileLandscape, setLayout, orientation.angle]);
 
   const refSetCanvas = useCallback(
     (node: HTMLCanvasElement | null) => setCanvas(node),
     [setCanvas]
   );
 
-  const position = isMobileLandscape
-    ? undefined
-    : layouts?.screen?.position ?? {
-        x: screenWrapperXStart,
-        y: screenWrapperYStart
-      };
+  const currentDimensions =
+    rndRef?.current?.resizableElement?.current?.getBoundingClientRect();
+  const width = currentDimensions?.width ?? 0;
+  const height = currentDimensions?.height ?? 0;
+  const position =
+    layouts?.screen?.position ??
+    (isMobileLandscape
+      ? {
+          x: Math.floor(document.documentElement.clientWidth / 2 - width / 2),
+          y: Math.floor(document.documentElement.clientHeight / 2 - height / 2)
+        }
+      : {
+          x: screenWrapperXStart,
+          y: screenWrapperYStart
+        });
   const size = layouts?.screen?.size ?? defaultSize;
 
   return (
