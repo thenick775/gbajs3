@@ -452,7 +452,7 @@ export const ControlPanel = () => {
       };
   const defaultSize = isMobileLandscape
     ? {
-        width: Math.min(60, canvasBounds.left),
+        width: Math.min(80, canvasBounds.left),
         height: 'auto'
       }
     : {

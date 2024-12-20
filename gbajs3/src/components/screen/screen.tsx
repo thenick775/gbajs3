@@ -60,8 +60,12 @@ const defaultSize = {
 
 export const Screen = () => {
   const theme = useTheme();
-  const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
-  const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
+  const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone, {
+    noSsr: true
+  });
+  const isMobileLandscape = useMediaQuery(theme.isMobileLandscape, {
+    noSsr: true
+  });
   const { setCanvas } = useEmulatorContext();
   const { areItemsDraggable } = useDragContext();
   const { areItemsResizable } = useResizeContext();
