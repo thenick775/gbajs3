@@ -87,7 +87,7 @@ export const Screen = () => {
   const { layouts, setLayout, hasSetLayout } = useLayoutContext();
   const screenWrapperXStart = isLargerThanPhone ? NavigationMenuWidth + 10 : 0;
   const screenWrapperYStart = isLargerThanPhone && !isMobileLandscape ? 15 : 0;
-  const rndRef = useRef<Rnd | null>();
+  const rndRef = useRef<Rnd | null>(undefined);
   const orientation = useOrientation();
 
   const refUpdateDefaultPosition = useCallback(

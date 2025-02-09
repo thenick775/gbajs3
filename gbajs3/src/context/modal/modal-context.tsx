@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import type { Dispatch, SetStateAction } from 'react';
+import type { JSX, Dispatch, SetStateAction } from 'react';
 
 type ModalContextProps = {
   modalContent: JSX.Element | null;

@@ -1,5 +1,5 @@
 import { useLocalStorage } from '@uidotdev/usehooks';
-import Joyride, { STATUS, type Step } from 'react-joyride';
+import { Joyride, STATUS, type Step } from 'react-joyride';
 import { styled } from 'styled-components';
 
 import { productTourLocalStorageKey } from './consts.tsx';
