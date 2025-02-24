@@ -1,5 +1,10 @@
-import { useLocalStorage } from '@uidotdev/usehooks';
+import {
+  useLocalStorage,
+  useMediaQuery,
+  useOrientation
+} from '@uidotdev/usehooks';
 import { useCallback, type ReactNode } from 'react';
+import { useTheme } from 'styled-components';
 
 import { LayoutContext } from './layout-context.tsx';
 
@@ -14,6 +19,9 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
     layoutLocalStorageKey,
     {}
   );
+  const theme = useTheme();
+  const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
+  const orientation = useOrientation();
 
   const clearLayouts = useCallback(() => setLayouts({}), [setLayouts]);
 
@@ -22,16 +30,36 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
       setLayouts((prevState) => {
         return {
           ...prevState,
-          [layoutKey]: { ...prevState?.[layoutKey], ...layout }
+          [layoutKey]: {
+            ...prevState?.[layoutKey],
+            ...layout,
+            orientation: orientation.type,
+            isLargerThanPhone: isLargerThanPhone
+          }
         };
       }),
-    [setLayouts]
+    [setLayouts, orientation.type, isLargerThanPhone]
+  );
+
+  const getLayout = useCallback(
+    (layoutKey: string) => {
+      const matchingLayout = Object.entries(layouts).find(
+        ([key, layout]) =>
+          key === layoutKey &&
+          layout.orientation === orientation.type &&
+          layout.isLargerThanPhone === isLargerThanPhone
+      );
+
+      return matchingLayout?.[1];
+    },
+    [layouts, isLargerThanPhone, orientation.type]
   );
 
   return (
     <LayoutContext.Provider
       value={{
         layouts,
+        getLayout,
         clearLayouts,
         setLayout,
         setLayouts
