@@ -479,11 +479,11 @@ describe('<NavigationMenu />', () => {
       localStorage.setItem(
         'componentLayouts',
         `{
-          "menuButton": {
+          "menuButton": [{
             "position": { "x": 0, "y": 200 },
             "orientation": "UNKNOWN",
             "isLargerThanPhone": false
-          }
+          }]
         }`
       );
 

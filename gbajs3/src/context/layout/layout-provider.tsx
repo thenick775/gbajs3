@@ -28,30 +28,44 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
   const setLayout = useCallback(
     (layoutKey: string, layout: Layout) =>
       setLayouts((prevState) => {
+        const existingLayouts =
+          prevState[layoutKey]?.filter(
+            (l) =>
+              !(
+                l.orientation === orientation.type &&
+                l.isLargerThanPhone === isLargerThanPhone
+              )
+          ) ?? [];
+
+        const matchingLayout = prevState[layoutKey]?.find(
+          (l) =>
+            l.orientation === orientation.type &&
+            l.isLargerThanPhone === isLargerThanPhone
+        );
+
         return {
           ...prevState,
-          [layoutKey]: {
-            ...prevState?.[layoutKey],
-            ...layout,
-            orientation: orientation.type,
-            isLargerThanPhone: isLargerThanPhone
-          }
+          [layoutKey]: [
+            ...existingLayouts,
+            {
+              ...matchingLayout,
+              ...layout,
+              orientation: orientation.type,
+              isLargerThanPhone: isLargerThanPhone
+            }
+          ]
         };
       }),
     [setLayouts, orientation.type, isLargerThanPhone]
   );
 
   const getLayout = useCallback(
-    (layoutKey: string) => {
-      const matchingLayout = Object.entries(layouts).find(
-        ([key, layout]) =>
-          key === layoutKey &&
+    (layoutKey: string) =>
+      layouts?.[layoutKey]?.find(
+        (layout) =>
           layout.orientation === orientation.type &&
           layout.isLargerThanPhone === isLargerThanPhone
-      );
-
-      return matchingLayout?.[1];
-    },
+      ),
     [layouts, isLargerThanPhone, orientation.type]
   );
 

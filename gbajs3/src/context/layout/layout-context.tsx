@@ -13,7 +13,7 @@ export type Layout = {
 };
 
 export type Layouts = {
-  [key: string]: Layout;
+  [key: string]: Layout[] | undefined;
 };
 
 export type LayoutContextProps = {
