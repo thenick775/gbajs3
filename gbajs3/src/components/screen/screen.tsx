@@ -91,11 +91,10 @@ export const Screen = () => {
   const rndRef = useRef<Rnd | null>();
 
   const screenLayout = getLayout('screen');
-  const hasScreenLayout = !!screenLayout;
 
   const refUpdateDefaultPosition = useCallback(
     (node: Rnd | null) => {
-      if (!hasScreenLayout) {
+      if (!screenLayout?.size) {
         node?.resizableElement?.current?.style?.removeProperty('width');
         node?.resizableElement?.current?.style?.removeProperty('height');
       }
@@ -108,7 +107,7 @@ export const Screen = () => {
 
       rndRef.current = node;
     },
-    [initialBounds?.screen, setInitialBound, hasScreenLayout]
+    [initialBounds?.screen, setInitialBound, screenLayout?.size]
   );
 
   const refSetCanvas = useCallback(

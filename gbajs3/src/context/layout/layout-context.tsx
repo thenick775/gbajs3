@@ -13,7 +13,9 @@ export type Layout = {
 };
 
 export type Layouts = {
-  [key: string]: Layout[] | undefined;
+  [key: string]: {
+    [key in 'portrait' | 'landscape' | 'desktop']: Layout | undefined;
+  };
 };
 
 export type LayoutContextProps = {
