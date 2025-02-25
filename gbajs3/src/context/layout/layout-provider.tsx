@@ -12,7 +12,7 @@ import type { Layout, Layouts } from './layout-context.tsx';
 
 type LayoutProviderProps = { children: ReactNode };
 
-const layoutLocalStorageKey = 'componentLayouts';
+const layoutLocalStorageKey = 'componentLayoutsV2';
 
 export const LayoutProvider = ({ children }: LayoutProviderProps) => {
   const [layouts, setLayouts] = useLocalStorage<Layouts>(

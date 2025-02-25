@@ -477,7 +477,7 @@ describe('<NavigationMenu />', () => {
 
     it('renders with existing layout', async () => {
       localStorage.setItem(
-        'componentLayouts',
+        'componentLayoutsV2',
         `{
           "menuButton": {
             "portrait": {
