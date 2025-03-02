@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:with-coi-serviceworker": "vite build --mode with-coi-serviceworker",
     "lint": "eslint src test --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint src test --report-unused-disable-directives --max-warnings 0 --fix",
     "preview": "vite preview",
@@ -18,7 +19,7 @@
     "@emotion/styled": "^11.13.5",
     "@mui/material": "^6.0.2",
     "@mui/x-tree-view": "^7.0.0",
-    "@thenick775/mgba-wasm": "^1.1.0",
+    "@thenick775/mgba-wasm": "^2.0.0-beta.1",
     "@uidotdev/usehooks": "^2.4.1",
     "jwt-decode": "^4.0.0",
     "nanoid": "^5.0.7",
