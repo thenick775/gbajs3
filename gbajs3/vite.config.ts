@@ -4,131 +4,130 @@ import { coverageConfigDefaults } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { createHtmlPlugin } from 'vite-plugin-html';
 
 export default defineConfig(({ mode }) => {
-  console.log('vancise building with mode:', mode);
+  console.log('building with mode:', mode);
 
   const withCOIServiceWorker = mode === 'with-coi-serviceworker';
-
-  const headersPlugin = {
-    handlerWillRespond: async ({ response }) => {
-      const headers = new Headers(response.headers);
-      headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
-      headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-
-      return new Response(response.body, {
-        headers,
-        status: response.status,
-        statusText: response.statusText
-      });
-    }
-  };
 
   return {
     base: './',
     plugins: [
       react(),
-      VitePWA({
-        registerType: 'autoUpdate',
-        includeAssets: ['/img/favicon.ico'],
-        manifest: {
-          name: 'Gbajs3',
-          short_name: 'GJ3',
-          description: 'GBA emulator online in the Browser',
-          theme_color: '#979597',
-          background_color: '#212529',
-          icons: [
-            {
-              src: '/img/icon-192x192.png',
-              sizes: '192x192',
-              type: 'image/png'
-            },
-            {
-              src: '/img/icon-256x256.png',
-              sizes: '256x256',
-              type: 'image/png'
-            },
-            {
-              src: '/img/icon-384x384.png',
-              sizes: '384x384',
-              type: 'image/png'
-            },
-            {
-              src: '/img/icon-512x512.png',
-              sizes: '512x512',
-              type: 'image/png'
-            },
-            {
-              src: '/img/maskable-icon-192x192.png',
-              sizes: '192x192',
-              type: 'image/png',
-              purpose: 'maskable'
-            },
-            {
-              src: '/img/maskable-icon-256x256.png',
-              sizes: '256x256',
-              type: 'image/png',
-              purpose: 'maskable'
-            },
-            {
-              src: '/img/maskable-icon-384x384.png',
-              sizes: '384x384',
-              type: 'image/png',
-              purpose: 'maskable'
-            },
-            {
-              src: '/img/maskable-icon-512x512.png',
-              sizes: '512x512',
-              type: 'image/png',
-              purpose: 'maskable'
-            }
-          ],
-          screenshots: [
-            {
-              src: 'img/desktop.png',
-              sizes: '2054x1324',
-              type: 'image/png',
-              form_factor: 'wide',
-              label: 'Desktop Gbajs3'
-            },
-            {
-              src: 'img/mobile.png',
-              sizes: '1170x2532',
-              type: 'image/png',
-              form_factor: 'narrow',
-              label: 'Mobile Gbajs3'
-            }
-          ]
-        },
-        workbox: {
-          globPatterns: ['**/*.{js,css,html,wasm}'],
-          runtimeCaching: withCOIServiceWorker
-            ? [
+      withCOIServiceWorker
+        ? [
+            viteStaticCopy({
+              targets: [
                 {
-                  urlPattern: ({ request }) =>
-                    ['document', 'script', 'wasm', 'iframe', 'worker'].indexOf(
-                      request.destination
-                    ) > 1,
-                  handler: 'NetworkOnly',
-                  options: {
-                    plugins: [headersPlugin]
-                  }
+                  src: 'node_modules/coi-serviceworker/coi-serviceworker.js',
+                  dest: './'
                 }
               ]
-            : []
-        }
-      }),
+            }),
+            ,
+            createHtmlPlugin({
+              inject: {
+                tags: [
+                  {
+                    tag: 'script',
+
+                    attrs: { src: 'coi-serviceworker.js' },
+
+                    injectTo: 'head-prepend'
+                  }
+                ]
+              }
+            })
+          ]
+        : VitePWA({
+            registerType: 'autoUpdate',
+            includeAssets: ['/img/favicon.ico'],
+            manifest: {
+              name: 'Gbajs3',
+              short_name: 'GJ3',
+              description: 'GBA emulator online in the Browser',
+              theme_color: '#979597',
+              background_color: '#212529',
+              icons: [
+                {
+                  src: '/img/icon-192x192.png',
+                  sizes: '192x192',
+                  type: 'image/png'
+                },
+                {
+                  src: '/img/icon-256x256.png',
+                  sizes: '256x256',
+                  type: 'image/png'
+                },
+                {
+                  src: '/img/icon-384x384.png',
+                  sizes: '384x384',
+                  type: 'image/png'
+                },
+                {
+                  src: '/img/icon-512x512.png',
+                  sizes: '512x512',
+                  type: 'image/png'
+                },
+                {
+                  src: '/img/maskable-icon-192x192.png',
+                  sizes: '192x192',
+                  type: 'image/png',
+                  purpose: 'maskable'
+                },
+                {
+                  src: '/img/maskable-icon-256x256.png',
+                  sizes: '256x256',
+                  type: 'image/png',
+                  purpose: 'maskable'
+                },
+                {
+                  src: '/img/maskable-icon-384x384.png',
+                  sizes: '384x384',
+                  type: 'image/png',
+                  purpose: 'maskable'
+                },
+                {
+                  src: '/img/maskable-icon-512x512.png',
+                  sizes: '512x512',
+                  type: 'image/png',
+                  purpose: 'maskable'
+                }
+              ],
+              screenshots: [
+                {
+                  src: 'img/desktop.png',
+                  sizes: '2054x1324',
+                  type: 'image/png',
+                  form_factor: 'wide',
+                  label: 'Desktop Gbajs3'
+                },
+                {
+                  src: 'img/mobile.png',
+                  sizes: '1170x2532',
+                  type: 'image/png',
+                  form_factor: 'narrow',
+                  label: 'Mobile Gbajs3'
+                }
+              ]
+            },
+            workbox: {
+              globPatterns: ['**/*.{js,css,html,wasm}']
+            }
+          }),
       visualizer({ gzipSize: true })
     ],
     optimizeDeps: {
       exclude: ['@thenick775/mgba-wasm']
     },
-    server: {
-      headers: {
-        'Cross-Origin-Embedder-Policy': 'require-corp',
-        'Cross-Origin-Opener-Policy': 'same-origin'
-      }
-    },
+    // server: {
+    //   headers: {
+    //     'Cross-Origin-Embedder-Policy': 'require-corp',
+    //     'Cross-Origin-Opener-Policy': 'same-origin'
+    //   }
+    // },
     build: {
       rollupOptions: {
         output: {
