@@ -68,13 +68,13 @@ Do not attempt to log into the server unless you are the server owner or an appr
 
 - Example Desktop
 
-<img src="./readme-graphics/gbajs3-desktop-v3.png">
+<img src="./readme-graphics/gbajs3-desktop-v4.png">
 
 - Example Mobile
 
-<img src="./readme-graphics/gbajs3-mobile-portrait-v4.png" width="400px">
+<img src="./readme-graphics/gbajs3-mobile-portrait-v5.png" width="400px">
 
-<img src="./readme-graphics/gbajs3-mobile-landscape-v1.png" height="400px">
+<img src="./readme-graphics/gbajs3-mobile-landscape-v2.png" height="400px">
 
 All control positions can be modified if the default layouts do not suit your device!
 
