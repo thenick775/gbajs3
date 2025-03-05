@@ -38,6 +38,8 @@ Do not attempt to log into the server unless you are the server owner or an appr
 - Save state support
 - Cheat code support
 - Soft patch support
+- Rewind support
+- Threading support
 - Core Support
   - mGBA support (wasm based)
 - Admin UI
