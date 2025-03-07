@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
         : [],
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['/img/favicon.ico'],
+        includeAssets: ['./img/favicon.ico'],
         manifest: {
           name: 'Gbajs3',
           short_name: 'GJ3',
@@ -41,45 +41,45 @@ export default defineConfig(({ mode }) => {
           background_color: '#212529',
           icons: [
             {
-              src: '/img/icon-192x192.png',
+              src: './img/icon-192x192.png',
               sizes: '192x192',
               type: 'image/png'
             },
             {
-              src: '/img/icon-256x256.png',
+              src: './img/icon-256x256.png',
               sizes: '256x256',
               type: 'image/png'
             },
             {
-              src: '/img/icon-384x384.png',
+              src: './img/icon-384x384.png',
               sizes: '384x384',
               type: 'image/png'
             },
             {
-              src: '/img/icon-512x512.png',
+              src: './img/icon-512x512.png',
               sizes: '512x512',
               type: 'image/png'
             },
             {
-              src: '/img/maskable-icon-192x192.png',
+              src: './img/maskable-icon-192x192.png',
               sizes: '192x192',
               type: 'image/png',
               purpose: 'maskable'
             },
             {
-              src: '/img/maskable-icon-256x256.png',
+              src: './img/maskable-icon-256x256.png',
               sizes: '256x256',
               type: 'image/png',
               purpose: 'maskable'
             },
             {
-              src: '/img/maskable-icon-384x384.png',
+              src: './img/maskable-icon-384x384.png',
               sizes: '384x384',
               type: 'image/png',
               purpose: 'maskable'
             },
             {
-              src: '/img/maskable-icon-512x512.png',
+              src: './img/maskable-icon-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'maskable'
