@@ -110,23 +110,28 @@ export const ControlPanel = () => {
     emulatorSettingsLocalStorageKey
   );
   const [emulatorVolumeBeforeAutoMute, setEmulatorVolumeBeforeAutoMute] =
-    useLocalStorage<number | undefined>(
-      'emulatorVolumeBeforeAutoMuteLocalStorageKey'
-    );
+    useLocalStorage<
+      { volumeBeforeMute: number; type: 'rewind' | 'fastForward' } | undefined
+    >('emulatorVolumeBeforeAutoMuteLocalStorageKey');
   const rndRef = useRef<Rnd | null>();
 
-  const muteAndPreserveVolume = () => {
+  const muteAndPreserveVolume = (type: 'rewind' | 'fastForward') => {
     if (currentEmulatorVolume > 0) {
-      setEmulatorVolumeBeforeAutoMute(currentEmulatorVolume);
+      setEmulatorVolumeBeforeAutoMute({
+        volumeBeforeMute: currentEmulatorVolume,
+        type
+      });
       emulator?.setVolume(0);
       setCurrentEmulatorVolume(0);
     }
   };
 
-  const restoreVolume = () => {
+  const restoreVolume = (type: 'rewind' | 'fastForward') => {
+    if (type !== emulatorVolumeBeforeAutoMute?.type) return;
+
     if (emulatorVolumeBeforeAutoMute) {
-      emulator?.setVolume(emulatorVolumeBeforeAutoMute);
-      setCurrentEmulatorVolume(emulatorVolumeBeforeAutoMute);
+      emulator?.setVolume(emulatorVolumeBeforeAutoMute.volumeBeforeMute);
+      setCurrentEmulatorVolume(emulatorVolumeBeforeAutoMute.volumeBeforeMute);
     }
     setEmulatorVolumeBeforeAutoMute(undefined);
   };
@@ -182,10 +187,10 @@ export const ControlPanel = () => {
     setFastForwardMultiplier(ffMultiplier);
 
     if (emulatorSettings?.muteOnFastForward) {
-      if (ffMultiplier > 1) {
-        muteAndPreserveVolume();
+      if (ffMultiplier > 1 && !emulatorVolumeBeforeAutoMute) {
+        muteAndPreserveVolume('fastForward');
       } else if (ffMultiplier === 1 && currentEmulatorVolume === 0) {
-        restoreVolume();
+        restoreVolume('fastForward');
       }
     }
   };
@@ -409,11 +414,15 @@ export const ControlPanel = () => {
               $gridArea="rewind"
               onPointerDown={() => {
                 emulator?.toggleRewind(true);
-                if (emulatorSettings?.muteOnRewind) muteAndPreserveVolume();
+                if (
+                  emulatorSettings?.muteOnRewind &&
+                  !emulatorVolumeBeforeAutoMute
+                )
+                  muteAndPreserveVolume('rewind');
               }}
               onPointerUp={() => {
                 emulator?.toggleRewind(false);
-                if (emulatorSettings?.muteOnRewind) restoreVolume();
+                if (emulatorSettings?.muteOnRewind) restoreVolume('rewind');
               }}
             >
               <AiOutlineBackward style={{ maxHeight: '100%' }} />
