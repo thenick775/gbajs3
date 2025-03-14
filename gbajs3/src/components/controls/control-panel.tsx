@@ -175,6 +175,7 @@ export const ControlPanel = () => {
   const setVolume = (volumePercent: number) => {
     emulator?.setVolume(volumePercent);
     setCurrentEmulatorVolume(volumePercent);
+    setEmulatorVolumeBeforeAutoMute(undefined);
   };
 
   const setVolumeFromEvent = (event: Event) => {
@@ -189,7 +190,7 @@ export const ControlPanel = () => {
     if (emulatorSettings?.muteOnFastForward) {
       if (ffMultiplier > 1 && !emulatorVolumeBeforeAutoMute) {
         muteAndPreserveVolume('fastForward');
-      } else if (ffMultiplier === 1 && currentEmulatorVolume === 0) {
+      } else if (ffMultiplier === 1) {
         restoreVolume('fastForward');
       }
     }
