@@ -321,6 +321,32 @@ describe('<ControlPanel />', () => {
       expect(screen.queryAllByTestId('gripper-handle')).toHaveLength(0);
     });
 
+    it('toggles emulator rewind', async () => {
+      const toggleRewindSpy: (v: boolean) => void = vi.fn();
+      const { useEmulatorContext: originalEmulator } = await vi.importActual<
+        typeof contextHooks
+      >('../../hooks/context.tsx');
+
+      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+        ...originalEmulator(),
+        emulator: {
+          toggleRewind: toggleRewindSpy
+        } as GBAEmulator
+      }));
+
+      renderWithContext(<ControlPanel />);
+
+      fireEvent.pointerDown(screen.getByLabelText('Rewind Emulator'));
+
+      expect(toggleRewindSpy).toHaveBeenCalledOnce();
+      expect(toggleRewindSpy).toHaveBeenCalledWith(true);
+
+      fireEvent.pointerUp(screen.getByLabelText('Rewind Emulator'));
+
+      expect(toggleRewindSpy).toHaveBeenCalledTimes(2);
+      expect(toggleRewindSpy).toHaveBeenCalledWith(true);
+    });
+
     it('mutes volume', async () => {
       const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
       const emulatorSetVolumeSpy: (v: number) => void = vi.fn();

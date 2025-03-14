@@ -20,8 +20,9 @@ import { Rnd } from 'react-rnd';
 import { styled, useTheme } from 'styled-components';
 
 import {
-  emulatorVolumeLocalStorageKey,
-  emulatorFFMultiplierLocalStorageKey
+  emulatorFFMultiplierLocalStorageKey,
+  emulatorSettingsLocalStorageKey,
+  emulatorVolumeLocalStorageKey
 } from '../../context/emulator/consts.ts';
 import {
   useDragContext,
@@ -40,6 +41,8 @@ import {
 import { GripperHandle } from '../shared/gripper-handle.tsx';
 import { PanelButton, SliderButton } from './control-panel/buttons.tsx';
 import { PanelSlider } from './control-panel/panel-slider.tsx';
+
+import type { EmulatorSettings } from '../modals/emulator-settings.tsx';
 
 type PanelProps = {
   $controlled: boolean;
@@ -95,15 +98,38 @@ export const ControlPanel = () => {
   const [isResizing, setIsResizing] = useState(false);
   const controlPanelId = useId();
   const quitGame = useQuitGame();
-  const [currentEmulatorVolume, setCurrentEmulatorVolume] = useLocalStorage(
-    emulatorVolumeLocalStorageKey,
-    1
-  );
   const [fastForwardMultiplier, setFastForwardMultiplier] = useLocalStorage(
     emulatorFFMultiplierLocalStorageKey,
     1
   );
+  const [currentEmulatorVolume, setCurrentEmulatorVolume] = useLocalStorage(
+    emulatorVolumeLocalStorageKey,
+    1
+  );
+  const [emulatorSettings] = useLocalStorage<EmulatorSettings | undefined>(
+    emulatorSettingsLocalStorageKey
+  );
+  const [emulatorVolumeBeforeAutoMute, setEmulatorVolumeBeforeAutoMute] =
+    useLocalStorage<number | undefined>(
+      'emulatorVolumeBeforeAutoMuteLocalStorageKey'
+    );
   const rndRef = useRef<Rnd | null>();
+
+  const muteAndPreserveVolume = () => {
+    if (currentEmulatorVolume > 0) {
+      setEmulatorVolumeBeforeAutoMute(currentEmulatorVolume);
+      emulator?.setVolume(0);
+      setCurrentEmulatorVolume(0);
+    }
+  };
+
+  const restoreVolume = () => {
+    if (emulatorVolumeBeforeAutoMute) {
+      emulator?.setVolume(emulatorVolumeBeforeAutoMute);
+      setCurrentEmulatorVolume(emulatorVolumeBeforeAutoMute);
+    }
+    setEmulatorVolumeBeforeAutoMute(undefined);
+  };
 
   // pause emulator when document is not visible,
   // resumes if applicable when document is visible
@@ -154,12 +180,19 @@ export const ControlPanel = () => {
   const setFastForward = (ffMultiplier: number) => {
     emulator?.setFastForwardMultiplier(ffMultiplier);
     setFastForwardMultiplier(ffMultiplier);
+
+    if (emulatorSettings?.muteOnFastForward) {
+      if (ffMultiplier > 1) {
+        muteAndPreserveVolume();
+      } else if (ffMultiplier === 1 && currentEmulatorVolume === 0) {
+        restoreVolume();
+      }
+    }
   };
 
   const setFastForwardFromEvent = (event: Event) => {
     const ffMultiplier = Number((event.target as HTMLInputElement)?.value);
-    emulator?.setFastForwardMultiplier(ffMultiplier);
-    setFastForwardMultiplier(ffMultiplier);
+    setFastForward(ffMultiplier);
   };
 
   const tourSteps: TourSteps = [
@@ -376,9 +409,11 @@ export const ControlPanel = () => {
               $gridArea="rewind"
               onPointerDown={() => {
                 emulator?.toggleRewind(true);
+                if (emulatorSettings?.muteOnRewind) muteAndPreserveVolume();
               }}
               onPointerUp={() => {
                 emulator?.toggleRewind(false);
+                if (emulatorSettings?.muteOnRewind) restoreVolume();
               }}
             >
               <AiOutlineBackward style={{ maxHeight: '100%' }} />
