@@ -42,6 +42,7 @@ export type EmulatorSettings = {
   audioBufferSize?: number;
   videoSync: boolean;
   audioSync: boolean;
+  threadedVideo: boolean;
 };
 
 const StyledForm = styled.form`
@@ -105,7 +106,8 @@ export const EmulatorSettingsModal = () => {
       audioSampleRate: emulatorSettings?.audioSampleRate ?? 48000,
       audioBufferSize: emulatorSettings?.audioBufferSize ?? 1024,
       videoSync: emulatorSettings?.videoSync ?? false,
-      audioSync: emulatorSettings?.audioSync ?? true
+      audioSync: emulatorSettings?.audioSync ?? true,
+      threadedVideo: emulatorSettings?.threadedVideo ?? false
     }
   });
   const baseId = useId();
@@ -133,7 +135,8 @@ export const EmulatorSettingsModal = () => {
       audioSampleRate: rest.audioSampleRate,
       audioBufferSize: rest.audioBufferSize,
       videoSync: rest.videoSync,
-      audioSync: rest.audioSync
+      audioSync: rest.audioSync,
+      threadedVideo: rest.threadedVideo
     });
   };
 
@@ -149,7 +152,8 @@ export const EmulatorSettingsModal = () => {
         audioSampleRate: 48000,
         audioBufferSize: 1024,
         videoSync: false,
-        audioSync: true
+        audioSync: true,
+        threadedVideo: false
       });
   };
 
@@ -292,6 +296,11 @@ export const EmulatorSettingsModal = () => {
               label="Audio Sync"
               watcher={watch('audioSync')}
               {...register('audioSync')}
+            />
+            <ManagedCheckbox
+              label="Threaded Video"
+              watcher={watch('threadedVideo')}
+              {...register('threadedVideo')}
             />
           </GridContainer>
         </StyledForm>

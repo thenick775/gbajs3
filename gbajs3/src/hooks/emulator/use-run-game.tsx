@@ -44,7 +44,8 @@ export const useRunGame = () => {
       audioSampleRate: 48000,
       audioBufferSize: 1024,
       videoSync: false,
-      audioSync: true
+      audioSync: true,
+      threadedVideo: false
     }
   );
   const { addCallbacks } = useAddCallbacks();
@@ -82,7 +83,8 @@ export const useRunGame = () => {
           audioSampleRate: emulatorSettings.audioSampleRate,
           audioBufferSize: emulatorSettings.audioBufferSize,
           videoSync: emulatorSettings.videoSync,
-          audioSync: emulatorSettings.audioSync
+          audioSync: emulatorSettings.audioSync,
+          threadedVideo: emulatorSettings.threadedVideo
         });
       }
 
