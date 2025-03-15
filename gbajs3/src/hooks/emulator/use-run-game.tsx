@@ -45,7 +45,8 @@ export const useRunGame = () => {
       audioBufferSize: 1024,
       videoSync: false,
       audioSync: true,
-      threadedVideo: false
+      threadedVideo: false,
+      rewindEnable: true
     }
   );
   const { addCallbacks } = useAddCallbacks();
@@ -84,7 +85,8 @@ export const useRunGame = () => {
           audioBufferSize: emulatorSettings.audioBufferSize,
           videoSync: emulatorSettings.videoSync,
           audioSync: emulatorSettings.audioSync,
-          threadedVideo: emulatorSettings.threadedVideo
+          threadedVideo: emulatorSettings.threadedVideo,
+          rewindEnable: emulatorSettings.rewindEnable
         });
       }
 

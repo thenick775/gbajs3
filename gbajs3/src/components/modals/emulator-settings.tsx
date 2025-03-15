@@ -43,6 +43,7 @@ export type EmulatorSettings = {
   videoSync: boolean;
   audioSync: boolean;
   threadedVideo: boolean;
+  rewindEnable: boolean;
 };
 
 const StyledForm = styled.form`
@@ -107,7 +108,8 @@ export const EmulatorSettingsModal = () => {
       audioBufferSize: emulatorSettings?.audioBufferSize ?? 1024,
       videoSync: emulatorSettings?.videoSync ?? false,
       audioSync: emulatorSettings?.audioSync ?? true,
-      threadedVideo: emulatorSettings?.threadedVideo ?? false
+      threadedVideo: emulatorSettings?.threadedVideo ?? false,
+      rewindEnable: emulatorSettings?.rewindEnable ?? true
     }
   });
   const baseId = useId();
@@ -136,7 +138,8 @@ export const EmulatorSettingsModal = () => {
       audioBufferSize: rest.audioBufferSize,
       videoSync: rest.videoSync,
       audioSync: rest.audioSync,
-      threadedVideo: rest.threadedVideo
+      threadedVideo: rest.threadedVideo,
+      rewindEnable: rest.rewindEnable
     });
   };
 
@@ -153,7 +156,8 @@ export const EmulatorSettingsModal = () => {
         audioBufferSize: 1024,
         videoSync: false,
         audioSync: true,
-        threadedVideo: false
+        threadedVideo: false,
+        rewindEnable: true
       });
   };
 
@@ -301,6 +305,11 @@ export const EmulatorSettingsModal = () => {
               label="Threaded Video"
               watcher={watch('threadedVideo')}
               {...register('threadedVideo')}
+            />
+            <ManagedCheckbox
+              label="Rewind Enabled"
+              watcher={watch('rewindEnable')}
+              {...register('rewindEnable')}
             />
           </GridContainer>
         </StyledForm>
