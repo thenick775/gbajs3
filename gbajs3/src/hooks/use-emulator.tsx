@@ -20,6 +20,9 @@ export const useEmulator = (canvas: HTMLCanvasElement | null) => {
 
         await Module.FSInit();
 
+        // @ts-expect-error custom property
+        window.emu = Module;
+
         const emulator = mGBAEmulator(Module);
 
         setEmulator(emulator);
