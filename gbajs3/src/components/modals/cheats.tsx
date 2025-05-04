@@ -1,5 +1,5 @@
 import { Button, IconButton, TextField } from '@mui/material';
-import { useCallback, useId, useMemo, useState } from 'react';
+import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { BiTrash } from 'react-icons/bi';
 import { styled } from 'styled-components';
@@ -80,6 +80,7 @@ export const CheatsModal = () => {
   const { emulator } = useEmulatorContext();
   const [viewRawCheats, setViewRawCheats] = useState(false);
   const { syncActionIfEnabled } = useAddCallbacks();
+  const createNewCheatButtonRef = useRef<HTMLButtonElement>(null);
   const baseId = useId();
   const defaultCheat = { desc: '', code: '', enable: false };
 
@@ -284,8 +285,18 @@ export const CheatsModal = () => {
             <IconButton
               aria-label="Create new cheat"
               id={`${baseId}--add-cheat`}
+              ref={createNewCheatButtonRef}
               sx={{ padding: 0, display: viewRawCheats ? 'none' : 'flex' }}
-              onClick={() => append(defaultCheat)}
+              onClick={() => {
+                append(defaultCheat, { shouldFocus: false });
+
+                requestAnimationFrame(() => {
+                  createNewCheatButtonRef.current?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                });
+              }}
             >
               <StyledBiPlus />
             </IconButton>

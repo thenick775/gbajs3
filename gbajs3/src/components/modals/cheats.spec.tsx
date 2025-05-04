@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -95,6 +95,8 @@ describe('<CheatsModal />', () => {
   });
 
   it('adds new cheat', async () => {
+    const scrollIntoViewSpy = vi.spyOn(HTMLElement.prototype, 'scrollIntoView');
+
     renderWithContext(<CheatsModal />);
 
     expect(screen.getByRole('list')).toBeVisible();
@@ -105,6 +107,8 @@ describe('<CheatsModal />', () => {
     );
 
     expect(screen.getAllByRole('listitem')).toHaveLength(2);
+    // adding a new cheat should cause a scroll the create button into view fully
+    await waitFor(() => expect(scrollIntoViewSpy).toHaveBeenCalledOnce());
   });
 
   it('removes cheat', async () => {
