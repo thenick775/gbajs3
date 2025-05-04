@@ -138,7 +138,7 @@ export const CheatsModal = () => {
       target: `#${CSS.escape(`${baseId}--cheat-code`)}`
     },
     {
-      content: <p>Use the checkbox to enable/disable a cheat.</p>,
+      content: <p>Use the switch to enable/disable a cheat.</p>,
       placement: 'right',
       target: `#${CSS.escape(`${baseId}--enabled`)}`
     },

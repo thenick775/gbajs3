@@ -313,7 +313,7 @@ describe('<CheatsModal />', () => {
     await userEvent.click(screen.getByRole('button', { name: /Next/ }));
 
     expect(
-      screen.getByText('Use the checkbox to enable/disable a cheat.')
+      screen.getByText('Use the switch to enable/disable a cheat.')
     ).toBeVisible();
 
     // advance tour
