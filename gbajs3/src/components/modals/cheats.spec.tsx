@@ -43,7 +43,7 @@ describe('<CheatsModal />', () => {
 
     expect(screen.getByLabelText('Name')).toBeVisible();
     expect(screen.getByLabelText('Cheat Code')).toBeVisible();
-    expect(screen.getByLabelText('Enabled')).not.toBeChecked();
+    expect(screen.getByLabelText('Enabled')).toBeChecked();
     expect(screen.getByRole('button', { name: 'Remove Cheat' })).toBeVisible();
   });
 
@@ -107,7 +107,7 @@ describe('<CheatsModal />', () => {
     );
 
     expect(screen.getAllByRole('listitem')).toHaveLength(2);
-    // adding a new cheat should cause a scroll the create button into view fully
+    // adding a new cheat should cause the create button to scroll into view fully
     await waitFor(() => expect(scrollIntoViewSpy).toHaveBeenCalledOnce());
   });
 

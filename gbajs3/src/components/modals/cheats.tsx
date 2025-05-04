@@ -82,7 +82,7 @@ export const CheatsModal = () => {
   const { syncActionIfEnabled } = useAddCallbacks();
   const createNewCheatButtonRef = useRef<HTMLButtonElement>(null);
   const baseId = useId();
-  const defaultCheat = { desc: '', code: '', enable: false };
+  const defaultCheat = { desc: '', code: '', enable: true };
 
   const [rawCheats, parsedCheats] = useMemo(() => {
     const cheatsFile = emulator?.getCurrentCheatsFile();
