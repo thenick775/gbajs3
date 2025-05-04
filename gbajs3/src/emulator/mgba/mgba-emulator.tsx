@@ -185,7 +185,7 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
         cheatsList
           .map(
             ({ desc, enable, code }, idx) =>
-              `cheat${idx}_desc = "${desc}"\ncheat${idx}_enable = ${enable}\ncheat${idx}_code = "${code}"`
+              `cheat${idx}_desc = "${desc}"\ncheat${idx}_enable = ${enable}\ncheat${idx}_code = "${code}"\n`
           )
           .join('\n')
       : '';

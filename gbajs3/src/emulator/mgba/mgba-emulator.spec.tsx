@@ -138,8 +138,8 @@ cheat1_code = "XYZ789"`;
 
     const expectedContent =
       `cheats = 2\n\n` +
-      `cheat0_desc = "Infinite Lives"\ncheat0_enable = true\ncheat0_code = "ABC123"\n` +
-      `cheat1_desc = "All Weapons"\ncheat1_enable = false\ncheat1_code = "XYZ789"`;
+      `cheat0_desc = "Infinite Lives"\ncheat0_enable = true\ncheat0_code = "ABC123"\n\n` +
+      `cheat1_desc = "All Weapons"\ncheat1_enable = false\ncheat1_code = "XYZ789"\n`;
 
     const content = await cheatsFile?.text();
     expect(content).toBe(expectedContent);
