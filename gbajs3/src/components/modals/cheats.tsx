@@ -1,8 +1,8 @@
-import { Button, IconButton, TextField, useMediaQuery } from '@mui/material';
+import { Button, IconButton, TextField } from '@mui/material';
 import { useCallback, useId, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { CiSquareRemove } from 'react-icons/ci';
-import { styled, useTheme } from 'styled-components';
+import { BiTrash } from 'react-icons/bi';
+import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -14,7 +14,7 @@ import {
   type TourSteps
 } from '../product-tour/embedded-product-tour.tsx';
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
-import { ManagedCheckbox } from '../shared/managed-checkbox.tsx';
+import { ManagedSwitch } from '../shared/managed-switch.tsx';
 import { StyledBiPlus } from '../shared/styled.tsx';
 
 type OptionallyHiddenProps = {
@@ -29,6 +29,17 @@ type HelpTextProps = {
   $withMargin: boolean;
 };
 
+const Cheat = styled.li`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  border-bottom: 1px solid ${({ theme }) => theme.pattensBlue};
+  padding-bottom: 5px;
+  width: 100%;
+`;
+
 const CheatsList = styled.ul<OptionallyHiddenProps>`
   list-style: none;
   display: ${({ $shouldHide = false }) => ($shouldHide ? 'none' : 'flex')};
@@ -37,22 +48,10 @@ const CheatsList = styled.ul<OptionallyHiddenProps>`
   padding: 10px;
   margin: 0;
   max-width: 100%;
-`;
 
-const Cheat = styled.li`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 10px;
-  align-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.pattensBlue};
-  padding-bottom: 10px;
-  width: 100%;
-`;
-
-const StyledCiSquareRemove = styled(CiSquareRemove)`
-  min-height: 40px;
-  min-width: 40px;
+  & > ${Cheat}:not(:first-child) {
+    padding-top: 10px;
+  }
 `;
 
 const CheatsFormSeparator = styled.div<CheatsFormSeparatorProps>`
@@ -60,10 +59,6 @@ const CheatsFormSeparator = styled.div<CheatsFormSeparatorProps>`
   flex-direction: column;
   gap: 10px;
   width: ${({ $fullWidth = false }) => ($fullWidth ? '100%' : 'auto')};
-
-  @media ${({ theme }) => theme.isLargerThanPhone} {
-    flex-direction: row;
-  }
 `;
 
 const RowContainer = styled.div`
@@ -81,8 +76,6 @@ const HelpText = styled.p<HelpTextProps>`
 `;
 
 export const CheatsModal = () => {
-  const theme = useTheme();
-  const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const { setIsModalOpen } = useModalContext();
   const { emulator } = useEmulatorContext();
   const [viewRawCheats, setViewRawCheats] = useState(false);
@@ -127,7 +120,7 @@ export const CheatsModal = () => {
 
   const tourSteps: TourSteps = [
     {
-      content: <p>Use this form to enter, add, and delete cheats.</p>,
+      content: <p>Use this form to enter, add, and remove cheats.</p>,
       target: `#${CSS.escape(`${baseId}--cheats-form`)}`
     },
     {
@@ -243,7 +236,6 @@ export const CheatsModal = () => {
                       error={!!errors?.cheats?.[index]?.desc}
                       size="small"
                       autoComplete="Cheat Name"
-                      style={isLargerThanPhone ? { maxWidth: 100 } : undefined}
                       helperText={errors?.cheats?.[index]?.desc?.message}
                       {...register(`cheats.${index}.desc`, {
                         required: {
@@ -266,31 +258,23 @@ export const CheatsModal = () => {
                         }
                       })}
                     />
-                  </CheatsFormSeparator>
 
-                  <CheatsFormSeparator>
-                    <ManagedCheckbox
-                      id={firstWithId(`${baseId}--enabled`)}
-                      label="Enabled"
-                      watcher={watch(`cheats.${index}.enable`)}
-                      {...register(`cheats.${index}.enable`)}
-                    />
-                    <IconButton
-                      aria-label="Delete"
-                      id={firstWithId(`${baseId}--remove`)}
-                      sx={{
-                        padding: 0,
-                        marginRight: 'auto',
-                        '&:hover': { borderRadius: '10px' },
-                        '&:focus': { borderRadius: '10px' },
-                        '& .MuiTouchRipple-root .MuiTouchRipple-child': {
-                          borderRadius: '10px'
-                        }
-                      }}
-                      onClick={() => remove(index)}
-                    >
-                      <StyledCiSquareRemove />
-                    </IconButton>
+                    <RowContainer>
+                      <ManagedSwitch
+                        id={firstWithId(`${baseId}--enabled`)}
+                        label="Enabled"
+                        watcher={watch(`cheats.${index}.enable`)}
+                        {...register(`cheats.${index}.enable`)}
+                      />
+                      <IconButton
+                        aria-label="Remove Cheat"
+                        id={firstWithId(`${baseId}--remove`)}
+                        sx={{ padding: '5px' }}
+                        onClick={() => remove(index)}
+                      >
+                        <BiTrash />
+                      </IconButton>
+                    </RowContainer>
                   </CheatsFormSeparator>
                 </Cheat>
               );
