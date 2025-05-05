@@ -157,7 +157,7 @@ cheat1_code = "XYZ789"`;
     expect(cheatsFile).toBeNull();
   });
 
-  it('should generate an empty file if cheats list is empty', async () => {
+  it('should generate only a header if cheats list is empty', async () => {
     const emulator = createEmulator();
     const cheatsList: ParsedCheats[] = [];
 
@@ -166,8 +166,10 @@ cheat1_code = "XYZ789"`;
     expect(cheatsFile).toBeInstanceOf(File);
     expect(cheatsFile?.name).toBe('testGame.cheats');
 
-    const size = cheatsFile?.size;
-    expect(size).toBe(0);
+    const expectedContent = `cheats = 0\n\n`;
+
+    const content = await cheatsFile?.text();
+    expect(content).toBe(expectedContent);
   });
 
   it('should retrieve the current cheats file', () => {
