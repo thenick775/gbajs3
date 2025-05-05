@@ -21,10 +21,6 @@ type OptionallyHiddenProps = {
   $shouldHide: boolean;
 };
 
-type CheatsFormSeparatorProps = {
-  $fullWidth?: boolean;
-};
-
 type HelpTextProps = {
   $withMargin: boolean;
 };
@@ -54,11 +50,11 @@ const CheatsList = styled.ul<OptionallyHiddenProps>`
   }
 `;
 
-const CheatsFormSeparator = styled.div<CheatsFormSeparatorProps>`
+const CheatsFormSeparator = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: ${({ $fullWidth = false }) => ($fullWidth ? '100%' : 'auto')};
+  width: 100%;
 `;
 
 const RowContainer = styled.div`
@@ -230,7 +226,7 @@ export const CheatsModal = () => {
 
               return (
                 <Cheat key={item.id}>
-                  <CheatsFormSeparator $fullWidth>
+                  <CheatsFormSeparator>
                     <TextField
                       id={firstWithId(`${baseId}--name`)}
                       label="Name"
