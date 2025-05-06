@@ -94,7 +94,7 @@ describe('<EmulatorSettingsModal />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":0,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"videoSync":true,"audioSync":false,"threadedVideo":false,"rewindEnable":true}'
+      '{"frameSkip":0,"fpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
@@ -110,11 +110,13 @@ describe('<EmulatorSettingsModal />', () => {
       audioSampleRate: 48000,
       audioSync: false,
       frameSkip: 0,
+      fpsTarget: 60,
       rewindBufferCapacity: 600,
       rewindBufferInterval: 1,
       rewindEnable: true,
       threadedVideo: false,
-      videoSync: true
+      timestepSync: true,
+      videoSync: false
     });
   });
 
@@ -170,6 +172,7 @@ describe('<EmulatorSettingsModal />', () => {
     const saveOnInGameSaveCheckbox = screen.getByLabelText(
       'Save file system on in-game save'
     );
+    const timestepSyncCheckbox = screen.getByLabelText('Timestep Sync');
     const videoSyncCheckbox = screen.getByLabelText('Video Sync');
     const audioSyncCheckbox = screen.getByLabelText('Audio Sync');
     const threadedVideoCheckbox = screen.getByLabelText('Threaded Video');
@@ -192,6 +195,7 @@ describe('<EmulatorSettingsModal />', () => {
     await userEvent.click(muteOnFastForwardCheckbox);
     await userEvent.click(saveFileSystemOnFSOperationCheckbox);
     await userEvent.click(saveOnInGameSaveCheckbox);
+    await userEvent.click(timestepSyncCheckbox);
     await userEvent.click(videoSyncCheckbox);
     await userEvent.click(audioSyncCheckbox);
     await userEvent.click(threadedVideoCheckbox);
@@ -199,9 +203,10 @@ describe('<EmulatorSettingsModal />', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
+    // todo above change new input values
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":25,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"videoSync":false,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"saveFileName":"custom_save_override.sav"}'
+      '{"frameSkip":25,"fpsTarget":60,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"saveFileName":"custom_save_override.sav"}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
@@ -217,11 +222,13 @@ describe('<EmulatorSettingsModal />', () => {
       audioSampleRate: 48000,
       audioSync: true,
       frameSkip: 25,
+      fpsTarget: 60,
       rewindBufferCapacity: 1000,
       rewindBufferInterval: 10,
       rewindEnable: false,
       threadedVideo: true,
-      videoSync: false
+      timestepSync: false,
+      videoSync: true
     });
   });
 
@@ -275,13 +282,15 @@ describe('<EmulatorSettingsModal />', () => {
       allowOpposingDirections: true,
       audioBufferSize: 1024,
       audioSampleRate: 48000,
+      fpsTarget: 60,
       audioSync: false,
       frameSkip: 0,
       rewindBufferCapacity: 600,
       rewindBufferInterval: 1,
       rewindEnable: true,
       threadedVideo: false,
-      videoSync: true
+      timestepSync: true,
+      videoSync: false
     });
   });
 

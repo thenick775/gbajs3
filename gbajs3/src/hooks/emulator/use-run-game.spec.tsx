@@ -84,12 +84,14 @@ describe('useRunGame hook', () => {
       audioBufferSize: 1024,
       audioSampleRate: 48000,
       audioSync: false,
+      fpsTarget: undefined,
       frameSkip: undefined,
       rewindBufferCapacity: undefined,
       rewindBufferInterval: undefined,
       rewindEnable: true,
       threadedVideo: false,
-      videoSync: true
+      timestepSync: true,
+      videoSync: false
     });
   });
 
