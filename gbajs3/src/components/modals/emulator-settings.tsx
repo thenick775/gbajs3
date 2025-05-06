@@ -34,6 +34,7 @@ export type EmulatorSettings = {
   allowOpposingDirections: boolean;
   fileSystemNotificationsEnabled: boolean;
   frameSkip?: number;
+  fpsTarget?: number;
   muteOnFastForward: boolean;
   muteOnRewind: boolean;
   rewindBufferCapacity?: number;
@@ -43,6 +44,7 @@ export type EmulatorSettings = {
   saveFileSystemOnInGameSave: boolean;
   audioSampleRate?: number;
   audioBufferSize?: number;
+  timestepSync: boolean;
   videoSync: boolean;
   audioSync: boolean;
   threadedVideo: boolean;
@@ -55,20 +57,10 @@ const StyledForm = styled.form`
   gap: 15px;
 `;
 
-const FlexContainer = styled.div`
-  display: flex;
-  gap: 15px;
-  min-width: 0;
-
-  * {
-    flex-grow: 1;
-  }
-`;
-
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 0;
+  gap: 10px;
 `;
 
 export const EmulatorSettingsModal = () => {
@@ -89,6 +81,7 @@ export const EmulatorSettingsModal = () => {
   } = useForm<EmulatorSettings>({
     values: {
       frameSkip: emulatorSettings?.frameSkip ?? 0,
+      fpsTarget: emulatorSettings?.fpsTarget ?? 60,
       rewindBufferCapacity: emulatorSettings?.rewindBufferCapacity ?? 600,
       rewindBufferInterval: emulatorSettings?.rewindBufferInterval ?? 1,
       allowOpposingDirections:
@@ -106,7 +99,8 @@ export const EmulatorSettingsModal = () => {
         emulatorSettings?.fileSystemNotificationsEnabled ?? true,
       audioSampleRate: emulatorSettings?.audioSampleRate ?? 48000,
       audioBufferSize: emulatorSettings?.audioBufferSize ?? 1024,
-      videoSync: emulatorSettings?.videoSync ?? true,
+      timestepSync: emulatorSettings?.timestepSync ?? true,
+      videoSync: emulatorSettings?.videoSync ?? false,
       audioSync: emulatorSettings?.audioSync ?? false,
       threadedVideo: emulatorSettings?.threadedVideo ?? false,
       rewindEnable: emulatorSettings?.rewindEnable ?? true
@@ -137,10 +131,12 @@ export const EmulatorSettingsModal = () => {
     emulator?.setCoreSettings({
       allowOpposingDirections: rest.allowOpposingDirections,
       frameSkip: rest.frameSkip,
+      fpsTarget: rest.fpsTarget,
       rewindBufferCapacity: rest.rewindBufferCapacity,
       rewindBufferInterval: rest.rewindBufferInterval,
       audioSampleRate: rest.audioSampleRate,
       audioBufferSize: rest.audioBufferSize,
+      timestepSync: rest.timestepSync,
       videoSync: rest.videoSync,
       audioSync: rest.audioSync,
       threadedVideo: rest.threadedVideo,
@@ -160,11 +156,13 @@ export const EmulatorSettingsModal = () => {
     emulator?.setCoreSettings({
       allowOpposingDirections: true,
       frameSkip: 0,
+      fpsTarget: 60,
       rewindBufferCapacity: 600,
       rewindBufferInterval: 1,
       audioSampleRate: 48000,
       audioBufferSize: 1024,
-      videoSync: true,
+      timestepSync: true,
+      videoSync: false,
       audioSync: false,
       threadedVideo: false,
       rewindEnable: true
@@ -362,18 +360,28 @@ export const EmulatorSettingsModal = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Copy>Core: {emulator?.coreName}</Copy>
-          <NumberInput
-            id={`${baseId}--frame-skip`}
-            label="Frame Skip"
-            min={0}
-            max={32}
-            size="small"
-            {...register('frameSkip', {
-              required: { value: true, message: 'Frame skip is required' },
-              valueAsNumber: true
-            })}
-          />
-          <FlexContainer>
+          <GridContainer>
+            <NumberInput
+              id={`${baseId}--frame-skip`}
+              label="Frame Skip"
+              min={0}
+              max={32}
+              size="small"
+              {...register('frameSkip', {
+                required: { value: true, message: 'Frame skip is required' },
+                valueAsNumber: true
+              })}
+            />
+            <NumberInput
+              id={`${baseId}--fps-target`}
+              label="FPS Target"
+              min={0}
+              size="small"
+              {...register('fpsTarget', {
+                required: { value: true, message: 'FPS target is required' },
+                valueAsNumber: true
+              })}
+            />
             <NumberInput
               id={`${baseId}--rewind-capacity`}
               label="Rewind Capacity"
@@ -402,8 +410,6 @@ export const EmulatorSettingsModal = () => {
                 valueAsNumber: true
               })}
             />
-          </FlexContainer>
-          <FlexContainer>
             <FormControl id={`${baseId}--audio-sample-rate`} size="small">
               <InputLabel>Audio Sample Rate</InputLabel>
               <Select
@@ -440,7 +446,7 @@ export const EmulatorSettingsModal = () => {
                 ))}
               </Select>
             </FormControl>
-          </FlexContainer>
+          </GridContainer>
           <Controller
             control={control}
             name="saveFileName"
@@ -493,6 +499,12 @@ export const EmulatorSettingsModal = () => {
               label="Save file system on in-game save"
               watcher={watch('saveFileSystemOnInGameSave')}
               {...register('saveFileSystemOnInGameSave')}
+            />
+            <ManagedCheckbox
+              id={`${baseId}--timesttep-sync`}
+              label="Timestep Sync"
+              watcher={watch('timestepSync')}
+              {...register('timestepSync')}
             />
             <ManagedCheckbox
               id={`${baseId}--video-sync`}
