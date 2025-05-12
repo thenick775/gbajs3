@@ -34,7 +34,7 @@ export type EmulatorSettings = {
   allowOpposingDirections: boolean;
   fileSystemNotificationsEnabled: boolean;
   frameSkip?: number;
-  fpsTarget?: number;
+  baseFpsTarget?: number;
   muteOnFastForward: boolean;
   muteOnRewind: boolean;
   rewindBufferCapacity?: number;
@@ -81,7 +81,7 @@ export const EmulatorSettingsModal = () => {
   } = useForm<EmulatorSettings>({
     values: {
       frameSkip: emulatorSettings?.frameSkip ?? 0,
-      fpsTarget: emulatorSettings?.fpsTarget ?? 60,
+      baseFpsTarget: emulatorSettings?.baseFpsTarget ?? 60,
       rewindBufferCapacity: emulatorSettings?.rewindBufferCapacity ?? 600,
       rewindBufferInterval: emulatorSettings?.rewindBufferInterval ?? 1,
       allowOpposingDirections:
@@ -131,7 +131,7 @@ export const EmulatorSettingsModal = () => {
     emulator?.setCoreSettings({
       allowOpposingDirections: rest.allowOpposingDirections,
       frameSkip: rest.frameSkip,
-      fpsTarget: rest.fpsTarget,
+      baseFpsTarget: rest.baseFpsTarget,
       rewindBufferCapacity: rest.rewindBufferCapacity,
       rewindBufferInterval: rest.rewindBufferInterval,
       audioSampleRate: rest.audioSampleRate,
@@ -156,7 +156,7 @@ export const EmulatorSettingsModal = () => {
     emulator?.setCoreSettings({
       allowOpposingDirections: true,
       frameSkip: 0,
-      fpsTarget: 60,
+      baseFpsTarget: 60,
       rewindBufferCapacity: 600,
       rewindBufferInterval: 1,
       audioSampleRate: 48000,
@@ -373,12 +373,15 @@ export const EmulatorSettingsModal = () => {
               })}
             />
             <NumberInput
-              id={`${baseId}--fps-target`}
-              label="FPS Target"
+              id={`${baseId}--base-fps-target`}
+              label="Base FPS Target"
               min={0}
               size="small"
-              {...register('fpsTarget', {
-                required: { value: true, message: 'FPS target is required' },
+              {...register('baseFpsTarget', {
+                required: {
+                  value: true,
+                  message: 'Base FPS target is required'
+                },
                 valueAsNumber: true
               })}
             />

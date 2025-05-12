@@ -84,7 +84,7 @@ describe('useRunGame hook', () => {
       audioBufferSize: 1024,
       audioSampleRate: 48000,
       audioSync: false,
-      fpsTarget: undefined,
+      baseFpsTarget: undefined,
       frameSkip: undefined,
       rewindBufferCapacity: undefined,
       rewindBufferInterval: undefined,
