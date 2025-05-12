@@ -34,6 +34,7 @@ export type EmulatorSettings = {
   allowOpposingDirections: boolean;
   fileSystemNotificationsEnabled: boolean;
   frameSkip?: number;
+  baseFpsTarget?: number;
   muteOnFastForward: boolean;
   muteOnRewind: boolean;
   rewindBufferCapacity?: number;
@@ -55,20 +56,10 @@ const StyledForm = styled.form`
   gap: 15px;
 `;
 
-const FlexContainer = styled.div`
-  display: flex;
-  gap: 15px;
-  min-width: 0;
-
-  * {
-    flex-grow: 1;
-  }
-`;
-
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 0;
+  gap: 10px;
 `;
 
 export const EmulatorSettingsModal = () => {
@@ -89,6 +80,7 @@ export const EmulatorSettingsModal = () => {
   } = useForm<EmulatorSettings>({
     values: {
       frameSkip: emulatorSettings?.frameSkip ?? 0,
+      baseFpsTarget: emulatorSettings?.baseFpsTarget ?? 60,
       rewindBufferCapacity: emulatorSettings?.rewindBufferCapacity ?? 600,
       rewindBufferInterval: emulatorSettings?.rewindBufferInterval ?? 1,
       allowOpposingDirections:
@@ -137,6 +129,7 @@ export const EmulatorSettingsModal = () => {
     emulator?.setCoreSettings({
       allowOpposingDirections: rest.allowOpposingDirections,
       frameSkip: rest.frameSkip,
+      baseFpsTarget: rest.baseFpsTarget,
       rewindBufferCapacity: rest.rewindBufferCapacity,
       rewindBufferInterval: rest.rewindBufferInterval,
       audioSampleRate: rest.audioSampleRate,
@@ -160,6 +153,7 @@ export const EmulatorSettingsModal = () => {
     emulator?.setCoreSettings({
       allowOpposingDirections: true,
       frameSkip: 0,
+      baseFpsTarget: 60,
       rewindBufferCapacity: 600,
       rewindBufferInterval: 1,
       audioSampleRate: 48000,
@@ -362,18 +356,31 @@ export const EmulatorSettingsModal = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Copy>Core: {emulator?.coreName}</Copy>
-          <NumberInput
-            id={`${baseId}--frame-skip`}
-            label="Frame Skip"
-            min={0}
-            max={32}
-            size="small"
-            {...register('frameSkip', {
-              required: { value: true, message: 'Frame skip is required' },
-              valueAsNumber: true
-            })}
-          />
-          <FlexContainer>
+          <GridContainer>
+            <NumberInput
+              id={`${baseId}--frame-skip`}
+              label="Frame Skip"
+              min={0}
+              max={32}
+              size="small"
+              {...register('frameSkip', {
+                required: { value: true, message: 'Frame skip is required' },
+                valueAsNumber: true
+              })}
+            />
+            <NumberInput
+              id={`${baseId}--base-fps-target`}
+              label="Base FPS Target"
+              min={0}
+              size="small"
+              {...register('baseFpsTarget', {
+                required: {
+                  value: true,
+                  message: 'Base FPS target is required'
+                },
+                valueAsNumber: true
+              })}
+            />
             <NumberInput
               id={`${baseId}--rewind-capacity`}
               label="Rewind Capacity"
@@ -402,8 +409,6 @@ export const EmulatorSettingsModal = () => {
                 valueAsNumber: true
               })}
             />
-          </FlexContainer>
-          <FlexContainer>
             <FormControl id={`${baseId}--audio-sample-rate`} size="small">
               <InputLabel>Audio Sample Rate</InputLabel>
               <Select
@@ -440,7 +445,7 @@ export const EmulatorSettingsModal = () => {
                 ))}
               </Select>
             </FormControl>
-          </FlexContainer>
+          </GridContainer>
           <Controller
             control={control}
             name="saveFileName"
