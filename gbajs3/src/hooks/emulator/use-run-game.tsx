@@ -81,7 +81,7 @@ export const useRunGame = () => {
           rewindBufferCapacity: emulatorSettings.rewindBufferCapacity,
           rewindBufferInterval: emulatorSettings.rewindBufferInterval,
           frameSkip: emulatorSettings.frameSkip,
-          fpsTarget: emulatorSettings.fpsTarget,
+          baseFpsTarget: emulatorSettings.baseFpsTarget,
           audioSampleRate: emulatorSettings.audioSampleRate,
           audioBufferSize: emulatorSettings.audioBufferSize,
           timestepSync: emulatorSettings.timestepSync,
