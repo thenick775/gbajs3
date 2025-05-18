@@ -49,6 +49,7 @@ export type EmulatorSettings = {
   audioSync: boolean;
   threadedVideo: boolean;
   rewindEnable: boolean;
+  showFpsCounter: boolean;
 };
 
 const StyledForm = styled.form`
@@ -103,7 +104,8 @@ export const EmulatorSettingsModal = () => {
       videoSync: emulatorSettings?.videoSync ?? false,
       audioSync: emulatorSettings?.audioSync ?? false,
       threadedVideo: emulatorSettings?.threadedVideo ?? false,
-      rewindEnable: emulatorSettings?.rewindEnable ?? true
+      rewindEnable: emulatorSettings?.rewindEnable ?? true,
+      showFpsCounter: emulatorSettings?.showFpsCounter ?? false
     }
   });
   const baseId = useId();
@@ -140,7 +142,8 @@ export const EmulatorSettingsModal = () => {
       videoSync: rest.videoSync,
       audioSync: rest.audioSync,
       threadedVideo: rest.threadedVideo,
-      rewindEnable: rest.rewindEnable
+      rewindEnable: rest.rewindEnable,
+      showFpsCounter: rest.showFpsCounter
     });
   };
 
@@ -165,7 +168,8 @@ export const EmulatorSettingsModal = () => {
       videoSync: false,
       audioSync: false,
       threadedVideo: false,
-      rewindEnable: true
+      rewindEnable: true,
+      showFpsCounter: false
     });
   };
 
@@ -520,6 +524,12 @@ export const EmulatorSettingsModal = () => {
               label="Audio Sync"
               watcher={watch('audioSync')}
               {...register('audioSync')}
+            />
+            <ManagedCheckbox
+              id={`${baseId}--show-fps-counter`}
+              label="FPS Counter"
+              watcher={watch('showFpsCounter')}
+              {...register('showFpsCounter')}
             />
             <ManagedCheckbox
               id={`${baseId}--threaded-video`}

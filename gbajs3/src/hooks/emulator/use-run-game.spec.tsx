@@ -89,6 +89,7 @@ describe('useRunGame hook', () => {
       rewindBufferCapacity: undefined,
       rewindBufferInterval: undefined,
       rewindEnable: true,
+      showFpsCounter: false,
       threadedVideo: false,
       timestepSync: true,
       videoSync: false

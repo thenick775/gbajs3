@@ -46,7 +46,8 @@ export const useRunGame = () => {
       videoSync: false,
       audioSync: false,
       threadedVideo: false,
-      rewindEnable: true
+      rewindEnable: true,
+      showFpsCounter: false
     }
   );
   const { addCallbacks } = useAddCallbacks();
@@ -88,7 +89,8 @@ export const useRunGame = () => {
           videoSync: emulatorSettings.videoSync,
           audioSync: emulatorSettings.audioSync,
           threadedVideo: emulatorSettings.threadedVideo,
-          rewindEnable: emulatorSettings.rewindEnable
+          rewindEnable: emulatorSettings.rewindEnable,
+          showFpsCounter: emulatorSettings.showFpsCounter
         });
       }
 

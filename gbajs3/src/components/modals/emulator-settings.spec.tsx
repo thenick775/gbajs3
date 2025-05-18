@@ -94,7 +94,7 @@ describe('<EmulatorSettingsModal />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true}'
+      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
@@ -114,6 +114,7 @@ describe('<EmulatorSettingsModal />', () => {
       rewindBufferCapacity: 600,
       rewindBufferInterval: 1,
       rewindEnable: true,
+      showFpsCounter: false,
       threadedVideo: false,
       timestepSync: true,
       videoSync: false
@@ -177,6 +178,7 @@ describe('<EmulatorSettingsModal />', () => {
     const audioSyncCheckbox = screen.getByLabelText('Audio Sync');
     const threadedVideoCheckbox = screen.getByLabelText('Threaded Video');
     const rewindEnabledCheckbox = screen.getByLabelText('Rewind Enabled');
+    const fpsCounterCheckbox = screen.getByLabelText('FPS Counter');
 
     await userEvent.type(frameSkipInput, '25');
 
@@ -198,6 +200,7 @@ describe('<EmulatorSettingsModal />', () => {
     await userEvent.click(timestepSyncCheckbox);
     await userEvent.click(videoSyncCheckbox);
     await userEvent.click(audioSyncCheckbox);
+    await userEvent.click(fpsCounterCheckbox);
     await userEvent.click(threadedVideoCheckbox);
     await userEvent.click(rewindEnabledCheckbox);
 
@@ -206,7 +209,7 @@ describe('<EmulatorSettingsModal />', () => {
     // todo above change new input values
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":25,"baseFpsTarget":60,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"saveFileName":"custom_save_override.sav"}'
+      '{"frameSkip":25,"baseFpsTarget":60,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"showFpsCounter":true,"saveFileName":"custom_save_override.sav"}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
@@ -226,6 +229,7 @@ describe('<EmulatorSettingsModal />', () => {
       rewindBufferCapacity: 1000,
       rewindBufferInterval: 10,
       rewindEnable: false,
+      showFpsCounter: true,
       threadedVideo: true,
       timestepSync: false,
       videoSync: true
@@ -288,6 +292,7 @@ describe('<EmulatorSettingsModal />', () => {
       rewindBufferCapacity: 600,
       rewindBufferInterval: 1,
       rewindEnable: true,
+      showFpsCounter: false,
       threadedVideo: false,
       timestepSync: true,
       videoSync: false
