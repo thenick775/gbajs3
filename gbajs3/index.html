@@ -22,5 +22,9 @@
     // Some libraries use the global object, even though it doesn't exist in the browser.
     // global got renamed to globalThis, causing a lot of problems
     const global = globalThis || window;
+
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    });
   </script>
 </html>
