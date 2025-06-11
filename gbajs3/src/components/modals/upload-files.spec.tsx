@@ -33,7 +33,8 @@ describe('<UploadFilesModal />', () => {
       savePath: '/data/saves',
       screenshotsPath: '/data/screenshots',
       patchPath: '/data/patches',
-      autosave: '/autosave'
+      autosave: '/autosave',
+      shaderPath: '/shaders'
     }),
     getCurrentAutoSaveStatePath: () => null
   };
