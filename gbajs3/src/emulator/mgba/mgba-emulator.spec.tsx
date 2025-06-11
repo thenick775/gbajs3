@@ -19,7 +19,8 @@ describe('mGBAEmulator - Full Functionality Test Suite', () => {
       savePath: '/data/saves',
       screenshotsPath: '/data/screenshots',
       patchPath: '/data/patches',
-      autosave: '/autosave'
+      autosave: '/autosave',
+      shaderPath: '/shaders'
     })),
     FS: {
       readdir: vi.fn(() => ['file1.sav', 'file2.sav']),
