@@ -71,6 +71,9 @@ export type GBAEmulator = {
   uploadSaveOrSaveState: (file: File, callback?: () => void) => void;
   toggleRewind: (enabled: boolean) => void;
   setCoreSettings: (coreSettings: coreSettings) => void;
+  forceAutoSaveState: () => boolean;
+  loadAutoSaveState: () => boolean;
+  FS: mGBAEmulatorTypeDef['FS'];
 };
 
 export const KEY_LOCATION_STANDARD = 0;
@@ -302,8 +305,11 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     fsSync: mGBA.FSSync,
     toggleRewind: mGBA.toggleRewind,
     setCoreSettings: mGBA.setCoreSettings,
+    forceAutoSaveState: mGBA.forceAutoSaveState,
+    loadAutoSaveState: mGBA.loadAutoSaveState,
     listAllFiles,
     parseCheatsString,
-    parsedCheatsToFile
+    parsedCheatsToFile,
+    FS: mGBA.FS
   };
 };

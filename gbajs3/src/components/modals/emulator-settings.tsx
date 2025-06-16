@@ -50,6 +50,9 @@ export type EmulatorSettings = {
   threadedVideo: boolean;
   rewindEnable: boolean;
   showFpsCounter: boolean;
+  autoSaveStateTimerIntervalSeconds?: number;
+  autoSaveStateEnable?: boolean;
+  restoreAutoSaveStateOnLoad?: boolean;
 };
 
 const StyledForm = styled.form`
@@ -105,7 +108,12 @@ export const EmulatorSettingsModal = () => {
       audioSync: emulatorSettings?.audioSync ?? false,
       threadedVideo: emulatorSettings?.threadedVideo ?? false,
       rewindEnable: emulatorSettings?.rewindEnable ?? true,
-      showFpsCounter: emulatorSettings?.showFpsCounter ?? false
+      showFpsCounter: emulatorSettings?.showFpsCounter ?? false,
+      autoSaveStateTimerIntervalSeconds:
+        emulatorSettings?.autoSaveStateTimerIntervalSeconds ?? 30,
+      autoSaveStateEnable: emulatorSettings?.autoSaveStateEnable ?? true,
+      restoreAutoSaveStateOnLoad:
+        emulatorSettings?.restoreAutoSaveStateOnLoad ?? true
     }
   });
   const baseId = useId();
@@ -417,6 +425,20 @@ export const EmulatorSettingsModal = () => {
                 valueAsNumber: true
               })}
             />
+            <NumberInput
+              id={`${baseId}--auto-save-state-interval`}
+              label="Auto Save State Interval"
+              min={1}
+              max={100}
+              size="small"
+              {...register('autoSaveStateTimerIntervalSeconds', {
+                required: {
+                  value: true,
+                  message: 'Auto save state interval is required'
+                },
+                valueAsNumber: true
+              })}
+            />
             <FormControl id={`${baseId}--audio-sample-rate`} size="small">
               <InputLabel>Audio Sample Rate</InputLabel>
               <Select
@@ -542,6 +564,18 @@ export const EmulatorSettingsModal = () => {
               label="Rewind Enabled"
               watcher={watch('rewindEnable')}
               {...register('rewindEnable')}
+            />
+            <ManagedCheckbox
+              id={`${baseId}--auto-save-state-enabled`}
+              label="Auto Save State Enabled"
+              watcher={watch('autoSaveStateEnable')}
+              {...register('autoSaveStateEnable')}
+            />
+            <ManagedCheckbox
+              id={`${baseId}--restore-auto-save-state-on-load`}
+              label="Restore Auto Save State"
+              watcher={watch('restoreAutoSaveStateOnLoad')}
+              {...register('restoreAutoSaveStateOnLoad')}
             />
           </GridContainer>
         </StyledForm>
