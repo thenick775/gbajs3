@@ -90,7 +90,12 @@ export const useRunGame = () => {
           audioSync: emulatorSettings.audioSync,
           threadedVideo: emulatorSettings.threadedVideo,
           rewindEnable: emulatorSettings.rewindEnable,
-          showFpsCounter: emulatorSettings.showFpsCounter
+          showFpsCounter: emulatorSettings.showFpsCounter,
+          autoSaveStateTimerIntervalSeconds:
+            emulatorSettings.autoSaveStateTimerIntervalSeconds,
+          autoSaveStateEnable: emulatorSettings.autoSaveStateEnable,
+          restoreAutoSaveStateOnLoad:
+            emulatorSettings.restoreAutoSaveStateOnLoad
         });
       }
 
