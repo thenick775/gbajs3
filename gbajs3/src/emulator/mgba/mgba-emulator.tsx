@@ -73,7 +73,11 @@ export type GBAEmulator = {
   setCoreSettings: (coreSettings: coreSettings) => void;
   forceAutoSaveState: () => boolean;
   loadAutoSaveState: () => boolean;
-  FS: mGBAEmulatorTypeDef['FS'];
+  getAutoSaveState: () => { autoSaveStateName: string; data: Uint8Array };
+  uploadAutoSaveState: (
+    autoSaveStateName: string,
+    data: Uint8Array
+  ) => Promise<void>;
 };
 
 export const KEY_LOCATION_STANDARD = 0;
@@ -307,9 +311,10 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     setCoreSettings: mGBA.setCoreSettings,
     forceAutoSaveState: mGBA.forceAutoSaveState,
     loadAutoSaveState: mGBA.loadAutoSaveState,
+    getAutoSaveState: mGBA.getAutoSaveState,
+    uploadAutoSaveState: mGBA.uploadAutoSaveState,
     listAllFiles,
     parseCheatsString,
-    parsedCheatsToFile,
-    FS: mGBA.FS
+    parsedCheatsToFile
   };
 };
