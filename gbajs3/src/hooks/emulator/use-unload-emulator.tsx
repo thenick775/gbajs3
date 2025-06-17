@@ -1,4 +1,3 @@
-import { useLocalStorage } from '@uidotdev/usehooks';
 import { useEffect } from 'react';
 
 import { useEmulatorContext, useRunningContext } from '../context.tsx';
@@ -22,18 +21,9 @@ const uint8ArrayToBase64 = (bytes: Uint8Array) => {
 
 const emulatorAutoSaveUnloadLocalStorageKey = 'unloadedAutoSaveState';
 
-type StoredAutoSaveData = {
-  filename: string;
-  data: string;
-  timestamp: string;
-};
-
 export const useUnloadEmulator = () => {
   const { emulator } = useEmulatorContext();
   const { isRunning } = useRunningContext();
-  const [, setStoredAutoSaveData] = useLocalStorage<
-    StoredAutoSaveData | undefined
-  >(emulatorAutoSaveUnloadLocalStorageKey);
 
   useEffect(() => {
     const handlePageHide = () => {
@@ -51,15 +41,18 @@ export const useUnloadEmulator = () => {
       if (autoSaveStateData) {
         const base64data = uint8ArrayToBase64(autoSaveStateData.data);
 
-        setStoredAutoSaveData({
-          filename: autoSaveStateData.autoSaveStateName,
-          data: base64data,
-          timestamp: new Date().toISOString()
-        });
+        localStorage.setItem(
+          emulatorAutoSaveUnloadLocalStorageKey,
+          JSON.stringify({
+            filename: autoSaveStateData.autoSaveStateName,
+            data: base64data,
+            timestamp: new Date().toISOString()
+          })
+        );
       }
     };
 
     window.addEventListener('pagehide', handlePageHide);
     return () => window.removeEventListener('pagehide', handlePageHide);
-  }, [emulator, isRunning, setStoredAutoSaveData]);
+  }, [emulator, isRunning]);
 };
