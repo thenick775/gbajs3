@@ -52,7 +52,11 @@ export const useUnloadEmulator = () => {
       }
     };
 
-    window.addEventListener('pagehide', handlePageHide);
-    return () => window.removeEventListener('pagehide', handlePageHide);
+    // window.addEventListener('pagehide', handlePageHide);
+    window.addEventListener('visibilitychange', handlePageHide);
+    return () => {
+      // window.removeEventListener('pagehide', handlePageHide);
+      window.removeEventListener('visibilitychange', handlePageHide);
+    };
   }, [emulator, isRunning]);
 };
