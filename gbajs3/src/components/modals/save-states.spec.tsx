@@ -16,13 +16,12 @@ describe('<SaveStatesModal />', () => {
     renderWithContext(<SaveStatesModal />);
 
     expect(screen.getByLabelText('Current Save State Slot')).toBeVisible();
-    expect(screen.getByRole('button', { name: 'Update Slot' })).toBeVisible();
     expect(screen.getByRole('list')).toBeVisible();
     expect(screen.getAllByRole('listitem')).toHaveLength(1);
     expect(screen.getByText('No save states')).toBeVisible();
   });
 
-  it('renders with save states and current slot', async () => {
+  it('renders with save states from current game and current slot', async () => {
     localStorage.setItem(saveStateSlotLocalStorageKey, '2');
 
     const { useEmulatorContext: original } = await vi.importActual<
@@ -32,7 +31,9 @@ describe('<SaveStatesModal />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),
       emulator: {
-        listSaveStates: () => ['rom0.ss0', 'rom1.ss1']
+        listCurrentSaveStates: () => ['rom0.ss0', 'rom0.ss1'],
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        getSaveState: (_) => new Uint8Array()
       } as GBAEmulator
     }));
 
@@ -43,7 +44,7 @@ describe('<SaveStatesModal />', () => {
       screen.getByRole('button', { name: 'rom0.ss0' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'rom1.ss1' })
+      screen.getByRole('button', { name: 'rom0.ss1' })
     ).toBeInTheDocument();
   });
 
@@ -54,13 +55,11 @@ describe('<SaveStatesModal />', () => {
 
     await userEvent.type(screen.getByLabelText('Current Save State Slot'), '5');
 
-    await userEvent.click(screen.getByRole('button', { name: 'Update Slot' }));
-
     expect(setItemSpy).toHaveBeenCalledWith(saveStateSlotLocalStorageKey, '5');
   });
 
   it('creates saves states', async () => {
-    const listSaveStatesSpy = vi.fn(() => ['rom0.ss0']);
+    const listCurrentSaveStatesSpy = vi.fn(() => ['rom0.ss0']);
     const createSaveStateSpy: (s: number) => boolean = vi.fn(() => true);
     const syncActionIfEnabledSpy = vi.fn();
     const { useEmulatorContext: original } = await vi.importActual<
@@ -73,8 +72,10 @@ describe('<SaveStatesModal />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),
       emulator: {
-        listSaveStates: listSaveStatesSpy as () => string[],
-        createSaveState: createSaveStateSpy
+        listCurrentSaveStates: listCurrentSaveStatesSpy as () => string[],
+        createSaveState: createSaveStateSpy,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        getSaveState: (_) => new Uint8Array()
       } as GBAEmulator
     }));
 
@@ -85,7 +86,7 @@ describe('<SaveStatesModal />', () => {
 
     renderWithContext(<SaveStatesModal />);
 
-    listSaveStatesSpy.mockClear(); // clear calls from initial render
+    listCurrentSaveStatesSpy.mockClear(); // clear calls from initial render
 
     await userEvent.click(
       screen.getByRole('button', { name: 'Create new save state' })
@@ -93,7 +94,7 @@ describe('<SaveStatesModal />', () => {
 
     expect(createSaveStateSpy).toHaveBeenCalledOnce();
     expect(createSaveStateSpy).toHaveBeenCalledWith(1);
-    expect(listSaveStatesSpy).toHaveBeenCalledOnce();
+    expect(listCurrentSaveStatesSpy).toHaveBeenCalledOnce();
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
   });
 
@@ -105,7 +106,9 @@ describe('<SaveStatesModal />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),
       emulator: {
-        listSaveStates: () => ['rom0.ss0'],
+        listCurrentSaveStates: () => ['rom0.ss0'],
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        getSaveState: (_) => new Uint8Array(),
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         createSaveState: (_) => false
       } as GBAEmulator
@@ -122,7 +125,7 @@ describe('<SaveStatesModal />', () => {
 
   it('deletes saves states', async () => {
     const deleteSaveStateSpy: (s: number) => void = vi.fn();
-    const listSaveStatesSpy = vi.fn(() => ['rom0.ss0', 'rom1.ss1']);
+    const listCurrentSaveStatesSpy = vi.fn(() => ['rom0.ss0', 'rom0.ss1']);
     const syncActionIfEnabledSpy = vi.fn();
     const { useEmulatorContext: original } = await vi.importActual<
       typeof contextHooks
@@ -135,7 +138,9 @@ describe('<SaveStatesModal />', () => {
       return {
         ...original(),
         emulator: {
-          listSaveStates: listSaveStatesSpy as () => string[],
+          listCurrentSaveStates: listCurrentSaveStatesSpy as () => string[],
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          getSaveState: (_) => new Uint8Array(),
           deleteSaveState: deleteSaveStateSpy
         } as GBAEmulator
       };
@@ -148,13 +153,13 @@ describe('<SaveStatesModal />', () => {
 
     renderWithContext(<SaveStatesModal />);
 
-    listSaveStatesSpy.mockClear(); // clear calls from initial render
+    listCurrentSaveStatesSpy.mockClear(); // clear calls from initial render
 
-    await userEvent.click(screen.getByLabelText('Delete rom1.ss1'));
+    await userEvent.click(screen.getByLabelText('Delete rom0.ss1'));
 
     expect(deleteSaveStateSpy).toHaveBeenCalledOnce();
     expect(deleteSaveStateSpy).toHaveBeenCalledWith(1);
-    expect(listSaveStatesSpy).toHaveBeenCalledOnce();
+    expect(listCurrentSaveStatesSpy).toHaveBeenCalledOnce();
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
   });
 
@@ -167,8 +172,10 @@ describe('<SaveStatesModal />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),
       emulator: {
-        listSaveStates: () => ['some_rom.ss1'],
-        loadSaveState: loadSaveStateSpy
+        listCurrentSaveStates: () => ['some_rom.ss1'],
+        loadSaveState: loadSaveStateSpy,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        getSaveState: (_) => new Uint8Array()
       } as GBAEmulator
     }));
 
@@ -188,7 +195,9 @@ describe('<SaveStatesModal />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),
       emulator: {
-        listSaveStates: () => ['rom0.ss0'],
+        listCurrentSaveStates: () => ['rom0.ss0'],
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        getSaveState: (_) => new Uint8Array(),
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         loadSaveState: (_) => false
       } as GBAEmulator
@@ -241,7 +250,7 @@ describe('<SaveStatesModal />', () => {
 
     expect(
       await screen.findByText(
-        'Use this input and button to manually update the current save state slot in use.'
+        'Use this input to manually update the current save state slot in use.'
       )
     ).toBeInTheDocument();
 
@@ -252,7 +261,7 @@ describe('<SaveStatesModal />', () => {
 
     expect(
       screen.getByText(
-        'Use this input and button to manually update the current save state slot in use.'
+        'Use this input to manually update the current save state slot in use.'
       )
     ).toBeVisible();
 
