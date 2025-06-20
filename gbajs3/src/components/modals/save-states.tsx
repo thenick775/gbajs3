@@ -209,7 +209,9 @@ export const SaveStatesModal = () => {
                   {saveState}
                 </LoadSaveStateButton>
                 <IconButton
-                  aria-label={`View ${saveState}`}
+                  aria-label={`${
+                    currentSaveStatePreview === saveState ? 'Close' : 'View'
+                  } ${saveState}`}
                   sx={{ padding: 0 }}
                   onClick={() =>
                     setCurrentSaveStatePreview(
@@ -239,7 +241,7 @@ export const SaveStatesModal = () => {
               <Collapse in={currentSaveStatePreview === saveState}>
                 <SaveStatePreview
                   src={saveStateImageUrls?.[idx]}
-                  alt={saveState}
+                  alt={`${saveState} Preview`}
                 />
               </Collapse>
             </StyledLi>
