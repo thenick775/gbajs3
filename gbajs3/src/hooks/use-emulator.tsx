@@ -19,7 +19,7 @@ const base64ToUint8Array = (base64: string) => {
   return bytes;
 };
 
-type derp = {
+type AutoSaveData = {
   filename: string;
   data: string;
   timestamp: string;
@@ -27,7 +27,7 @@ type derp = {
 
 export const useEmulator = (canvas: HTMLCanvasElement | null) => {
   const [emulator, setEmulator] = useState<GBAEmulator | null>(null);
-  const [storedAutoSaveData] = useLocalStorage<derp | undefined>(
+  const [storedAutoSaveData] = useLocalStorage<AutoSaveData | undefined>(
     emulatorAutoSaveUnloadLocalStorageKey
   );
 
