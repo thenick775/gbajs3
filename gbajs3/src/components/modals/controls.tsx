@@ -51,12 +51,10 @@ const TabWrapper = styled.div`
   padding: 20px 40px 20px 40px;
 `;
 
-const a11yProps = (index: number) => {
-  return {
-    id: `control-tab-${index}`,
-    'aria-controls': `tabpanel-${index}`
-  };
-};
+const a11yProps = (index: number) => ({
+  id: `control-tab-${index}`,
+  'aria-controls': `tabpanel-${index}`
+});
 
 const TabPanel = ({ children, index, value }: TabPanelProps) => {
   return (

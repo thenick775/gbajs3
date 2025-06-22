@@ -1,13 +1,16 @@
 import {
+  Box,
   Button,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
+  Tab,
+  Tabs,
   TextField
 } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
-import { useId } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { styled } from 'styled-components';
 
@@ -25,7 +28,6 @@ import { EmbeddedProductTour } from '../product-tour/embedded-product-tour.tsx';
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 import { ManagedCheckbox } from '../shared/managed-checkbox.tsx';
 import { NumberInput } from '../shared/number-input.tsx';
-import { Copy } from '../shared/styled.tsx';
 
 import type { TourSteps } from '../product-tour/embedded-product-tour.tsx';
 import type { SubmitHandler } from 'react-hook-form';
@@ -55,17 +57,45 @@ export type EmulatorSettings = {
   restoreAutoSaveStateOnLoad?: boolean;
 };
 
+type TabPanelProps = {
+  children: ReactNode;
+  index: number;
+  value: number;
+};
+
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 15px;
 `;
 
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+const StyledModalBody = styled(ModalBody)`
+  padding: 0;
 `;
+
+const TabWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+`;
+
+const TabPanel = ({ children, index, value }: TabPanelProps) => (
+  <div
+    role="tabpanel"
+    hidden={value !== index}
+    id={`tabpanel-${index}`}
+    aria-labelledby={`tab-${index}`}
+    style={{ width: '100%' }}
+  >
+    <TabWrapper>{children}</TabWrapper>
+  </div>
+);
+
+const a11yProps = (index: number) => ({
+  id: `settings-tab-${index}`,
+  'aria-controls': `tabpanel-${index}`
+});
 
 export const EmulatorSettingsModal = () => {
   const { emulator } = useEmulatorContext();
@@ -116,6 +146,7 @@ export const EmulatorSettingsModal = () => {
         emulatorSettings?.restoreAutoSaveStateOnLoad ?? true
     }
   });
+  const [tabValue, setTabValue] = useState(0);
   const baseId = useId();
 
   const defaultAudioSampleRates = emulator?.defaultAudioSampleRates();
@@ -366,224 +397,260 @@ export const EmulatorSettingsModal = () => {
     }
   ];
 
+  const handleTabChange = (_: React.SyntheticEvent, tabIndex: number) =>
+    setTabValue(tabIndex);
+
   return (
     <>
       <ModalHeader title="Emulator Settings" />
-      <ModalBody>
+      <StyledModalBody>
         <StyledForm
           id={`${baseId}--emulator-settings-form`}
           aria-label="Emulator Settings Form"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Copy>Core: {emulator?.coreName}</Copy>
-          <GridContainer>
-            <NumberInput
-              id={`${baseId}--frame-skip`}
-              label="Frame Skip"
-              min={0}
-              max={32}
-              size="small"
-              {...register('frameSkip', {
-                required: { value: true, message: 'Frame skip is required' },
-                valueAsNumber: true
-              })}
-            />
-            <NumberInput
-              id={`${baseId}--base-fps-target`}
-              label="Base FPS Target"
-              min={0}
-              size="small"
-              {...register('baseFpsTarget', {
-                required: {
-                  value: true,
-                  message: 'Base FPS target is required'
-                },
-                valueAsNumber: true
-              })}
-            />
-            <NumberInput
-              id={`${baseId}--rewind-capacity`}
-              label="Rewind Capacity"
-              min={1}
-              max={3600}
-              size="small"
-              {...register('rewindBufferCapacity', {
-                required: {
-                  value: true,
-                  message: 'Rewind buffer capacity is required'
-                },
-                valueAsNumber: true
-              })}
-            />
-            <NumberInput
-              id={`${baseId}--rewind-interval`}
-              label="Rewind Interval"
-              min={1}
-              max={100}
-              size="small"
-              {...register('rewindBufferInterval', {
-                required: {
-                  value: true,
-                  message: 'Rewind buffer interval is required'
-                },
-                valueAsNumber: true
-              })}
-            />
-            <NumberInput
-              id={`${baseId}--auto-save-state-interval`}
-              label="Auto Save State Interval"
-              min={1}
-              max={100}
-              size="small"
-              {...register('autoSaveStateTimerIntervalSeconds', {
-                required: {
-                  value: true,
-                  message: 'Auto save state interval is required'
-                },
-                valueAsNumber: true
-              })}
-            />
-            <FormControl id={`${baseId}--audio-sample-rate`} size="small">
-              <InputLabel>Audio Sample Rate</InputLabel>
-              <Select
-                label="Audio Sample Rate"
-                disabled={isRunning}
-                value={watch('audioSampleRate')}
-                {...register('audioSampleRate', {
-                  required: { value: true, message: 'Sample rate is required' },
-                  valueAsNumber: true
-                })}
-              >
-                {defaultAudioSampleRates?.map((sampleRate, idx) => (
-                  <MenuItem key={`${sampleRate}_${idx}`} value={sampleRate}>
-                    {sampleRate}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl id={`${baseId}--audio-buffer-size`} size="small">
-              <InputLabel>Audio Buffer Size</InputLabel>
-              <Select
-                label="Audio Buffer Size"
-                disabled={isRunning}
-                value={watch('audioBufferSize')}
-                {...register('audioBufferSize', {
-                  required: { value: true, message: 'Buffer size is required' },
-                  valueAsNumber: true
-                })}
-              >
-                {defaultAudioBufferSizes?.map((bufferSize, idx) => (
-                  <MenuItem key={`${bufferSize}_${idx}`} value={bufferSize}>
-                    {bufferSize}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </GridContainer>
-          <Controller
-            control={control}
-            name="saveFileName"
-            render={({ field: { name, value, ...rest } }) => (
-              <TextField
-                id={`${baseId}--save-file-name`}
-                value={value}
-                name={name}
-                label="Save File Name"
-                variant="outlined"
-                size="small"
-                disabled={isRunning}
-                {...rest}
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: 'flex'
+            }}
+          >
+            <Tabs
+              orientation="vertical"
+              variant="scrollable"
+              value={tabValue}
+              onChange={handleTabChange}
+              aria-label="Settings tabs"
+              sx={{
+                borderRight: 1,
+                borderColor: 'divider',
+                minWidth: 'fit-content'
+              }}
+            >
+              <Tab label="Game" {...a11yProps(0)} />
+              <Tab label="Audio" {...a11yProps(1)} />
+              <Tab label="Video" {...a11yProps(2)} />
+              <Tab label="Files" {...a11yProps(2)} />
+            </Tabs>
+            <TabPanel value={tabValue} index={0}>
+              <Controller
+                control={control}
+                name="saveFileName"
+                render={({ field: { name, value, ...rest } }) => (
+                  <TextField
+                    id={`${baseId}--save-file-name`}
+                    value={value}
+                    name={name}
+                    label="Save File Name"
+                    variant="outlined"
+                    size="small"
+                    disabled={isRunning}
+                    {...rest}
+                  />
+                )}
               />
-            )}
-          />
-          <GridContainer>
-            <ManagedCheckbox
-              id={`${baseId}--allow-opposing-directions`}
-              label="Allow opposing directions"
-              watcher={watch('allowOpposingDirections')}
-              {...register('allowOpposingDirections')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--file-system-notifications`}
-              label="File system notifications"
-              watcher={watch('fileSystemNotificationsEnabled')}
-              {...register('fileSystemNotificationsEnabled')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--mute-on-rewind`}
-              label="Mute on rewind"
-              watcher={watch('muteOnRewind')}
-              {...register('muteOnRewind')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--mute-on-fast-forward`}
-              label="Mute on fast forward"
-              watcher={watch('muteOnFastForward')}
-              {...register('muteOnFastForward')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--save-file-system-on-cud`}
-              label="Save file system on create / update / delete"
-              watcher={watch('saveFileSystemOnCreateUpdateDelete')}
-              {...register('saveFileSystemOnCreateUpdateDelete')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--save-file-system-on-in-game-save`}
-              label="Save file system on in-game save"
-              watcher={watch('saveFileSystemOnInGameSave')}
-              {...register('saveFileSystemOnInGameSave')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--timesttep-sync`}
-              label="Timestep Sync"
-              watcher={watch('timestepSync')}
-              {...register('timestepSync')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--video-sync`}
-              label="Video Sync"
-              watcher={watch('videoSync')}
-              {...register('videoSync')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--audio-sync`}
-              label="Audio Sync"
-              watcher={watch('audioSync')}
-              {...register('audioSync')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--show-fps-counter`}
-              label="FPS Counter"
-              watcher={watch('showFpsCounter')}
-              {...register('showFpsCounter')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--threaded-video`}
-              label="Threaded Video"
-              watcher={watch('threadedVideo')}
-              {...register('threadedVideo')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--rewind-enabled`}
-              label="Rewind Enabled"
-              watcher={watch('rewindEnable')}
-              {...register('rewindEnable')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--auto-save-state-enabled`}
-              label="Auto Save State Enabled"
-              watcher={watch('autoSaveStateEnable')}
-              {...register('autoSaveStateEnable')}
-            />
-            <ManagedCheckbox
-              id={`${baseId}--restore-auto-save-state-on-load`}
-              label="Restore Auto Save State"
-              watcher={watch('restoreAutoSaveStateOnLoad')}
-              {...register('restoreAutoSaveStateOnLoad')}
-            />
-          </GridContainer>
+              <NumberInput
+                id={`${baseId}--rewind-capacity`}
+                label="Rewind Capacity"
+                min={1}
+                max={3600}
+                size="small"
+                {...register('rewindBufferCapacity', {
+                  required: {
+                    value: true,
+                    message: 'Rewind buffer capacity is required'
+                  },
+                  valueAsNumber: true
+                })}
+              />
+              <NumberInput
+                id={`${baseId}--rewind-interval`}
+                label="Rewind Interval"
+                min={1}
+                max={100}
+                size="small"
+                {...register('rewindBufferInterval', {
+                  required: {
+                    value: true,
+                    message: 'Rewind buffer interval is required'
+                  },
+                  valueAsNumber: true
+                })}
+              />
+              <NumberInput
+                id={`${baseId}--auto-save-state-interval`}
+                label="Auto Save State Interval"
+                min={1}
+                max={100}
+                size="small"
+                {...register('autoSaveStateTimerIntervalSeconds', {
+                  required: {
+                    value: true,
+                    message: 'Auto save state interval is required'
+                  },
+                  valueAsNumber: true
+                })}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--allow-opposing-directions`}
+                label="Allow opposing directions"
+                watcher={watch('allowOpposingDirections')}
+                {...register('allowOpposingDirections')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--rewind-enabled`}
+                label="Rewind Enabled"
+                watcher={watch('rewindEnable')}
+                {...register('rewindEnable')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--auto-save-state-enabled`}
+                label="Auto Save State Enabled"
+                watcher={watch('autoSaveStateEnable')}
+                {...register('autoSaveStateEnable')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--restore-auto-save-state-on-load`}
+                label="Restore Auto Save State"
+                watcher={watch('restoreAutoSaveStateOnLoad')}
+                {...register('restoreAutoSaveStateOnLoad')}
+              />
+            </TabPanel>
+            <TabPanel value={tabValue} index={1}>
+              <FormControl id={`${baseId}--audio-sample-rate`} size="small">
+                <InputLabel>Audio Sample Rate</InputLabel>
+                <Select
+                  label="Audio Sample Rate"
+                  disabled={isRunning}
+                  value={watch('audioSampleRate')}
+                  {...register('audioSampleRate', {
+                    required: {
+                      value: true,
+                      message: 'Sample rate is required'
+                    },
+                    valueAsNumber: true
+                  })}
+                >
+                  {defaultAudioSampleRates?.map((sampleRate, idx) => (
+                    <MenuItem key={`${sampleRate}_${idx}`} value={sampleRate}>
+                      {sampleRate}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl id={`${baseId}--audio-buffer-size`} size="small">
+                <InputLabel>Audio Buffer Size</InputLabel>
+                <Select
+                  label="Audio Buffer Size"
+                  disabled={isRunning}
+                  value={watch('audioBufferSize')}
+                  {...register('audioBufferSize', {
+                    required: {
+                      value: true,
+                      message: 'Buffer size is required'
+                    },
+                    valueAsNumber: true
+                  })}
+                >
+                  {defaultAudioBufferSizes?.map((bufferSize, idx) => (
+                    <MenuItem key={`${bufferSize}_${idx}`} value={bufferSize}>
+                      {bufferSize}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <ManagedCheckbox
+                id={`${baseId}--mute-on-rewind`}
+                label="Mute on rewind"
+                watcher={watch('muteOnRewind')}
+                {...register('muteOnRewind')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--mute-on-fast-forward`}
+                label="Mute on fast forward"
+                watcher={watch('muteOnFastForward')}
+                {...register('muteOnFastForward')}
+              />
+            </TabPanel>
+            <TabPanel value={tabValue} index={2}>
+              <NumberInput
+                id={`${baseId}--base-fps-target`}
+                label="Base FPS Target"
+                min={0}
+                size="small"
+                {...register('baseFpsTarget', {
+                  required: {
+                    value: true,
+                    message: 'Base FPS target is required'
+                  },
+                  valueAsNumber: true
+                })}
+              />
+              <NumberInput
+                id={`${baseId}--frame-skip`}
+                label="Frame Skip"
+                min={0}
+                max={32}
+                size="small"
+                {...register('frameSkip', {
+                  required: { value: true, message: 'Frame skip is required' },
+                  valueAsNumber: true
+                })}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--timesttep-sync`}
+                label="Timestep Sync"
+                watcher={watch('timestepSync')}
+                {...register('timestepSync')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--video-sync`}
+                label="Video Sync"
+                watcher={watch('videoSync')}
+                {...register('videoSync')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--audio-sync`}
+                label="Audio Sync"
+                watcher={watch('audioSync')}
+                {...register('audioSync')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--show-fps-counter`}
+                label="FPS Counter"
+                watcher={watch('showFpsCounter')}
+                {...register('showFpsCounter')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--threaded-video`}
+                label="Threaded Video"
+                watcher={watch('threadedVideo')}
+                {...register('threadedVideo')}
+              />
+            </TabPanel>
+            <TabPanel value={tabValue} index={3}>
+              <ManagedCheckbox
+                id={`${baseId}--file-system-notifications`}
+                label="File system notifications"
+                watcher={watch('fileSystemNotificationsEnabled')}
+                {...register('fileSystemNotificationsEnabled')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--save-file-system-on-cud`}
+                label="Save file system on create / update / delete"
+                watcher={watch('saveFileSystemOnCreateUpdateDelete')}
+                {...register('saveFileSystemOnCreateUpdateDelete')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--save-file-system-on-in-game-save`}
+                label="Save file system on in-game save"
+                watcher={watch('saveFileSystemOnInGameSave')}
+                {...register('saveFileSystemOnInGameSave')}
+              />
+            </TabPanel>
+          </Box>
         </StyledForm>
-      </ModalBody>
+      </StyledModalBody>
       <ModalFooter>
         <CircleCheckButton
           id={`${baseId}--save-button`}
