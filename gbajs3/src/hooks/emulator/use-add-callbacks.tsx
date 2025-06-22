@@ -52,7 +52,9 @@ export const useAddCallbacks = () => {
             if (options.fileSystemNotificationsEnabled)
               toast.success('Saved File System');
           }
-        )
+        ),
+        autoSaveStateLoadedCallback: () =>
+          toast.success('Auto save state loaded')
       }),
     [emulator]
   );
