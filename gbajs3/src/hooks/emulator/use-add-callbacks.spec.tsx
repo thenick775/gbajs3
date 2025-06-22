@@ -33,6 +33,7 @@ describe('useAddCallbacks hook', () => {
       expect(emulatorAddCoreCallbacksSpy).toHaveBeenCalledOnce();
       expect(emulatorAddCoreCallbacksSpy).toHaveBeenCalledWith({
         autoSaveStateLoadedCallback: expect.anything(),
+        autoSaveStateCapturedCallback: expect.anything(),
         saveDataUpdatedCallback: expect.anything()
       });
     });
@@ -58,6 +59,7 @@ describe('useAddCallbacks hook', () => {
       expect(emulatorAddCoreCallbacksSpy).toHaveBeenCalledOnce();
       expect(emulatorAddCoreCallbacksSpy).toHaveBeenCalledWith({
         autoSaveStateLoadedCallback: expect.anything(),
+        autoSaveStateCapturedCallback: expect.anything(),
         saveDataUpdatedCallback: null
       });
     });

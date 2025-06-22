@@ -54,7 +54,9 @@ export const useAddCallbacks = () => {
           }
         ),
         autoSaveStateLoadedCallback: () =>
-          toast.success('Auto save state loaded')
+          toast.success('Auto save state loaded'),
+        autoSaveStateCapturedCallback: () =>
+          toast.success('Auto save state captured')
       }),
     [emulator]
   );
