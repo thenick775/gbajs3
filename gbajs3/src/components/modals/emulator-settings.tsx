@@ -151,7 +151,9 @@ export const EmulatorSettingsModal = () => {
       audioSync: rest.audioSync,
       threadedVideo: rest.threadedVideo,
       rewindEnable: rest.rewindEnable,
-      showFpsCounter: rest.showFpsCounter
+      showFpsCounter: rest.showFpsCounter,
+      autoSaveStateEnable: rest.autoSaveStateEnable,
+      restoreAutoSaveStateOnLoad: rest.restoreAutoSaveStateOnLoad
     });
   };
 
@@ -177,7 +179,9 @@ export const EmulatorSettingsModal = () => {
       audioSync: false,
       threadedVideo: false,
       rewindEnable: true,
-      showFpsCounter: false
+      showFpsCounter: false,
+      autoSaveStateEnable: true,
+      restoreAutoSaveStateOnLoad: true
     });
   };
 
