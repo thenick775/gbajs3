@@ -141,8 +141,7 @@ export const ControlPanel = () => {
   // resumes if applicable when document is visible
   useBackgroundEmulator({ isPaused });
 
-  // take auto save state when page is hidden
-  // TODO: best effort, it will not always be called, attempt to find a better way to deal with this
+  // take auto save state when page is hidden (best effort)
   useUnloadEmulator();
 
   const refSetLayout = useCallback(
