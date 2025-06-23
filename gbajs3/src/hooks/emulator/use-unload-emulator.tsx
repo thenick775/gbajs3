@@ -32,7 +32,7 @@ export const useUnloadEmulator = () => {
       console.log('in handlePageHide');
 
       const result = emulator?.forceAutoSaveState();
-      appendLog(`forceAutoSaveState result: ${result}`);
+      appendLog(`visibilitychange - forceAutoSaveState result: ${result}`);
 
       console.log('before autosavestatedata');
       const autoSaveStateData = emulator?.getAutoSaveState();
@@ -46,17 +46,14 @@ export const useUnloadEmulator = () => {
           JSON.stringify({
             filename: autoSaveStateData.autoSaveStateName,
             data: base64data,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            event: 'handlePageHide'
           })
         );
       }
     };
 
-    // window.addEventListener('pagehide', handlePageHide);
-    window.addEventListener('visibilitychange', handlePageHide);
-    return () => {
-      // window.removeEventListener('pagehide', handlePageHide);
-      window.removeEventListener('visibilitychange', handlePageHide);
-    };
+    window.addEventListener('pagehide', handlePageHide);
+    return () => window.removeEventListener('pagehide', handlePageHide);
   }, [emulator, isRunning]);
 };
