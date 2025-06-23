@@ -45,6 +45,7 @@ describe('useBackgroundEmulator hook', () => {
     );
 
     expect(emulatorPauseSpy).toHaveBeenCalledOnce();
+    expect(emulatorForceAutoSaveStateSpy).toHaveBeenCalledOnce();
 
     rerender();
 

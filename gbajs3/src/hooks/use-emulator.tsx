@@ -7,6 +7,12 @@ import {
   type GBAEmulator
 } from '../emulator/mgba/mgba-emulator.tsx';
 
+type AutoSaveData = {
+  filename: string;
+  data: string;
+  timestamp: string;
+};
+
 const emulatorAutoSaveUnloadLocalStorageKey = 'unloadedAutoSaveState';
 
 const base64ToUint8Array = (base64: string) => {
@@ -17,12 +23,6 @@ const base64ToUint8Array = (base64: string) => {
     bytes[i] = binary.charCodeAt(i);
   }
   return bytes;
-};
-
-type AutoSaveData = {
-  filename: string;
-  data: string;
-  timestamp: string;
 };
 
 export const useEmulator = (canvas: HTMLCanvasElement | null) => {

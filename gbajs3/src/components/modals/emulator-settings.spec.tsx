@@ -39,7 +39,7 @@ describe('<EmulatorSettingsModal />', () => {
     expect(screen.getByLabelText('Frame Skip')).toBeInTheDocument();
   });
 
-  it('updates frame skip value', async () => {
+  it('updates frame only value', async () => {
     renderWithContext(<EmulatorSettingsModal />);
 
     const frameSkipInput = screen.getByLabelText('Frame Skip');
@@ -61,7 +61,7 @@ describe('<EmulatorSettingsModal />', () => {
     expect(checkbox).not.toBeChecked();
   });
 
-  it.skip('submits the form and saves default values', async () => {
+  it('submits the form and saves default values', async () => {
     const addCallbacksSpy: (options: CoreCallbackOptions) => void = vi.fn();
     const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
 
@@ -94,7 +94,7 @@ describe('<EmulatorSettingsModal />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false}'
+      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false,"autoSaveStateTimerIntervalSeconds":30,"autoSaveStateEnable":true,"restoreAutoSaveStateOnLoad":true}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
@@ -117,7 +117,10 @@ describe('<EmulatorSettingsModal />', () => {
       showFpsCounter: false,
       threadedVideo: false,
       timestepSync: true,
-      videoSync: false
+      videoSync: false,
+      autoSaveStateTimerIntervalSeconds: 30,
+      autoSaveStateEnable: true,
+      restoreAutoSaveStateOnLoad: true
     });
   });
 
@@ -239,7 +242,7 @@ describe('<EmulatorSettingsModal />', () => {
     });
   });
 
-  it.skip('removes settings when reset button is clicked', async () => {
+  it('removes settings when reset button is clicked', async () => {
     const addCallbacksSpy: (options: CoreCallbackOptions) => void = vi.fn();
     const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
 
@@ -298,7 +301,10 @@ describe('<EmulatorSettingsModal />', () => {
       showFpsCounter: false,
       threadedVideo: false,
       timestepSync: true,
-      videoSync: false
+      videoSync: false,
+      autoSaveStateTimerIntervalSeconds: 30,
+      autoSaveStateEnable: true,
+      restoreAutoSaveStateOnLoad: true
     });
   });
 

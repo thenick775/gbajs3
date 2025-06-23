@@ -183,6 +183,7 @@ export const EmulatorSettingsModal = () => {
       threadedVideo: rest.threadedVideo,
       rewindEnable: rest.rewindEnable,
       showFpsCounter: rest.showFpsCounter,
+      autoSaveStateTimerIntervalSeconds: rest.autoSaveStateTimerIntervalSeconds,
       autoSaveStateEnable: rest.autoSaveStateEnable,
       restoreAutoSaveStateOnLoad: rest.restoreAutoSaveStateOnLoad
     });
@@ -211,6 +212,7 @@ export const EmulatorSettingsModal = () => {
       threadedVideo: false,
       rewindEnable: true,
       showFpsCounter: false,
+      autoSaveStateTimerIntervalSeconds: 30,
       autoSaveStateEnable: true,
       restoreAutoSaveStateOnLoad: true
     });
