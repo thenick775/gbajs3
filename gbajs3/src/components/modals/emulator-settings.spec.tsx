@@ -35,7 +35,6 @@ describe('<EmulatorSettingsModal />', () => {
     renderWithContext(<EmulatorSettingsModal />);
 
     expect(screen.getByLabelText('Emulator Settings Form')).toBeInTheDocument();
-    // expect(screen.getByText('Core:')).toBeInTheDocument();
     expect(screen.getByLabelText('Frame Skip')).toBeInTheDocument();
   });
 
@@ -126,7 +125,8 @@ describe('<EmulatorSettingsModal />', () => {
     });
   });
 
-  it.skip('submits the form and saves edited values', async () => {
+  // TODO: refactor this test or add a new one surrounding the emulator settings tabs - should probably be broken down by tab
+  it('submits the form and saves edited values', async () => {
     const addCallbacksSpy: (options: CoreCallbackOptions) => void = vi.fn();
     const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
 
@@ -161,6 +161,9 @@ describe('<EmulatorSettingsModal />', () => {
     const rewindCapacityInput = screen.getByLabelText('Rewind Capacity');
     const rewindIntervalInput = screen.getByLabelText('Rewind Interval');
     const saveFileNameInput = screen.getByLabelText('Save File Name');
+    const autoSaveStateIntervalInput = screen.getByLabelText(
+      'Auto Save State Interval'
+    );
     // TODO: test select inputs
 
     const allowOpposingDirectionsCheckbox = screen.getByLabelText(
@@ -185,6 +188,18 @@ describe('<EmulatorSettingsModal />', () => {
     const fpsCounterCheckbox = screen.getByLabelText('FPS Counter');
     const threadedVideoCheckbox = screen.getByLabelText('Threaded Video');
     const rewindEnabledCheckbox = screen.getByLabelText('Rewind Enabled');
+    const autoSaveStateEnabledCheckbox = screen.getByLabelText(
+      'Auto Save State Enabled'
+    );
+    const restoreAutoSaveStateCheckbox = screen.getByLabelText(
+      'Restore Auto Save State'
+    );
+    const autoSaveStateCaptureNotificationCheckbox = screen.getByLabelText(
+      'Auto save state capture notification'
+    );
+    const autoSaveStateLoadNotificationCheckbox = screen.getByLabelText(
+      'Auto save state load notification'
+    );
 
     await userEvent.type(frameSkipInput, '25');
 
@@ -200,6 +215,9 @@ describe('<EmulatorSettingsModal />', () => {
     await userEvent.clear(saveFileNameInput);
     await userEvent.type(saveFileNameInput, 'custom_save_override.sav');
 
+    await userEvent.clear(autoSaveStateIntervalInput);
+    await userEvent.type(autoSaveStateIntervalInput, '10');
+
     await userEvent.click(allowOpposingDirectionsCheckbox);
     await userEvent.click(fileSystemNotificationsCheckbox);
     await userEvent.click(muteOnRewindCheckbox);
@@ -212,16 +230,22 @@ describe('<EmulatorSettingsModal />', () => {
     await userEvent.click(fpsCounterCheckbox);
     await userEvent.click(threadedVideoCheckbox);
     await userEvent.click(rewindEnabledCheckbox);
+    await userEvent.click(autoSaveStateEnabledCheckbox);
+    await userEvent.click(restoreAutoSaveStateCheckbox);
+    await userEvent.click(autoSaveStateCaptureNotificationCheckbox);
+    await userEvent.click(autoSaveStateLoadNotificationCheckbox);
 
     await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":25,"baseFpsTarget":30,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"showFpsCounter":true,"saveFileName":"custom_save_override.sav"}'
+      '{"frameSkip":25,"baseFpsTarget":30,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"showFpsCounter":true,"autoSaveStateTimerIntervalSeconds":10,"autoSaveStateEnable":false,"restoreAutoSaveStateOnLoad":false,"autoSaveStateLoadNotificationEnabled":false,"autoSaveStateCaptureNotificationEnabled":false,"saveFileName":"custom_save_override.sav"}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
     expect(addCallbacksSpy).toHaveBeenCalledWith({
+      autoSaveStateCaptureNotificationEnabled: false,
+      autoSaveStateLoadNotificationEnabled: false,
       fileSystemNotificationsEnabled: false,
       saveFileSystemOnInGameSave: false
     });
@@ -240,7 +264,10 @@ describe('<EmulatorSettingsModal />', () => {
       showFpsCounter: true,
       threadedVideo: true,
       timestepSync: false,
-      videoSync: true
+      videoSync: true,
+      autoSaveStateTimerIntervalSeconds: 10,
+      autoSaveStateEnable: false,
+      restoreAutoSaveStateOnLoad: false
     });
   });
 
