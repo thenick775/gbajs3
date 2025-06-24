@@ -55,6 +55,8 @@ export type EmulatorSettings = {
   autoSaveStateTimerIntervalSeconds?: number;
   autoSaveStateEnable?: boolean;
   restoreAutoSaveStateOnLoad?: boolean;
+  autoSaveStateLoadNotificationEnabled: boolean;
+  autoSaveStateCaptureNotificationEnabled: boolean;
 };
 
 type TabPanelProps = {
@@ -143,7 +145,11 @@ export const EmulatorSettingsModal = () => {
         emulatorSettings?.autoSaveStateTimerIntervalSeconds ?? 30,
       autoSaveStateEnable: emulatorSettings?.autoSaveStateEnable ?? true,
       restoreAutoSaveStateOnLoad:
-        emulatorSettings?.restoreAutoSaveStateOnLoad ?? true
+        emulatorSettings?.restoreAutoSaveStateOnLoad ?? true,
+      autoSaveStateLoadNotificationEnabled:
+        emulatorSettings?.autoSaveStateLoadNotificationEnabled ?? true,
+      autoSaveStateCaptureNotificationEnabled:
+        emulatorSettings?.autoSaveStateCaptureNotificationEnabled ?? true
     }
   });
   const [tabValue, setTabValue] = useState(0);
@@ -166,7 +172,11 @@ export const EmulatorSettingsModal = () => {
 
     addCallbacks({
       saveFileSystemOnInGameSave: rest.saveFileSystemOnInGameSave,
-      fileSystemNotificationsEnabled: rest.fileSystemNotificationsEnabled
+      fileSystemNotificationsEnabled: rest.fileSystemNotificationsEnabled,
+      autoSaveStateLoadNotificationEnabled:
+        rest.autoSaveStateLoadNotificationEnabled,
+      autoSaveStateCaptureNotificationEnabled:
+        rest.autoSaveStateCaptureNotificationEnabled
     });
 
     emulator?.setCoreSettings({
@@ -195,7 +205,9 @@ export const EmulatorSettingsModal = () => {
 
     addCallbacks({
       saveFileSystemOnInGameSave: true,
-      fileSystemNotificationsEnabled: true
+      fileSystemNotificationsEnabled: true,
+      autoSaveStateLoadNotificationEnabled: true,
+      autoSaveStateCaptureNotificationEnabled: true
     });
 
     emulator?.setCoreSettings({
@@ -432,7 +444,8 @@ export const EmulatorSettingsModal = () => {
               <Tab label="Game" {...a11yProps(0)} />
               <Tab label="Audio" {...a11yProps(1)} />
               <Tab label="Video" {...a11yProps(2)} />
-              <Tab label="Files" {...a11yProps(2)} />
+              <Tab label="File" {...a11yProps(3)} />
+              <Tab label="Alert" {...a11yProps(4)} />
             </Tabs>
             <TabPanel value={tabValue} index={0}>
               <Controller
@@ -632,12 +645,6 @@ export const EmulatorSettingsModal = () => {
             </TabPanel>
             <TabPanel value={tabValue} index={3}>
               <ManagedCheckbox
-                id={`${baseId}--file-system-notifications`}
-                label="File system notifications"
-                watcher={watch('fileSystemNotificationsEnabled')}
-                {...register('fileSystemNotificationsEnabled')}
-              />
-              <ManagedCheckbox
                 id={`${baseId}--save-file-system-on-cud`}
                 label="Save file system on create / update / delete"
                 watcher={watch('saveFileSystemOnCreateUpdateDelete')}
@@ -648,6 +655,26 @@ export const EmulatorSettingsModal = () => {
                 label="Save file system on in-game save"
                 watcher={watch('saveFileSystemOnInGameSave')}
                 {...register('saveFileSystemOnInGameSave')}
+              />
+            </TabPanel>
+            <TabPanel value={tabValue} index={4}>
+              <ManagedCheckbox
+                id={`${baseId}--file-system-notifications`}
+                label="File system notifications"
+                watcher={watch('fileSystemNotificationsEnabled')}
+                {...register('fileSystemNotificationsEnabled')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--save-state-load-notification`}
+                label="Auto save state load notification"
+                watcher={watch('autoSaveStateLoadNotificationEnabled')}
+                {...register('autoSaveStateLoadNotificationEnabled')}
+              />
+              <ManagedCheckbox
+                id={`${baseId}--save-state-capture-notification`}
+                label="Auto save state capture notification"
+                watcher={watch('autoSaveStateCaptureNotificationEnabled')}
+                {...register('autoSaveStateCaptureNotificationEnabled')}
               />
             </TabPanel>
           </Box>

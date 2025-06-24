@@ -94,11 +94,13 @@ describe('<EmulatorSettingsModal />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false,"autoSaveStateTimerIntervalSeconds":30,"autoSaveStateEnable":true,"restoreAutoSaveStateOnLoad":true}'
+      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false,"autoSaveStateTimerIntervalSeconds":30,"autoSaveStateEnable":true,"restoreAutoSaveStateOnLoad":true,"autoSaveStateLoadNotificationEnabled":true,"autoSaveStateCaptureNotificationEnabled":true}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
     expect(addCallbacksSpy).toHaveBeenCalledWith({
+      autoSaveStateCaptureNotificationEnabled: true,
+      autoSaveStateLoadNotificationEnabled: true,
       fileSystemNotificationsEnabled: true,
       saveFileSystemOnInGameSave: true
     });
@@ -284,6 +286,8 @@ describe('<EmulatorSettingsModal />', () => {
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
     expect(addCallbacksSpy).toHaveBeenCalledWith({
+      autoSaveStateCaptureNotificationEnabled: true,
+      autoSaveStateLoadNotificationEnabled: true,
       fileSystemNotificationsEnabled: true,
       saveFileSystemOnInGameSave: true
     });
