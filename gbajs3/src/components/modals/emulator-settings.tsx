@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   FormControl,
   InputLabel,
@@ -82,6 +81,11 @@ const TabWrapper = styled.div`
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
+`;
+
+const TabFlexWrapper = styled.div`
+  flex-grow: 1;
+  display: flex;
 `;
 
 const TabPanel = ({ children, index, value }: TabPanelProps) => (
@@ -426,12 +430,7 @@ export const EmulatorSettingsModal = () => {
           aria-label="Emulator Settings Form"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: 'flex'
-            }}
-          >
+          <TabFlexWrapper>
             <Tabs
               orientation="vertical"
               variant="scrollable"
@@ -680,7 +679,7 @@ export const EmulatorSettingsModal = () => {
                 {...register('autoSaveStateCaptureNotificationEnabled')}
               />
             </TabPanel>
-          </Box>
+          </TabFlexWrapper>
         </StyledForm>
       </StyledModalBody>
       <ModalFooter>
