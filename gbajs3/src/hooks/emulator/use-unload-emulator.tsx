@@ -12,6 +12,11 @@ export const uint8ArrayToBase64 = (bytes: Uint8Array) => {
   return btoa(binary);
 };
 
+/**
+ * Purpose is to grab the save state and store using a synchronous mechanism (localStorage), because indexed db is async.
+ * There is no guarantee visibilityChange events will be fired when the tab is closed. This is primarily for desktop, as
+ * mobile PWA definitely is not guaranteed to fire this event, or a visibility change event.
+ */
 export const useUnloadEmulator = () => {
   const { emulator } = useEmulatorContext();
   const { isRunning } = useRunningContext();
