@@ -36,7 +36,8 @@ describe('<SaveStatesModal />', () => {
         listCurrentSaveStates: () => ['rom0.ss0', 'rom0.ss1'],
         getCurrentGameName: () => 'rom0.gba',
         getSaveState: getSaveStateSpy,
-        getAutoSaveState: () => null
+        getAutoSaveState: () => null,
+        getCurrentAutoSaveStatePath: () => null
       } as GBAEmulator
     }));
 
@@ -72,7 +73,8 @@ describe('<SaveStatesModal />', () => {
         getAutoSaveState: () => ({
           autoSaveStateName: 'rom0_auto.ss',
           data: new Uint8Array([1, 2, 3])
-        })
+        }),
+        getCurrentAutoSaveStatePath: () => null
       } as GBAEmulator
     }));
 
@@ -97,7 +99,8 @@ describe('<SaveStatesModal />', () => {
       ...original(),
       emulator: {
         getCurrentGameName: () => 'some_rom.gba',
-        getAutoSaveState: () => null
+        getAutoSaveState: () => null,
+        getCurrentAutoSaveStatePath: () => null
       } as GBAEmulator
     }));
 
@@ -134,7 +137,8 @@ describe('<SaveStatesModal />', () => {
         listCurrentSaveStates: listCurrentSaveStatesSpy as () => string[],
         getSaveState: getSaveStateSpy as (saveStateName: string) => Uint8Array,
         createSaveState: createSaveStateSpy,
-        getAutoSaveState: () => null
+        getAutoSaveState: () => null,
+        getCurrentAutoSaveStatePath: () => null
       } as GBAEmulator
     }));
 
@@ -169,7 +173,8 @@ describe('<SaveStatesModal />', () => {
       getCurrentGameName: () => 'rom0.gba',
       getSaveState: getSaveStateSpy as (saveStateName: string) => Uint8Array,
       createSaveState: createSaveState,
-      getAutoSaveState: () => null
+      getAutoSaveState: () => null,
+      getCurrentAutoSaveStatePath: () => null
     } as GBAEmulator;
 
     const { useEmulatorContext: original } = await vi.importActual<
@@ -218,7 +223,8 @@ describe('<SaveStatesModal />', () => {
             saveStateName: string
           ) => Uint8Array,
           deleteSaveState: deleteSaveStateSpy,
-          getAutoSaveState: () => null
+          getAutoSaveState: () => null,
+          getCurrentAutoSaveStatePath: () => null
         } as GBAEmulator
       };
     });
@@ -259,7 +265,8 @@ describe('<SaveStatesModal />', () => {
           autoSaveStateName: 'rom0_auto.ss',
           data: new Uint8Array([1, 2, 3])
         }),
-        deleteFile: deleteFileSpy
+        deleteFile: deleteFileSpy,
+        getCurrentAutoSaveStatePath: () => null
       } as GBAEmulator
     }));
 
@@ -280,7 +287,8 @@ describe('<SaveStatesModal />', () => {
       getCurrentGameName: () => 'some_rom.gba',
       loadSaveState: loadSaveStateSpy,
       getSaveState: getSaveStateSpy as (saveStateName: string) => Uint8Array,
-      getAutoSaveState: () => null
+      getAutoSaveState: () => null,
+      getCurrentAutoSaveStatePath: () => null
     } as GBAEmulator;
 
     const { useEmulatorContext: original } = await vi.importActual<
@@ -319,7 +327,8 @@ describe('<SaveStatesModal />', () => {
         getCurrentGameName: () => 'rom0.gba',
         getSaveState: getSaveState,
         loadSaveState: loadSaveState,
-        getAutoSaveState: () => null
+        getAutoSaveState: () => null,
+        getCurrentAutoSaveStatePath: () => null
       } as GBAEmulator
     }));
 
@@ -344,7 +353,8 @@ describe('<SaveStatesModal />', () => {
         listCurrentSaveStates: () => ['rom0.ss0', 'rom0.ss1'],
         getCurrentGameName: () => 'rom0.gba',
         getSaveState: getSaveState,
-        getAutoSaveState: () => null
+        getAutoSaveState: () => null,
+        getCurrentAutoSaveStatePath: () => null
       } as GBAEmulator
     }));
 
@@ -389,7 +399,8 @@ describe('<SaveStatesModal />', () => {
         getAutoSaveState: () => ({
           autoSaveStateName: 'rom0_auto.ss',
           data: new Uint8Array([1, 2, 3])
-        })
+        }),
+        getCurrentAutoSaveStatePath: () => null
       } as GBAEmulator
     }));
 

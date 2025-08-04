@@ -39,12 +39,12 @@ export const FileSystemModal = () => {
     [emulator, syncActionIfEnabled]
   );
 
-  // the only flow that can force the file system to change without user interaction after the modal
-  // is open is the auto save state timer, if the modified time of the current auto save state has
-  // changed, we should refresh the file system view
   const autoSaveStatePath = emulator?.getCurrentAutoSaveStatePath();
   const { modifiedTime } = useFileStat(autoSaveStatePath);
 
+  // the only flow that can force the file system to change without user interaction after the modal
+  // is open is the auto save state timer, if the modified time of the current auto save state has
+  // changed, we should refresh the file system view
   useEffect(
     () => setAllFiles(emulator?.listAllFiles()),
     [emulator, modifiedTime]
