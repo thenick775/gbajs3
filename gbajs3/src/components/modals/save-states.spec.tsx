@@ -6,6 +6,7 @@ import { SaveStatesModal } from './save-states.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
 import * as addCallbackHooks from '../../hooks/emulator/use-add-callbacks.tsx';
+import * as useFileStatHooks from '../../hooks/emulator/use-file-stat.tsx';
 import { saveStateSlotsLocalStorageKey } from '../controls/consts.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 
@@ -251,13 +252,18 @@ describe('<SaveStatesModal />', () => {
 
   it('deletes auto save state', async () => {
     const deleteFileSpy: (p: string) => void = vi.fn();
+    const triggerSpy = vi.fn();
 
-    const { useEmulatorContext: original } = await vi.importActual<
+    const { useEmulatorContext: originalEmulator } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
+    const { useFileStat: originalFileStat } = await vi.importActual<
+      typeof useFileStatHooks
+    >('../../hooks/emulator/use-file-stat.tsx');
+
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-      ...original(),
+      ...originalEmulator(),
       emulator: {
         listCurrentSaveStates: (): string[] => [],
         getCurrentGameName: () => 'rom0.gba',
@@ -270,12 +276,18 @@ describe('<SaveStatesModal />', () => {
       } as GBAEmulator
     }));
 
+    vi.spyOn(useFileStatHooks, 'useFileStat').mockImplementation(() => ({
+      ...originalFileStat(),
+      trigger: triggerSpy
+    }));
+
     renderWithContext(<SaveStatesModal />);
 
     await userEvent.click(screen.getByLabelText('Delete rom0_auto.ss'));
 
     expect(deleteFileSpy).toHaveBeenCalledOnce();
     expect(deleteFileSpy).toHaveBeenCalledWith('rom0_auto.ss');
+    expect(triggerSpy).toHaveBeenCalledOnce();
   });
 
   it('loads save state', async () => {
