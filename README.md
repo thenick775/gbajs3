@@ -169,6 +169,26 @@ All control positions can be modified if the default layouts do not suit your de
 
 Feel free to open discussions, issues, and pull requests. Contributions are welcome!
 
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://nicholas-vancise.dev/"><img src="https://avatars.githubusercontent.com/u/40526638?v=4?s=100" width="100px;" alt="Nicholas VanCise"/><br /><sub><b>Nicholas VanCise</b></sub></a><br /><a href="#maintenance-thenick775" title="Maintenance">🚧</a> <a href="https://github.com/thenick775/gbajs3/commits?author=thenick775" title="Code">💻</a> <a href="https://github.com/thenick775/gbajs3/pulls?q=is%3Apr+reviewed-by%3Athenick775" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/gutenye"><img src="https://avatars.githubusercontent.com/u/377544?v=4?s=100" width="100px;" alt="Guten"/><br /><sub><b>Guten</b></sub></a><br /><a href="https://github.com/thenick775/gbajs3/commits?author=gutenye" title="Code">💻</a> <a href="https://github.com/thenick775/gbajs3/issues?q=author%3Agutenye" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sonht-0555"><img src="https://avatars.githubusercontent.com/u/26568422?v=4?s=100" width="100px;" alt="Son Hoang Tuan"/><br /><sub><b>Son Hoang Tuan</b></sub></a><br /><a href="https://github.com/thenick775/gbajs3/issues?q=author%3Asonht-0555" title="Bug reports">🐛</a> <a href="#ideas-sonht-0555" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## License
 
 Original work by Endrift. Repo: (Archived / No longer maintained)

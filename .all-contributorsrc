@@ -1,0 +1,39 @@
+{
+  "projectName": "gbajs3",
+  "projectOwner": "thenick775",
+  "repoType": "github",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "thenick775",
+      "name": "Nicholas VanCise",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40526638?v=4",
+      "profile": "https://nicholas-vancise.dev/",
+      "contributions": [
+        "maintenance",
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "gutenye",
+      "name": "Guten",
+      "avatar_url": "https://avatars.githubusercontent.com/u/377544?v=4",
+      "profile": "https://github.com/gutenye",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "sonht-0555",
+      "name": "Son Hoang Tuan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26568422?v=4",
+      "profile": "https://github.com/sonht-0555",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
+    }
+  ]
+}
