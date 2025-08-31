@@ -20,7 +20,7 @@ export type ZipTarget = {
   finalize: () => Promise<void>;
 };
 
-const ZIP_TYPES: FilePickerAcceptType[] = [
+const zipTypes: FilePickerAcceptType[] = [
   {
     description: 'ZIP archive',
     accept: { 'application/zip': ['.zip'] }
@@ -48,7 +48,7 @@ export const setupZipTarget = async (
   if (usePicker) {
     const handle = await window.showSaveFilePicker({
       suggestedName: name,
-      types: ZIP_TYPES
+      types: zipTypes
     });
     const sink = await handle.createWritable();
     const writer = new ZipWriter<void>(sink, opts);

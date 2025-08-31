@@ -50,9 +50,7 @@ const exportEmscriptenFsAsZip = async (
   emulator: GBAEmulator | null
 ): Promise<void> => {
   const zipName = generateExportZipName();
-  const files = flattenFiles(emulator?.listAllFiles())
-    .map(stripLeadingSlashes)
-    .filter(Boolean);
+  const files = flattenFiles(emulator?.listAllFiles()).map(stripLeadingSlashes);
 
   const { writer, finalize } = await setupZipTarget(zipName, zipOptions);
 

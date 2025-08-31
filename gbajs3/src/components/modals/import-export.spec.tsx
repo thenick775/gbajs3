@@ -144,7 +144,6 @@ describe('<ImportExportModal />', () => {
     const uploadCheatsSpy = vi.fn();
     const uploadPatchSpy = vi.fn();
     const uploadScreenshotSpy = vi.fn();
-    const filePathsSpy = vi.fn(() => ({ autosave: '/autosave' }));
 
     const syncActionIfEnabledSpy = vi.fn();
     const setIsModalOpenSpy = vi.fn();
@@ -160,15 +159,18 @@ describe('<ImportExportModal />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...originalEmulator(),
       emulator: {
+        uploadAutoSaveState: uploadAutoSaveStateSpy as (
+          autoSaveStateName: string,
+          data: Uint8Array
+        ) => Promise<void>,
         uploadRom: uploadRomSpy as GenericFileUploadSpy,
-        uploadAutoSaveState: uploadAutoSaveStateSpy as GenericFileUploadSpy,
         uploadSaveOrSaveState: uploadSaveOrSaveStateSpy as GenericFileUploadSpy,
         uploadCheats: uploadCheatsSpy as GenericFileUploadSpy,
         uploadPatch: uploadPatchSpy as GenericFileUploadSpy,
         uploadScreenshot: uploadScreenshotSpy as GenericFileUploadSpy,
-        filePaths: filePathsSpy as GenericFileUploadSpy,
+        filePaths: () => ({ autosave: '/autosave' }),
         getCurrentAutoSaveStatePath: () => null
-      } as unknown as GBAEmulator
+      } as GBAEmulator
     }));
 
     vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
@@ -267,10 +269,6 @@ describe('<ImportExportModal />', () => {
     const getFileSpy: (p: string) => Uint8Array = vi.fn(() =>
       new TextEncoder().encode('Some sav file contents')
     );
-
-    // unimplemented in jsdom
-    URL.createObjectURL = vi.fn(() => 'object_url:rom1.gba');
-    URL.revokeObjectURL = vi.fn();
 
     const { useEmulatorContext: originalEmulator } = await vi.importActual<
       typeof contextHooks
