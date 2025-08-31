@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { type Entry } from '@zip.js/zip.js';
-import { useCallback, useId } from 'react';
+import { useCallback, useId, useState } from 'react';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 
 import { ModalBody } from './modal-body.tsx';
@@ -151,6 +151,7 @@ export const ImportExportModal = () => {
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
   const { reset, handleSubmit, setValue, control } = useForm<InputProps>();
+  const [isExportLoading, setIsExportLoading] = useState(false);
   const importFormId = useId();
   const buttonBaseId = useId();
 
@@ -246,7 +247,12 @@ export const ImportExportModal = () => {
           id={`${buttonBaseId}-export`}
           variant="contained"
           color="secondary"
-          onClick={() => exportEmscriptenFsAsZip(emulator)}
+          onClick={async () => {
+            setIsExportLoading(true);
+            await exportEmscriptenFsAsZip(emulator);
+            setIsExportLoading(false);
+          }}
+          loading={isExportLoading}
         >
           Export
         </Button>

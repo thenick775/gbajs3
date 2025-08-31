@@ -214,7 +214,6 @@ describe('<ImportExportModal />', () => {
       }
     );
 
-    // Make readFileFromZipEntry return per-entry filenames (so .name matches)
     vi.spyOn(zipUtils, 'readFileFromZipEntry').mockImplementation(
       async (entry: FileEntry) => new File(['bytes'], entry.filename)
     );
@@ -225,7 +224,6 @@ describe('<ImportExportModal />', () => {
 
     renderWithContext(<ImportExportModal />);
 
-    // Upload + submit
     await userEvent.upload(screen.getByTestId('hidden-file-input'), testZip);
     await userEvent.click(screen.getByRole('button', { name: 'Import' }));
 
