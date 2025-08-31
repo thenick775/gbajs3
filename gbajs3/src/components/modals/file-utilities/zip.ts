@@ -52,7 +52,7 @@ export const setupZipTarget = async (
     });
     const sink = await handle.createWritable();
     const writer = new ZipWriter<void>(sink, opts);
-    return { writer, finalize: writer.close };
+    return { writer, finalize: () => writer.close() };
   }
 
   // else we build a blob in memory
