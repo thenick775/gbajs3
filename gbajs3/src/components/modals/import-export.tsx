@@ -77,46 +77,23 @@ const writeFileToEmulator = async (
   const name = file.name;
   const nameLower = name.toLowerCase();
 
-  if (
-    nameLower.endsWith('.gba') ||
-    nameLower.endsWith('.gbc') ||
-    nameLower.endsWith('.gb') ||
-    nameLower.endsWith('.zip') ||
-    nameLower.endsWith('.7z')
-  ) {
+  if (emulator?.isFileExtensionOfType(nameLower, 'rom')) {
     emulator?.uploadRom(file);
-    return;
-  }
-  if (nameLower.endsWith('_auto.ss')) {
+  } else if (emulator?.isFileExtensionOfType(nameLower, 'autosave')) {
     const arrayBuffer = await file.arrayBuffer();
     await emulator?.uploadAutoSaveState(
       `${emulator?.filePaths().autosave}/${name}`,
       new Uint8Array(arrayBuffer)
     );
-    return;
-  }
-  if (nameLower.endsWith('.sav') || nameLower.match(/\.ss[0-9]+/)) {
+  } else if (emulator?.isFileExtensionOfType(nameLower, 'save')) {
     emulator?.uploadSaveOrSaveState(file);
-    return;
-  }
-  if (nameLower.endsWith('.cheats')) {
+  } else if (emulator?.isFileExtensionOfType(nameLower, 'cheat')) {
     emulator?.uploadCheats(file);
-    return;
-  }
-  if (
-    nameLower.endsWith('.ips') ||
-    nameLower.endsWith('.ups') ||
-    nameLower.endsWith('.bps')
-  ) {
+  } else if (emulator?.isFileExtensionOfType(nameLower, 'patch')) {
     emulator?.uploadPatch(file);
-    return;
-  }
-  if (nameLower.endsWith('.png')) {
+  } else if (emulator?.isFileExtensionOfType(nameLower, 'screenshot')) {
     emulator?.uploadScreenshot(file);
-    return;
   }
-
-  console.warn(`No supported write path for ${name}`);
 };
 
 const importZipToEmulatorFs = (emulator: GBAEmulator | null, zipFile: File) => {

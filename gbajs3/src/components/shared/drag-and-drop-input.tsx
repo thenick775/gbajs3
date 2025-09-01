@@ -6,12 +6,7 @@ import { styled, useTheme } from 'styled-components';
 
 import { ErrorWithIcon } from './error-with-icon.tsx';
 
-type Extension = RegexValidator | string;
-
-type RegexValidator = {
-  regex: RegExp;
-  displayText: string;
-};
+import type { Extension } from '../../emulator/mgba/mgba-emulator.tsx';
 
 type DragAndDropInputProps = {
   ariaLabel: string;

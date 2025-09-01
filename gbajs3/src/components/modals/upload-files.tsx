@@ -13,21 +13,16 @@ type InputProps = {
   allFiles: File[];
 };
 
-const fileTypes = {
-  rom: ['.gba', '.gbc', '.gb', '.zip', '.7z'],
-  saves: ['.sav', { regex: /\.ss[0-9]+/, displayText: '.ss' }],
-  cheats: ['.cheats'],
-  patches: ['.ips', '.ups', '.bps']
-};
-
-const validFileExtensions = Object.values(fileTypes).flatMap((_) => _);
-
 export const UploadFilesModal = () => {
   const { setIsModalOpen } = useModalContext();
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
   const { reset, handleSubmit, setValue, control } = useForm<InputProps>();
   const uploadPatchesFormId = useId();
+
+  const validFileExtensions = Object.values(
+    emulator?.defaultFileTypes() ?? {}
+  ).flatMap((_) => _);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {

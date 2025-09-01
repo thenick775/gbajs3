@@ -18,10 +18,10 @@ import * as addCallbackHooks from '../../hooks/emulator/use-add-callbacks.tsx';
 import { productTourLocalStorageKey } from '../product-tour/consts.tsx';
 import * as zipUtils from './file-utilities/zip.ts';
 import { ImportExportModal } from './import-export.tsx';
-
-import type {
-  GBAEmulator,
-  FileNode
+import {
+  fileTypes,
+  type GBAEmulator,
+  type FileNode
 } from '../../emulator/mgba/mgba-emulator.tsx';
 
 type GenericFileUploadSpy = (_file: File, _cb?: () => void) => void;
@@ -59,6 +59,18 @@ describe('<ImportExportModal />', () => {
       isDir: true,
       children: [{ path: '/autosave/rom1_auto.ss', isDir: false, children: [] }]
     }
+  };
+
+  // vendored from emulator
+  const isFileExtensionOfType = (
+    fileName: string,
+    type: keyof typeof fileTypes
+  ) => {
+    const fileExtension = `.${fileName.split('.').pop()}`;
+
+    return fileTypes[type].some((e) =>
+      typeof e === 'string' ? e === fileExtension : !!e.regex.exec(fileName)
+    );
   };
 
   // only uint8 array style (no blobs) will work in jsdom
@@ -137,7 +149,7 @@ describe('<ImportExportModal />', () => {
     await waitFor(() => expect(setIsModalOpenSpy).toHaveBeenCalledWith(false));
   });
 
-  it('dispatches imported entries to the correct emulator APIs', async () => {
+  it('dispatches imported entries to the correct emulator handlers', async () => {
     const uploadRomSpy = vi.fn();
     const uploadAutoSaveStateSpy = vi.fn(async () => undefined);
     const uploadSaveOrSaveStateSpy = vi.fn();
@@ -169,7 +181,8 @@ describe('<ImportExportModal />', () => {
         uploadPatch: uploadPatchSpy as GenericFileUploadSpy,
         uploadScreenshot: uploadScreenshotSpy as GenericFileUploadSpy,
         filePaths: () => ({ autosave: '/autosave' }),
-        getCurrentAutoSaveStatePath: () => null
+        getCurrentAutoSaveStatePath: () => null,
+        isFileExtensionOfType: isFileExtensionOfType
       } as GBAEmulator
     }));
 
@@ -243,7 +256,7 @@ describe('<ImportExportModal />', () => {
 
     expect(restoreLocalStorageFromZipSpy).toHaveBeenCalledTimes(1);
 
-    expect(warnSpy).toHaveBeenCalledTimes(2);
+    expect(warnSpy).toHaveBeenCalledTimes(1);
     warnSpy.mockRestore();
   });
 
