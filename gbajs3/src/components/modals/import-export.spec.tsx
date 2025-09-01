@@ -24,7 +24,7 @@ import {
   type FileNode
 } from '../../emulator/mgba/mgba-emulator.tsx';
 
-type GenericFileUploadSpy = (_file: File, _cb?: () => void) => void;
+type GenericFileUploadSpy = (_file: File, cb?: () => void) => void;
 
 describe('<ImportExportModal />', () => {
   const defaultFSData: FileNode = {
@@ -150,12 +150,14 @@ describe('<ImportExportModal />', () => {
   });
 
   it('dispatches imported entries to the correct emulator handlers', async () => {
-    const uploadRomSpy = vi.fn();
+    const uploadRomSpy = vi.fn((_file: File, cb?: () => void) => cb?.());
     const uploadAutoSaveStateSpy = vi.fn(async () => undefined);
-    const uploadSaveOrSaveStateSpy = vi.fn();
-    const uploadCheatsSpy = vi.fn();
-    const uploadPatchSpy = vi.fn();
-    const uploadScreenshotSpy = vi.fn();
+    const uploadSaveOrSaveStateSpy = vi.fn((_file: File, cb?: () => void) =>
+      cb?.()
+    );
+    const uploadCheatsSpy = vi.fn((_file: File, cb?: () => void) => cb?.());
+    const uploadPatchSpy = vi.fn((_file: File, cb?: () => void) => cb?.());
+    const uploadScreenshotSpy = vi.fn((_file: File, cb?: () => void) => cb?.());
 
     const syncActionIfEnabledSpy = vi.fn();
     const setIsModalOpenSpy = vi.fn();

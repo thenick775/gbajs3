@@ -31,7 +31,7 @@ type RegexValidator = {
   displayText: string;
 };
 
-type FileTypes = Record<
+export type FileTypes = Record<
   'rom' | 'save' | 'autosave' | 'cheat' | 'patch' | 'screenshot',
   Extension[]
 >;
@@ -109,10 +109,10 @@ export const KEY_LOCATION_NUMPAD = 3;
 
 export const fileTypes: FileTypes = {
   rom: ['.gba', '.gbc', '.gb', '.zip', '.7z'],
+  patch: ['.ips', '.ups', '.bps'],
   autosave: [{ regex: /_auto\.ss$/, displayText: '_auto.ss' }],
   save: ['.sav', { regex: /\.ss[0-9]+/, displayText: '.ss' }],
   cheat: ['.cheats'],
-  patch: ['.ips', '.ups', '.bps'],
   screenshot: ['.png']
 };
 

@@ -24,6 +24,7 @@ import {
   stripLeadingSlashes,
   zipOptions
 } from './file-utilities/zip.ts';
+import { useWriteFileToEmulator } from '../../hooks/emulator/use-write-file-to-emulator.tsx';
 
 import type {
   FileNode,
@@ -70,33 +71,10 @@ const exportEmscriptenFsAsZip = async (
   await finalize();
 };
 
-const writeFileToEmulator = async (
-  emulator: GBAEmulator | null,
-  file: File
+const importZipToEmulatorFs = (
+  zipFile: File,
+  writeFileToEmulator: (file: File) => Promise<void>
 ) => {
-  const name = file.name;
-  const nameLower = name.toLowerCase();
-
-  if (emulator?.isFileExtensionOfType(nameLower, 'rom')) {
-    emulator?.uploadRom(file);
-  } else if (emulator?.isFileExtensionOfType(nameLower, 'autosave')) {
-    const arrayBuffer = await file.arrayBuffer();
-    await emulator?.uploadAutoSaveState(
-      `${emulator?.filePaths().autosave}/${name}`,
-      new Uint8Array(arrayBuffer)
-    );
-  } else if (emulator?.isFileExtensionOfType(nameLower, 'save')) {
-    emulator?.uploadSaveOrSaveState(file);
-  } else if (emulator?.isFileExtensionOfType(nameLower, 'cheat')) {
-    emulator?.uploadCheats(file);
-  } else if (emulator?.isFileExtensionOfType(nameLower, 'patch')) {
-    emulator?.uploadPatch(file);
-  } else if (emulator?.isFileExtensionOfType(nameLower, 'screenshot')) {
-    emulator?.uploadScreenshot(file);
-  }
-};
-
-const importZipToEmulatorFs = (emulator: GBAEmulator | null, zipFile: File) => {
   const writeEntryToEmulator = async (entry: Entry) => {
     if (!entry || !entry.filename) return;
     if (entry.directory) return;
@@ -109,13 +87,13 @@ const importZipToEmulatorFs = (emulator: GBAEmulator | null, zipFile: File) => {
     }
 
     if (normalized === 'local-storage.json') {
-      restoreLocalStorageFromZip(entry);
+      await restoreLocalStorageFromZip(entry);
       return;
     }
 
     const file = await readFileFromZipEntry(entry);
 
-    if (file) await writeFileToEmulator(emulator, file);
+    if (file) await writeFileToEmulator(file);
   };
 
   return readZipEntriesFromBlob(zipFile, writeEntryToEmulator);
@@ -124,6 +102,7 @@ const importZipToEmulatorFs = (emulator: GBAEmulator | null, zipFile: File) => {
 export const ImportExportModal = () => {
   const { setIsModalOpen } = useModalContext();
   const { emulator } = useEmulatorContext();
+  const writeFileToEmulator = useWriteFileToEmulator();
   const { syncActionIfEnabled } = useAddCallbacks();
   const {
     reset,
@@ -145,7 +124,7 @@ export const ImportExportModal = () => {
   );
 
   const onSubmit: SubmitHandler<InputProps> = async ({ zipFile }) => {
-    await importZipToEmulatorFs(emulator, zipFile);
+    await importZipToEmulatorFs(zipFile, writeFileToEmulator);
     await syncActionIfEnabled();
     setIsModalOpen(false);
   };
