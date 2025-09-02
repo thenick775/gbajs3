@@ -1,6 +1,27 @@
-import { Button, Checkbox, type CheckboxProps } from '@mui/material';
-import { useId, useCallback } from 'react';
-import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
+import {
+  Button,
+  Checkbox,
+  Divider,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  type CheckboxProps
+} from '@mui/material';
+import { useId, useCallback, useState } from 'react';
+import {
+  Controller,
+  useFieldArray,
+  useForm,
+  type SubmitHandler
+} from 'react-hook-form';
+import { BiTrash } from 'react-icons/bi';
+import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -9,11 +30,13 @@ import { useModalContext, useEmulatorContext } from '../../hooks/context.tsx';
 import { useAddCallbacks } from '../../hooks/emulator/use-add-callbacks.tsx';
 import { useWriteFileToEmulator } from '../../hooks/emulator/use-write-file-to-emulator.tsx';
 import { DragAndDropInput } from '../shared/drag-and-drop-input.tsx';
+import { StyledBiPlus } from '../shared/styled.tsx';
 
 import type { FileTypes } from '../../emulator/mgba/mgba-emulator.tsx';
 
 type InputProps = {
-  allFiles: File[];
+  files: File[];
+  fileUrls: { url: string; type: keyof FileTypes }[];
   romFileToRun?: string;
 };
 
@@ -28,6 +51,33 @@ type AdditionalFileActionsProps = {
   isChecked: boolean;
   isRomFile: boolean;
 };
+
+const defaultFileUrl: { url: string; type: keyof FileTypes } = {
+  url: '',
+  type: 'rom'
+};
+
+const GridContainer = styled.div`
+  display: grid;
+`;
+
+const GridItem = styled.div<{ $isVisible: boolean }>`
+  grid-area: 1 / 1;
+  visibility: ${({ $isVisible }) => ($isVisible ? 'visible' : 'hidden')};
+  min-width: 0;
+`;
+
+const UrlFieldContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const UrlInputsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+`;
 
 const orderFileNamesByExtension = (types?: FileTypes) => {
   if (!types) return;
@@ -47,6 +97,36 @@ const orderFileNamesByExtension = (types?: FileTypes) => {
   };
 
   return (a: string, b: string) => rank(a) - rank(b);
+};
+
+// TODO: find a better place for this logic, slightly duplicated
+const fetchFileFromUrl = async (fileUrl: URL) => {
+  const options: RequestInit = {
+    method: 'GET'
+  };
+
+  const res = await fetch(fileUrl, options);
+
+  // extract file name from response headers if possible
+  const fileName = res.headers
+    .get('Content-Disposition')
+    ?.split(';')
+    .pop()
+    ?.split('=')
+    .pop()
+    ?.replace(/"/g, '');
+
+  const fallbackFileName = decodeURIComponent(
+    fileUrl.pathname.split('/').pop() ?? 'unknown_external.unknown'
+  );
+
+  if (!res.ok)
+    throw new Error(`Received unexpected status code: ${res.status}`);
+
+  const blob = await res.blob();
+  const file = new File([blob], fileName ?? fallbackFileName);
+
+  return file;
 };
 
 const RunRomCheckboxProps = ({
@@ -85,9 +165,23 @@ export const UploadFilesModal = () => {
   const { emulator } = useEmulatorContext();
   const writeFileToEmulator = useWriteFileToEmulator();
   const { syncActionIfEnabled } = useAddCallbacks();
-  const { reset, handleSubmit, setValue, control, watch } =
-    useForm<InputProps>();
-  const uploadPatchesFormId = useId();
+  const [uploadType, setUploadType] = useState<'files' | 'urls'>('files');
+  const uploadFilesFormId = useId();
+  const {
+    reset,
+    handleSubmit,
+    setValue,
+    control,
+    watch,
+    register,
+    formState: { errors }
+  } = useForm<InputProps>({
+    defaultValues: { fileUrls: [defaultFileUrl] }
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'fileUrls'
+  });
 
   const validFileExtensions = Object.values(
     emulator?.defaultFileTypes() ?? {}
@@ -96,85 +190,220 @@ export const UploadFilesModal = () => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       reset();
-      setValue('allFiles', acceptedFiles, { shouldValidate: true });
+      setValue('files', acceptedFiles, { shouldValidate: true });
     },
     [reset, setValue]
   );
 
-  const onSubmit: SubmitHandler<InputProps> = async ({ allFiles }) => {
-    await Promise.all(allFiles.map((file) => writeFileToEmulator(file)));
+  const onSubmit: SubmitHandler<InputProps> = async ({ files, fileUrls }) => {
+    await Promise.all(files.map((file) => writeFileToEmulator(file)));
+
+    const externalFilesSettled = await Promise.allSettled(
+      fileUrls
+        .filter((u) => !!u.url)
+        .map(async ({ url, type }) => {
+          // note: the url is validated below, this is safe
+          const file = await fetchFileFromUrl(new URL(url));
+
+          return {
+            file,
+            type
+          };
+        })
+    );
+
+    const writePromises = externalFilesSettled.flatMap((r) =>
+      r.status === 'fulfilled'
+        ? [writeFileToEmulator(r.value.file, r.value.type)]
+        : []
+    );
+
+    await Promise.all(writePromises);
 
     await syncActionIfEnabled();
     setIsModalOpen(false);
   };
 
-  const allFiles = watch('allFiles');
-  const firstRomName = allFiles?.find((file) =>
+  const files = watch('files');
+  const firstRomName = files?.find((file) =>
     emulator?.isFileExtensionOfType(file.name, 'rom')
   )?.name;
   const romFileToRun = watch('romFileToRun');
+
+  const handleUploadType = (
+    _: React.MouseEvent<HTMLElement>,
+    uploadType: 'files' | 'urls'
+  ) => setUploadType(uploadType);
 
   return (
     <>
       <ModalHeader title="Upload Files" />
       <ModalBody>
         <form
-          id={uploadPatchesFormId}
-          aria-label="Upload Patches Form"
+          id={uploadFilesFormId}
+          aria-label="Upload Files Form"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Controller
-            control={control}
-            name="allFiles"
-            rules={{
-              validate: (allFiles) =>
-                allFiles?.length > 0 ||
-                'At least one .ips/.ups/.bps file is required'
-            }}
-            render={({ field: { name, value }, fieldState: { error } }) => (
-              <DragAndDropInput
-                ariaLabel="Upload Files"
-                id={`${uploadPatchesFormId}--drag-and-drop`}
-                onDrop={onDrop}
-                name={name}
-                validFileExtensions={validFileExtensions}
-                error={error?.message}
-                hideAcceptedFiles={!value?.length}
-                sortAcceptedFiles={orderFileNamesByExtension(
-                  emulator?.defaultFileTypes()
+          <GridContainer>
+            <GridItem $isVisible={uploadType === 'files'}>
+              <Controller
+                control={control}
+                name="files"
+                rules={{
+                  validate: (files) =>
+                    files?.length > 0 ||
+                    'At least one .ips/.ups/.bps file is required'
+                }}
+                render={({ field: { name, value }, fieldState: { error } }) => (
+                  <DragAndDropInput
+                    ariaLabel="Upload Files"
+                    id={`${uploadFilesFormId}--drag-and-drop`}
+                    onDrop={onDrop}
+                    name={name}
+                    validFileExtensions={validFileExtensions}
+                    error={error?.message}
+                    hideAcceptedFiles={!value?.length}
+                    sortAcceptedFiles={orderFileNamesByExtension(
+                      emulator?.defaultFileTypes()
+                    )}
+                    multiple
+                    renderAdditionalFileActions={({ fileName }) => (
+                      <AdditionalFileActions
+                        selectedFileName={watch('romFileToRun')}
+                        setSelectedFileName={(name) =>
+                          setValue('romFileToRun', name ?? undefined)
+                        }
+                        isRomFile={
+                          emulator?.isFileExtensionOfType(fileName, 'rom') ??
+                          false
+                        }
+                        fileName={fileName}
+                        isChecked={
+                          (firstRomName === fileName && !romFileToRun) ||
+                          romFileToRun === fileName
+                        }
+                      />
+                    )}
+                  >
+                    <p>
+                      Drag and drop or click to upload roms, saves, cheats, or
+                      patch files
+                    </p>
+                  </DragAndDropInput>
                 )}
-                multiple
-                renderAdditionalFileActions={({ fileName }) => (
-                  <AdditionalFileActions
-                    selectedFileName={watch('romFileToRun')}
-                    setSelectedFileName={(name) =>
-                      setValue('romFileToRun', name ?? undefined)
-                    }
-                    isRomFile={
-                      emulator?.isFileExtensionOfType(fileName, 'rom') ?? false
-                    }
-                    fileName={fileName}
-                    isChecked={
-                      (firstRomName === fileName && !romFileToRun) ||
-                      romFileToRun === fileName
-                    }
-                  />
-                )}
+              />
+            </GridItem>
+            <GridItem $isVisible={uploadType === 'urls'}>
+              <UrlFieldContainer>
+                {fields.map((item, index) => {
+                  return (
+                    <div key={item.id}>
+                      {index !== 0 && (
+                        <Divider flexItem sx={{ margin: '10px 0' }} />
+                      )}
+                      <UrlInputsContainer>
+                        <TextField
+                          id={`${uploadFilesFormId}--file-url-${index}`}
+                          error={!!errors?.fileUrls?.[index]?.url}
+                          label="URL"
+                          size="small"
+                          autoComplete="url"
+                          variant="filled"
+                          helperText={errors?.fileUrls?.[index]?.url?.message}
+                          aria-label="Upload File From URL"
+                          fullWidth
+                          slotProps={{
+                            input: {
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    aria-label="Remove URL"
+                                    sx={{ padding: '5px' }}
+                                    onClick={() => remove(index)}
+                                  >
+                                    <BiTrash />
+                                  </IconButton>
+                                </InputAdornment>
+                              )
+                            }
+                          }}
+                          {...register(`fileUrls.${index}.url`, {
+                            validate: (fileUrl) => {
+                              try {
+                                if (uploadType === 'urls') new URL(fileUrl);
+                              } catch {
+                                return 'Invalid url';
+                              }
+                            }
+                          })}
+                        />
+                        <FormControl size="small">
+                          <InputLabel>File Type</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={item.type}
+                            label="File Type"
+                            {...register(`fileUrls.${index}.type`)}
+                          >
+                            {Object.keys(
+                              emulator?.defaultFileTypes() ?? {}
+                            ).map((fileType, idx) => (
+                              <MenuItem
+                                key={`${fileType}_${idx}`}
+                                value={fileType}
+                              >
+                                {fileType}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </UrlInputsContainer>
+                    </div>
+                  );
+                })}
+              </UrlFieldContainer>
+              <IconButton
+                aria-label={`Add upload url`}
+                sx={{ padding: 0, marginTop: '10px' }}
+                onClick={() => append(defaultFileUrl)}
               >
-                <p>
-                  Drag and drop or click to upload roms, saves, cheats, or patch
-                  files
-                </p>
-              </DragAndDropInput>
-            )}
-          />
+                <StyledBiPlus />
+              </IconButton>
+            </GridItem>
+          </GridContainer>
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button form={uploadPatchesFormId} type="submit" variant="contained">
+        <div style={{ width: '100%' }}>
+          <ToggleButtonGroup
+            value={uploadType}
+            size="small"
+            exclusive
+            onChange={handleUploadType}
+            aria-label="upload type"
+          >
+            <ToggleButton value="files" aria-label="files">
+              Files
+            </ToggleButton>
+            <ToggleButton value="urls" aria-label="urls">
+              Urls
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+        <Button
+          style={{ minWidth: 'fit-content' }}
+          form={uploadFilesFormId}
+          type="submit"
+          variant="contained"
+        >
           Upload
         </Button>
-        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+        <Button
+          style={{ minWidth: 'fit-content' }}
+          variant="outlined"
+          onClick={() => setIsModalOpen(false)}
+        >
           Close
         </Button>
       </ModalFooter>

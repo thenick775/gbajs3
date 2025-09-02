@@ -2,40 +2,61 @@ import { useCallback } from 'react';
 
 import { useEmulatorContext } from '../context.tsx';
 
+import type { FileTypes } from '../../emulator/mgba/mgba-emulator.tsx';
+
 export const useWriteFileToEmulator = () => {
   const { emulator } = useEmulatorContext();
 
   const writeFileToEmulator = useCallback(
-    async (file: File): Promise<void> => {
+    async (file: File, fileType?: keyof FileTypes): Promise<void> => {
       const name = file.name;
       const nameLower = name.toLowerCase();
 
-      if (emulator?.isFileExtensionOfType(nameLower, 'rom')) {
+      if (
+        // additional type overrides are given for external uploads, that may/may not have a proper name, but do have a proper type
+        fileType === 'rom' ||
+        emulator?.isFileExtensionOfType(nameLower, 'rom')
+      ) {
         return new Promise<void>((resolve) =>
-          emulator.uploadRom(file, resolve)
+          emulator?.uploadRom(file, resolve)
         );
-      } else if (emulator?.isFileExtensionOfType(nameLower, 'autosave')) {
+      } else if (
+        fileType === 'autosave' ||
+        emulator?.isFileExtensionOfType(nameLower, 'autosave')
+      ) {
         const arrayBuffer = await file.arrayBuffer();
-        await emulator.uploadAutoSaveState(
+        await emulator?.uploadAutoSaveState(
           `${emulator.filePaths().autosave}/${name}`,
           new Uint8Array(arrayBuffer)
         );
         return;
-      } else if (emulator?.isFileExtensionOfType(nameLower, 'save')) {
+      } else if (
+        fileType === 'save' ||
+        emulator?.isFileExtensionOfType(nameLower, 'save')
+      ) {
         return new Promise<void>((resolve) =>
-          emulator.uploadSaveOrSaveState(file, resolve)
+          emulator?.uploadSaveOrSaveState(file, resolve)
         );
-      } else if (emulator?.isFileExtensionOfType(nameLower, 'cheat')) {
+      } else if (
+        fileType === 'cheat' ||
+        emulator?.isFileExtensionOfType(nameLower, 'cheat')
+      ) {
         return new Promise<void>((resolve) =>
-          emulator.uploadCheats(file, resolve)
+          emulator?.uploadCheats(file, resolve)
         );
-      } else if (emulator?.isFileExtensionOfType(nameLower, 'patch')) {
+      } else if (
+        fileType === 'patch' ||
+        emulator?.isFileExtensionOfType(nameLower, 'patch')
+      ) {
         return new Promise<void>((resolve) =>
-          emulator.uploadPatch(file, resolve)
+          emulator?.uploadPatch(file, resolve)
         );
-      } else if (emulator?.isFileExtensionOfType(nameLower, 'screenshot')) {
+      } else if (
+        fileType === 'screenshot' ||
+        emulator?.isFileExtensionOfType(nameLower, 'screenshot')
+      ) {
         return new Promise<void>((resolve) =>
-          emulator.uploadScreenshot(file, resolve)
+          emulator?.uploadScreenshot(file, resolve)
         );
       }
     },
