@@ -28,6 +28,7 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { useModalContext, useEmulatorContext } from '../../hooks/context.tsx';
 import { useAddCallbacks } from '../../hooks/emulator/use-add-callbacks.tsx';
+import { useRunGame } from '../../hooks/emulator/use-run-game.tsx';
 import { useWriteFileToEmulator } from '../../hooks/emulator/use-write-file-to-emulator.tsx';
 import { DragAndDropInput } from '../shared/drag-and-drop-input.tsx';
 import { StyledBiPlus } from '../shared/styled.tsx';
@@ -164,6 +165,7 @@ const AdditionalFileActions = ({
 export const UploadFilesModal = () => {
   const { setIsModalOpen } = useModalContext();
   const { emulator } = useEmulatorContext();
+  const runGame = useRunGame();
   const writeFileToEmulator = useWriteFileToEmulator();
   const { syncActionIfEnabled } = useAddCallbacks();
   const [uploadType, setUploadType] = useState<'files' | 'urls'>('files');
@@ -196,7 +198,11 @@ export const UploadFilesModal = () => {
     [reset, setValue]
   );
 
-  const onSubmit: SubmitHandler<InputProps> = async ({ files, fileUrls }) => {
+  const onSubmit: SubmitHandler<InputProps> = async ({
+    files,
+    fileUrls,
+    romFileToRun
+  }) => {
     if (files)
       await Promise.all(files.map((file) => writeFileToEmulator(file)));
 
@@ -225,6 +231,9 @@ export const UploadFilesModal = () => {
     }
 
     await syncActionIfEnabled();
+
+    if (romFileToRun) runGame(romFileToRun);
+
     setIsModalOpen(false);
   };
 
@@ -283,7 +292,7 @@ export const UploadFilesModal = () => {
                       <AdditionalFileActions
                         selectedFileName={watch('romFileToRun')}
                         setSelectedFileName={(name) =>
-                          setValue('romFileToRun', name ?? undefined)
+                          setValue('romFileToRun', name ?? 'none')
                         }
                         isRomFile={
                           emulator?.isFileExtensionOfType(fileName, 'rom') ??

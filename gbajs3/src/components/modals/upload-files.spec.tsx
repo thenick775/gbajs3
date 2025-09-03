@@ -121,7 +121,7 @@ describe('<UploadFilesModal />', () => {
     expect(second).toBeChecked();
 
     await userEvent.click(second);
-    expect(first).toBeChecked();
+    expect(first).not.toBeChecked();
     expect(second).not.toBeChecked();
 
     expect(
