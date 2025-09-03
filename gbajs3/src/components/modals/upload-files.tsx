@@ -35,8 +35,8 @@ import { StyledBiPlus } from '../shared/styled.tsx';
 import type { FileTypes } from '../../emulator/mgba/mgba-emulator.tsx';
 
 type InputProps = {
-  files: File[];
-  fileUrls: { url: string; type: keyof FileTypes }[];
+  files?: File[];
+  fileUrls?: { url: string; type: keyof FileTypes }[];
   romFileToRun?: string;
 };
 
@@ -120,8 +120,9 @@ const fetchFileFromUrl = async (fileUrl: URL) => {
     fileUrl.pathname.split('/').pop() ?? 'unknown_external.unknown'
   );
 
-  if (!res.ok)
+  if (!res.ok) {
     throw new Error(`Received unexpected status code: ${res.status}`);
+  }
 
   const blob = await res.blob();
   const file = new File([blob], fileName ?? fallbackFileName);
@@ -196,29 +197,32 @@ export const UploadFilesModal = () => {
   );
 
   const onSubmit: SubmitHandler<InputProps> = async ({ files, fileUrls }) => {
-    await Promise.all(files.map((file) => writeFileToEmulator(file)));
+    if (files)
+      await Promise.all(files.map((file) => writeFileToEmulator(file)));
 
-    const externalFilesSettled = await Promise.allSettled(
-      fileUrls
-        .filter((u) => !!u.url)
-        .map(async ({ url, type }) => {
-          // note: the url is validated below, this is safe
-          const file = await fetchFileFromUrl(new URL(url));
+    if (fileUrls) {
+      const externalFilesSettled = await Promise.allSettled(
+        fileUrls
+          .filter((u) => !!u.url)
+          .map(async ({ url, type }) => {
+            // note: the url is validated below, this is safe
+            const file = await fetchFileFromUrl(new URL(url));
 
-          return {
-            file,
-            type
-          };
-        })
-    );
+            return {
+              file,
+              type
+            };
+          })
+      );
 
-    const writePromises = externalFilesSettled.flatMap((r) =>
-      r.status === 'fulfilled'
-        ? [writeFileToEmulator(r.value.file, r.value.type)]
-        : []
-    );
+      const writePromises = externalFilesSettled.flatMap((r) =>
+        r.status === 'fulfilled'
+          ? [writeFileToEmulator(r.value.file, r.value.type)]
+          : []
+      );
 
-    await Promise.all(writePromises);
+      await Promise.all(writePromises);
+    }
 
     await syncActionIfEnabled();
     setIsModalOpen(false);
@@ -232,8 +236,10 @@ export const UploadFilesModal = () => {
 
   const handleUploadType = (
     _: React.MouseEvent<HTMLElement>,
-    uploadType: 'files' | 'urls'
-  ) => setUploadType(uploadType);
+    uploadType: 'files' | 'urls' | null
+  ) => {
+    if (uploadType) setUploadType(uploadType);
+  };
 
   return (
     <>
@@ -251,8 +257,14 @@ export const UploadFilesModal = () => {
                 name="files"
                 rules={{
                   validate: (files) =>
-                    files?.length > 0 ||
-                    'At least one .ips/.ups/.bps file is required'
+                    (files?.length ?? 0) > 0 ||
+                    uploadType === 'urls' ||
+                    `At least one ${validFileExtensions
+                      .map(
+                        (ext) =>
+                          `'${typeof ext === 'string' ? ext : ext.displayText}'`
+                      )
+                      .join(', ')} file is required`
                 }}
                 render={({ field: { name, value }, fieldState: { error } }) => (
                   <DragAndDropInput
@@ -317,7 +329,7 @@ export const UploadFilesModal = () => {
                               endAdornment: (
                                 <InputAdornment position="end">
                                   <IconButton
-                                    aria-label="Remove URL"
+                                    aria-label={`Remove URL ${index}`}
                                     sx={{ padding: '5px' }}
                                     onClick={() => remove(index)}
                                   >
@@ -339,24 +351,28 @@ export const UploadFilesModal = () => {
                         />
                         <FormControl size="small">
                           <InputLabel>File Type</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={item.type}
-                            label="File Type"
-                            {...register(`fileUrls.${index}.type`)}
-                          >
-                            {Object.keys(
-                              emulator?.defaultFileTypes() ?? {}
-                            ).map((fileType, idx) => (
-                              <MenuItem
-                                key={`${fileType}_${idx}`}
-                                value={fileType}
+                          <Controller
+                            control={control}
+                            name={`fileUrls.${index}.type`}
+                            defaultValue={item.type}
+                            render={({ field }) => (
+                              <Select
+                                labelId={`file-type-label-${index}`}
+                                label="File Type"
+                                {...field}
                               >
-                                {fileType}
-                              </MenuItem>
-                            ))}
-                          </Select>
+                                {Object.keys(
+                                  emulator?.defaultFileTypes() ?? {
+                                    rom: '.gba'
+                                  }
+                                ).map((fileType) => (
+                                  <MenuItem key={fileType} value={fileType}>
+                                    {fileType}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            )}
+                          />
                         </FormControl>
                       </UrlInputsContainer>
                     </div>
