@@ -170,8 +170,6 @@ describe('<UploadFilesModal />', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
 
-    // todo, add a loading indicator...
-
     await waitFor(() =>
       expect(writeFileToEmulatorSpy).toHaveBeenCalledWith(
         expect.objectContaining({ name: 'good_rom.gba' }),

@@ -175,7 +175,7 @@ export const UploadFilesModal = () => {
     control,
     watch,
     register,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<InputProps>({
     defaultValues: { fileUrls: [defaultFileUrl] }
   });
@@ -412,6 +412,7 @@ export const UploadFilesModal = () => {
           form={uploadFilesFormId}
           type="submit"
           variant="contained"
+          loading={isSubmitting}
         >
           Upload
         </Button>

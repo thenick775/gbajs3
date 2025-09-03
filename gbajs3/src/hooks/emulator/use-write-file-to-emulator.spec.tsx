@@ -208,7 +208,7 @@ describe('useWriteFileToEmulator hook', () => {
 
   it('lowercases name before detection', async () => {
     const isFileExtensionOfType = vi.fn(
-      (n: string, t: string) => t === 'save' && n === 'SAVE1.SAV'.toLowerCase()
+      (n: string, t: string) => t === 'save' && n === 'save1.sav'
     );
 
     const uploadSaveOrSaveState = vi.fn((_f: File, cb?: () => void) => cb?.());
