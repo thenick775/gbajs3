@@ -43,8 +43,10 @@ export const InitialBoundsProvider = ({
       orientation.angle !== prevOrientation.current &&
       [0, 90, 270].includes(orientation.angle) &&
       hasInitialBounds
-    )
+    ) {
       clearInitialBounds();
+      prevOrientation.current = orientation.angle;
+    }
   }, [clearInitialBounds, orientation.angle, hasInitialBounds]);
 
   useEffect(() => {
