@@ -18,6 +18,7 @@ export const InitialBoundsProvider = ({
 }: InitialBoundsProviderProps) => {
   const [initialBounds, setInitialBounds] = useState<InitialBounds>();
   const orientation = useOrientation();
+  const prevOrientation = useRef<number>(orientation.angle);
   const windowSize = useWindowSize();
   const prevSize = useRef<{
     width: number | null;
@@ -38,7 +39,11 @@ export const InitialBoundsProvider = ({
   const hasInitialBounds = !!initialBounds;
 
   useEffect(() => {
-    if ([0, 90, 270].includes(orientation.angle) && hasInitialBounds)
+    if (
+      orientation.angle !== prevOrientation.current &&
+      [0, 90, 270].includes(orientation.angle) &&
+      hasInitialBounds
+    )
       clearInitialBounds();
   }, [clearInitialBounds, orientation.angle, hasInitialBounds]);
 
