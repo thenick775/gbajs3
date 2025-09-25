@@ -114,7 +114,7 @@ export const ControlPanel = () => {
     useLocalStorage<
       { volumeBeforeMute: number; type: 'rewind' | 'fastForward' } | undefined
     >('emulatorVolumeBeforeAutoMuteLocalStorageKey');
-  const rndRef = useRef<Rnd | null>();
+  const rndRef = useRef<Rnd | null>(null);
 
   const muteAndPreserveVolume = (type: 'rewind' | 'fastForward') => {
     if (currentEmulatorVolume > 0) {

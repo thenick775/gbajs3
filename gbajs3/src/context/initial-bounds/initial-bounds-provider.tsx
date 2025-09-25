@@ -25,14 +25,26 @@ export const InitialBoundsProvider = ({
     [setInitialBounds]
   );
 
-  useEffect(() => {
-    if (orientation.angle !== null && [0, 90, 270].includes(orientation.angle))
-      clearInitialBounds();
-  }, [clearInitialBounds, orientation.angle]);
+  const hasInitialBounds = !!initialBounds;
 
   useEffect(() => {
-    if (windowSize.width && windowSize.height) clearInitialBounds();
-  }, [clearInitialBounds, windowSize.width, windowSize.height]);
+    if (
+      orientation.angle !== null &&
+      [0, 90, 270].includes(orientation.angle) &&
+      hasInitialBounds
+    )
+      clearInitialBounds();
+  }, [clearInitialBounds, orientation.angle, hasInitialBounds]);
+
+  useEffect(() => {
+    if (windowSize.width && windowSize.height && hasInitialBounds)
+      clearInitialBounds();
+  }, [
+    clearInitialBounds,
+    windowSize.width,
+    windowSize.height,
+    hasInitialBounds
+  ]);
 
   return (
     <InitialBoundsContext.Provider
