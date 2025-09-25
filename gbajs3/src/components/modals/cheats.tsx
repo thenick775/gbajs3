@@ -9,10 +9,6 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 import { useAddCallbacks } from '../../hooks/emulator/use-add-callbacks.tsx';
-import {
-  EmbeddedProductTour,
-  type TourSteps
-} from '../product-tour/embedded-product-tour.tsx';
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 import { ManagedSwitch } from '../shared/managed-switch.tsx';
 import { StyledBiPlus } from '../shared/styled.tsx';
@@ -114,63 +110,6 @@ export const CheatsModal = () => {
     if (viewRawCheats) setValue('cheats', parsedCheats);
     else setValue('rawCheats', rawCheats);
   }, [emulator, setValue, viewRawCheats]);
-
-  const tourSteps: TourSteps = [
-    {
-      content: <p>Use this form to enter, add, and remove cheats.</p>,
-      target: `#${CSS.escape(`${baseId}--cheats-form`)}`
-    },
-    {
-      content: <p>This form field is for the name of the cheat.</p>,
-      target: `#${CSS.escape(`${baseId}--name`)}`
-    },
-    {
-      content: (
-        <>
-          <p>Put your cheat code into this field.</p>
-          <p>Remember to separate multi-line cheats with the '+' character!</p>
-        </>
-      ),
-      target: `#${CSS.escape(`${baseId}--cheat-code`)}`
-    },
-    {
-      content: <p>Use the switch to enable/disable a cheat.</p>,
-      placement: 'right',
-      target: `#${CSS.escape(`${baseId}--enabled`)}`
-    },
-    {
-      content: <p>Use the trash button to remove a cheat entirely.</p>,
-      placement: 'right',
-      target: `#${CSS.escape(`${baseId}--remove`)}`
-    },
-    {
-      content: (
-        <p>
-          Use the <i>plus</i> button to add a new cheat.
-        </p>
-      ),
-      target: `#${CSS.escape(`${baseId}--add-cheat`)}`
-    },
-    {
-      content: (
-        <p>
-          Use the <i>Submit</i> button to save your cheats, and convert them to
-          libretro format.
-        </p>
-      ),
-      target: `#${CSS.escape(`${baseId}--submit-button`)}`
-    },
-    {
-      content: (
-        <p>
-          Use this button to toggle between viewing parsed cheats or raw cheats
-          in libretro file format.
-        </p>
-      ),
-      placement: 'right',
-      target: `#${CSS.escape(`${baseId}--toggle-raw-cheats`)}`
-    }
-  ];
 
   return (
     <>
@@ -322,10 +261,6 @@ export const CheatsModal = () => {
           Close
         </Button>
       </ModalFooter>
-      <EmbeddedProductTour
-        steps={tourSteps}
-        completedProductTourStepName="hasCompletedCheatsTour"
-      />
     </>
   );
 };

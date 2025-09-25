@@ -12,10 +12,6 @@ import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 import { useAddCallbacks } from '../../hooks/emulator/use-add-callbacks.tsx';
 import { useFileStat } from '../../hooks/emulator/use-file-stat.tsx';
 import { saveStateSlotsLocalStorageKey } from '../controls/consts.tsx';
-import {
-  EmbeddedProductTour,
-  type TourSteps
-} from '../product-tour/embedded-product-tour.tsx';
 import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { NumberInput } from '../shared/number-input.tsx';
 import { CenteredText, StyledBiPlus } from '../shared/styled.tsx';
@@ -224,38 +220,6 @@ export const SaveStatesModal = () => {
       currentSaveStatePreview === saveStateName ? null : saveStateName
     );
 
-  const tourSteps: TourSteps = [
-    {
-      content: (
-        <p>
-          Use this input to manually update the current save state slot in use.
-        </p>
-      ),
-      placementBeacon: 'bottom-end',
-      target: `#${CSS.escape(`${baseId}--save-state-slot`)}`
-    },
-    {
-      content: (
-        <p>
-          Tap a row to load a save state, or use the trash can icon to delete a
-          save state.
-        </p>
-      ),
-      placementBeacon: 'bottom-end',
-      target: `#${CSS.escape(`${baseId}--save-state-list`)}`
-    },
-    {
-      content: (
-        <p>
-          Use the <i>plus</i> button to add a new save state. This will
-          automatically increase the current save state number!
-        </p>
-      ),
-      placementBeacon: 'bottom-end',
-      target: `#${CSS.escape(`${baseId}--add-state-button`)}`
-    }
-  ];
-
   return (
     <>
       <ModalHeader title="Manage Save States" />
@@ -370,10 +334,6 @@ export const SaveStatesModal = () => {
           Close
         </Button>
       </ModalFooter>
-      <EmbeddedProductTour
-        steps={tourSteps}
-        completedProductTourStepName="hasCompletedSaveStatesTour"
-      />
     </>
   );
 };

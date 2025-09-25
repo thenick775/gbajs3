@@ -9,10 +9,6 @@ import { ModalHeader } from './modal-header.tsx';
 import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 import { useAddCallbacks } from '../../hooks/emulator/use-add-callbacks.tsx';
 import { useFileStat } from '../../hooks/emulator/use-file-stat.tsx';
-import {
-  EmbeddedProductTour,
-  type TourSteps
-} from '../product-tour/embedded-product-tour.tsx';
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 import { downloadBlob } from './file-utilities/blob.ts';
 
@@ -66,33 +62,6 @@ export const FileSystemModal = () => {
 
   const renderedFiles = allFiles ?? emulator?.listAllFiles();
 
-  const tourSteps: TourSteps = [
-    {
-      content: (
-        <>
-          <p>
-            Use this area to view your current file tree, download files, and
-            delete files from the tree.
-          </p>
-          <p>
-            Use the <i>plus</i> and <i>minus</i> icons to open and close file
-            tree branches!
-          </p>
-        </>
-      ),
-      target: `#${CSS.escape(`${baseId}--emulator-file-system`)}`
-    },
-    {
-      content: (
-        <p>
-          Use the <i>SAVE FILE SYSTEM</i> button to persist all of your files to
-          your device!
-        </p>
-      ),
-      target: `#${CSS.escape(`${baseId}--save-file-system-button`)}`
-    }
-  ];
-
   return (
     <>
       <ModalHeader title="File System" />
@@ -114,10 +83,6 @@ export const FileSystemModal = () => {
           Close
         </Button>
       </ModalFooter>
-      <EmbeddedProductTour
-        steps={tourSteps}
-        completedProductTourStepName="hasCompletedFileSystemTour"
-      />
     </>
   );
 };
