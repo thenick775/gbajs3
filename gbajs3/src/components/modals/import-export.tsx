@@ -109,7 +109,6 @@ export const ImportExportModal = () => {
   } = useForm<InputProps>();
   const [isExportLoading, setIsExportLoading] = useState(false);
   const importFormId = useId();
-  const buttonBaseId = useId();
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -161,7 +160,6 @@ export const ImportExportModal = () => {
       </ModalBody>
       <ModalFooter>
         <Button
-          id={`${buttonBaseId}-import`}
           form={importFormId}
           type="submit"
           variant="contained"
@@ -170,7 +168,6 @@ export const ImportExportModal = () => {
           Import
         </Button>
         <Button
-          id={`${buttonBaseId}-export`}
           variant="contained"
           color="secondary"
           onClick={async () => {

@@ -5,11 +5,13 @@ import { PwaPrompt } from './pwa-prompt.tsx';
 import * as publicRomHooks from '../../hooks/use-show-load-public-roms.tsx';
 
 describe('<PwaPrompt />', () => {
-  const iOSUA =
+  const iOSUserAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1';
 
   beforeEach(() => {
-    vi.spyOn(window.navigator, 'userAgent', 'get').mockReturnValue(iOSUA);
+    vi.spyOn(window.navigator, 'userAgent', 'get').mockReturnValue(
+      iOSUserAgent
+    );
   });
 
   it('renders prompt', () => {

@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 import { EmulatorFileSystem } from './file-system/emulator-file-system.tsx';
@@ -25,7 +25,6 @@ export const FileSystemModal = () => {
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
   const [allFiles, setAllFiles] = useState<FileNode | undefined>();
-  const baseId = useId();
 
   const deleteFile = useCallback(
     (path: string) => {
@@ -67,18 +66,13 @@ export const FileSystemModal = () => {
       <ModalHeader title="File System" />
       <FlexModalBody>
         <EmulatorFileSystem
-          id={`${baseId}--emulator-file-system`}
           allFiles={renderedFiles}
           deleteFile={deleteFile}
           downloadFile={downloadFile}
         />
       </FlexModalBody>
       <ModalFooter>
-        <CircleCheckButton
-          copy="Save File System"
-          id={`${baseId}--save-file-system-button`}
-          onClick={emulator?.fsSync}
-        />
+        <CircleCheckButton copy="Save File System" onClick={emulator?.fsSync} />
         <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
           Close
         </Button>

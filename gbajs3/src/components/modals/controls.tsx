@@ -165,7 +165,6 @@ export const ControlsModal = () => {
           <CircleCheckButton
             copy="Save Changes"
             form={formId}
-            id={`${baseId}--save-changes-button`}
             type="submit"
             showSuccess={isSuccessfulSubmit}
           />

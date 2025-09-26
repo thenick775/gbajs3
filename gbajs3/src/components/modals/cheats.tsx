@@ -73,7 +73,7 @@ export const CheatsModal = () => {
   const [viewRawCheats, setViewRawCheats] = useState(false);
   const { syncActionIfEnabled } = useAddCallbacks();
   const createNewCheatButtonRef = useRef<HTMLButtonElement>(null);
-  const baseId = useId();
+  const cheatsFormId = useId();
   const defaultCheat = { desc: '', code: '', enable: true };
 
   const [rawCheats, parsedCheats] = useMemo(() => {
@@ -117,7 +117,7 @@ export const CheatsModal = () => {
       <ModalBody>
         <form
           aria-label="Cheats Form"
-          id={`${baseId}--cheats-form`}
+          id={cheatsFormId}
           onSubmit={handleSubmit((data) => {
             const cheatsFile = viewRawCheats
               ? new File(
@@ -159,67 +159,57 @@ export const CheatsModal = () => {
             {...register('rawCheats')}
           />
           <CheatsList $shouldHide={viewRawCheats}>
-            {fields.map((item, index) => {
-              const firstWithId = (id: string) =>
-                index === 0 ? id : undefined;
+            {fields.map((item, index) => (
+              <Cheat key={item.id}>
+                <CheatsFormSeparator>
+                  <TextField
+                    label="Name"
+                    error={!!errors?.cheats?.[index]?.desc}
+                    size="small"
+                    autoComplete="Cheat Name"
+                    helperText={errors?.cheats?.[index]?.desc?.message}
+                    {...register(`cheats.${index}.desc`, {
+                      required: {
+                        value: true,
+                        message: 'required'
+                      }
+                    })}
+                  />
+                  <TextField
+                    label="Cheat Code"
+                    error={!!errors?.cheats?.[index]?.code}
+                    size="small"
+                    autoComplete="Code"
+                    helperText={errors?.cheats?.[index]?.code?.message}
+                    {...register(`cheats.${index}.code`, {
+                      required: {
+                        value: true,
+                        message: 'required'
+                      }
+                    })}
+                  />
 
-              return (
-                <Cheat key={item.id}>
-                  <CheatsFormSeparator>
-                    <TextField
-                      id={firstWithId(`${baseId}--name`)}
-                      label="Name"
-                      error={!!errors?.cheats?.[index]?.desc}
-                      size="small"
-                      autoComplete="Cheat Name"
-                      helperText={errors?.cheats?.[index]?.desc?.message}
-                      {...register(`cheats.${index}.desc`, {
-                        required: {
-                          value: true,
-                          message: 'required'
-                        }
-                      })}
+                  <RowContainer>
+                    <ManagedSwitch
+                      label="Enabled"
+                      watcher={watch(`cheats.${index}.enable`)}
+                      {...register(`cheats.${index}.enable`)}
                     />
-                    <TextField
-                      id={firstWithId(`${baseId}--cheat-code`)}
-                      label="Cheat Code"
-                      error={!!errors?.cheats?.[index]?.code}
-                      size="small"
-                      autoComplete="Code"
-                      helperText={errors?.cheats?.[index]?.code?.message}
-                      {...register(`cheats.${index}.code`, {
-                        required: {
-                          value: true,
-                          message: 'required'
-                        }
-                      })}
-                    />
-
-                    <RowContainer>
-                      <ManagedSwitch
-                        id={firstWithId(`${baseId}--enabled`)}
-                        label="Enabled"
-                        watcher={watch(`cheats.${index}.enable`)}
-                        {...register(`cheats.${index}.enable`)}
-                      />
-                      <IconButton
-                        aria-label="Remove Cheat"
-                        id={firstWithId(`${baseId}--remove`)}
-                        sx={{ padding: '5px' }}
-                        onClick={() => remove(index)}
-                      >
-                        <BiTrash />
-                      </IconButton>
-                    </RowContainer>
-                  </CheatsFormSeparator>
-                </Cheat>
-              );
-            })}
+                    <IconButton
+                      aria-label="Remove Cheat"
+                      sx={{ padding: '5px' }}
+                      onClick={() => remove(index)}
+                    >
+                      <BiTrash />
+                    </IconButton>
+                  </RowContainer>
+                </CheatsFormSeparator>
+              </Cheat>
+            ))}
           </CheatsList>
           <RowContainer>
             <IconButton
               aria-label="Create new cheat"
-              id={`${baseId}--add-cheat`}
               ref={createNewCheatButtonRef}
               sx={{ padding: 0, display: viewRawCheats ? 'none' : 'flex' }}
               onClick={() => {
@@ -244,13 +234,11 @@ export const CheatsModal = () => {
       <ModalFooter>
         <CircleCheckButton
           copy="Submit"
-          form={`${baseId}--cheats-form`}
-          id={`${baseId}--submit-button`}
+          form={cheatsFormId}
           showSuccess={isSubmitSuccessful}
           type="submit"
         />
         <Button
-          id={`${baseId}--toggle-raw-cheats`}
           color="info"
           variant="contained"
           onClick={() => setViewRawCheats((prevState) => !prevState)}

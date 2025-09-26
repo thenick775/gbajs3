@@ -1,6 +1,6 @@
 import { Button, Collapse, IconButton } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
-import { useCallback, useId, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { BiError, BiTrash } from 'react-icons/bi';
 import { FaRegEye } from 'react-icons/fa';
 import { styled, useTheme } from 'styled-components';
@@ -171,7 +171,6 @@ export const SaveStatesModal = () => {
   const [currentSlots, setCurrentSlots] =
     useLocalStorage<CurrentSaveStateSlots>(saveStateSlotsLocalStorageKey, {});
   const { syncActionIfEnabled } = useAddCallbacks();
-  const baseId = useId();
   const [currentSaveStatePreview, setCurrentSaveStatePreview] = useState<
     string | null
   >(null);
@@ -226,7 +225,6 @@ export const SaveStatesModal = () => {
       <ModalBody>
         <StateSlotContainer>
           <NumberInput
-            id={`${baseId}--save-state-slot`}
             label="Current Save State Slot"
             size="small"
             min={0}
@@ -241,7 +239,7 @@ export const SaveStatesModal = () => {
           />
         </StateSlotContainer>
 
-        <SaveStatesList id={`${baseId}--save-state-list`}>
+        <SaveStatesList>
           {autoSaveStateNameWithoutPath && (
             <SaveStateListItem
               key={autoSaveStateNameWithoutPath}
@@ -303,7 +301,6 @@ export const SaveStatesModal = () => {
           )}
         </SaveStatesList>
         <IconButton
-          id={`${baseId}--add-state-button`}
           aria-label={`Create new save state`}
           sx={{ padding: 0 }}
           onClick={() => {
