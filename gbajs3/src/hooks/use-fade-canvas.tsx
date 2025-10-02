@@ -37,8 +37,8 @@ export const useFadeCanvas = () => {
       const ctx = copyCanvas.getContext('2d');
       const url = URL.createObjectURL(screenshot);
 
-      copyCanvas.width = canvas.width;
-      copyCanvas.height = canvas.height;
+      copyCanvas.width = 240;
+      copyCanvas.height = 160;
       copyCanvas.className = canvas.className;
       copyCanvas.style.cssText = canvas.style.cssText;
       copyCanvas.style.position = 'absolute';
