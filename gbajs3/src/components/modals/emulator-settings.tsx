@@ -436,8 +436,8 @@ export const EmulatorSettingsModal = () => {
               />
               <NumberInput
                 label="Resolution Scale"
-                min={0}
-                max={32}
+                min={1}
+                max={16}
                 size="small"
                 {...register('highResolutionScale', {
                   required: {
