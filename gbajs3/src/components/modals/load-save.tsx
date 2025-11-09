@@ -68,6 +68,7 @@ const SaveError = styled(ErrorWithIcon)<SaveErrorProps>`
     `
     margin-top: 15px;
     `}
+  justify-content: center;
 `;
 
 export const LoadSaveModal = () => {
@@ -78,14 +79,15 @@ export const LoadSaveModal = () => {
   const { syncActionIfEnabled } = useAddCallbacks();
   const {
     data: saveList,
-    isLoading: saveListLoading,
-    error: saveListError
-  } = useListSaves({ loadOnMount: true });
+    isPending: saveListLoading,
+    error: saveListError,
+    isPaused: saveListPaused
+  } = useListSaves();
   const {
     data: saveFile,
-    isLoading: saveLoading,
+    isPending: saveLoading,
     error: saveLoadError,
-    execute: executeLoadSave
+    mutateAsync: executeLoadSave
   } = useLoadSave();
   const [currentSaveLoading, setCurrentSaveLoading] = useState<string | null>(
     null
@@ -136,6 +138,12 @@ export const LoadSaveModal = () => {
               )}
             </SaveList>
           </LoadingIndicator>
+        )}
+        {saveListPaused && (
+          <SaveError
+            icon={<BiError style={{ color: theme.errorRed }} />}
+            text="You are offline, request will resume once online"
+          />
         )}
         {!!saveListError && (
           <SaveError

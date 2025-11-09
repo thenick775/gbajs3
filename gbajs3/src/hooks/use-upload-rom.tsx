@@ -1,7 +1,6 @@
-import { useCallback } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
-import { useAsyncData } from './use-async-data.tsx';
 
 type UploadRomProps = {
   romFile: File;
@@ -11,8 +10,9 @@ export const useUpLoadRom = () => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
-  const executeUploadRom = useCallback(
-    async (fetchProps?: UploadRomProps) => {
+  return useMutation<Response, Error, UploadRomProps | undefined>({
+    mutationKey: ['uploadRom', accessToken],
+    mutationFn: async (fetchProps?: UploadRomProps) => {
       const url = `${apiLocation}/api/rom/upload`;
       const formData = new FormData();
       formData.append('rom', fetchProps?.romFile ?? '');
@@ -31,14 +31,6 @@ export const useUpLoadRom = () => {
       }
 
       return res;
-    },
-    [apiLocation, accessToken]
-  );
-
-  const { data, isLoading, error, execute } = useAsyncData({
-    fetchFn: executeUploadRom,
-    clearDataOnLoad: true
+    }
   });
-
-  return { data, isLoading, error, execute };
 };

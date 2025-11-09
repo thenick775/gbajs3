@@ -20,6 +20,7 @@ import { CenteredText } from '../shared/styled.tsx';
 
 type RomErrorProps = {
   $withMarginTop?: boolean;
+  $isCentered?: boolean;
 };
 
 const LoadRomButton = styled.button`
@@ -69,6 +70,12 @@ const RomError = styled(ErrorWithIcon)<RomErrorProps>`
     `
     margin-top: 15px;
     `}
+
+  ${({ $isCentered = false }) =>
+    $isCentered &&
+    `
+      justify-content: center;
+      `}
 `;
 
 export const LoadRomModal = () => {
@@ -79,14 +86,15 @@ export const LoadRomModal = () => {
   const runGame = useRunGame();
   const {
     data: romList,
-    isLoading: romListLoading,
-    error: romListError
-  } = useListRoms({ loadOnMount: true });
+    isPending: romListLoading,
+    error: romListError,
+    isPaused: romListPaused
+  } = useListRoms();
   const {
     data: romFile,
-    isLoading: romLoading,
+    isPending: romLoading,
     error: romLoadError,
-    execute: executeLoadRom
+    mutateAsync: executeLoadRom
   } = useLoadRom();
   const [currentRomLoading, setCurrentRomLoading] = useState<string | null>(
     null
@@ -143,6 +151,13 @@ export const LoadRomModal = () => {
               )}
             </RomList>
           </LoadingIndicator>
+        )}
+        {romListPaused && (
+          <RomError
+            $isCentered
+            icon={<BiError style={{ color: theme.errorRed }} />}
+            text="You are offline, request will resume once online"
+          />
         )}
         {!!romListError && (
           <RomError

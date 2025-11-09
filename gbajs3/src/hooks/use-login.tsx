@@ -1,6 +1,4 @@
-import { useCallback } from 'react';
-
-import { useAsyncData } from './use-async-data.tsx';
+import { useMutation } from '@tanstack/react-query';
 
 type LoginProps = {
   username: string;
@@ -10,8 +8,9 @@ type LoginProps = {
 export const useLogin = () => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
 
-  const executeLogin = useCallback(
-    async (fetchProps?: LoginProps) => {
+  return useMutation<string, Error, LoginProps, string>({
+    mutationKey: ['login'],
+    mutationFn: async (fetchProps) => {
       const username = fetchProps?.username || '';
       const password = fetchProps?.password || '';
 
@@ -25,14 +24,6 @@ export const useLogin = () => {
 
       const res = await fetch(url, options);
       return res.json();
-    },
-    [apiLocation]
-  );
-
-  const { data, isLoading, error, execute } = useAsyncData({
-    fetchFn: executeLogin,
-    clearDataOnLoad: true
+    }
   });
-
-  return { data, isLoading, error, execute };
 };

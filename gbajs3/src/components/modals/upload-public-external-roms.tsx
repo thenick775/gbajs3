@@ -63,9 +63,9 @@ export const UploadPublicExternalRomsModal = ({
 
   const {
     data: externalRomFile,
-    isLoading: isExternalRomLoading,
+    isPending: isExternalRomLoading,
     error: externalRomLoadError,
-    execute: executeLoadExternalRom
+    mutateAsync: executeLoadExternalRom
   } = useLoadExternalRom();
 
   useEffect(() => {
@@ -123,7 +123,8 @@ export const UploadPublicExternalRomsModal = ({
           disabled={isExternalRomLoading}
           onClick={() => {
             setCurrentRomURL(url.href);
-            executeLoadExternalRom({ url: url });
+            // ensure any rejection is handled to avoid unhandled promise rejections in tests
+            executeLoadExternalRom({ url: url }).catch(() => {});
           }}
           type="submit"
           variant="contained"

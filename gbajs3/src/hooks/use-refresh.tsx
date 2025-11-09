@@ -1,11 +1,10 @@
+import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 
-import { useAsyncData } from './use-async-data.tsx';
-
-export const useRefreshAccessToken = ({ loadOnMount = false } = {}) => {
+export const useRefreshAccessToken = () => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
 
-  const executeRefresh = useCallback(async () => {
+  const refresh = useCallback(async () => {
     const url = `${apiLocation}/api/tokens/refresh`;
     const options: RequestInit = {
       method: 'POST',
@@ -14,14 +13,14 @@ export const useRefreshAccessToken = ({ loadOnMount = false } = {}) => {
     };
 
     const res = await fetch(url, options);
+
+    if (res.status === 401) return null;
+
     return res.json();
   }, [apiLocation]);
 
-  const { data, isLoading, error, clearError, execute } = useAsyncData({
-    fetchFn: executeRefresh,
-    clearDataOnLoad: true,
-    loadOnMount
+  return useMutation<string | null, Error, void>({
+    mutationKey: ['refreshAccessToken'],
+    mutationFn: async () => refresh()
   });
-
-  return { data, isLoading, error, clearError, execute };
 };

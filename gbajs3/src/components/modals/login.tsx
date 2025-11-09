@@ -34,9 +34,10 @@ export const LoginModal = () => {
   const { setAccessToken, setAccessTokenSource } = useAuthContext();
   const loginFormId = useId();
   const {
-    execute: executeLogin,
+    mutate: executeLogin,
     data: accessToken,
-    isLoading: loginLoading,
+    isPending: loginLoading,
+    isPaused: loginPaused,
     error: loginError
   } = useLogin();
   const {
@@ -101,6 +102,12 @@ export const LoginModal = () => {
                 required: { value: true, message: 'Password is required' }
               })}
             />
+            {loginPaused && (
+              <ErrorWithIcon
+                icon={<BiError style={{ color: theme.errorRed }} />}
+                text="You are offline, request will resume once online"
+              />
+            )}
             {!!loginError && (
               <ErrorWithIcon
                 icon={<BiError style={{ color: theme.errorRed }} />}

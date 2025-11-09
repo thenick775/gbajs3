@@ -13,21 +13,21 @@ type AuthProviderProps = { children: ReactNode };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const fourMinutesInMS = 240 * 1000;
-  const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
   const [accessToken, setAccessToken] =
     useState<AuthContextProps['accessToken']>(null);
   const [accessTokenSource, setAccessTokenSource] =
     useState<AccessTokenSource>(null);
 
-  // generate initial access token
+  // generate initial access token (using mutation API)
   const {
     data: accessTokenResp,
-    isLoading: refreshLoading,
-    execute: executeRefresh,
+    status: refreshStatus,
+    mutateAsync: executeRefresh,
     error: refreshTokenError,
-    clearError: refreshClearError
-  } = useRefreshAccessToken({ loadOnMount: hasApiLocation });
+    reset: refreshReset
+  } = useRefreshAccessToken();
 
+  const refreshLoading = refreshStatus === 'pending';
   const shouldSetAccessToken = !refreshLoading && !!accessTokenResp;
 
   // assign token to context
@@ -58,9 +58,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // if access token has changed from login, clear refresh errors.
     // resume attempts to periodically refresh the token
     if (shouldClearRefreshTokenError) {
-      refreshClearError();
+      refreshReset();
     }
-  }, [shouldClearRefreshTokenError, refreshClearError]);
+  }, [shouldClearRefreshTokenError, refreshReset]);
+
+  useEffect(() => {
+    const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
+    if (hasApiLocation) {
+      // trigger initial refresh on mount
+      executeRefresh();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // refresh access token every 4 minutes
   useInterval(
