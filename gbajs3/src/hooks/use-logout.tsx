@@ -18,7 +18,7 @@ export const useLogout = (options?: UseMutationOptions) => {
         credentials: 'include'
       };
 
-      await fetch(url, options).then(() => setAccessToken(null));
+      await fetch(url, options).then(() => setAccessToken(undefined));
     },
     ...options
   });

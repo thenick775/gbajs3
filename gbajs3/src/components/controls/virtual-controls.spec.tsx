@@ -167,7 +167,7 @@ describe('<VirtualControls />', () => {
 
       vi.spyOn(contextHooks, 'useAuthContext').mockImplementation(() => ({
         ...originalAuth(),
-        isAuthenticated: () => true
+        isAuthenticated: true
       }));
 
       vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({

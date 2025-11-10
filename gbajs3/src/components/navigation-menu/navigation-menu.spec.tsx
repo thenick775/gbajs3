@@ -360,7 +360,7 @@ describe('<NavigationMenu />', () => {
 
       vi.spyOn(contextHooks, 'useAuthContext').mockImplementation(() => ({
         ...originalAuth(),
-        isAuthenticated: () => true
+        isAuthenticated: true
       }));
 
       vi.spyOn(logoutHooks, 'useLogout').mockReturnValue({
@@ -404,7 +404,7 @@ describe('<NavigationMenu />', () => {
 
         vi.spyOn(contextHooks, 'useAuthContext').mockImplementation(() => ({
           ...originalAuth(),
-          isAuthenticated: () => true
+          isAuthenticated: true
         }));
 
         renderWithContext(<NavigationMenu />);
@@ -444,7 +444,7 @@ describe('<NavigationMenu />', () => {
 
         vi.spyOn(contextHooks, 'useAuthContext').mockImplementation(() => ({
           ...originalAuth(),
-          isAuthenticated: () => true
+          isAuthenticated: true
         }));
 
         vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({

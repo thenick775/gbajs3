@@ -1,13 +1,15 @@
-import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+
+export const refreshAccessTokenQueryKey = ['refreshAccessToken'];
 
 export const useRefreshAccessToken = (
-  options?: UseMutationOptions<string, Error, void>
+  options?: Omit<UseQueryOptions<string, Error>, 'queryKey'>
 ) => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
 
-  return useMutation<string, Error, void>({
-    mutationKey: ['refreshAccessToken'],
-    mutationFn: async () => {
+  return useQuery<string, Error>({
+    queryKey: [refreshAccessTokenQueryKey, apiLocation],
+    queryFn: async () => {
       const url = `${apiLocation}/api/tokens/refresh`;
       const options: RequestInit = {
         method: 'POST',
@@ -23,6 +25,7 @@ export const useRefreshAccessToken = (
 
       return res.json();
     },
+    refetchOnWindowFocus: false,
     ...options
   });
 };

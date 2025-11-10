@@ -1,33 +1,54 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { jwtDecode, type JwtPayload } from 'jwt-decode';
-import { useState, useEffect, useCallback, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 
 import {
   AuthContext,
   type AuthContextProps,
   type AccessTokenSource
 } from './auth-context.tsx';
-import { useInterval } from '../../hooks/use-interval.ts';
-import { useRefreshAccessToken } from '../../hooks/use-refresh.tsx';
+import {
+  refreshAccessTokenQueryKey,
+  useRefreshAccessToken
+} from '../../hooks/use-refresh.tsx';
 
 type AuthProviderProps = { children: ReactNode };
 
+const fourMinutesInMS = 240 * 1000;
+
+const isAuthenticated = (accessToken?: string) => {
+  if (accessToken) {
+    const { exp } = jwtDecode<JwtPayload>(accessToken);
+
+    if (exp && Date.now() <= exp * 1000) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const fourMinutesInMS = 240 * 1000;
   const [accessToken, setAccessToken] =
-    useState<AuthContextProps['accessToken']>(null);
+    useState<AuthContextProps['accessToken']>();
   const [accessTokenSource, setAccessTokenSource] =
     useState<AccessTokenSource>(null);
+  const queryClient = useQueryClient();
+  const { data: accessTokenResp, status: refreshStatus } =
+    useRefreshAccessToken({
+      refetchInterval: (query) => {
+        const lastToken = query.state.data;
+        const hasError = !!query.state.error;
+        const shouldRefresh = isAuthenticated(lastToken) && !hasError;
 
-  // generate initial access token (using mutation API)
-  const {
-    data: accessTokenResp,
-    status: refreshStatus,
-    mutate: executeRefresh,
-    error: refreshTokenError,
-    reset: refreshReset
-  } = useRefreshAccessToken();
+        return shouldRefresh ? fourMinutesInMS : false;
+      },
+      retry: 0
+    });
 
-  const refreshLoading = refreshStatus === 'pending';
+  // consider loading if the query status isn't success or error
+  const refreshLoading =
+    refreshStatus !== 'success' && refreshStatus !== 'error';
   const shouldSetAccessToken = !refreshLoading && !!accessTokenResp;
 
   // assign token to context
@@ -38,45 +59,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, [shouldSetAccessToken, accessTokenResp]);
 
-  // convenience callback to determine if token is expired
-  const isAuthenticated = useCallback(() => {
-    if (accessToken) {
-      const { exp } = jwtDecode<JwtPayload>(accessToken);
-
-      if (exp && Date.now() <= exp * 1000) {
-        return true;
-      }
-    }
-
-    return false;
-  }, [accessToken]);
-
   const shouldClearRefreshTokenError =
-    isAuthenticated() && !accessTokenResp && accessTokenSource !== 'refresh';
+    isAuthenticated(accessToken) &&
+    !accessTokenResp &&
+    accessTokenSource !== 'refresh';
 
   useEffect(() => {
     // if access token has changed from login, clear refresh errors.
     // resume attempts to periodically refresh the token
-    if (shouldClearRefreshTokenError) {
-      refreshReset();
-    }
-  }, [shouldClearRefreshTokenError, refreshReset]);
+    if (shouldClearRefreshTokenError)
+      queryClient.resetQueries({
+        queryKey: [refreshAccessTokenQueryKey]
+      });
+  }, [shouldClearRefreshTokenError, queryClient]);
 
-  useEffect(() => {
-    const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
-    if (hasApiLocation) {
-      // trigger initial refresh on mount
-      executeRefresh();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // refresh access token every 4 minutes
-  useInterval(
-    executeRefresh,
-    // TODO: re-evaluate whether or not auth check is desired
-    isAuthenticated() && !refreshTokenError ? fourMinutesInMS : null
-  );
+  const isCurrentlyAuthenticated = isAuthenticated(accessToken);
 
   return (
     <AuthContext.Provider
@@ -84,7 +81,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         accessToken,
         setAccessToken,
         setAccessTokenSource,
-        isAuthenticated
+        isAuthenticated: isCurrentlyAuthenticated
       }}
     >
       {children}

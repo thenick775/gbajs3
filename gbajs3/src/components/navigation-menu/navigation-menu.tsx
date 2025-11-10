@@ -183,7 +183,7 @@ export const NavigationMenu = () => {
   const menuHeaderId = useId();
   const { quickReload, isQuickReloadAvailable } = useQuickReload();
 
-  const isMenuItemDisabledByAuth = !isAuthenticated();
+  const isMenuItemDisabledByAuth = !isAuthenticated;
   const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
 
   useShowLoadPublicRoms();

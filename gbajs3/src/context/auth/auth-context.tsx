@@ -5,10 +5,10 @@ import type { Dispatch, SetStateAction } from 'react';
 export type AccessTokenSource = 'refresh' | 'login' | null;
 
 export type AuthContextProps = {
-  accessToken: string | null;
-  setAccessToken: Dispatch<SetStateAction<string | null>>;
+  accessToken?: string;
+  setAccessToken: Dispatch<SetStateAction<string | undefined>>;
   setAccessTokenSource: Dispatch<SetStateAction<AccessTokenSource | null>>;
-  isAuthenticated: () => boolean;
+  isAuthenticated: boolean;
 };
 
 export const AuthContext = createContext<AuthContextProps | null>(null);
