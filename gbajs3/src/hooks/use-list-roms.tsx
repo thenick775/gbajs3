@@ -1,11 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
 type romName = string;
 export type RomListResponse = romName[];
 
-export const useListRoms = () => {
+export const useListRoms = (
+  options?: UseQueryOptions<RomListResponse, Error>
+) => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
@@ -23,6 +25,7 @@ export const useListRoms = () => {
 
       const res = await fetch(url, options);
       return res.json();
-    }
+    },
+    ...options
   });
 };

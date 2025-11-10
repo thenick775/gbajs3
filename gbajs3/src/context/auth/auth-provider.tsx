@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const {
     data: accessTokenResp,
     status: refreshStatus,
-    mutateAsync: executeRefresh,
+    mutate: executeRefresh,
     error: refreshTokenError,
     reset: refreshReset
   } = useRefreshAccessToken();
@@ -73,9 +73,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // refresh access token every 4 minutes
   useInterval(
-    async () => {
-      await executeRefresh();
-    },
+    executeRefresh,
     // TODO: re-evaluate whether or not auth check is desired
     isAuthenticated() && !refreshTokenError ? fourMinutesInMS : null
   );

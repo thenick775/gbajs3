@@ -4,7 +4,7 @@ import {
   AccordionSummary,
   Button
 } from '@mui/material';
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { BiError } from 'react-icons/bi';
 import { FaArrowDown } from 'react-icons/fa';
 import { styled, useTheme } from 'styled-components';
@@ -60,37 +60,25 @@ export const UploadPublicExternalRomsModal = ({
   const uploadRomButtonId = useId();
   const runGame = useRunGame();
   const { syncActionIfEnabled } = useAddCallbacks();
-
   const {
-    data: externalRomFile,
     isPending: isExternalRomLoading,
     error: externalRomLoadError,
-    mutateAsync: executeLoadExternalRom
-  } = useLoadExternalRom();
-
-  useEffect(() => {
-    if (!isExternalRomLoading && externalRomFile && currentRomURL) {
+    mutate: executeLoadExternalRom
+  } = useLoadExternalRom({
+    onSuccess: (file) => {
       const runCallback = () => {
         syncActionIfEnabled();
-        const hasSucceeded = runGame(externalRomFile.name);
+        const hasSucceeded = runGame(file.name);
         if (hasSucceeded) {
           onLoadOrDismiss('loaded');
           setIsModalOpen(false);
         }
       };
-      emulator?.uploadRom(externalRomFile, runCallback);
+
+      emulator?.uploadRom(file, runCallback);
       setCurrentRomURL(null);
     }
-  }, [
-    onLoadOrDismiss,
-    runGame,
-    currentRomURL,
-    emulator,
-    externalRomFile,
-    isExternalRomLoading,
-    setIsModalOpen,
-    syncActionIfEnabled
-  ]);
+  });
 
   return (
     <>
@@ -123,8 +111,7 @@ export const UploadPublicExternalRomsModal = ({
           disabled={isExternalRomLoading}
           onClick={() => {
             setCurrentRomURL(url.href);
-            // ensure any rejection is handled to avoid unhandled promise rejections in tests
-            executeLoadExternalRom({ url: url }).catch(() => {});
+            executeLoadExternalRom({ url: url });
           }}
           type="submit"
           variant="contained"

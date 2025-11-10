@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
@@ -6,11 +6,13 @@ type UploadSaveProps = {
   saveFile: File;
 };
 
-export const useUpLoadSave = () => {
+export const useUpLoadSave = (
+  options?: UseMutationOptions<Response, Error, UploadSaveProps>
+) => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
-  return useMutation<Response, Error, UploadSaveProps | undefined>({
+  return useMutation<Response, Error, UploadSaveProps>({
     mutationKey: ['uploadSave', accessToken],
     mutationFn: async (fetchProps?: UploadSaveProps) => {
       const url = `${apiLocation}/api/save/upload`;
@@ -31,6 +33,7 @@ export const useUpLoadSave = () => {
       }
 
       return res;
-    }
+    },
+    ...options
   });
 };

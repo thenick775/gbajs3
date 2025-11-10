@@ -67,7 +67,7 @@ export const UploadSaveToServerModal = () => {
     data,
     isPending: isLoading,
     error,
-    mutateAsync: executeUploadSave
+    mutate: executeUploadSave
   } = useUpLoadSave();
 
   return (
@@ -91,8 +91,8 @@ export const UploadSaveToServerModal = () => {
             if (saveFileBytes && saveName) {
               const saveFileBlob = new Blob([saveFileBytes.slice()]);
               const saveFile = new File([saveFileBlob], saveName);
-              // handle rejection to avoid unhandled promise rejections in tests
-              executeUploadSave({ saveFile }).catch(() => {});
+
+              executeUploadSave({ saveFile });
             }
           }}
         >

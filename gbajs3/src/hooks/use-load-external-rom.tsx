@@ -1,11 +1,13 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 type LoadExternalRomProps = {
   url: URL;
 };
 
-export const useLoadExternalRom = () => {
-  return useMutation<File, Error, LoadExternalRomProps | undefined>({
+export const useLoadExternalRom = (
+  options?: UseMutationOptions<File, Error, LoadExternalRomProps>
+) => {
+  return useMutation<File, Error, LoadExternalRomProps>({
     mutationKey: ['loadExternalRom'],
     mutationFn: async (fetchProps?: LoadExternalRomProps) => {
       if (!fetchProps) throw new Error('Missing URL for external rom load');
@@ -35,6 +37,7 @@ export const useLoadExternalRom = () => {
       const file = new File([blob], fileName ?? fallbackFileName);
 
       return file;
-    }
+    },
+    ...options
   });
 };

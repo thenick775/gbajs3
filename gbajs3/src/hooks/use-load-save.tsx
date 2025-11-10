@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
@@ -6,7 +6,9 @@ export type LoadSaveProps = {
   saveName: string;
 };
 
-export const useLoadSave = () => {
+export const useLoadSave = (
+  options?: UseMutationOptions<File, Error, LoadSaveProps>
+) => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
@@ -34,6 +36,7 @@ export const useLoadSave = () => {
       const file = new File([blob], fetchProps?.saveName ?? '');
 
       return file;
-    }
+    },
+    ...options
   });
 };

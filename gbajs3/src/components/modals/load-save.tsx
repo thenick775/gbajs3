@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useEffect, useState, useId } from 'react';
+import { useState, useId } from 'react';
 import { BiError } from 'react-icons/bi';
 import { styled, useTheme } from 'styled-components';
 
@@ -84,23 +84,18 @@ export const LoadSaveModal = () => {
     isPaused: saveListPaused
   } = useListSaves();
   const {
-    data: saveFile,
     isPending: saveLoading,
     error: saveLoadError,
-    mutateAsync: executeLoadSave
-  } = useLoadSave();
+    mutate: executeLoadSave
+  } = useLoadSave({
+    onSuccess: (file) => {
+      emulator?.uploadSaveOrSaveState(file, syncActionIfEnabled);
+      setCurrentSaveLoading(null);
+    }
+  });
   const [currentSaveLoading, setCurrentSaveLoading] = useState<string | null>(
     null
   );
-
-  const shouldUploadSave = !saveLoading && !!saveFile && !!currentSaveLoading;
-
-  useEffect(() => {
-    if (shouldUploadSave) {
-      emulator?.uploadSaveOrSaveState(saveFile, syncActionIfEnabled);
-      setCurrentSaveLoading(null);
-    }
-  }, [emulator, shouldUploadSave, saveFile, syncActionIfEnabled]);
 
   return (
     <>
@@ -120,8 +115,9 @@ export const LoadSaveModal = () => {
                 <StyledLi key={`${save}_${idx}`}>
                   <LoadSaveButton
                     onClick={() => {
-                      executeLoadSave({ saveName: save });
                       setCurrentSaveLoading(save);
+
+                      executeLoadSave({ saveName: save });
                     }}
                   >
                     {save}

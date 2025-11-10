@@ -1,26 +1,28 @@
-import { useMutation } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
-export const useRefreshAccessToken = () => {
+export const useRefreshAccessToken = (
+  options?: UseMutationOptions<string, Error, void>
+) => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
 
-  const refresh = useCallback(async () => {
-    const url = `${apiLocation}/api/tokens/refresh`;
-    const options: RequestInit = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include'
-    };
-
-    const res = await fetch(url, options);
-
-    if (res.status === 401) return null;
-
-    return res.json();
-  }, [apiLocation]);
-
-  return useMutation<string | null, Error, void>({
+  return useMutation<string, Error, void>({
     mutationKey: ['refreshAccessToken'],
-    mutationFn: async () => refresh()
+    mutationFn: async () => {
+      const url = `${apiLocation}/api/tokens/refresh`;
+      const options: RequestInit = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      };
+
+      const res = await fetch(url, options);
+
+      if (!res.ok) {
+        throw new Error(`Received unexpected status code: ${res.status}`);
+      }
+
+      return res.json();
+    },
+    ...options
   });
 };

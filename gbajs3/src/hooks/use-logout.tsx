@@ -1,8 +1,8 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
-export const useLogout = () => {
+export const useLogout = (options?: UseMutationOptions) => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken, setAccessToken } = useAuthContext();
 
@@ -19,6 +19,7 @@ export const useLogout = () => {
       };
 
       await fetch(url, options).then(() => setAccessToken(null));
-    }
+    },
+    ...options
   });
 };

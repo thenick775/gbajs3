@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
@@ -6,7 +6,9 @@ export type LoadRomProps = {
   romName: string;
 };
 
-export const useLoadRom = () => {
+export const useLoadRom = (
+  options?: UseMutationOptions<File, Error, LoadRomProps>
+) => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
@@ -34,6 +36,7 @@ export const useLoadRom = () => {
       const file = new File([blob], fetchProps?.romName ?? '');
 
       return file;
-    }
+    },
+    ...options
   });
 };

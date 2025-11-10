@@ -1,5 +1,5 @@
 import { TextField, Button } from '@mui/material';
-import { useEffect, useId } from 'react';
+import { useId } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiError } from 'react-icons/bi';
 import { styled, useTheme } from 'styled-components';
@@ -34,39 +34,27 @@ export const LoginModal = () => {
   const { setAccessToken, setAccessTokenSource } = useAuthContext();
   const loginFormId = useId();
   const {
-    mutate: executeLogin,
-    data: accessToken,
-    isPending: loginLoading,
-    isPaused: loginPaused,
-    error: loginError
-  } = useLogin();
-  const {
     register,
     reset,
     handleSubmit,
     formState: { errors }
   } = useForm<InputProps>();
-
-  const shouldSetAccessToken = !loginLoading && !loginError && !!accessToken;
-
-  useEffect(() => {
-    if (shouldSetAccessToken) {
-      setAccessToken(accessToken);
+  const {
+    mutate: executeLogin,
+    isPending: loginLoading,
+    isPaused: loginPaused,
+    error: loginError
+  } = useLogin({
+    onSuccess: (token) => {
+      setAccessToken(token);
       setAccessTokenSource('login');
       setIsModalOpen(false);
+      reset();
     }
-  }, [
-    shouldSetAccessToken,
-    accessToken,
-    setAccessToken,
-    setAccessTokenSource,
-    setIsModalOpen
-  ]);
+  });
 
-  const onSubmit: SubmitHandler<InputProps> = async (formData) => {
-    await executeLogin(formData);
-    reset();
-  };
+  const onSubmit: SubmitHandler<InputProps> = (formData) =>
+    executeLogin(formData);
 
   return (
     <>

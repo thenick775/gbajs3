@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
@@ -6,11 +6,13 @@ type UploadRomProps = {
   romFile: File;
 };
 
-export const useUpLoadRom = () => {
+export const useUpLoadRom = (
+  options?: UseMutationOptions<Response, Error, UploadRomProps>
+) => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
-  return useMutation<Response, Error, UploadRomProps | undefined>({
+  return useMutation<Response, Error, UploadRomProps>({
     mutationKey: ['uploadRom', accessToken],
     mutationFn: async (fetchProps?: UploadRomProps) => {
       const url = `${apiLocation}/api/rom/upload`;
@@ -31,6 +33,7 @@ export const useUpLoadRom = () => {
       }
 
       return res;
-    }
+    },
+    ...options
   });
 };
