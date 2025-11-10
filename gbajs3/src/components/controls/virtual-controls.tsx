@@ -398,7 +398,7 @@ export const VirtualControls = () => {
     {
       children: <BiSolidCloudUpload />,
       onPointerDown: () => {
-        if (isAuthenticated() && isRunning) {
+        if (isAuthenticated && isRunning) {
           setModalContent(<UploadSaveToServerModal />);
           setIsModalOpen(true);
         } else if (areNotificationsEnabled) {

@@ -173,7 +173,7 @@ export const NavigationMenu = () => {
   const { isAuthenticated } = useAuthContext();
   const { canvas, emulator } = useEmulatorContext();
   const { isRunning } = useRunningContext();
-  const { execute: executeLogout } = useLogout();
+  const { mutate: executeLogout } = useLogout();
   const { areItemsDraggable } = useDragContext();
   const { getLayout, setLayout } = useLayoutContext();
   const menuButtonLayout = getLayout('menuButton');
@@ -183,7 +183,7 @@ export const NavigationMenu = () => {
   const menuHeaderId = useId();
   const { quickReload, isQuickReloadAvailable } = useQuickReload();
 
-  const isMenuItemDisabledByAuth = !isAuthenticated();
+  const isMenuItemDisabledByAuth = !isAuthenticated;
   const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
 
   useShowLoadPublicRoms();
