@@ -13,8 +13,8 @@ export const useLogin = (
   return useMutation<string, Error, LoginProps, string>({
     mutationKey: ['login'],
     mutationFn: async (fetchProps) => {
-      const username = fetchProps?.username || '';
-      const password = fetchProps?.password || '';
+      const username = fetchProps.username;
+      const password = fetchProps.password;
 
       const url = `${apiLocation}/api/account/login`;
       const options: RequestInit = {

@@ -124,7 +124,7 @@ export const LoadRomModal = () => {
             loadingCopy="Loading rom:"
           >
             <RomList id={romListId}>
-              {romList?.map?.((rom: string, idx: number) => (
+              {romList?.map((rom: string, idx: number) => (
                 <StyledLi key={`${rom}_${idx}`}>
                   <LoadRomButton
                     onClick={() => {

@@ -64,7 +64,7 @@ export const NumberInput = ({
     preventDefault(e);
 
     if (internalRef.current) {
-      const currentValue = internalRef.current?.valueAsNumber;
+      const currentValue = internalRef.current.valueAsNumber;
       const newValue = clamp(currentValue + step);
       dispatchEvent(newValue);
     }
@@ -74,7 +74,7 @@ export const NumberInput = ({
     preventDefault(e);
 
     if (internalRef.current) {
-      const currentValue = internalRef.current?.valueAsNumber;
+      const currentValue = internalRef.current.valueAsNumber;
       const newValue = clamp(currentValue - step);
       dispatchEvent(newValue);
     }
@@ -92,7 +92,7 @@ export const NumberInput = ({
     if (internalRef.current && !isIntermediateValue.current) {
       const value = internalRef.current.valueAsNumber;
 
-      if (isNaN(value) || value === undefined) internalRef.current.value = '0';
+      if (isNaN(value)) internalRef.current.value = '0';
       else internalRef.current.value = clamp(value).toString();
     }
   };

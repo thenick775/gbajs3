@@ -123,7 +123,7 @@ describe('<EmulatorFileSystem />', () => {
     // expand autosave neighbor mount
     if (defaultFSData.nextNeighbor?.path) {
       const path =
-        defaultFSData.nextNeighbor?.path.split('/').pop() ?? 'invalid_path';
+        defaultFSData.nextNeighbor.path.split('/').pop() ?? 'invalid_path';
       await userEvent.click(screen.getByText(path));
     }
 

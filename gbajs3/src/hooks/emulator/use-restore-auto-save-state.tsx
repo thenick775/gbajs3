@@ -32,7 +32,7 @@ export const useRestoreAutoSaveStateData = (emulator: GBAEmulator | null) => {
       if (
         !emulator ||
         !storedAutoSaveData?.data ||
-        !storedAutoSaveData?.filename
+        !storedAutoSaveData.filename
       )
         return;
 

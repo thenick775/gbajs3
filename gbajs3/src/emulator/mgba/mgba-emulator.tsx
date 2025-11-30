@@ -153,13 +153,10 @@ const filterSaveStates =
 export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
   const paths = mGBA.filePaths();
 
-  const filepathToFileName = (
-    path: string | undefined,
-    extension?: string | undefined
-  ) => {
-    let fileName = path?.split('/')?.pop();
+  const filepathToFileName = (path: string | undefined, extension?: string) => {
+    let fileName = path?.split('/').pop();
     if (extension) {
-      const ext = '.' + fileName?.split('.')?.pop();
+      const ext = '.' + fileName?.split('.').pop();
       fileName = fileName?.replace(ext, extension);
     }
 
@@ -207,7 +204,7 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     const lines = cheatsStr.split('\n');
     const ignoreLines = [/^cheats = \d+$/, /^$/];
 
-    if (!lines?.[0]?.match('^cheats = [0-9]+$')) return [];
+    if (!lines[0]?.match('^cheats = [0-9]+$')) return [];
 
     const assembledCheats: {
       [cheatNumber: string]: {

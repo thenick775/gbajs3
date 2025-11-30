@@ -187,7 +187,7 @@ export const SaveStatesModal = () => {
           const binary = emulator?.getSaveState(saveState);
           return uint8ArrayToBase64DataUrl(binary);
         })
-        .filter((url): url is string => url !== null),
+        .filter((url): url is string => url !== undefined),
     [emulator, currentSaveStates]
   );
 

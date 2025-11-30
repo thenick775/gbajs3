@@ -135,13 +135,13 @@ export const CheatsModal = () => {
           })}
         >
           <TextField
-            error={!!errors?.rawCheats}
+            error={!!errors.rawCheats}
             label="Raw Libretro Cheats"
             multiline
             fullWidth
             minRows={6}
             variant="outlined"
-            helperText={errors?.rawCheats?.message}
+            helperText={errors.rawCheats?.message}
             slotProps={{
               input: {
                 sx: {
@@ -164,10 +164,10 @@ export const CheatsModal = () => {
                 <CheatsFormSeparator>
                   <TextField
                     label="Name"
-                    error={!!errors?.cheats?.[index]?.desc}
+                    error={!!errors.cheats?.[index]?.desc}
                     size="small"
                     autoComplete="Cheat Name"
-                    helperText={errors?.cheats?.[index]?.desc?.message}
+                    helperText={errors.cheats?.[index]?.desc?.message}
                     {...register(`cheats.${index}.desc`, {
                       required: {
                         value: true,
@@ -177,10 +177,10 @@ export const CheatsModal = () => {
                   />
                   <TextField
                     label="Cheat Code"
-                    error={!!errors?.cheats?.[index]?.code}
+                    error={!!errors.cheats?.[index]?.code}
                     size="small"
                     autoComplete="Code"
-                    helperText={errors?.cheats?.[index]?.code?.message}
+                    helperText={errors.cheats?.[index]?.code?.message}
                     {...register(`cheats.${index}.code`, {
                       required: {
                         value: true,

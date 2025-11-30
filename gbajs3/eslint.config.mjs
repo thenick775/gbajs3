@@ -17,7 +17,7 @@ export default [
   jsxA11Y.flatConfigs.recommended,
   styledA11y.flatConfigs.recommended,
   jestDom.configs['flat/recommended'],
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
   ...pluginQuery.configs['flat/recommended'],
   {
     files: ['**/__tests__/**/*.[jt]s?(x)', '**/*.{test,spec}.[jt]s?(x)'],
@@ -40,12 +40,22 @@ export default [
       },
 
       parser: tsParser,
+      parserOptions: {
+        projectService: true
+      },
       ecmaVersion: 'latest',
       sourceType: 'module'
     },
 
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-unnecessary-condition': 'error',
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        {
+          checksVoidReturn: false
+        }
+      ],
       'react-refresh/only-export-components': 'warn',
       'import/no-default-export': 'error',
 
