@@ -100,8 +100,8 @@ export const LoadRomModal = () => {
     mutate: executeLoadRom
   } = useLoadRom({
     onSuccess: (file) => {
-      const runCallback = () => {
-        syncActionIfEnabled();
+      const runCallback = async () => {
+        await syncActionIfEnabled();
         runGame(file.name);
       };
 

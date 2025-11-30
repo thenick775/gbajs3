@@ -448,7 +448,7 @@ export const VirtualControls = () => {
     },
     {
       children: <BiSave />,
-      onPointerDown: () => {
+      onPointerDown: async () => {
         if (!currentGameName) {
           toast.error('Load a game to save state slots', {
             id: virtualControlToastId
@@ -459,7 +459,7 @@ export const VirtualControls = () => {
 
         const wasSuccessful = emulator?.createSaveState(currentSaveStateSlot);
 
-        if (wasSuccessful) syncActionIfEnabled({ withToast: false });
+        if (wasSuccessful) await syncActionIfEnabled({ withToast: false });
 
         toastOnCondition(
           !!wasSuccessful,

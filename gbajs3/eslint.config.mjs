@@ -24,7 +24,10 @@ export default [
     plugins: {
       'testing-library': testingLibrary
     },
-    ...testingLibrary.configs['flat/react']
+    ...testingLibrary.configs['flat/react'],
+    rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off'
+    }
   },
   {
     files: ['**/*.js', '**/*.ts', '**/*.tsx'],

@@ -162,10 +162,10 @@ export const ControlPanel = () => {
   const dragWrapperPadding = isLargerThanPhone ? 5 : 0;
   const isControlled = !!controlPanelLayout?.size || isResizing;
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     if (!isRunning) return;
 
-    if (isPaused) emulator?.resume();
+    if (isPaused) await emulator?.resume();
     else emulator?.pause();
 
     setIsPaused((prevState) => !prevState);

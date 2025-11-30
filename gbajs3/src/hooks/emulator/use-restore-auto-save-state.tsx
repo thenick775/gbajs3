@@ -45,7 +45,7 @@ export const useRestoreAutoSaveStateData = (emulator: GBAEmulator | null) => {
       setStoredAutoSaveData(undefined);
     };
 
-    initializeAutoSaveState();
+    void initializeAutoSaveState();
   }, [
     emulator,
     storedAutoSaveData?.filename,

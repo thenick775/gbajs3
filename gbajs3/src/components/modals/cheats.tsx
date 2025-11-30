@@ -127,8 +127,8 @@ export const CheatsModal = () => {
               : emulator?.parsedCheatsToFile(data.cheats);
 
             if (cheatsFile)
-              emulator?.uploadCheats(cheatsFile, () => {
-                syncActionIfEnabled();
+              emulator?.uploadCheats(cheatsFile, async () => {
+                await syncActionIfEnabled();
                 emulator.autoLoadCheats();
                 refreshForm();
               });
