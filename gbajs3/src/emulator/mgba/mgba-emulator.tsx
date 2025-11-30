@@ -153,7 +153,7 @@ const filterSaveStates =
 export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
   const paths = mGBA.filePaths();
 
-  const filepathToFileName = (path: string | undefined, extension?: string) => {
+  const filepathToFileName = (path?: string, extension?: string) => {
     let fileName = path?.split('/').pop();
     if (extension) {
       const ext = '.' + fileName?.split('.').pop();

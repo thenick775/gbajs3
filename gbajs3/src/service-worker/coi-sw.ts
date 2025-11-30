@@ -1,4 +1,4 @@
-/* eslint-disable -- vendored external*/
+/* eslint-disable -- vendored external */
 
 /**
  * Used for non-production deploys only.
