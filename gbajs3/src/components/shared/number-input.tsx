@@ -52,11 +52,10 @@ export const NumberInput = ({
   };
 
   const dispatchEvent = (value: string) => {
-    const setter = Object.getOwnPropertyDescriptor(
+    Object.getOwnPropertyDescriptor(
       window.HTMLInputElement.prototype,
       'value'
-    )?.set;
-    setter?.call(internalRef.current, value);
+    )?.set?.call(internalRef.current, value);
     internalRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
   };
 

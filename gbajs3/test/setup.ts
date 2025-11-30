@@ -28,6 +28,16 @@ beforeEach(() => {
       dispatchEvent: vi.fn()
     }))
   });
+
+  Object.defineProperty(URL, 'createObjectURL', {
+    writable: true,
+    value: vi.fn()
+  });
+
+  Object.defineProperty(URL, 'revokeObjectURL', {
+    writable: true,
+    value: vi.fn()
+  });
 });
 
 afterAll(() => server.close());
