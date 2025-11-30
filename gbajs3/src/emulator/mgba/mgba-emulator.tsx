@@ -207,9 +207,11 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     if (!lines[0]?.match('^cheats = [0-9]+$')) return [];
 
     const assembledCheats: {
-      [cheatNumber: string]: {
-        [cheatType: string]: string | boolean;
-      };
+      [cheatNumber: string]:
+        | {
+            [cheatType: string]: string | boolean;
+          }
+        | undefined;
     } = {};
     const propertyMap: { [key: string]: keyof ParsedCheats } = {
       desc: 'desc',
@@ -232,11 +234,11 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
           code: '',
           enable: false
         };
-        if (propertyName)
-          assembledCheats[cheatNumber][propertyName] =
-            propertyName === propertyMap.enable
-              ? value.toLowerCase() === 'true'
-              : value;
+
+        assembledCheats[cheatNumber][propertyName] =
+          propertyName === propertyMap.enable
+            ? value.toLowerCase() === 'true'
+            : value;
       }
     }
 

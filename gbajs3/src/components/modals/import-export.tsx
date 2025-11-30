@@ -137,7 +137,7 @@ export const ImportExportModal = () => {
             control={control}
             name="zipFile"
             rules={{
-              validate: (zipFile) =>
+              validate: (zipFile?: File) =>
                 !!zipFile || 'At least one export .zip file is required'
             }}
             render={({ field: { name, value }, fieldState: { error } }) => (
