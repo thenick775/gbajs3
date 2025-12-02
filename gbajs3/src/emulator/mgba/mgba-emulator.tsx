@@ -289,8 +289,10 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
       // best effort attempt at an audio teardown/resume for ios safari
       // context: we've most likely encountered `InvalidStateError: Failed to start the audio device`
       //          when in the interrupted state
-      await mGBA.SDL2.audioContext.suspend();
-      await mGBA.SDL2.audioContext.resume();
+      setTimeout(async () => {
+        await mGBA.SDL2.audioContext.suspend();
+        await mGBA.SDL2.audioContext.resume();
+      }, 100);
     }
   };
 
