@@ -54,6 +54,7 @@ export type EmulatorSettings = {
   restoreAutoSaveStateOnLoad?: boolean;
   autoSaveStateLoadNotificationEnabled: boolean;
   autoSaveStateCaptureNotificationEnabled: boolean;
+  useNativeFps?: boolean;
 };
 
 type TabPanelProps = {
@@ -151,7 +152,8 @@ export const EmulatorSettingsModal = () => {
       autoSaveStateLoadNotificationEnabled:
         emulatorSettings?.autoSaveStateLoadNotificationEnabled ?? true,
       autoSaveStateCaptureNotificationEnabled:
-        emulatorSettings?.autoSaveStateCaptureNotificationEnabled ?? true
+        emulatorSettings?.autoSaveStateCaptureNotificationEnabled ?? true,
+      useNativeFps: emulatorSettings?.useNativeFps ?? true
     }
   });
   const [tabValue, setTabValue] = useState(0);
@@ -197,7 +199,8 @@ export const EmulatorSettingsModal = () => {
       showFpsCounter: rest.showFpsCounter,
       autoSaveStateTimerIntervalSeconds: rest.autoSaveStateTimerIntervalSeconds,
       autoSaveStateEnable: rest.autoSaveStateEnable,
-      restoreAutoSaveStateOnLoad: rest.restoreAutoSaveStateOnLoad
+      restoreAutoSaveStateOnLoad: rest.restoreAutoSaveStateOnLoad,
+      useNativeFps: rest.useNativeFps
     });
   };
 
@@ -228,7 +231,8 @@ export const EmulatorSettingsModal = () => {
       showFpsCounter: false,
       autoSaveStateTimerIntervalSeconds: 30,
       autoSaveStateEnable: true,
-      restoreAutoSaveStateOnLoad: true
+      restoreAutoSaveStateOnLoad: true,
+      useNativeFps: true
     });
   };
 
@@ -396,6 +400,7 @@ export const EmulatorSettingsModal = () => {
             <TabPanel value={tabValue} index={2}>
               <NumberInput
                 label="Base FPS Target"
+                disabled={watch('useNativeFps')}
                 min={0}
                 size="small"
                 {...register('baseFpsTarget', {
@@ -415,6 +420,11 @@ export const EmulatorSettingsModal = () => {
                   required: { value: true, message: 'Frame skip is required' },
                   valueAsNumber: true
                 })}
+              />
+              <ManagedCheckbox
+                label="Use Native FPS"
+                watcher={watch('useNativeFps')}
+                {...register('useNativeFps')}
               />
               <ManagedCheckbox
                 label="Timestep Sync"

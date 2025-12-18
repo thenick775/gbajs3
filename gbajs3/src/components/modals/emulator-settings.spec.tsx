@@ -94,7 +94,7 @@ describe('<EmulatorSettingsModal />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false,"autoSaveStateTimerIntervalSeconds":30,"autoSaveStateEnable":true,"restoreAutoSaveStateOnLoad":true,"autoSaveStateLoadNotificationEnabled":true,"autoSaveStateCaptureNotificationEnabled":true}'
+      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false,"autoSaveStateTimerIntervalSeconds":30,"autoSaveStateEnable":true,"restoreAutoSaveStateOnLoad":true,"autoSaveStateLoadNotificationEnabled":true,"autoSaveStateCaptureNotificationEnabled":true,"useNativeFps":true}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
@@ -122,7 +122,8 @@ describe('<EmulatorSettingsModal />', () => {
       videoSync: false,
       autoSaveStateTimerIntervalSeconds: 30,
       autoSaveStateEnable: true,
-      restoreAutoSaveStateOnLoad: true
+      restoreAutoSaveStateOnLoad: true,
+      useNativeFps: true
     });
   });
 
@@ -189,6 +190,7 @@ describe('<EmulatorSettingsModal />', () => {
     const audioSyncCheckbox = screen.getByLabelText('Audio Sync');
     const fpsCounterCheckbox = screen.getByLabelText('FPS Counter');
     const threadedVideoCheckbox = screen.getByLabelText('Threaded Video');
+    const useNativeFpsCheckbox = screen.getByLabelText('Use Native FPS');
     const rewindEnabledCheckbox = screen.getByLabelText('Rewind enabled');
     const autoSaveStateEnabledCheckbox = screen.getByLabelText(
       'Auto save state enabled'
@@ -205,6 +207,8 @@ describe('<EmulatorSettingsModal />', () => {
 
     await userEvent.type(frameSkipInput, '25');
 
+    // related input must be changed first
+    await userEvent.click(useNativeFpsCheckbox);
     await userEvent.clear(baseFpsTargetInput);
     await userEvent.type(baseFpsTargetInput, '30');
 
@@ -241,7 +245,7 @@ describe('<EmulatorSettingsModal />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":25,"baseFpsTarget":30,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"showFpsCounter":true,"autoSaveStateTimerIntervalSeconds":10,"autoSaveStateEnable":false,"restoreAutoSaveStateOnLoad":false,"autoSaveStateLoadNotificationEnabled":false,"autoSaveStateCaptureNotificationEnabled":false,"saveFileName":"custom_save_override.sav"}'
+      '{"frameSkip":25,"baseFpsTarget":30,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"showFpsCounter":true,"autoSaveStateTimerIntervalSeconds":10,"autoSaveStateEnable":false,"restoreAutoSaveStateOnLoad":false,"autoSaveStateLoadNotificationEnabled":false,"autoSaveStateCaptureNotificationEnabled":false,"useNativeFps":false,"saveFileName":"custom_save_override.sav"}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledOnce();
@@ -269,7 +273,8 @@ describe('<EmulatorSettingsModal />', () => {
       videoSync: true,
       autoSaveStateTimerIntervalSeconds: 10,
       autoSaveStateEnable: false,
-      restoreAutoSaveStateOnLoad: false
+      restoreAutoSaveStateOnLoad: false,
+      useNativeFps: false
     });
   });
 
@@ -338,7 +343,8 @@ describe('<EmulatorSettingsModal />', () => {
       videoSync: false,
       autoSaveStateTimerIntervalSeconds: 30,
       autoSaveStateEnable: true,
-      restoreAutoSaveStateOnLoad: true
+      restoreAutoSaveStateOnLoad: true,
+      useNativeFps: true
     });
   });
 
