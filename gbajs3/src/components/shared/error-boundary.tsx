@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import { Button } from '@mui/material';
 import { ErrorBoundary } from 'react-error-boundary';
-import { styled } from 'styled-components';
 
 import {
   BodyWrapper,

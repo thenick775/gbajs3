@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import styled from '@emotion/styled';
 
 import { useModalContext } from '../../hooks/context.tsx';
 import { HeaderWrapper, Header } from '../shared/styled.tsx';

@@ -1,7 +1,10 @@
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { Slider } from '@mui/material';
-import { styled, css } from 'styled-components';
 
 import { ButtonBase } from '../../shared/custom-button-base.tsx';
+
+import type { Theme } from '@emotion/react';
 
 type ControlledProps = {
   $controlled: boolean;
@@ -11,9 +14,11 @@ type PanelControlSliderProps = {
   $gridArea: string;
 } & ControlledProps;
 
-const InteractivePanelControlStyle = css<ControlledProps>`
+const InteractivePanelControlStyle = (
+  props: ControlledProps & { theme: Theme }
+) => css`
   cursor: pointer;
-  background-color: ${({ theme }) => theme.panelControlGray};
+  background-color: ${props.theme.panelControlGray};
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -22,13 +27,12 @@ const InteractivePanelControlStyle = css<ControlledProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.pureBlack};
-  width: ${({ $controlled }) => ($controlled ? 'auto' : '100%')};
+  color: ${props.theme.pureBlack};
+  width: ${props.$controlled ? 'auto' : '100%'};
 
-  ${({ $controlled, theme }) =>
-    !$controlled &&
-    `
-    @media ${theme.isLargerThanPhone} {
+  ${!props.$controlled &&
+  `
+    @media ${props.theme.isLargerThanPhone} {
         width: auto;
     }
     `}
@@ -43,7 +47,11 @@ export const ContentSpan = styled.span`
 `;
 
 export const PanelControlSlider = styled.div<PanelControlSliderProps>`
-  ${InteractivePanelControlStyle}
+  ${(props) =>
+    InteractivePanelControlStyle({
+      $controlled: props.$controlled,
+      theme: props.theme
+    })}
   grid-area: ${({ $gridArea }) => $gridArea};
   max-height: 40px;
 `;
@@ -57,16 +65,20 @@ export const MutedMarkSlider = styled(Slider)`
   }
 `;
 
-export const PanelControlButton = styled(ButtonBase).attrs(({ className }) => ({
-  className
-}))<ControlledProps & { $gridArea?: string }>`
-  ${InteractivePanelControlStyle}
+export const PanelControlButton = styled(ButtonBase)<
+  ControlledProps & { $gridArea?: string }
+>`
+  ${({ $controlled, theme }) =>
+    InteractivePanelControlStyle({
+      $controlled: $controlled,
+      theme: theme
+    })}
 
   ${({ $gridArea }) =>
     $gridArea &&
     `
   grid-area: ${$gridArea};
-`}
+`} 
 
   border: none;
   flex-grow: 1;
@@ -80,7 +92,6 @@ export const PanelControlButton = styled(ButtonBase).attrs(({ className }) => ({
   &:active {
     color: ${({ theme }) => theme.gbaThemeBlue};
   }
-
   @media ${({ theme }) => theme.isMobileLandscape} {
     flex-shrink: 1;
     min-width: unset;

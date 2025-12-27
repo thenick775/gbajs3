@@ -1,5 +1,5 @@
+import { useTheme } from '@emotion/react';
 import { IconButton } from '@mui/material';
-import { useTheme } from 'styled-components';
 
 import { PanelControlWrapper, PanelControlButton } from './styled.tsx';
 

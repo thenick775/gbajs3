@@ -1,9 +1,9 @@
+import styled from '@emotion/styled';
 import { IconButton, TextField } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { BiTrash, BiEdit, BiSave } from 'react-icons/bi';
-import { styled } from 'styled-components';
 
 import {
   useInitialBoundsContext,

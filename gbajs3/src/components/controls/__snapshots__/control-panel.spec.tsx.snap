@@ -1,315 +1,22 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`<ControlPanel /> > renders with default desktop position and size 1`] = `
-.c2 {
-  font-size: inherit;
-  font-family: inherit;
-  line-height: inherit;
-  padding: inherit;
-}
-
-.c1 {
-  display: contents;
-}
-
-.c8 {
-  display: contents;
-}
-
-.c9 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: volume;
-  max-height: 40px;
-}
-
-.c11 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: fastForward;
-  max-height: 40px;
-}
-
-.c10 {
-  flex-grow: 1;
-}
-
-.c10 >.MuiSlider-markActive {
-  opacity: 1;
-  background-color: currentColor;
-}
-
-.c3 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: play;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c3:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c3:active {
-  color: #1c76fd;
-}
-
-.c4 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: quit;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c4:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c4:active {
-  color: #1c76fd;
-}
-
-.c5 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: drag;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c5:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c5:active {
-  color: #1c76fd;
-}
-
-.c6 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: resize;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c6:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c6:active {
-  color: #1c76fd;
-}
-
-.c7 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: rewind;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c7:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c7:active {
-  color: #1c76fd;
-}
-
-.c0 {
-  background-color: #4f555a;
-  list-style: none;
-  padding: 10px;
-  margin: 0;
-  max-width: 100%;
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: 1fr 1fr;
-  gap: 10px 10px;
-  grid-template-areas: 'play play quit quit drag drag resize resize rewind rewind' 'volume volume volume volume volume fastForward fastForward fastForward fastForward fastForward';
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 10px;
-}
-
-@media only screen and (min-width: 600px) {
-  .c9 {
-    width: auto;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c11 {
-    width: auto;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c3 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c3 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c4 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c4 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c5 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c5 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c6 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c6 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c7 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c7 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
 <div
   class="react-draggable"
   data-testid="control-panel-wrapper"
-  id="_r_a_"
+  id="_r_d_"
   style="position: absolute; user-select: auto; width: auto; height: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px,10px); max-width: 9007199254740991px; max-height: 9007199254740991px; box-sizing: border-box; flex-shrink: 0;"
 >
   <ul
-    class="c0"
+    class="css-a8wv8q"
   >
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Play"
-        class="c2 c3"
-        id="_r_a_--play"
+        class="css-13tynzk"
+        id="_r_d_--play"
       >
         <svg
           fill="currentColor"
@@ -327,12 +34,12 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Quit Game"
-        class="c2 c4"
-        id="_r_a_--quit-game"
+        class="css-31e5ln"
+        id="_r_d_--quit-game"
       >
         <svg
           fill="currentColor"
@@ -350,12 +57,12 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Drag Items"
-        class="c2 c5 noDrag"
-        id="_r_a_--drag"
+        class="noDrag css-17lcwwu"
+        id="_r_d_--drag"
       >
         <svg
           fill="currentColor"
@@ -373,12 +80,12 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Resize Items"
-        class="c2 c6 noDrag"
-        id="_r_a_--resize"
+        class="noDrag css-1p7v6yw"
+        id="_r_d_--resize"
       >
         <svg
           fill="none"
@@ -401,12 +108,12 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Rewind Emulator"
-        class="c2 c7"
-        id="_r_a_--rewind"
+        class="css-15k4civ"
+        id="_r_d_--rewind"
       >
         <svg
           fill="currentColor"
@@ -425,18 +132,18 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <span
-        class="c8"
+        class="css-jbvua0"
       >
         <div
-          class="c9"
-          id="_r_a_--volume-slider"
+          class="css-1ea2mjo"
+          id="_r_d_--volume-slider"
         >
           <button
             aria-label="Mute Volume"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-dhaj44-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1sti93z-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >
@@ -456,7 +163,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
             </svg>
           </button>
           <span
-            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c10 css-1uesrtc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium css-au7fs4-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-r64h58-MuiSlider-rail"
@@ -466,62 +173,62 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
               style="left: 0%; width: 100%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="1"
               style="left: 10%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="2"
               style="left: 20%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="3"
               style="left: 30.000000000000004%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="4"
               style="left: 40%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="5"
               style="left: 50%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="6"
               style="left: 60.00000000000001%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="7"
               style="left: 70%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="8"
               style="left: 80%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="9"
               style="left: 90%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="10"
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-vumlk7-MuiSlider-thumb"
               data-index="0"
               style="left: 100%;"
             >
@@ -557,7 +264,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
           </span>
           <button
             aria-label="Max Volume"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-dhaj44-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1sti93z-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >
@@ -583,18 +290,18 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </span>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <span
-        class="c8"
+        class="css-jbvua0"
       >
         <div
-          class="c11"
-          id="_r_a_--fast-forward"
+          class="css-2twumc"
+          id="_r_d_--fast-forward"
         >
           <button
             aria-label="Regular Speed"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-dhaj44-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1sti93z-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >
@@ -614,7 +321,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
             </svg>
           </button>
           <span
-            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c10 css-1uesrtc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium css-au7fs4-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-r64h58-MuiSlider-rail"
@@ -624,7 +331,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
@@ -649,7 +356,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-vumlk7-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -685,7 +392,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
           </span>
           <button
             aria-label="Max Fast Forward"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-dhaj44-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1sti93z-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >
@@ -713,310 +420,22 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 `;
 
 exports[`<ControlPanel /> > renders with default mobile position and size 1`] = `
-.c2 {
-  font-size: inherit;
-  font-family: inherit;
-  line-height: inherit;
-  padding: inherit;
-}
-
-.c1 {
-  display: contents;
-}
-
-.c8 {
-  display: contents;
-}
-
-.c9 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: volume;
-  max-height: 40px;
-}
-
-.c11 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: fastForward;
-  max-height: 40px;
-}
-
-.c10 {
-  flex-grow: 1;
-}
-
-.c10 >.MuiSlider-markActive {
-  opacity: 1;
-  background-color: currentColor;
-}
-
-.c3 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: play;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c3:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c3:active {
-  color: #1c76fd;
-}
-
-.c4 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: quit;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c4:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c4:active {
-  color: #1c76fd;
-}
-
-.c5 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: drag;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c5:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c5:active {
-  color: #1c76fd;
-}
-
-.c6 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: resize;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c6:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c6:active {
-  color: #1c76fd;
-}
-
-.c7 {
-  cursor: pointer;
-  background-color: #a9a9a9;
-  border-radius: 0.25rem;
-  min-width: 40px;
-  min-height: 40px;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  width: 100%;
-  grid-area: rewind;
-  border: none;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-}
-
-.c7:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.c7:active {
-  color: #1c76fd;
-}
-
-.c0 {
-  background-color: #4f555a;
-  list-style: none;
-  padding: 10px;
-  margin: 0;
-  max-width: 100%;
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: 1fr 1fr;
-  gap: 10px 10px;
-  grid-template-areas: 'play play quit quit drag drag resize resize rewind rewind' 'volume volume volume volume volume fastForward fastForward fastForward fastForward fastForward';
-}
-
-@media only screen and (min-width: 600px) {
-  .c9 {
-    width: auto;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c11 {
-    width: auto;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c3 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c3 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c4 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c4 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c5 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c5 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c6 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c6 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .c7 {
-    width: auto;
-  }
-}
-
-@media only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape) {
-  .c7 {
-    flex-shrink: 1;
-    min-width: unset;
-  }
-}
-
 <div
   class="react-draggable"
   data-testid="control-panel-wrapper"
-  id="_r_5_"
+  id="_r_7_"
   style="position: absolute; user-select: auto; width: 100dvw; height: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px,0px); max-width: 9007199254740991px; max-height: 9007199254740991px; box-sizing: border-box; flex-shrink: 0;"
 >
   <ul
-    class="c0"
+    class="css-hla71a"
   >
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Play"
-        class="c2 c3"
-        id="_r_5_--play"
+        class="css-13tynzk"
+        id="_r_7_--play"
       >
         <svg
           fill="currentColor"
@@ -1034,12 +453,12 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Quit Game"
-        class="c2 c4"
-        id="_r_5_--quit-game"
+        class="css-31e5ln"
+        id="_r_7_--quit-game"
       >
         <svg
           fill="currentColor"
@@ -1057,12 +476,12 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Drag Items"
-        class="c2 c5 noDrag"
-        id="_r_5_--drag"
+        class="noDrag css-17lcwwu"
+        id="_r_7_--drag"
       >
         <svg
           fill="currentColor"
@@ -1080,12 +499,12 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Resize Items"
-        class="c2 c6 noDrag"
-        id="_r_5_--resize"
+        class="noDrag css-1p7v6yw"
+        id="_r_7_--resize"
       >
         <svg
           fill="none"
@@ -1108,12 +527,12 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <button
         aria-label="Rewind Emulator"
-        class="c2 c7"
-        id="_r_5_--rewind"
+        class="css-15k4civ"
+        id="_r_7_--rewind"
       >
         <svg
           fill="currentColor"
@@ -1132,18 +551,18 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <span
-        class="c8"
+        class="css-jbvua0"
       >
         <div
-          class="c9"
-          id="_r_5_--volume-slider"
+          class="css-1ea2mjo"
+          id="_r_7_--volume-slider"
         >
           <button
             aria-label="Mute Volume"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-dhaj44-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1sti93z-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >
@@ -1163,7 +582,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
             </svg>
           </button>
           <span
-            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c10 css-1uesrtc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium css-au7fs4-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-r64h58-MuiSlider-rail"
@@ -1173,62 +592,62 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
               style="left: 0%; width: 100%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="1"
               style="left: 10%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="2"
               style="left: 20%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="3"
               style="left: 30.000000000000004%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="4"
               style="left: 40%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="5"
               style="left: 50%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="6"
               style="left: 60.00000000000001%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="7"
               style="left: 70%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="8"
               style="left: 80%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="9"
               style="left: 90%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="10"
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-vumlk7-MuiSlider-thumb"
               data-index="0"
               style="left: 100%;"
             >
@@ -1264,7 +683,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
           </span>
           <button
             aria-label="Max Volume"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-dhaj44-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1sti93z-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >
@@ -1290,18 +709,18 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </span>
     </li>
     <li
-      class="c1"
+      class="css-jbvua0"
     >
       <span
-        class="c8"
+        class="css-jbvua0"
       >
         <div
-          class="c11"
-          id="_r_5_--fast-forward"
+          class="css-2twumc"
+          id="_r_7_--fast-forward"
         >
           <button
             aria-label="Regular Speed"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-dhaj44-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1sti93z-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >
@@ -1321,7 +740,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
             </svg>
           </button>
           <span
-            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium c10 css-1uesrtc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium css-au7fs4-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-r64h58-MuiSlider-rail"
@@ -1331,7 +750,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-ce2uc1-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
@@ -1356,7 +775,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-vumlk7-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -1392,7 +811,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
           </span>
           <button
             aria-label="Max Fast Forward"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-dhaj44-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1sti93z-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >

@@ -1,5 +1,6 @@
+import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { PacmanLoader } from 'react-spinners';
-import { styled, useTheme } from 'styled-components';
 
 import type { ReactNode } from 'react';
 import type { LoaderSizeMarginProps } from 'react-spinners/helpers/props';

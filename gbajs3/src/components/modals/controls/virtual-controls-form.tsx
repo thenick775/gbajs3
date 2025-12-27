@@ -1,7 +1,8 @@
+import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { useMediaQuery } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { styled, useTheme } from 'styled-components';
 
 import { virtualControlsLocalStorageKey } from '../../controls/consts.tsx';
 import { ManagedCheckbox } from '../../shared/managed-checkbox.tsx';

@@ -1,6 +1,6 @@
-import type { DefaultTheme } from 'styled-components';
+import type { Theme } from '@emotion/react';
 
-export const GbaDarkTheme: DefaultTheme = {
+export const GbaDarkTheme: Theme = {
   // media queries
   isLargerThanPhone: 'only screen and (min-width: 600px)',
   isMobileLandscape:

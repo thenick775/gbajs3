@@ -1,9 +1,10 @@
+import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { Button, Collapse, IconButton } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useMemo, useState } from 'react';
 import { BiError, BiTrash } from 'react-icons/bi';
 import { FaRegEye } from 'react-icons/fa';
-import { styled, useTheme } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

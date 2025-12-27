@@ -1,7 +1,7 @@
+import styled from '@emotion/styled';
 import { TextField } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { Controller, useForm } from 'react-hook-form';
-import { styled } from 'styled-components';
 
 import { emulatorKeyBindingsLocalStorageKey } from '../../../context/emulator/consts.ts';
 import {

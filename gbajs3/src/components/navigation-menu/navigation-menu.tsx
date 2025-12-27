@@ -1,3 +1,5 @@
+import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { useMediaQuery } from '@mui/material';
 import { useId, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
@@ -27,7 +29,6 @@ import {
   BiDownload
 } from 'react-icons/bi';
 import { MdImportExport } from 'react-icons/md';
-import { styled, useTheme } from 'styled-components';
 
 import { NavigationMenuWidth } from './consts.tsx';
 import { NavComponent } from './nav-component.tsx';

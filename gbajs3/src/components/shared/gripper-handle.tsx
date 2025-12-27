@@ -1,5 +1,5 @@
+import { useTheme } from '@emotion/react';
 import { FaGripLines } from 'react-icons/fa';
-import { useTheme } from 'styled-components';
 
 type GripperHandleProps = {
   variation?: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';

@@ -1,7 +1,8 @@
+import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { Button } from '@mui/material';
 import { useState, useId } from 'react';
 import { BiError } from 'react-icons/bi';
-import { styled, useTheme } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

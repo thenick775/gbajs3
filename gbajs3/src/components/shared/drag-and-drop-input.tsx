@@ -1,8 +1,9 @@
+import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { IconButton } from '@mui/material';
 import { useState, type ReactNode } from 'react';
 import { ErrorCode, useDropzone } from 'react-dropzone';
 import { BiCloudUpload, BiError, BiTrash } from 'react-icons/bi';
-import { styled, useTheme } from 'styled-components';
 
 import { ErrorWithIcon } from './error-with-icon.tsx';
 

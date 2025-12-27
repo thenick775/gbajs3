@@ -1,6 +1,7 @@
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 import { Button } from '@mui/material';
 import { useId, useState } from 'react';
-import { styled, keyframes } from 'styled-components';
 
 import { useInterval } from '../../hooks/use-interval.ts';
 

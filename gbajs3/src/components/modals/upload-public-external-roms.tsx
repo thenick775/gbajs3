@@ -1,3 +1,5 @@
+import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import {
   Accordion,
   AccordionDetails,
@@ -7,7 +9,6 @@ import {
 import { useId, useState } from 'react';
 import { BiError } from 'react-icons/bi';
 import { FaArrowDown } from 'react-icons/fa';
-import { styled, useTheme } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

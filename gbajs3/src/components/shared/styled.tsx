@@ -1,5 +1,5 @@
+import styled from '@emotion/styled';
 import { BiPlus } from 'react-icons/bi';
-import { styled } from 'styled-components';
 
 export const Copy = styled.p`
   margin: 0;

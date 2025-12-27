@@ -1,4 +1,5 @@
-import {
+import styled from '@emotion/styled';
+import React, {
   useCallback,
   useEffect,
   useRef,
@@ -6,7 +7,6 @@ import {
   type PointerEvent
 } from 'react';
 import Draggable from 'react-draggable';
-import { styled } from 'styled-components';
 
 import {
   useDragContext,
@@ -42,14 +42,29 @@ type KeyState = {
   RIGHT?: number;
 };
 
-const BackgroundContainer = styled.section.attrs<BackgroundContainerProps>(
-  (props) => ({
-    style: {
-      top: props.$initialPosition?.top || '0',
-      left: props.$initialPosition?.left || '0'
-    }
-  })
-)`
+const BackgroundContainerWrapper = React.forwardRef<
+  HTMLElement,
+  BackgroundContainerProps & { children?: React.ReactNode }
+>(({ $initialPosition, children, ...rest }, ref) => {
+  const sectionProps = rest as React.ComponentPropsWithoutRef<'section'> &
+    Partial<BackgroundContainerProps>;
+  return (
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      {...sectionProps}
+      style={{
+        top: $initialPosition?.top || '0',
+        left: $initialPosition?.left || '0'
+      }}
+    >
+      {children}
+    </section>
+  );
+});
+
+const BackgroundContainer = styled(
+  BackgroundContainerWrapper
+)<BackgroundContainerProps>`
   position: absolute;
   background-color: red;
   border-radius: 50%;

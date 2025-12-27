@@ -7,7 +7,7 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 1`] = `
   type="button"
 >
   <span
-    class=""
+    class="css-1oteowz"
   >
     Submit
   </span>
@@ -15,39 +15,6 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 1`] = `
 `;
 
 exports[`<CircleCheckButton /> > matches snapshot when clicked 2`] = `
-.c0 {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 50%;
-  stroke-width: 5;
-  stroke-miterlimit: 10;
-  animation: jDLghl 0.2s ease-in-out 0.2s forwards,dcldXz 0.12s ease-in-out 0.45s both;
-}
-
-.c1 {
-  stroke-dasharray: 166;
-  stroke-dashoffset: 166;
-  stroke-width: 5;
-  stroke-miterlimit: 10;
-  fill: none;
-  animation: kscbJG 0.3s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-}
-
-.c2 {
-  transform-origin: 50% 50%;
-  stroke-dasharray: 48;
-  stroke-dashoffset: 48;
-  animation: kscbJG 0.15s cubic-bezier(0.65, 0, 0.45, 1) 0.4s forwards;
-}
-
-.c3 {
-  visibility: hidden;
-}
-
 <button
   class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-74d805-MuiButtonBase-root-MuiButton-root"
   tabindex="0"
@@ -55,7 +22,7 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 2`] = `
 >
   <svg
     aria-labelledby="_r_0_"
-    class="c0"
+    class="css-1n1zzbt"
     role="graphics-symbol"
     viewBox="0 0 52 52"
     xmlns="http://www.w3.org/2000/svg"
@@ -66,20 +33,20 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 2`] = `
       Circle Check
     </title>
     <circle
-      class="c1"
+      class="css-11lco7a"
       cx="26"
       cy="26"
       fill="none"
       r="25"
     />
     <path
-      class="c2"
+      class="css-r0i9d7"
       d="M14.1 27.2l7.1 7.2 16.7-16.8"
       fill="none"
     />
   </svg>
   <span
-    class="c3"
+    class="css-1wk92h"
   >
     Submit
   </span>

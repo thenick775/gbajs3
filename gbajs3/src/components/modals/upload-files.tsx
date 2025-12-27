@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import {
   Button,
   Checkbox,
@@ -21,7 +22,6 @@ import {
   type SubmitHandler
 } from 'react-hook-form';
 import { BiTrash } from 'react-icons/bi';
-import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

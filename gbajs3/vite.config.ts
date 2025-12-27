@@ -147,7 +147,7 @@ export default defineConfig(({ mode }) => {
 
             mgba: ['@thenick775/mgba-wasm'],
 
-            styled: ['styled-components'],
+            //styled: ['styled-components'],
 
             onboarding: ['react-ios-pwa-prompt-ts'],
 
@@ -183,7 +183,7 @@ export default defineConfig(({ mode }) => {
       globals: true,
       restoreMocks: true,
       environment: 'jsdom',
-      setupFiles: ['./test/setup.ts', 'jest-styled-components'],
+      setupFiles: ['./test/setup.ts'],
       coverage: {
         provider: 'v8',
         include: ['src'],

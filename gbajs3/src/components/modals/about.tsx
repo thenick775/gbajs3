@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import { Button, Chip } from '@mui/material';
 import { BiCheckCircle } from 'react-icons/bi';
-import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

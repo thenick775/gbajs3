@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import { Button, Tabs, Tab } from '@mui/material';
 import { useId, useState, type Dispatch, type ReactNode } from 'react';
-import { styled } from 'styled-components';
 
 import { KeyBindingsForm } from './controls/key-bindings-form.tsx';
 import { VirtualControlsForm } from './controls/virtual-controls-form.tsx';

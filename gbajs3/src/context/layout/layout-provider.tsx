@@ -1,10 +1,10 @@
+import { useTheme } from '@emotion/react';
 import {
   useLocalStorage,
   useMediaQuery,
   useOrientation
 } from '@uidotdev/usehooks';
 import { useCallback, type ReactNode } from 'react';
-import { useTheme } from 'styled-components';
 
 import { LayoutContext } from './layout-context.tsx';
 

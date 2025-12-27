@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import { Button } from '@mui/material';
 import { useId } from 'react';
-import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

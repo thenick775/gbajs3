@@ -1,7 +1,7 @@
-import 'styled-components';
+import '@emotion/react';
 
-declare module 'styled-components' {
-  export interface DefaultTheme {
+declare module '@emotion/react' {
+  export interface Theme {
     isLargerThanPhone: string;
     isMobileLandscape: string;
     isMobilePortrait: string;

@@ -1,3 +1,4 @@
+import { useTheme } from '@emotion/react';
 import {
   tooltipClasses,
   Tooltip,
@@ -5,7 +6,6 @@ import {
   useMediaQuery
 } from '@mui/material';
 import { useState } from 'react';
-import { useTheme } from 'styled-components';
 
 import {
   ContentSpan,

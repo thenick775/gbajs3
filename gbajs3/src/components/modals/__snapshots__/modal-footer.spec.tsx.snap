@@ -1,18 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`<ModalFooter /> > container matches snapshot 1`] = `
-.c0 {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-end;
-  border-top: 1px solid #dee2e6;
-  padding: 1rem 1rem;
-}
-
 <div
-  class="c0"
+  class="css-1ha1ok3"
   data-testid="modal-footer:wrapper"
 >
   Test Footer Content

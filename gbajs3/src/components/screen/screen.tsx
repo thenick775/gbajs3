@@ -1,7 +1,8 @@
+import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { useMediaQuery } from '@mui/material';
 import { useCallback, useRef } from 'react';
 import { Rnd, type Props as RndProps } from 'react-rnd';
-import { styled, useTheme } from 'styled-components';
 
 import {
   useDragContext,
@@ -33,7 +34,9 @@ const RenderCanvas = styled.canvas`
   image-rendering: pixelated;
 `;
 
-const ScreenWrapper = styled(Rnd)<ScreenWrapperProps>`
+const ScreenWrapper = styled(Rnd, {
+  shouldForwardProp: (prop) => prop !== '$areItemsDraggable'
+})<ScreenWrapperProps>`
   background-color: ${({ theme }) => theme.pureBlack};
   overflow: visible;
   width: 100dvw;

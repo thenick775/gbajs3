@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import { useEffect, useState, type ReactNode } from 'react';
 import AnimateHeight, { type Height } from 'react-animate-height';
-import { styled } from 'styled-components';
 
 import { ButtonBase } from '../shared/custom-button-base.tsx';
 

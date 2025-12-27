@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import {
   Button,
   FormControl,
@@ -11,7 +12,6 @@ import {
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useId, useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { styled } from 'styled-components';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';

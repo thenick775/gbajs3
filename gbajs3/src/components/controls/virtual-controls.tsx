@@ -1,3 +1,5 @@
+import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { useMediaQuery } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useId } from 'react';
@@ -9,7 +11,6 @@ import {
   BiSave,
   BiSolidBookmark
 } from 'react-icons/bi';
-import { styled, useTheme } from 'styled-components';
 
 import {
   saveStateSlotsLocalStorageKey,
