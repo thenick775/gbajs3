@@ -23,9 +23,7 @@ import { GbaDarkTheme } from './context/theme/theme.tsx';
 
 const queryClient = new QueryClient();
 
-const muiTheme = createTheme({
-  palette: { mode: 'dark', primary: { main: GbaDarkTheme.gbaThemeBlue } }
-});
+const muiTheme = createTheme();
 
 export const App = () => (
   <MuiThemeProvider theme={muiTheme}>

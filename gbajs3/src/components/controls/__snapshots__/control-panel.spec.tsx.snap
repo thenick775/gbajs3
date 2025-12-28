@@ -8,14 +8,14 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   style="position: absolute; user-select: auto; width: auto; height: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px,10px); max-width: 9007199254740991px; max-height: 9007199254740991px; box-sizing: border-box; flex-shrink: 0;"
 >
   <ul
-    class="css-a8wv8q"
+    class="css-1yp3qi5 e1dc5ms00"
   >
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Play"
-        class="css-13tynzk"
+        class="ebju0yb4 css-oxmfqc e1xr9mda0"
         id="_r_d_--play"
       >
         <svg
@@ -34,11 +34,11 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Quit Game"
-        class="css-31e5ln"
+        class="ebju0yb4 css-v1856x e1xr9mda0"
         id="_r_d_--quit-game"
       >
         <svg
@@ -57,11 +57,11 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Drag Items"
-        class="noDrag css-17lcwwu"
+        class="noDrag ebju0yb4 css-1mtkefl e1xr9mda0"
         id="_r_d_--drag"
       >
         <svg
@@ -80,11 +80,11 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Resize Items"
-        class="noDrag css-1p7v6yw"
+        class="noDrag ebju0yb4 css-tjpg4z e1xr9mda0"
         id="_r_d_--resize"
       >
         <svg
@@ -108,11 +108,11 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Rewind Emulator"
-        class="css-15k4civ"
+        class="ebju0yb4 css-6w942u e1xr9mda0"
         id="_r_d_--rewind"
       >
         <svg
@@ -132,13 +132,13 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <span
-        class="css-jbvua0"
+        class="css-1obf64m ebju0yb1"
       >
         <div
-          class="css-1ea2mjo"
+          class="css-1bwkdc4 ebju0yb2"
           id="_r_d_--volume-slider"
         >
           <button
@@ -163,7 +163,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
             </svg>
           </button>
           <span
-            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium css-au7fs4-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium ebju0yb3 css-1md1blg-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-r64h58-MuiSlider-rail"
@@ -290,13 +290,13 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
       </span>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <span
-        class="css-jbvua0"
+        class="css-1obf64m ebju0yb1"
       >
         <div
-          class="css-2twumc"
+          class="css-1jese5g ebju0yb2"
           id="_r_d_--fast-forward"
         >
           <button
@@ -321,7 +321,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
             </svg>
           </button>
           <span
-            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium css-au7fs4-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium ebju0yb3 css-1md1blg-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-r64h58-MuiSlider-rail"
@@ -427,14 +427,14 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   style="position: absolute; user-select: auto; width: 100dvw; height: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px,0px); max-width: 9007199254740991px; max-height: 9007199254740991px; box-sizing: border-box; flex-shrink: 0;"
 >
   <ul
-    class="css-hla71a"
+    class="css-ba9jvp e1dc5ms00"
   >
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Play"
-        class="css-13tynzk"
+        class="ebju0yb4 css-oxmfqc e1xr9mda0"
         id="_r_7_--play"
       >
         <svg
@@ -453,11 +453,11 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Quit Game"
-        class="css-31e5ln"
+        class="ebju0yb4 css-v1856x e1xr9mda0"
         id="_r_7_--quit-game"
       >
         <svg
@@ -476,11 +476,11 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Drag Items"
-        class="noDrag css-17lcwwu"
+        class="noDrag ebju0yb4 css-1mtkefl e1xr9mda0"
         id="_r_7_--drag"
       >
         <svg
@@ -499,11 +499,11 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Resize Items"
-        class="noDrag css-1p7v6yw"
+        class="noDrag ebju0yb4 css-tjpg4z e1xr9mda0"
         id="_r_7_--resize"
       >
         <svg
@@ -527,11 +527,11 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <button
         aria-label="Rewind Emulator"
-        class="css-15k4civ"
+        class="ebju0yb4 css-6w942u e1xr9mda0"
         id="_r_7_--rewind"
       >
         <svg
@@ -551,13 +551,13 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </button>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <span
-        class="css-jbvua0"
+        class="css-1obf64m ebju0yb1"
       >
         <div
-          class="css-1ea2mjo"
+          class="css-1bwkdc4 ebju0yb2"
           id="_r_7_--volume-slider"
         >
           <button
@@ -582,7 +582,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
             </svg>
           </button>
           <span
-            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium css-au7fs4-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium ebju0yb3 css-1md1blg-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-r64h58-MuiSlider-rail"
@@ -709,13 +709,13 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
       </span>
     </li>
     <li
-      class="css-jbvua0"
+      class="css-1obf64m ebju0yb0"
     >
       <span
-        class="css-jbvua0"
+        class="css-1obf64m ebju0yb1"
       >
         <div
-          class="css-2twumc"
+          class="css-1jese5g ebju0yb2"
           id="_r_7_--fast-forward"
         >
           <button
@@ -740,7 +740,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
             </svg>
           </button>
           <span
-            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium css-au7fs4-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-colorPrimary MuiSlider-sizeMedium ebju0yb3 css-1md1blg-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-r64h58-MuiSlider-rail"

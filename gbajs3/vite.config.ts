@@ -1,7 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import { coverageConfigDefaults } from 'vitest/config';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { createHtmlPlugin } from 'vite-plugin-html';
@@ -12,7 +12,9 @@ export default defineConfig(({ mode }) => {
   return {
     base: './',
     plugins: [
-      react(),
+      react({
+        plugins: [['@swc/plugin-emotion', {}]]
+      }),
       withCOIServiceWorker
         ? [
             createHtmlPlugin({

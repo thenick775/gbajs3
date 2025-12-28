@@ -2,35 +2,35 @@
 
 exports[`fallbackRender > renders styled fallback 1`] = `
 <div
-  class="css-1i2bc1n"
+  class="css-b9r7b0 eh8oxhq1"
   data-testid="fallback-renderer"
 >
   <div
-    class="css-qn0gzl"
+    class="css-1hafge1 eh8oxhq0"
     role="alert"
   >
     <div
-      class="css-5htrse"
+      class="css-1x7xt10 eh8oxhq2"
     >
       <h3
-        class="css-r44k6v"
+        class="css-1uk1gs8 e1478dbm2"
       >
         An irrecoverable error occurred
       </h3>
     </div>
     <div
-      class="css-1vvqyfs"
+      class="css-1oaylr4 eh8oxhq3"
     >
       <div
-        class="css-cssveg"
+        class="css-79elbk eh8oxhq6"
       >
         <img
           alt="GameBoy Advance with error icon"
-          class="css-17452ul"
+          class="css-kpfxlo eh8oxhq4"
           src="/img/error-512x512.png"
         />
         <a
-          class="css-r1o8wo"
+          class="css-1u8u5c9 eh8oxhq7"
           href="https://www.freepik.com/free-vector/editable-text-effect-error-3d-hack-virus-font-style_21408324.htm"
           target="_blank"
         >
@@ -47,7 +47,7 @@ exports[`fallbackRender > renders styled fallback 1`] = `
       </p>
     </div>
     <div
-      class="css-gllhz7"
+      class="css-1ye8vzh eh8oxhq5"
     >
       <button
         class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedInfo MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorInfo MuiButton-root MuiButton-contained MuiButton-containedInfo MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorInfo css-2lrc7h-MuiButtonBase-root-MuiButton-root"

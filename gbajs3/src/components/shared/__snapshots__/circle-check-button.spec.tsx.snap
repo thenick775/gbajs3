@@ -7,7 +7,7 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 1`] = `
   type="button"
 >
   <span
-    class="css-1oteowz"
+    class="css-0 ex9regj3"
   >
     Submit
   </span>
@@ -22,7 +22,7 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 2`] = `
 >
   <svg
     aria-labelledby="_r_0_"
-    class="css-1n1zzbt"
+    class="css-1qwd77n ex9regj0"
     role="graphics-symbol"
     viewBox="0 0 52 52"
     xmlns="http://www.w3.org/2000/svg"
@@ -33,20 +33,20 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 2`] = `
       Circle Check
     </title>
     <circle
-      class="css-11lco7a"
+      class="css-1n9o4bd ex9regj1"
       cx="26"
       cy="26"
       fill="none"
       r="25"
     />
     <path
-      class="css-r0i9d7"
+      class="css-ozxg ex9regj2"
       d="M14.1 27.2l7.1 7.2 16.7-16.8"
       fill="none"
     />
   </svg>
   <span
-    class="css-1wk92h"
+    class="css-agiyk7 ex9regj3"
   >
     Submit
   </span>
