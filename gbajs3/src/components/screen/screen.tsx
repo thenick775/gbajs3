@@ -1,6 +1,5 @@
-import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
 import { useMediaQuery } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
 import { useCallback, useRef } from 'react';
 import { Rnd, type Props as RndProps } from 'react-rnd';
 
@@ -19,7 +18,7 @@ type ScreenWrapperProps = RndProps & { $areItemsDraggable: boolean };
 const defaultGBACanvasWidth = 240;
 const defaultGBACanvasHeight = 160;
 
-const RenderCanvas = styled.canvas`
+const RenderCanvas = styled('canvas')`
   background-color: ${({ theme }) => theme.pureBlack};
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -moz-crisp-edges;

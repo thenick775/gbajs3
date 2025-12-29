@@ -1,11 +1,10 @@
-import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Button
 } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
 import { useId, useState } from 'react';
 import { BiError } from 'react-icons/bi';
 import { FaArrowDown } from 'react-icons/fa';
@@ -31,7 +30,7 @@ type UploadPublicExternalRomsModalProps = {
   onLoadOrDismiss: (statusMsg: PublicRomUploadStatus) => void;
 };
 
-const LinkBreakWord = styled.a`
+const LinkBreakWord = styled('a')`
   word-break: break-all;
 `;
 

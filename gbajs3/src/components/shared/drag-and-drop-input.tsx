@@ -1,6 +1,5 @@
-import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
 import { IconButton } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
 import { useState, type ReactNode } from 'react';
 import { ErrorCode, useDropzone } from 'react-dropzone';
 import { BiCloudUpload, BiError, BiTrash } from 'react-icons/bi';
@@ -31,7 +30,7 @@ type DropAreaProps = {
   $isDragActive?: boolean;
 };
 
-const DropArea = styled.div<DropAreaProps>`
+const DropArea = styled('div')<DropAreaProps>`
   cursor: pointer;
   border-color: ${({ theme }) => theme.blackRussian};
   background-color: ${({ $isDragActive = false, theme }) =>
@@ -47,11 +46,11 @@ const BiCloudUploadLarge = styled(BiCloudUpload)`
   width: auto;
 `;
 
-const ErrorContainer = styled.div`
+const ErrorContainer = styled('div')`
   padding-top: 3px;
 `;
 
-const FileList = styled.ul`
+const FileList = styled('ul')`
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -65,7 +64,7 @@ const FileList = styled.ul`
   }
 `;
 
-const AcceptedFile = styled.li`
+const AcceptedFile = styled('li')`
   align-items: center;
   display: flex;
   gap: 10px;
@@ -79,7 +78,7 @@ const AcceptedFile = styled.li`
   }
 `;
 
-const IconSeparator = styled.div`
+const IconSeparator = styled('div')`
   display: flex;
   gap: 8px;
 `;

@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { Button, Chip } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { BiCheckCircle } from 'react-icons/bi';
 
 import { ModalBody } from './modal-body.tsx';
@@ -7,7 +7,7 @@ import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
 import { useModalContext } from '../../hooks/context.tsx';
 
-const FlexWrapper = styled.div`
+const FlexWrapper = styled('div')`
   display: flex;
   justify-content: flex-end;
   align-items: center;

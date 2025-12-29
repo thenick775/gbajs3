@@ -1,6 +1,5 @@
-import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
 import { TextField, Button } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
 import { useId } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { BiError } from 'react-icons/bi';
@@ -18,7 +17,7 @@ type InputProps = {
   password: string;
 };
 
-const StyledForm = styled.form`
+const StyledForm = styled('form')`
   display: flex;
   flex-direction: column;
   gap: 15px;

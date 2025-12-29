@@ -1,4 +1,4 @@
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 import { FaGripLines } from 'react-icons/fa';
 
 type GripperHandleProps = {

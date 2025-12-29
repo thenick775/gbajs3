@@ -1,8 +1,4 @@
-import { ThemeProvider as EmotionThemeProvider } from '@emotion/react';
-import {
-  ThemeProvider as MuiThemeProvider,
-  createTheme
-} from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import './App.css';
@@ -23,32 +19,30 @@ import { GbaDarkTheme } from './context/theme/theme.tsx';
 
 const queryClient = new QueryClient();
 
-const muiTheme = createTheme();
+const theme = createTheme(GbaDarkTheme);
 
 export const App = () => (
-  <MuiThemeProvider theme={muiTheme}>
-    <EmotionThemeProvider theme={GbaDarkTheme}>
-      <AppErrorBoundary>
-        <ToasterWithDefaults />
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <EmulatorContextProvider>
-              <InitialBoundsProvider>
-                <LayoutProvider>
-                  <ModalProvider>
-                    <PwaPrompt />
-                    <NavigationMenu />
-                    <Screen />
-                    <ControlPanel />
-                    <VirtualControls />
-                    <ModalContainer />
-                  </ModalProvider>
-                </LayoutProvider>
-              </InitialBoundsProvider>
-            </EmulatorContextProvider>
-          </AuthProvider>
-        </QueryClientProvider>
-      </AppErrorBoundary>
-    </EmotionThemeProvider>
-  </MuiThemeProvider>
+  <ThemeProvider theme={theme}>
+    <AppErrorBoundary>
+      <ToasterWithDefaults />
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <EmulatorContextProvider>
+            <InitialBoundsProvider>
+              <LayoutProvider>
+                <ModalProvider>
+                  <PwaPrompt />
+                  <NavigationMenu />
+                  <Screen />
+                  <ControlPanel />
+                  <VirtualControls />
+                  <ModalContainer />
+                </ModalProvider>
+              </LayoutProvider>
+            </InitialBoundsProvider>
+          </EmulatorContextProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </AppErrorBoundary>
+  </ThemeProvider>
 );

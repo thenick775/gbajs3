@@ -1,6 +1,5 @@
-import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
 import { Button, Collapse, IconButton } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useMemo, useState } from 'react';
 import { BiError, BiTrash } from 'react-icons/bi';
@@ -31,7 +30,7 @@ type SaveStateListItemProps = {
   onDelete: () => void;
 };
 
-const LoadSaveStateButton = styled.button`
+const LoadSaveStateButton = styled('button')`
   padding: 0.5rem 0.5rem;
   width: 100%;
   color: ${({ theme }) => theme.blueCharcoal};
@@ -45,7 +44,7 @@ const LoadSaveStateButton = styled.button`
   }
 `;
 
-const StyledLi = styled.li`
+const StyledLi = styled('li')`
   display: flex;
   flex-direction: column;
   color: ${({ theme }) => theme.blueCharcoal};
@@ -53,14 +52,14 @@ const StyledLi = styled.li`
   border: 1px solid rgba(0, 0, 0, 0.125);
 `;
 
-const ButtonGrid = styled.div`
+const ButtonGrid = styled('div')`
   cursor: pointer;
   display: grid;
   grid-template-columns: auto 32px 32px;
   gap: 10px;
 `;
 
-const SaveStatesList = styled.ul`
+const SaveStatesList = styled('ul')`
   list-style-type: none;
   display: flex;
   flex-direction: column;
@@ -92,13 +91,13 @@ const StyledFaRegEye = styled(FaRegEye)`
   width: 20px;
 `;
 
-const StateSlotContainer = styled.div`
+const StateSlotContainer = styled('div')`
   border-bottom: 1px solid ${({ theme }) => theme.pattensBlue};
   margin-bottom: 16px;
   padding-bottom: 16px;
 `;
 
-const SaveStatePreview = styled.img`
+const SaveStatePreview = styled('img')`
   width: 100%;
   height: 100%;
   object-fit: contain;

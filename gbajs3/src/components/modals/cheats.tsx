@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { Button, IconButton, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { BiTrash } from 'react-icons/bi';
@@ -21,7 +21,7 @@ type HelpTextProps = {
   $withMargin: boolean;
 };
 
-const Cheat = styled.li`
+const Cheat = styled('li')`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -32,7 +32,7 @@ const Cheat = styled.li`
   width: 100%;
 `;
 
-const CheatsList = styled.ul<OptionallyHiddenProps>`
+const CheatsList = styled('ul')<OptionallyHiddenProps>`
   list-style: none;
   display: ${({ $shouldHide = false }) => ($shouldHide ? 'none' : 'flex')};
   flex-direction: column;
@@ -46,21 +46,21 @@ const CheatsList = styled.ul<OptionallyHiddenProps>`
   }
 `;
 
-const CheatsFormSeparator = styled.div`
+const CheatsFormSeparator = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
 `;
 
-const RowContainer = styled.div`
+const RowContainer = styled('div')`
   display: flex;
   flex-direction: row;
   gap: 15px;
   justify-content: space-between;
 `;
 
-const HelpText = styled.p<HelpTextProps>`
+const HelpText = styled('p')<HelpTextProps>`
   margin-bottom: 0;
   margin-left: 0;
   margin-right: 0;

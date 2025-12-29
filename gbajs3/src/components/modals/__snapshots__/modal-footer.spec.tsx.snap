@@ -2,7 +2,7 @@
 
 exports[`<ModalFooter /> > container matches snapshot 1`] = `
 <div
-  class="css-1kuxtgq e1478dbm5"
+  class="css-1kuxtgq eovm7d95"
   data-testid="modal-footer:wrapper"
 >
   Test Footer Content

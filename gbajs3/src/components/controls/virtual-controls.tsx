@@ -1,6 +1,5 @@
-import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
 import { useMediaQuery } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useId } from 'react';
 import toast from 'react-hot-toast';
@@ -42,7 +41,7 @@ const VirtualButtonTextLarge = styled(Copy)`
   font-size: 1.5em;
 `;
 
-const VirtualButtonTextSmall = styled.p`
+const VirtualButtonTextSmall = styled('p')`
   color: ${({ theme }) => theme.pureWhite};
   margin: 4px 5px;
 `;

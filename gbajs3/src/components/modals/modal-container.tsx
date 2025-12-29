@@ -1,5 +1,5 @@
-import { useTheme } from '@emotion/react';
 import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import Modal from 'react-modal';
 
 import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';

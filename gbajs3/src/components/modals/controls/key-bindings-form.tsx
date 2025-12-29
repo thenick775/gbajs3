@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -20,7 +20,7 @@ type KeyBindingInputProps = {
   [gbaInput: string]: KeyBinding;
 };
 
-const StyledForm = styled.form`
+const StyledForm = styled('form')`
   display: flex;
   flex-direction: column;
   gap: 10px;

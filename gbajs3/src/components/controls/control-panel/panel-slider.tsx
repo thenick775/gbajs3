@@ -1,10 +1,10 @@
-import { useTheme } from '@emotion/react';
 import {
   tooltipClasses,
   Tooltip,
   ClickAwayListener,
   useMediaQuery
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useState } from 'react';
 
 import {

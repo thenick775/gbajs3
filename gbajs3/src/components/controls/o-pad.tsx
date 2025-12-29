@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import React, {
   useCallback,
   useEffect,
@@ -87,7 +87,7 @@ const BackgroundContainer = styled(
   }
 `;
 
-const CenterKnob = styled.div<CenterKnobProps>`
+const CenterKnob = styled('div')<CenterKnobProps>`
   position: absolute;
   height: 4rem;
   width: 4rem;
@@ -113,7 +113,7 @@ const CenterKnob = styled.div<CenterKnobProps>`
   }
 `;
 
-const DirectionArrow = styled.div`
+const DirectionArrow = styled('div')`
   width: 0;
   height: 0;
   border-style: solid;

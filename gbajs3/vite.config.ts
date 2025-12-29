@@ -1,11 +1,12 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
-import { coverageConfigDefaults } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
-import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
+import { VitePWA } from 'vite-plugin-pwa';
+import { coverageConfigDefaults } from 'vitest/config';
 
+// eslint-disable-next-line import/no-default-export
 export default defineConfig(({ mode }) => {
   const withCOIServiceWorker = mode === 'with-coi-serviceworker';
 
@@ -13,7 +14,30 @@ export default defineConfig(({ mode }) => {
     base: './',
     plugins: [
       react({
-        plugins: [['@swc/plugin-emotion', {}]]
+        plugins: [
+          [
+            '@swc/plugin-emotion',
+            {
+              // items for component selectors with MUI+SWC
+              autoLabel: 'dev-only',
+              labelFormat: '[local]',
+              importMap: {
+                '@mui/material/styles': {
+                  styled: {
+                    canonicalImport: ['@emotion/styled', 'default'],
+                    styledBaseImport: ['@mui/material/styles', 'styled']
+                  }
+                },
+                '@mui/system': {
+                  styled: {
+                    canonicalImport: ['@emotion/styled', 'default'],
+                    styledBaseImport: ['@mui/system', 'styled']
+                  }
+                }
+              }
+            }
+          ]
+        ]
       }),
       withCOIServiceWorker
         ? [
@@ -148,8 +172,6 @@ export default defineConfig(({ mode }) => {
             'mui-x': ['@mui/x-tree-view'],
 
             mgba: ['@thenick775/mgba-wasm'],
-
-            //styled: ['styled-components'],
 
             onboarding: ['react-ios-pwa-prompt-ts'],
 

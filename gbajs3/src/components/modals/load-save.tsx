@@ -1,6 +1,5 @@
-import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
 import { Button } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
 import { useState, useId } from 'react';
 import { BiError } from 'react-icons/bi';
 
@@ -22,7 +21,7 @@ type SaveErrorProps = {
   $withMarginTop?: boolean;
 };
 
-const LoadSaveButton = styled.button`
+const LoadSaveButton = styled('button')`
   padding: 0.5rem 1rem;
   width: 100%;
   color: ${({ theme }) => theme.blueCharcoal};
@@ -37,11 +36,11 @@ const LoadSaveButton = styled.button`
   }
 `;
 
-const StyledLi = styled.li`
+const StyledLi = styled('li')`
   cursor: pointer;
 `;
 
-const SaveList = styled.ul`
+const SaveList = styled('ul')`
   list-style-type: none;
   display: flex;
   flex-direction: column;

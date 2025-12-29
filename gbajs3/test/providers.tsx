@@ -1,8 +1,4 @@
-import { ThemeProvider as EmotionThemeProvider } from '@emotion/react';
-import {
-  ThemeProvider as MuiThemeProvider,
-  createTheme
-} from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 import { AuthProvider } from '../src/context/auth/auth-provider.tsx';
@@ -16,24 +12,22 @@ import type { ReactNode } from 'react';
 
 const queryClient = new QueryClient();
 
-const muiTheme = createTheme({
-  palette: { mode: 'dark', primary: { main: GbaDarkTheme.gbaThemeBlue } }
+const theme = createTheme({
+  ...GbaDarkTheme
 });
 
 export const AllTheProviders = ({ children }: { children: ReactNode }) => (
-  <MuiThemeProvider theme={muiTheme}>
-    <EmotionThemeProvider theme={GbaDarkTheme}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <EmulatorContextProvider>
-            <InitialBoundsProvider>
-              <LayoutProvider>
-                <ModalProvider>{children}</ModalProvider>
-              </LayoutProvider>
-            </InitialBoundsProvider>
-          </EmulatorContextProvider>
-        </AuthProvider>
-      </QueryClientProvider>
-    </EmotionThemeProvider>
-  </MuiThemeProvider>
+  <ThemeProvider theme={theme}>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <EmulatorContextProvider>
+          <InitialBoundsProvider>
+            <LayoutProvider>
+              <ModalProvider>{children}</ModalProvider>
+            </LayoutProvider>
+          </InitialBoundsProvider>
+        </EmulatorContextProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
 );

@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useCallback, useEffect, useState } from 'react';
 
 import { EmulatorFileSystem } from './file-system/emulator-file-system.tsx';

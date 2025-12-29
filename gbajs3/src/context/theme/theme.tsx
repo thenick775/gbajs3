@@ -1,6 +1,6 @@
-import type { Theme } from '@emotion/react';
+import type { ThemeOptions } from '@mui/material/styles';
 
-export const GbaDarkTheme: Theme = {
+export const GbaDarkTheme: ThemeOptions = {
   // media queries
   isLargerThanPhone: 'only screen and (min-width: 600px)',
   isMobileLandscape:

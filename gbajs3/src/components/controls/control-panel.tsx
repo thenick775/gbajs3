@@ -1,6 +1,5 @@
-import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
 import { useMediaQuery } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useId, useRef, useState } from 'react';
 import { IconContext } from 'react-icons';
@@ -48,7 +47,7 @@ type PanelProps = {
   $areItemsDraggable: boolean;
 };
 
-const Panel = styled.ul<PanelProps>`
+const Panel = styled('ul')<PanelProps>`
   background-color: ${({ theme }) => theme.panelBlueGray};
   list-style: none;
   padding: 10px;

@@ -1,5 +1,4 @@
-import { useTheme } from '@emotion/react';
-import styled from '@emotion/styled';
+import { useTheme , styled } from '@mui/material/styles';
 import { PacmanLoader } from 'react-spinners';
 
 import type { ReactNode } from 'react';
@@ -13,7 +12,7 @@ type LoadingIndicatorProps = {
   loadingCopy: string;
 };
 
-const LoadingContainer = styled.div`
+const LoadingContainer = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -22,7 +21,7 @@ const LoadingContainer = styled.div`
   margin-bottom: 15px;
 `;
 
-const BreakWord = styled.p`
+const BreakWord = styled('p')`
   word-wrap: break-word;
   max-width: 100%;
 `;

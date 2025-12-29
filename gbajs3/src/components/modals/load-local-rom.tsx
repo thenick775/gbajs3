@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useId } from 'react';
 
 import { ModalBody } from './modal-body.tsx';
@@ -9,7 +9,7 @@ import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 import { useRunGame } from '../../hooks/emulator/use-run-game.tsx';
 import { CenteredText } from '../shared/styled.tsx';
 
-const LoadRomButton = styled.button`
+const LoadRomButton = styled('button')`
   padding: 0.5rem 1rem;
   width: 100%;
   color: ${({ theme }) => theme.blueCharcoal};
@@ -24,11 +24,11 @@ const LoadRomButton = styled.button`
   }
 `;
 
-const StyledLi = styled.li`
+const StyledLi = styled('li')`
   cursor: pointer;
 `;
 
-const RomList = styled.ul`
+const RomList = styled('ul')`
   list-style-type: none;
   display: flex;
   flex-direction: column;

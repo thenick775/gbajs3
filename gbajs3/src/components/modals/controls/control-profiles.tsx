@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { IconButton, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
@@ -41,7 +41,7 @@ type EditableProfileLoadButtonProps = {
   onSubmit: (name: string) => void;
 };
 
-const StyledLi = styled.li`
+const StyledLi = styled('li')`
   cursor: pointer;
   display: grid;
   grid-template-columns: auto 32px;
@@ -52,7 +52,7 @@ const StyledLi = styled.li`
   border: 1px solid rgba(0, 0, 0, 0.125);
 `;
 
-const ProfilesList = styled.ul`
+const ProfilesList = styled('ul')`
   list-style-type: none;
   display: flex;
   flex-direction: column;
@@ -89,7 +89,7 @@ const StyledBiSave = styled(BiSave)`
   width: 20px;
 `;
 
-const LoadProfileButton = styled.button`
+const LoadProfileButton = styled('button')`
   padding: 0.5rem 0.5rem;
   width: 100%;
   color: ${({ theme }) => theme.blueCharcoal};
@@ -108,7 +108,7 @@ const LoadProfileButton = styled.button`
   }
 `;
 
-const FlexContainer = styled.div`
+const FlexContainer = styled('div')`
   display: flex;
   gap: 10px;
   min-width: 0;

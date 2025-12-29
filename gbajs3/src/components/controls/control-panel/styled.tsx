@@ -1,10 +1,10 @@
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
 import { Slider } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { css } from '@mui/system';
 
 import { ButtonBase } from '../../shared/custom-button-base.tsx';
 
-import type { Theme } from '@emotion/react';
+import type { Theme } from '@mui/material/styles';
 
 type ControlledProps = {
   $controlled: boolean;
@@ -38,15 +38,15 @@ const InteractivePanelControlStyle = (
     `}
 `;
 
-export const PanelControlWrapper = styled.li`
+export const PanelControlWrapper = styled('li')`
   display: contents;
 `;
 
-export const ContentSpan = styled.span`
+export const ContentSpan = styled('span')`
   display: contents;
 `;
 
-export const PanelControlSlider = styled.div<PanelControlSliderProps>`
+export const PanelControlSlider = styled('div')<PanelControlSliderProps>`
   ${(props) =>
     InteractivePanelControlStyle({
       $controlled: props.$controlled,

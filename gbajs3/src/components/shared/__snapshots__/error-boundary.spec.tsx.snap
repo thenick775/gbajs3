@@ -2,35 +2,35 @@
 
 exports[`fallbackRender > renders styled fallback 1`] = `
 <div
-  class="css-b9r7b0 eh8oxhq1"
+  class="css-b9r7b0 e8opzd11"
   data-testid="fallback-renderer"
 >
   <div
-    class="css-1hafge1 eh8oxhq0"
+    class="css-1hafge1 e8opzd10"
     role="alert"
   >
     <div
-      class="css-1x7xt10 eh8oxhq2"
+      class="css-1x7xt10 e8opzd12"
     >
       <h3
-        class="css-1uk1gs8 e1478dbm2"
+        class="css-1uk1gs8 eovm7d92"
       >
         An irrecoverable error occurred
       </h3>
     </div>
     <div
-      class="css-1oaylr4 eh8oxhq3"
+      class="css-1oaylr4 e8opzd13"
     >
       <div
-        class="css-79elbk eh8oxhq6"
+        class="css-79elbk e8opzd16"
       >
         <img
           alt="GameBoy Advance with error icon"
-          class="css-kpfxlo eh8oxhq4"
+          class="css-kpfxlo e8opzd14"
           src="/img/error-512x512.png"
         />
         <a
-          class="css-1u8u5c9 eh8oxhq7"
+          class="css-1u8u5c9 e8opzd17"
           href="https://www.freepik.com/free-vector/editable-text-effect-error-3d-hack-virus-font-style_21408324.htm"
           target="_blank"
         >
@@ -47,10 +47,10 @@ exports[`fallbackRender > renders styled fallback 1`] = `
       </p>
     </div>
     <div
-      class="css-1ye8vzh eh8oxhq5"
+      class="css-1ye8vzh e8opzd15"
     >
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedInfo MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorInfo MuiButton-root MuiButton-contained MuiButton-containedInfo MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorInfo css-2lrc7h-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedInfo MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorInfo MuiButton-root MuiButton-contained MuiButton-containedInfo MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorInfo css-mnflth-MuiButtonBase-root-MuiButton-root"
         tabindex="0"
         type="button"
       >
@@ -60,7 +60,7 @@ exports[`fallbackRender > renders styled fallback 1`] = `
         →
       </span>
       <a
-        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSuccess MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSuccess MuiButton-root MuiButton-contained MuiButton-containedSuccess MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSuccess css-169vjdk-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSuccess MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSuccess MuiButton-root MuiButton-contained MuiButton-containedSuccess MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSuccess css-1elmdwi-MuiButtonBase-root-MuiButton-root"
         href="https://github.com/thenick775/gbajs3/issues"
         tabindex="0"
         target="_blank"
@@ -71,7 +71,7 @@ exports[`fallbackRender > renders styled fallback 1`] = `
         →
       </span>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1wxqspn-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1mns5ui-MuiButtonBase-root-MuiButton-root"
         tabindex="0"
         type="button"
       >
