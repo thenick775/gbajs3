@@ -4,7 +4,6 @@ import {
   useEffect,
   useRef,
   useState,
-  type ComponentProps,
   type PointerEvent
 } from 'react';
 import Draggable from 'react-draggable';
@@ -43,27 +42,7 @@ type KeyState = {
   RIGHT?: number;
 };
 
-const BackgroundContainerWrapper = ({
-  $initialPosition,
-  children,
-  ref,
-  style,
-  ...rest
-}: BackgroundContainerProps & ComponentProps<'section'>) => (
-  <section
-    ref={ref}
-    style={{
-      ...style,
-      top: $initialPosition?.top ?? '0',
-      left: $initialPosition?.left ?? '0'
-    }}
-    {...rest}
-  >
-    {children}
-  </section>
-);
-
-const BackgroundContainer = styled(BackgroundContainerWrapper, {
+const BackgroundContainer = styled('section', {
   shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
 })<BackgroundContainerProps>`
   position: absolute;
@@ -298,7 +277,10 @@ export const OPad = ({ initialPosition }: OPadProps) => {
       <BackgroundContainer
         aria-label="O-Pad"
         ref={containerDragRef}
-        $initialPosition={initialPosition}
+        style={{
+          top: initialPosition?.top ?? '0',
+          left: initialPosition?.left ?? '0'
+        }}
         $areItemsDraggable={areItemsDraggable}
         {...pointerEvents}
       >

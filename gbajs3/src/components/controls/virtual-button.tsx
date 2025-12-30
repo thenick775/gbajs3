@@ -3,8 +3,7 @@ import {
   useRef,
   type ReactNode,
   type KeyboardEvent,
-  type PointerEventHandler,
-  type ComponentProps
+  type PointerEventHandler
 } from 'react';
 import Draggable from 'react-draggable';
 
@@ -62,29 +61,7 @@ const VirtualButtonBase = styled(ButtonBase)`
   }
 `;
 
-type VirtualButtonBaseProps = ComponentProps<typeof VirtualButtonBase>;
-
-const CircularButtonWrapper = ({
-  $initialPosition,
-  children,
-  ref,
-  style,
-  ...rest
-}: CircularButtonProps & VirtualButtonBaseProps) => (
-  <VirtualButtonBase
-    ref={ref}
-    style={{
-      ...style,
-      top: $initialPosition?.top ?? style?.top,
-      left: $initialPosition?.left ?? style?.left
-    }}
-    {...rest}
-  >
-    {children}
-  </VirtualButtonBase>
-);
-
-const CircularButton = styled(CircularButtonWrapper, {
+const CircularButton = styled(VirtualButtonBase, {
   shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
 })<CircularButtonProps>`
   width: ${({ $diameter = 60 }) => $diameter}px;
@@ -96,29 +73,9 @@ const CircularButton = styled(CircularButtonWrapper, {
     $areItemsDraggable ? 'dashed' : 'solid'};
 `;
 
-const RectangularButtonWrapper = ({
-  $initialPosition,
-  children,
-  ref,
-  style,
-  ...rest
-}: RectangularButtonProps & VirtualButtonBaseProps) => (
-  <VirtualButtonBase
-    ref={ref}
-    style={{
-      ...style,
-      top: $initialPosition?.top ?? style?.top,
-      left: $initialPosition?.left ?? style?.left
-    }}
-    {...rest}
-  >
-    {children}
-  </VirtualButtonBase>
-);
-
-const RectangularButton = styled(RectangularButtonWrapper, {
+const RectangularButton = styled(VirtualButtonBase, {
   shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
-})`
+})<RectangularButtonProps>`
   border-radius: 16px;
   width: fit-content;
   min-width: 85px;
@@ -193,6 +150,10 @@ export const VirtualButton = ({
     'aria-label': ariaLabel,
     // used for "virtual controls" that don't interface with the emulator
     onPointerDown: !areItemsDraggable ? onPointerDown : undefined,
+    style: {
+      top: initialPosition?.top ?? '0',
+      left: initialPosition?.left ?? '0'
+    },
     ...emulatorPointerEvents,
     ...keyboardEvents
   };
