@@ -35,7 +35,7 @@ const RomList = styled('ul')`
   margin: 0;
   padding: 0;
 
-  & > ${StyledLi}:first-child > ${LoadRomButton} {
+  & > ${StyledLi}:first-of-type > ${LoadRomButton} {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
   }
@@ -45,7 +45,7 @@ const RomList = styled('ul')`
     border-bottom-right-radius: 4px;
   }
 
-  & > ${StyledLi}:not(:first-child) > ${LoadRomButton} {
+  & > ${StyledLi}:not(:first-of-type) > ${LoadRomButton} {
     border-top-width: 0;
   }
 `;

@@ -47,7 +47,7 @@ const SaveList = styled('ul')`
   margin: 0;
   padding: 0;
 
-  & > ${StyledLi}:first-child > ${LoadSaveButton} {
+  & > ${StyledLi}:first-of-type > ${LoadSaveButton} {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
   }
@@ -57,7 +57,7 @@ const SaveList = styled('ul')`
     border-bottom-right-radius: 4px;
   }
 
-  & > ${StyledLi}:not(:first-child) > ${LoadSaveButton} {
+  & > ${StyledLi}:not(:first-of-type) > ${LoadSaveButton} {
     border-top-width: 0;
   }
 `;

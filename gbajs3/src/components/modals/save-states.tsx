@@ -66,7 +66,7 @@ const SaveStatesList = styled('ul')`
   margin: 0;
   padding: 0;
 
-  & > ${StyledLi}:first-child {
+  & > ${StyledLi}:first-of-type {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
   }
@@ -76,7 +76,7 @@ const SaveStatesList = styled('ul')`
     border-bottom-right-radius: 4px;
   }
 
-  & > ${StyledLi}:not(:first-child) {
+  & > ${StyledLi}:not(:first-of-type) {
     border-top-width: 0;
   }
 `;
