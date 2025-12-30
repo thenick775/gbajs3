@@ -53,13 +53,22 @@ jobs:
             /coverage: .* of statements/ { found = 1 }
           ' /tmp/go-test-output.txt > /tmp/go-test-summary.txt
 
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          COMMIT_SHA="$(git rev-parse HEAD)"
+          COMMIT_SHORT="$(git rev-parse --short=7 HEAD)"
+          COMMIT_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${COMMIT_SHA}"
+
+          META_LINE="_Generated in workflow [#${GITHUB_RUN_NUMBER}](${RUN_URL}) for commit [${COMMIT_SHORT}](${COMMIT_URL})_"
+
           # job summary output
           {
-            echo "## Coverage report for auth"
+            echo "## Coverage Report for ./auth"
             echo ""
             echo "**$ICON $COVER_LINE**"
             echo ""
             echo '```'
             cat /tmp/go-test-summary.txt
             echo '```'
+            echo ""
+            echo "$META_LINE"
           } >> "$GITHUB_STEP_SUMMARY"
