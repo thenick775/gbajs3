@@ -85,7 +85,7 @@ const CircularButtonWrapper = ({
 );
 
 const CircularButton = styled(CircularButtonWrapper, {
-  shouldForwardProp: (prop) => prop !== '$areItemsDraggable'
+  shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
 })<CircularButtonProps>`
   width: ${({ $diameter = 60 }) => $diameter}px;
   height: ${({ $diameter = 60 }) => $diameter}px;
@@ -117,7 +117,7 @@ const RectangularButtonWrapper = ({
 );
 
 const RectangularButton = styled(RectangularButtonWrapper, {
-  shouldForwardProp: (prop) => prop !== '$areItemsDraggable'
+  shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
 })`
   border-radius: 16px;
   width: fit-content;

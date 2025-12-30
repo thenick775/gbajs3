@@ -34,7 +34,7 @@ const RenderCanvas = styled('canvas')`
 `;
 
 const ScreenWrapper = styled(Rnd, {
-  shouldForwardProp: (prop) => prop !== '$areItemsDraggable'
+  shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
 })<ScreenWrapperProps>`
   background-color: ${({ theme }) => theme.pureBlack};
   overflow: visible;

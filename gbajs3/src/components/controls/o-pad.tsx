@@ -63,9 +63,9 @@ const BackgroundContainerWrapper = ({
   </section>
 );
 
-const BackgroundContainer = styled(
-  BackgroundContainerWrapper
-)<BackgroundContainerProps>`
+const BackgroundContainer = styled(BackgroundContainerWrapper, {
+  shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
+})<BackgroundContainerProps>`
   position: absolute;
   background-color: red;
   border-radius: 50%;

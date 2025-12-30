@@ -13,11 +13,12 @@ type PanelControlSliderProps = {
   $gridArea: string;
 } & ControlledProps;
 
-const InteractivePanelControlStyle = (
-  props: ControlledProps & { theme: Theme }
-) => css`
+const InteractivePanelControlStyle = ({
+  $controlled,
+  theme
+}: ControlledProps & { theme: Theme }) => css`
   cursor: pointer;
-  background-color: ${props.theme.panelControlGray};
+  background-color: ${theme.panelControlGray};
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -26,15 +27,14 @@ const InteractivePanelControlStyle = (
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${props.theme.pureBlack};
-  width: ${props.$controlled ? 'auto' : '100%'};
+  color: ${theme.pureBlack};
+  width: ${$controlled ? 'auto' : '100%'};
 
-  ${!props.$controlled &&
-  `
-    @media ${props.theme.isLargerThanPhone} {
+  ${!$controlled &&
+  `@media ${theme.isLargerThanPhone} {
         width: auto;
     }
-    `}
+  `}
 `;
 
 export const PanelControlWrapper = styled('li')`
@@ -87,6 +87,7 @@ export const PanelControlButton = styled(ButtonBase)<
   &:active {
     color: ${({ theme }) => theme.gbaThemeBlue};
   }
+
   @media ${({ theme }) => theme.isMobileLandscape} {
     flex-shrink: 1;
     min-width: unset;

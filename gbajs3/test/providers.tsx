@@ -12,9 +12,7 @@ import type { ReactNode } from 'react';
 
 const queryClient = new QueryClient();
 
-const theme = createTheme({
-  ...GbaDarkTheme
-});
+const theme = createTheme(GbaDarkTheme);
 
 export const AllTheProviders = ({ children }: { children: ReactNode }) => (
   <ThemeProvider theme={theme}>

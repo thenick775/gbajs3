@@ -120,10 +120,6 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 1`] = `
   color: transparent;
 }
 
-.emotion-1 {
-  visibility: visible;
-}
-
 <button
   class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary emotion-0"
   tabindex="0"

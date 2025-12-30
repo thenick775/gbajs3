@@ -71,11 +71,10 @@ const CheckPath = styled('path')`
   animation: ${stroke} 0.15s cubic-bezier(0.65, 0, 0.45, 1) 0.4s forwards;
 `;
 
-const CopyWrapper = styled('span')<CopyWrapperProps>(
-  ({ $isSuccessCheckVisible = false }) => ({
-    visibility: $isSuccessCheckVisible ? 'hidden' : 'visible'
-  })
-);
+const CopyWrapper = styled('span')<CopyWrapperProps>`
+  ${({ $isSuccessCheckVisible = false }) =>
+    $isSuccessCheckVisible && 'visibility: hidden;'}
+`;
 
 export const CircleCheckButton = ({
   copy,

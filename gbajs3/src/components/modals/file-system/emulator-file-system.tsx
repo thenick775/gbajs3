@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material';
-import { alpha, styled as muiStyled, styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import {
   SimpleTreeView,
   TreeItem,
@@ -40,7 +40,7 @@ const IconSeparator = styled('div')`
   gap: clamp(0.1rem, 2vw, 2rem);
 `;
 
-const StyledTreeItem = muiStyled((props: TreeItemProps) => (
+const StyledTreeItem = styled((props: TreeItemProps) => (
   <TreeItem {...props} />
 ))(({ theme }) => ({
   marginTop: 5,

@@ -47,7 +47,9 @@ type PanelProps = {
   $areItemsDraggable: boolean;
 };
 
-const Panel = styled('ul')<PanelProps>`
+const Panel = styled('ul', {
+  shouldForwardProp: (propName) => !propName.toString().startsWith('$')
+})<PanelProps>`
   background-color: ${({ theme }) => theme.panelBlueGray};
   list-style: none;
   padding: 10px;
