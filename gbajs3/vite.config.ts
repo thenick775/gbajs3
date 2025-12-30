@@ -27,12 +27,6 @@ export default defineConfig(({ mode }) => {
                     canonicalImport: ['@emotion/styled', 'default'],
                     styledBaseImport: ['@mui/material/styles', 'styled']
                   }
-                },
-                '@mui/system': {
-                  styled: {
-                    canonicalImport: ['@emotion/styled', 'default'],
-                    styledBaseImport: ['@mui/system', 'styled']
-                  }
                 }
               }
             }

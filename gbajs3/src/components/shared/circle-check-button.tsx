@@ -1,6 +1,5 @@
-import { Button } from '@mui/material';
+import { Button, keyframes } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { keyframes } from '@mui/system';
 import { useId, useState } from 'react';
 
 import { useInterval } from '../../hooks/use-interval.ts';

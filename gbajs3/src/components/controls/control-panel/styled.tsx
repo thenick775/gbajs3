@@ -1,6 +1,5 @@
 import { Slider } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { css } from '@mui/system';
+import { styled, css } from '@mui/material/styles';
 
 import { ButtonBase } from '../../shared/custom-button-base.tsx';
 

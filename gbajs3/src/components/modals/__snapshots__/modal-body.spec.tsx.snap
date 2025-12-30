@@ -1,8 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`<ModalBody /> > container matches snapshot 1`] = `
+.emotion-0 {
+  padding: 1rem;
+  overflow-y: auto;
+  touch-action: pan-x pan-y;
+}
+
 <div
-  class="css-iwi269 eovm7d94"
+  class="emotion-0 emotion-1"
 >
   Test Footer Content
 </div>

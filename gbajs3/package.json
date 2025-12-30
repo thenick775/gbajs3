@@ -44,6 +44,7 @@
     "react-draggable": "^4.5.0"
   },
   "devDependencies": {
+    "@emotion/jest": "^11.14.2",
     "@swc/plugin-emotion": "^14.3.0",
     "@tanstack/eslint-plugin-query": "^5.91.2",
     "@testing-library/jest-dom": "^6.1.6",
