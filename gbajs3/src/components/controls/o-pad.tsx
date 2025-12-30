@@ -1,9 +1,10 @@
 import { styled } from '@mui/material/styles';
-import React, {
+import {
   useCallback,
   useEffect,
   useRef,
   useState,
+  type ComponentProps,
   type PointerEvent
 } from 'react';
 import Draggable from 'react-draggable';
@@ -42,25 +43,25 @@ type KeyState = {
   RIGHT?: number;
 };
 
-const BackgroundContainerWrapper = React.forwardRef<
-  HTMLElement,
-  BackgroundContainerProps & { children?: React.ReactNode }
->(({ $initialPosition, children, ...rest }, ref) => {
-  const sectionProps = rest as React.ComponentPropsWithoutRef<'section'> &
-    Partial<BackgroundContainerProps>;
-  return (
-    <section
-      ref={ref as React.RefObject<HTMLElement>}
-      {...sectionProps}
-      style={{
-        top: $initialPosition?.top || '0',
-        left: $initialPosition?.left || '0'
-      }}
-    >
-      {children}
-    </section>
-  );
-});
+const BackgroundContainerWrapper = ({
+  $initialPosition,
+  children,
+  ref,
+  style,
+  ...rest
+}: BackgroundContainerProps & ComponentProps<'section'>) => (
+  <section
+    ref={ref}
+    style={{
+      ...style,
+      top: $initialPosition?.top ?? '0',
+      left: $initialPosition?.left ?? '0'
+    }}
+    {...rest}
+  >
+    {children}
+  </section>
+);
 
 const BackgroundContainer = styled(
   BackgroundContainerWrapper

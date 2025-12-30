@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import React, {
+import {
   useRef,
   type ReactNode,
   type KeyboardEvent,
@@ -64,24 +64,29 @@ const VirtualButtonBase = styled(ButtonBase)`
 
 type VirtualButtonBaseProps = ComponentProps<typeof VirtualButtonBase>;
 
-const CircularButtonWrapper = React.forwardRef<
-  HTMLButtonElement,
-  CircularButtonProps &
-    Partial<VirtualButtonBaseProps> & { children?: ReactNode }
->(({ $initialPosition, children, ...rest }, ref) => (
+const CircularButtonWrapper = ({
+  $initialPosition,
+  children,
+  ref,
+  style,
+  ...rest
+}: CircularButtonProps & VirtualButtonBaseProps) => (
   <VirtualButtonBase
-    {...(rest as VirtualButtonBaseProps)}
     ref={ref}
     style={{
-      top: $initialPosition?.top || '0',
-      left: $initialPosition?.left || '0'
+      ...style,
+      top: $initialPosition?.top ?? style?.top,
+      left: $initialPosition?.left ?? style?.left
     }}
+    {...rest}
   >
     {children}
   </VirtualButtonBase>
-));
+);
 
-const CircularButton = styled(CircularButtonWrapper)<CircularButtonProps>`
+const CircularButton = styled(CircularButtonWrapper, {
+  shouldForwardProp: (prop) => prop !== '$areItemsDraggable'
+})<CircularButtonProps>`
   width: ${({ $diameter = 60 }) => $diameter}px;
   height: ${({ $diameter = 60 }) => $diameter}px;
   border-radius: 100px;
@@ -91,24 +96,29 @@ const CircularButton = styled(CircularButtonWrapper)<CircularButtonProps>`
     $areItemsDraggable ? 'dashed' : 'solid'};
 `;
 
-const RectangularButtonWrapper = React.forwardRef<
-  HTMLButtonElement,
-  RectangularButtonProps &
-    Partial<VirtualButtonBaseProps> & { children?: ReactNode }
->(({ $initialPosition, children, ...rest }, ref) => (
+const RectangularButtonWrapper = ({
+  $initialPosition,
+  children,
+  ref,
+  style,
+  ...rest
+}: RectangularButtonProps & VirtualButtonBaseProps) => (
   <VirtualButtonBase
     ref={ref}
-    {...(rest as VirtualButtonBaseProps)}
     style={{
-      top: $initialPosition?.top ?? '0',
-      left: $initialPosition?.left ?? '0'
+      ...style,
+      top: $initialPosition?.top ?? style?.top,
+      left: $initialPosition?.left ?? style?.left
     }}
+    {...rest}
   >
     {children}
   </VirtualButtonBase>
-));
+);
 
-const RectangularButton = styled(RectangularButtonWrapper)`
+const RectangularButton = styled(RectangularButtonWrapper, {
+  shouldForwardProp: (prop) => prop !== '$areItemsDraggable'
+})`
   border-radius: 16px;
   width: fit-content;
   min-width: 85px;

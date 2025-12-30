@@ -73,11 +73,7 @@ export const PanelControlButton = styled(ButtonBase)<
       theme: theme
     })}
 
-  ${({ $gridArea }) =>
-    $gridArea &&
-    `
-  grid-area: ${$gridArea};
-`} 
+  ${({ $gridArea }) => $gridArea && `grid-area: ${$gridArea};`} 
 
   border: none;
   flex-grow: 1;
