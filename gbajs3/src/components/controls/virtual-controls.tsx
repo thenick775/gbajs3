@@ -478,6 +478,8 @@ export const VirtualControls = () => {
     }
   ];
 
+  console.log('derp testing');
+
   return (
     <IconContext.Provider value={{ color: theme.pureWhite, size: '2em' }}>
       {shouldShowVirtualButtonsAndOpad && (
