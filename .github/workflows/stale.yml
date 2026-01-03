@@ -22,7 +22,7 @@ jobs:
           days-before-stale: 21
           exempt-issue-labels: 'enhancement,bug'
 
-      - uses: thenick775/stalesweeper@main
+      - uses: thenick775/stalesweeper@ansi-coloring-and-output-summary
         with:
           message: 'This discussion has been closed due to inactivity.'
           days-before-close: '21'
