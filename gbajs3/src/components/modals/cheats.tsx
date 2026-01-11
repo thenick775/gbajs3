@@ -198,7 +198,9 @@ export const CheatsModal = () => {
                     <IconButton
                       aria-label="Remove Cheat"
                       sx={{ padding: '5px' }}
-                      onClick={() => { remove(index); }}
+                      onClick={() => {
+                        remove(index);
+                      }}
                     >
                       <BiTrash />
                     </IconButton>
@@ -241,11 +243,18 @@ export const CheatsModal = () => {
         <Button
           color="info"
           variant="contained"
-          onClick={() => { setViewRawCheats((prevState) => !prevState); }}
+          onClick={() => {
+            setViewRawCheats((prevState) => !prevState);
+          }}
         >
           {viewRawCheats ? 'Parsed' : 'Raw'}
         </Button>
-        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setIsModalOpen(false);
+          }}
+        >
           Close
         </Button>
       </ModalFooter>

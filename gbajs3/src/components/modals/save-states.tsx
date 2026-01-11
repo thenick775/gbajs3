@@ -211,10 +211,11 @@ export const SaveStatesModal = () => {
   const autoSaveStatePath = emulator?.getCurrentAutoSaveStatePath();
   const { trigger } = useFileStat(autoSaveStatePath);
 
-  const toggleCurrentSaveStatePreview = (saveStateName: string) =>
-    { setCurrentSaveStatePreview(
+  const toggleCurrentSaveStatePreview = (saveStateName: string) => {
+    setCurrentSaveStatePreview(
       currentSaveStatePreview === saveStateName ? null : saveStateName
-    ); };
+    );
+  };
 
   return (
     <>
@@ -229,7 +230,9 @@ export const SaveStatesModal = () => {
             slotProps={{
               inputLabel: { shrink: true },
               input: {
-                onChange: (p) => { setCurrentSaveStateSlot(Number(p.target.value)); }
+                onChange: (p) => {
+                  setCurrentSaveStateSlot(Number(p.target.value));
+                }
               }
             }}
             sx={{ width: '100%' }}
@@ -245,9 +248,9 @@ export const SaveStatesModal = () => {
               isSaveStatePreviewSelected={
                 currentSaveStatePreview === autoSaveStateNameWithoutPath
               }
-              onSaveStatePreviewSelected={() =>
-                { toggleCurrentSaveStatePreview(autoSaveStateNameWithoutPath); }
-              }
+              onSaveStatePreviewSelected={() => {
+                toggleCurrentSaveStatePreview(autoSaveStateNameWithoutPath);
+              }}
               onClick={emulator?.loadAutoSaveState}
               onDelete={() => {
                 if (autoSaveStateData?.autoSaveStateName) {
@@ -263,9 +266,9 @@ export const SaveStatesModal = () => {
               saveStateName={saveState}
               previewDataUrl={saveStateImageUrls?.[idx]}
               isSaveStatePreviewSelected={currentSaveStatePreview === saveState}
-              onSaveStatePreviewSelected={() =>
-                { toggleCurrentSaveStatePreview(saveState); }
-              }
+              onSaveStatePreviewSelected={() => {
+                toggleCurrentSaveStatePreview(saveState);
+              }}
               onClick={() => {
                 const slot = parseSaveStateSlot(saveState);
                 if (slot !== null) {
@@ -324,7 +327,12 @@ export const SaveStatesModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setIsModalOpen(false);
+          }}
+        >
           Close
         </Button>
       </ModalFooter>

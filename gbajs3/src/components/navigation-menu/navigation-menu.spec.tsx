@@ -422,9 +422,7 @@ describe('<NavigationMenu />', () => {
       vi.spyOn(logoutHooks, 'useLogout').mockReturnValue({
         isPending: false,
         error: null,
-        mutate: executeLogoutSpy as UseMutateFunction<
-          void
-        >
+        mutate: executeLogoutSpy as UseMutateFunction<void>
       } as UseMutationResult<void, Error, void>);
 
       renderWithContext(<NavigationMenu />);

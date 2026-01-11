@@ -165,9 +165,9 @@ export const VirtualButton = ({
       positionOffset={initialOffset}
       position={position}
       disabled={!areItemsDraggable}
-      onStop={(_, data) =>
-        { setLayout(inputName, { position: { x: data.x, y: data.y } }); }
-      }
+      onStop={(_, data) => {
+        setLayout(inputName, { position: { x: data.x, y: data.y } });
+      }}
     >
       {isRectangular ? (
         <RectangularButton {...commonProps}>{children}</RectangularButton>

@@ -197,18 +197,20 @@ export const NavigationMenu = () => {
         axis="y"
         position={menuButtonLayout?.position ?? { x: 0, y: 0 }}
         disabled={!areItemsDraggable}
-        onStop={(_, data) =>
-          { setLayout('menuButton', {
+        onStop={(_, data) => {
+          setLayout('menuButton', {
             position: { x: 0, y: data.y },
             standalone: true
-          }); }
-        }
+          });
+        }}
       >
         <HamburgerButton
           ref={menuButtonRef}
           id="menu-btn"
           $isExpanded={isExpanded}
-          onClick={() => { setIsExpanded((prevState) => !prevState); }}
+          onClick={() => {
+            setIsExpanded((prevState) => !prevState);
+          }}
           aria-label="Menu Toggle"
           $areItemsDraggable={areItemsDraggable}
         >

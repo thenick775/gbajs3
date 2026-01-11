@@ -179,7 +179,12 @@ export const ImportExportModal = () => {
         >
           Export
         </Button>
-        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setIsModalOpen(false);
+          }}
+        >
           Close
         </Button>
       </ModalFooter>

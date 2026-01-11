@@ -108,7 +108,9 @@ describe('<CheatsModal />', () => {
 
     expect(screen.getAllByRole('listitem')).toHaveLength(2);
     // adding a new cheat should cause the create button to scroll into view fully
-    await waitFor(() => { expect(scrollIntoViewSpy).toHaveBeenCalledOnce(); });
+    await waitFor(() => {
+      expect(scrollIntoViewSpy).toHaveBeenCalledOnce();
+    });
   });
 
   it('removes cheat', async () => {
