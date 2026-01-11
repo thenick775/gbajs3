@@ -1,9 +1,9 @@
 import { useTheme } from '@mui/material/styles';
 import { FaGripLines } from 'react-icons/fa';
 
-interface GripperHandleProps {
+type GripperHandleProps = {
   variation?: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
-}
+};
 
 export const GripperHandle = ({ variation }: GripperHandleProps) => {
   const theme = useTheme();

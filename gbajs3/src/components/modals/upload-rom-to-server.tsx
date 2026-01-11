@@ -12,13 +12,13 @@ import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { PacmanIndicator } from '../shared/loading-indicator.tsx';
 import { CenteredText } from '../shared/styled.tsx';
 
-interface DynamicBodyProps {
+type DynamicBodyProps = {
   errorColor: string;
   loadingColor: string;
   respStatus: number | undefined;
   isLoading: boolean;
   hasError: boolean;
-}
+};
 
 const DynamicBody = ({
   errorColor,

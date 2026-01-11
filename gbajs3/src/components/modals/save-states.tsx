@@ -18,7 +18,7 @@ import { CenteredText, StyledBiPlus } from '../shared/styled.tsx';
 
 export type CurrentSaveStateSlots = Record<string, number>;
 
-interface SaveStateListItemProps {
+type SaveStateListItemProps = {
   key: string;
   saveStateName: string;
   previewDataUrl?: string;
@@ -26,7 +26,7 @@ interface SaveStateListItemProps {
   onSaveStatePreviewSelected: () => void;
   onClick?: () => void;
   onDelete: () => void;
-}
+};
 
 const LoadSaveStateButton = styled('button')`
   padding: 0.5rem 0.5rem;

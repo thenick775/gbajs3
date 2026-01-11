@@ -16,16 +16,16 @@ import type { Layouts } from '../../../context/layout/layout-context.tsx';
 import type { IconButtonProps } from '@mui/material';
 import type { ReactNode } from 'react';
 
-interface ControlProfilesProps {
+type ControlProfilesProps = {
   id: string;
-}
+};
 
-interface VirtualControlProfile {
+type VirtualControlProfile = {
   id: string;
   name: string;
   active: boolean;
   layouts: Layouts;
-}
+};
 
 type VirtualControlProfiles = VirtualControlProfile[];
 
@@ -35,11 +35,11 @@ type StatefulIconButtonProps = {
   falsyIcon: ReactNode;
 } & IconButtonProps;
 
-interface EditableProfileLoadButtonProps {
+type EditableProfileLoadButtonProps = {
   name: string;
   loadProfile: () => void;
   onSubmit: (name: string) => void;
-}
+};
 
 const StyledLi = styled('li')`
   cursor: pointer;

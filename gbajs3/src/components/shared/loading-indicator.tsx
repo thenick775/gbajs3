@@ -4,13 +4,13 @@ import { PacmanLoader } from 'react-spinners';
 import type { ReactNode } from 'react';
 import type { LoaderSizeMarginProps } from 'react-spinners/helpers/props';
 
-interface LoadingIndicatorProps {
+type LoadingIndicatorProps = {
   children: ReactNode;
   currentName: string | null;
   indicator: ReactNode;
   isLoading: boolean;
   loadingCopy: string;
-}
+};
 
 const LoadingContainer = styled('div')`
   display: flex;

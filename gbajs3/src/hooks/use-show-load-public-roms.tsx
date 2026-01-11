@@ -13,6 +13,7 @@ export type PublicRomUploadStatus =
   | 'temporarily-dismissed'
   | 'pending';
 
+// key is the url, value is the rom upload status above
 export type HasLoadedPublicRoms = Record<string, PublicRomUploadStatus>;
 
 const romURLQueryParamName = 'romURL';

@@ -84,9 +84,9 @@ export const NumberInput = ({
   };
 
   const clamp = (value: number): string => {
-    if (min !== undefined && value < Number(min)) return String(min);
-    if (max !== undefined && value > Number(max)) return String(max);
-    return String(value);
+    if (min !== undefined && value < Number(min)) return min.toString();
+    if (max !== undefined && value > Number(max)) return max.toString();
+    return value.toString();
   };
 
   const dispatchEvent = (value: string) => {
@@ -147,9 +147,7 @@ export const NumberInput = ({
     }
   };
 
-  // ownerState for slotProps callbacks (covers typical use; no casts, no any)
-  const ownerState = { disabled, size, ...rest } satisfies TextFieldProps;
-
+  const ownerState = { disabled, size, ...rest };
   const inputSlotProps = resolveSlotComponentProps(
     slotProps?.input,
     ownerState

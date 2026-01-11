@@ -12,9 +12,9 @@ type CircleCheckButtonProps = {
   showSuccess?: boolean;
 } & Omit<ButtonProps, 'children'>;
 
-interface CopyWrapperProps {
+type CopyWrapperProps = {
   $isSuccessCheckVisible: boolean;
-}
+};
 
 const stroke = keyframes`
   100% {

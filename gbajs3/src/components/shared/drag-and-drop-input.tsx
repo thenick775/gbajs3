@@ -8,7 +8,7 @@ import { ErrorWithIcon } from './error-with-icon.tsx';
 
 import type { Extension } from '../../emulator/mgba/mgba-emulator.tsx';
 
-interface DragAndDropInputProps {
+type DragAndDropInputProps = {
   ariaLabel: string;
   children: ReactNode;
   error?: string;
@@ -24,11 +24,11 @@ interface DragAndDropInputProps {
     fileName: string;
     index: number;
   }) => ReactNode;
-}
+};
 
-interface DropAreaProps {
+type DropAreaProps = {
   $isDragActive?: boolean;
-}
+};
 
 const DropArea = styled('div')<DropAreaProps>`
   cursor: pointer;

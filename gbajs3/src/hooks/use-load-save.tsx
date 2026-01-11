@@ -2,9 +2,9 @@ import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
-export interface LoadSaveProps {
+export type LoadSaveProps = {
   saveName: string;
-}
+};
 
 export const useLoadSave = (
   options?: UseMutationOptions<File, Error, LoadSaveProps>

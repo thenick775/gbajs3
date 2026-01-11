@@ -6,7 +6,7 @@ import { PanelControlWrapper, PanelControlButton } from './styled.tsx';
 import type { IconButtonProps } from '@mui/material';
 import type { MouseEventHandler, PointerEventHandler, ReactNode } from 'react';
 
-interface PanelButtonProps {
+type PanelButtonProps = {
   ariaLabel: string;
   children: ReactNode;
   className?: string;
@@ -16,7 +16,7 @@ interface PanelButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onPointerDown?: PointerEventHandler<HTMLButtonElement>;
   onPointerUp?: PointerEventHandler<HTMLButtonElement>;
-}
+};
 
 type SliderButtonProps = {
   icon: ReactNode;

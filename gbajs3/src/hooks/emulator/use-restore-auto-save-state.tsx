@@ -5,12 +5,12 @@ import { emulatorAutoSaveUnloadLocalStorageKey } from '../../context/emulator/co
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator';
 
-interface AutoSaveData {
+type AutoSaveData = {
   filename: string;
   data: string;
   timestamp: string;
   event: string;
-}
+};
 
 const base64ToUint8Array = (base64: string) => {
   const binary = atob(base64);

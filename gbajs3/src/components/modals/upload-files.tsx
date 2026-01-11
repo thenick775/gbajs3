@@ -35,23 +35,23 @@ import { StyledBiPlus } from '../shared/styled.tsx';
 
 import type { FileTypes } from '../../emulator/mgba/mgba-emulator.tsx';
 
-interface InputProps {
+type InputProps = {
   files?: File[];
   fileUrls?: { url: string; type: keyof FileTypes }[];
   romFileToRun?: string;
-}
+};
 
 type RunRomCheckboxProps = {
   fileName: string;
 } & Pick<CheckboxProps, 'checked' | 'onChange'>;
 
-interface AdditionalFileActionsProps {
+type AdditionalFileActionsProps = {
   fileName: string;
   selectedFileName?: string;
   setSelectedFileName: (name: string | null) => void;
   isChecked: boolean;
   isRomFile: boolean;
-}
+};
 
 const defaultFileUrl: { url: string; type: keyof FileTypes } = {
   url: '',

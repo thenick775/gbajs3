@@ -14,7 +14,7 @@ import {
 } from '../../hooks/context.tsx';
 import { ButtonBase } from '../shared/custom-button-base.tsx';
 
-interface VirtualButtonProps {
+type VirtualButtonProps = {
   isRectangular?: boolean;
   width?: number;
   children: ReactNode;
@@ -31,18 +31,18 @@ interface VirtualButtonProps {
   onPointerDown?: PointerEventHandler<HTMLButtonElement>;
   enabled?: boolean;
   ariaLabel: string;
-}
+};
 
-interface CircularButtonProps {
+type CircularButtonProps = {
   $diameter: number;
   $initialPosition?: { top: string; left: string };
   $areItemsDraggable?: boolean;
-}
+};
 
-interface RectangularButtonProps {
+type RectangularButtonProps = {
   $initialPosition?: { top: string; left: string };
   $areItemsDraggable?: boolean;
-}
+};
 
 const VirtualButtonBase = styled(ButtonBase)`
   background-color: ${({ theme }) => theme.darkGray};

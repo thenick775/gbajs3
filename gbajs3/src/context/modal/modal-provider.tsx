@@ -2,9 +2,9 @@ import { useState, type ReactNode, type JSX } from 'react';
 
 import { ModalContext } from './modal-context.tsx';
 
-interface ModalProviderProps {
+type ModalProviderProps = {
   children: ReactNode;
-}
+};
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null);

@@ -3,11 +3,11 @@ import { styled } from '@mui/material/styles';
 import { useModalContext } from '../../hooks/context.tsx';
 import { HeaderWrapper, Header } from '../shared/styled.tsx';
 
-interface ModalHeaderProps {
+type ModalHeaderProps = {
   title: string;
   showExitIndicator?: boolean;
   onClose?: () => void;
-}
+};
 
 const CloseButton = styled('button')`
   width: 1em;

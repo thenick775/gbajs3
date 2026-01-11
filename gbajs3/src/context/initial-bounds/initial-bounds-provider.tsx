@@ -11,9 +11,9 @@ import { InitialBoundsContext } from './initial-bounds-context.tsx';
 
 import type { InitialBounds } from './initial-bounds-context.tsx';
 
-interface InitialBoundsProviderProps {
+type InitialBoundsProviderProps = {
   children: ReactNode;
-}
+};
 
 export const InitialBoundsProvider = ({
   children

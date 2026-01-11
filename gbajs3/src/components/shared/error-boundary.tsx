@@ -11,10 +11,10 @@ import {
 
 import type { ReactNode } from 'react';
 
-interface FallbackRendererProps {
+type FallbackRendererProps = {
   error: Error;
   resetErrorBoundary: () => void;
-}
+};
 
 const ErrorWrapper = styled('div')`
   background-color: ${({ theme }) => theme.pureWhite};

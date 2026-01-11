@@ -16,31 +16,31 @@ import {
 
 import type { Position } from 'react-rnd';
 
-interface InitialPosition {
+type InitialPosition = {
   top: string;
   left: string;
-}
+};
 
-interface OPadProps {
+type OPadProps = {
   initialPosition?: InitialPosition;
   disableDragging?: boolean;
-}
+};
 
-interface CenterKnobProps {
+type CenterKnobProps = {
   $isControlled: boolean;
-}
+};
 
-interface BackgroundContainerProps {
+type BackgroundContainerProps = {
   $initialPosition?: InitialPosition;
   $areItemsDraggable?: boolean;
-}
+};
 
-interface KeyState {
+type KeyState = {
   UP?: number;
   DOWN?: number;
   LEFT?: number;
   RIGHT?: number;
-}
+};
 
 const BackgroundContainer = styled('section', {
   shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
@@ -211,7 +211,7 @@ export const OPad = ({ initialPosition }: OPadProps) => {
 
       const keyId = getKeyId({ x, y });
 
-      if (keyId && !isKeyDown[keyId as keyof typeof isKeyDown]) {
+      if (keyId && !isKeyDown[keyId]) {
         unpressEmulatorArrow(event.pointerId);
         pressEmulatorArrow(keyId, event.pointerId);
       }

@@ -1,8 +1,8 @@
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
-interface LoadExternalRomProps {
+type LoadExternalRomProps = {
   url: URL;
-}
+};
 
 export const useLoadExternalRom = (
   options?: UseMutationOptions<File, Error, LoadExternalRomProps>

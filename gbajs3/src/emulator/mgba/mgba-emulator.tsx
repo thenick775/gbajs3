@@ -5,38 +5,38 @@ import type {
   mGBAEmulator as mGBAEmulatorTypeDef
 } from '@thenick775/mgba-wasm';
 
-export interface KeyBinding {
+export type KeyBinding = {
   gbaInput: string; // represents the GBA input to be remapped
   key: string; // represents the key property of a browser KeyboardEvent
   location: number; // represents the location property of a browser KeyboardEvent
-}
+};
 
-export interface FileNode {
+export type FileNode = {
   path: string;
   isDir: boolean;
   children?: FileNode[];
   nextNeighbor?: FileNode;
-}
+};
 
-export interface ParsedCheats {
+export type ParsedCheats = {
   desc: string;
   code: string;
   enable: boolean;
-}
+};
 
 export type Extension = RegexValidator | string;
 
-interface RegexValidator {
+type RegexValidator = {
   regex: RegExp;
   displayText: string;
-}
+};
 
 export type FileTypes = Record<
   'rom' | 'save' | 'autosave' | 'cheat' | 'patch' | 'screenshot',
   Extension[]
 >;
 
-export interface GBAEmulator {
+export type GBAEmulator = {
   addCoreCallbacks: (coreCallbacks: coreCallbacks) => void;
   autoLoadCheats: () => boolean;
   createSaveState: (slot: number) => boolean;
@@ -103,7 +103,7 @@ export interface GBAEmulator {
     autoSaveStateName: string,
     data: Uint8Array
   ) => Promise<void>;
-}
+};
 
 export const KEY_LOCATION_STANDARD = 0;
 export const KEY_LOCATION_NUMPAD = 3;
@@ -241,7 +241,7 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
       }
     }
 
-    return Object.values(assembledCheats) as ParsedCheats[];
+    return Object.values(assembledCheats).filter((v): v is ParsedCheats => !!v);
   };
 
   const parsedCheatsToFile = (cheatsList: ParsedCheats[]): File | null => {

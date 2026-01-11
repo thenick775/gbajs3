@@ -3,10 +3,10 @@ import { z } from 'zod';
 
 const TokenSchema = z.string();
 
-interface LoginProps {
+type LoginProps = {
   username: string;
   password: string;
-}
+};
 
 export const useLogin = (
   options?: UseMutationOptions<string, Error, LoginProps, string>

@@ -12,10 +12,10 @@ import { useLogin } from '../../hooks/use-login.tsx';
 import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { PacmanIndicator } from '../shared/loading-indicator.tsx';
 
-interface InputProps {
+type InputProps = {
   username: string;
   password: string;
-}
+};
 
 const StyledForm = styled('form')`
   display: flex;

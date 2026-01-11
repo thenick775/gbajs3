@@ -61,9 +61,9 @@ import { UploadRomToServerModal } from '../modals/upload-rom-to-server.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 import { ButtonBase } from '../shared/custom-button-base.tsx';
 
-interface ExpandableComponentProps {
+type ExpandableComponentProps = {
   $isExpanded?: boolean;
-}
+};
 
 const NavigationMenuWrapper = styled('div')<ExpandableComponentProps>`
   display: flex;

@@ -18,10 +18,10 @@ import {
 } from '../shared/loading-indicator.tsx';
 import { CenteredText } from '../shared/styled.tsx';
 
-interface RomErrorProps {
+type RomErrorProps = {
   $withMarginTop?: boolean;
   $isCentered?: boolean;
-}
+};
 
 const LoadRomButton = styled('button')`
   padding: 0.5rem 1rem;

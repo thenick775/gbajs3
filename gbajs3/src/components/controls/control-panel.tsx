@@ -41,11 +41,11 @@ import { useUnloadEmulator } from '../../hooks/emulator/use-unload-emulator.tsx'
 
 import type { EmulatorSettings } from '../modals/emulator-settings.tsx';
 
-interface PanelProps {
+type PanelProps = {
   $controlled: boolean;
   $isLargerThanPhone: boolean;
   $areItemsDraggable: boolean;
-}
+};
 
 type emulatorVolumeBeforeAutoMuteSources = 'rewind' | 'fastForwardSlowdown';
 

@@ -54,6 +54,7 @@ export default [
     rules: {
       eqeqeq: 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/no-unnecessary-condition': 'error',
       '@typescript-eslint/no-misused-promises': [
         'error',

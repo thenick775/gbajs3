@@ -16,10 +16,10 @@ import { z } from 'zod';
 
 import { downloadBlob } from './blob.ts';
 
-export interface ZipTarget {
+export type ZipTarget = {
   writer: ZipWriter<Blob>;
   finalize: () => Promise<Blob>;
-}
+};
 
 const zipTypes: FilePickerAcceptType[] = [
   {

@@ -8,9 +8,9 @@ import {
   useRefreshAccessToken
 } from '../../hooks/use-refresh.tsx';
 
-interface AuthProviderProps {
+type AuthProviderProps = {
   children: ReactNode;
-}
+};
 
 const fourMinutesInMS = 240 * 1000;
 

@@ -15,20 +15,20 @@ import {
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 import { ControlProfiles } from './controls/control-profiles.tsx';
 
-interface TabPanelProps {
+type TabPanelProps = {
   children: ReactNode;
   index: number;
   value: number;
-}
+};
 
-interface ControlTabsProps {
+type ControlTabsProps = {
   setFormId: Dispatch<React.SetStateAction<string>>;
   virtualControlsFormId: string;
   controlProfilesFormId: string;
   keyBindingsFormId: string;
   resetPositionsButtonId: string;
   setIsSuccessfulSubmit: (successfulSubmit: boolean) => void;
-}
+};
 
 const StyledModalBody = styled(ModalBody)`
   padding: 0 0 1rem 0;

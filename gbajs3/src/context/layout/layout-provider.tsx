@@ -10,9 +10,9 @@ import { LayoutContext } from './layout-context.tsx';
 
 import type { Layout, Layouts } from './layout-context.tsx';
 
-interface LayoutProviderProps {
+type LayoutProviderProps = {
   children: ReactNode;
-}
+};
 
 const layoutLocalStorageKey = 'componentLayoutsV2';
 

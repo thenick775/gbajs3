@@ -17,11 +17,11 @@ import {
 
 import type { FileNode } from '../../../emulator/mgba/mgba-emulator.tsx';
 
-interface EmulatorFileSystemProps {
+type EmulatorFileSystemProps = {
   allFiles?: FileNode;
   deleteFile: (path: string) => Promise<void>;
   downloadFile: (path: string) => void;
-}
+};
 
 const LeafLabelWrapper = styled('div')`
   display: flex;

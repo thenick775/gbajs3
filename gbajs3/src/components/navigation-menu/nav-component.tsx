@@ -4,17 +4,17 @@ import AnimateHeight, { type Height } from 'react-animate-height';
 
 import { ButtonBase } from '../shared/custom-button-base.tsx';
 
-interface NavComponentProps {
+type NavComponentProps = {
   title: string;
   icon: ReactNode;
   children: ReactNode;
   $isExpanded?: boolean;
   $disabled?: boolean;
-}
+};
 
-interface ComponentWrapperProps {
+type ComponentWrapperProps = {
   $disabled: boolean;
-}
+};
 
 const NavComponentWrapper = styled('li')<ComponentWrapperProps>`
   color: ${({ theme }) => theme.gbaThemeBlue};

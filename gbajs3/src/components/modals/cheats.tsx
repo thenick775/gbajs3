@@ -13,13 +13,13 @@ import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 import { ManagedSwitch } from '../shared/managed-switch.tsx';
 import { StyledBiPlus } from '../shared/styled.tsx';
 
-interface OptionallyHiddenProps {
+type OptionallyHiddenProps = {
   $shouldHide: boolean;
-}
+};
 
-interface HelpTextProps {
+type HelpTextProps = {
   $withMargin: boolean;
-}
+};
 
 const Cheat = styled('li')`
   display: flex;

@@ -11,11 +11,12 @@ import {
 
 import type { KeyBinding } from '../../../emulator/mgba/mgba-emulator.tsx';
 
-interface KeyBindingsFormProps {
+type KeyBindingsFormProps = {
   id: string;
   onAfterSubmit: () => void;
-}
+};
 
+// key is the gba input, value is the keybinding itself
 type KeyBindingInputProps = Record<string, KeyBinding>;
 
 const StyledForm = styled('form')`

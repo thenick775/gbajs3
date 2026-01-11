@@ -2,9 +2,9 @@ import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
-export interface LoadRomProps {
+export type LoadRomProps = {
   romName: string;
-}
+};
 
 export const useLoadRom = (
   options?: UseMutationOptions<File, Error, LoadRomProps>

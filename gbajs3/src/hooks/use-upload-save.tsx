@@ -2,9 +2,9 @@ import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
-interface UploadSaveProps {
+type UploadSaveProps = {
   saveFile: File;
-}
+};
 
 export const useUpLoadSave = (
   options?: UseMutationOptions<Response, Error, UploadSaveProps>

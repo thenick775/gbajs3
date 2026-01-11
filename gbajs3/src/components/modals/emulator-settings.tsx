@@ -29,7 +29,7 @@ import { NumberInput } from '../shared/number-input.tsx';
 
 import type { SubmitHandler } from 'react-hook-form';
 
-export interface EmulatorSettings {
+export type EmulatorSettings = {
   allowOpposingDirections: boolean;
   fileSystemNotificationsEnabled: boolean;
   frameSkip?: number;
@@ -56,13 +56,13 @@ export interface EmulatorSettings {
   autoSaveStateLoadNotificationEnabled: boolean;
   autoSaveStateCaptureNotificationEnabled: boolean;
   slowdownEnabled: boolean;
-}
+};
 
-interface TabPanelProps {
+type TabPanelProps = {
   children: ReactNode;
   index: number;
   value: number;
-}
+};
 
 const StyledForm = styled('form')`
   display: flex;

@@ -25,10 +25,10 @@ import { Copy } from '../shared/styled.tsx';
 
 import type { PublicRomUploadStatus } from '../../hooks/use-show-load-public-roms.tsx';
 
-interface UploadPublicExternalRomsModalProps {
+type UploadPublicExternalRomsModalProps = {
   url: URL;
   onLoadOrDismiss: (statusMsg: PublicRomUploadStatus) => void;
-}
+};
 
 const LinkBreakWord = styled('a')`
   word-break: break-all;

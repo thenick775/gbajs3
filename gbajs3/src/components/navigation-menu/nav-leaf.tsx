@@ -4,26 +4,26 @@ import { ButtonBase } from '../shared/custom-button-base.tsx';
 
 import type { ReactNode } from 'react';
 
-interface NavLeafProps {
+type NavLeafProps = {
   title: string;
   icon: ReactNode;
   $link?: string;
   $disabled?: boolean;
   $withPadding?: boolean;
   onClick?: () => void;
-}
+};
 
-interface LeafWrapperProps {
+type LeafWrapperProps = {
   $disabled: boolean;
-}
+};
 
-interface NavLinkProps {
+type NavLinkProps = {
   $withPadding: boolean;
-}
+};
 
-interface NavLeafButtonProps {
+type NavLeafButtonProps = {
   $withPadding: boolean;
-}
+};
 
 const NavLeafWrapper = styled('li')<LeafWrapperProps>`
   cursor: pointer;

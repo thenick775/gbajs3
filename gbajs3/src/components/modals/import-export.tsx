@@ -27,9 +27,9 @@ import type {
   GBAEmulator
 } from '../../emulator/mgba/mgba-emulator.tsx';
 
-interface InputProps {
+type InputProps = {
   zipFile: File;
-}
+};
 
 const validFileExtensions = ['.zip'];
 
