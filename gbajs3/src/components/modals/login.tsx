@@ -12,10 +12,10 @@ import { useLogin } from '../../hooks/use-login.tsx';
 import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { PacmanIndicator } from '../shared/loading-indicator.tsx';
 
-type InputProps = {
+interface InputProps {
   username: string;
   password: string;
-};
+}
 
 const StyledForm = styled('form')`
   display: flex;
@@ -53,7 +53,7 @@ export const LoginModal = () => {
   });
 
   const onSubmit: SubmitHandler<InputProps> = (formData) =>
-    executeLogin(formData);
+    { executeLogin(formData); };
 
   return (
     <>
@@ -108,7 +108,7 @@ export const LoginModal = () => {
         <Button form={loginFormId} type="submit" variant="contained">
           Login
         </Button>
-        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
           Close
         </Button>
       </ModalFooter>

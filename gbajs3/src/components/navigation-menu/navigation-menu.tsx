@@ -61,9 +61,9 @@ import { UploadRomToServerModal } from '../modals/upload-rom-to-server.tsx';
 import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 import { ButtonBase } from '../shared/custom-button-base.tsx';
 
-type ExpandableComponentProps = {
+interface ExpandableComponentProps {
   $isExpanded?: boolean;
-};
+}
 
 const NavigationMenuWrapper = styled('div')<ExpandableComponentProps>`
   display: flex;
@@ -147,7 +147,7 @@ const HamburgerButton = styled(ButtonBase)<
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
   }
 
-  ${({ $areItemsDraggable = false, theme }) =>
+  ${({ $areItemsDraggable, theme }) =>
     $areItemsDraggable &&
     `
     outline-color: ${theme.gbaThemeBlue};
@@ -198,17 +198,17 @@ export const NavigationMenu = () => {
         position={menuButtonLayout?.position ?? { x: 0, y: 0 }}
         disabled={!areItemsDraggable}
         onStop={(_, data) =>
-          setLayout('menuButton', {
+          { setLayout('menuButton', {
             position: { x: 0, y: data.y },
             standalone: true
-          })
+          }); }
         }
       >
         <HamburgerButton
           ref={menuButtonRef}
           id="menu-btn"
           $isExpanded={isExpanded}
-          onClick={() => setIsExpanded((prevState) => !prevState)}
+          onClick={() => { setIsExpanded((prevState) => !prevState); }}
           aria-label="Menu Toggle"
           $areItemsDraggable={areItemsDraggable}
         >

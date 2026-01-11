@@ -2,10 +2,10 @@ import { createContext } from 'react';
 
 import type { Dispatch, SetStateAction } from 'react';
 
-type ResizeContextProps = {
+interface ResizeContextProps {
   areItemsResizable: boolean;
   setAreItemsResizable: Dispatch<SetStateAction<boolean>>;
-};
+}
 
 export const ResizeContext = createContext<ResizeContextProps | null>(null);
 

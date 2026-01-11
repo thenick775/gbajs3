@@ -17,9 +17,9 @@ import {
 } from '../shared/loading-indicator.tsx';
 import { CenteredText } from '../shared/styled.tsx';
 
-type SaveErrorProps = {
+interface SaveErrorProps {
   $withMarginTop?: boolean;
-};
+}
 
 const LoadSaveButton = styled('button')`
   padding: 0.5rem 1rem;
@@ -156,7 +156,7 @@ export const LoadSaveModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
           Close
         </Button>
       </ModalFooter>

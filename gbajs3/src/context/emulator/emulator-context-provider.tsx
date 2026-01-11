@@ -5,9 +5,9 @@ import { RunningProvider } from './providers/running-provider.tsx';
 
 import type { ReactNode } from 'react';
 
-type EmulatorContextProviderProps = {
+interface EmulatorContextProviderProps {
   children: ReactNode;
-};
+}
 
 export const EmulatorContextProvider = ({
   children

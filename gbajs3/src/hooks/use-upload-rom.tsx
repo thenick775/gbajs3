@@ -2,9 +2,9 @@ import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useAuthContext } from './context.tsx';
 
-type UploadRomProps = {
+interface UploadRomProps {
   romFile: File;
-};
+}
 
 export const useUpLoadRom = (
   options?: UseMutationOptions<Response, Error, UploadRomProps>

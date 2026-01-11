@@ -16,16 +16,16 @@ import type { Layouts } from '../../../context/layout/layout-context.tsx';
 import type { IconButtonProps } from '@mui/material';
 import type { ReactNode } from 'react';
 
-type ControlProfilesProps = {
+interface ControlProfilesProps {
   id: string;
-};
+}
 
-type VirtualControlProfile = {
+interface VirtualControlProfile {
   id: string;
   name: string;
   active: boolean;
   layouts: Layouts;
-};
+}
 
 type VirtualControlProfiles = VirtualControlProfile[];
 
@@ -35,11 +35,11 @@ type StatefulIconButtonProps = {
   falsyIcon: ReactNode;
 } & IconButtonProps;
 
-type EditableProfileLoadButtonProps = {
+interface EditableProfileLoadButtonProps {
   name: string;
   loadProfile: () => void;
   onSubmit: (name: string) => void;
-};
+}
 
 const StyledLi = styled('li')`
   cursor: pointer;
@@ -152,7 +152,7 @@ const EditableProfileLoadButton = ({
           }}
           error={!storedName}
           value={storedName}
-          onChange={(e) => setStoredName(e.target.value)}
+          onChange={(e) => { setStoredName(e.target.value); }}
         />
       ) : (
         <LoadProfileButton onClick={loadProfile}>{name}</LoadProfileButton>
@@ -163,7 +163,7 @@ const EditableProfileLoadButton = ({
         falsyIcon={<StyledBiEdit />}
         aria-label={`${isEditing ? 'Save' : 'Edit'} ${name}'s name`}
         type="submit"
-        onClick={() => submitNameChange(storedName)}
+        onClick={() => { submitNameChange(storedName); }}
       />
     </FlexContainer>
   );
@@ -221,13 +221,13 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
             <StyledLi key={`${profile.name}_${idx}_action_list_item`}>
               <EditableProfileLoadButton
                 name={profile.name}
-                loadProfile={() => loadProfile(profile.layouts)}
-                onSubmit={(name) => updateProfile(profile.id, name)}
+                loadProfile={() => { loadProfile(profile.layouts); }}
+                onSubmit={(name) => { updateProfile(profile.id, name); }}
               />
               <IconButton
                 aria-label={`Delete ${profile.name}`}
                 sx={{ padding: 0 }}
-                onClick={() => deleteProfile(profile.id)}
+                onClick={() => { deleteProfile(profile.id); }}
               >
                 <StyledBiTrash />
               </IconButton>
@@ -243,7 +243,7 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
       <IconButton
         aria-label={`Create New Profile`}
         sx={{ padding: 0 }}
-        onClick={() => addProfile()}
+        onClick={() => { addProfile(); }}
       >
         <StyledBiPlus />
       </IconButton>

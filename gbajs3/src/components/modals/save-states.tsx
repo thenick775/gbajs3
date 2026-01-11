@@ -16,11 +16,9 @@ import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { NumberInput } from '../shared/number-input.tsx';
 import { CenteredText, StyledBiPlus } from '../shared/styled.tsx';
 
-export type CurrentSaveStateSlots = {
-  [romName: string]: number;
-};
+export type CurrentSaveStateSlots = Record<string, number>;
 
-type SaveStateListItemProps = {
+interface SaveStateListItemProps {
   key: string;
   saveStateName: string;
   previewDataUrl?: string;
@@ -28,7 +26,7 @@ type SaveStateListItemProps = {
   onSaveStatePreviewSelected: () => void;
   onClick?: () => void;
   onDelete: () => void;
-};
+}
 
 const LoadSaveStateButton = styled('button')`
   padding: 0.5rem 0.5rem;
@@ -214,9 +212,9 @@ export const SaveStatesModal = () => {
   const { trigger } = useFileStat(autoSaveStatePath);
 
   const toggleCurrentSaveStatePreview = (saveStateName: string) =>
-    setCurrentSaveStatePreview(
+    { setCurrentSaveStatePreview(
       currentSaveStatePreview === saveStateName ? null : saveStateName
-    );
+    ); };
 
   return (
     <>
@@ -231,7 +229,7 @@ export const SaveStatesModal = () => {
             slotProps={{
               inputLabel: { shrink: true },
               input: {
-                onChange: (p) => setCurrentSaveStateSlot(Number(p.target.value))
+                onChange: (p) => { setCurrentSaveStateSlot(Number(p.target.value)); }
               }
             }}
             sx={{ width: '100%' }}
@@ -248,7 +246,7 @@ export const SaveStatesModal = () => {
                 currentSaveStatePreview === autoSaveStateNameWithoutPath
               }
               onSaveStatePreviewSelected={() =>
-                toggleCurrentSaveStatePreview(autoSaveStateNameWithoutPath)
+                { toggleCurrentSaveStatePreview(autoSaveStateNameWithoutPath); }
               }
               onClick={emulator?.loadAutoSaveState}
               onDelete={() => {
@@ -266,7 +264,7 @@ export const SaveStatesModal = () => {
               previewDataUrl={saveStateImageUrls?.[idx]}
               isSaveStatePreviewSelected={currentSaveStatePreview === saveState}
               onSaveStatePreviewSelected={() =>
-                toggleCurrentSaveStatePreview(saveState)
+                { toggleCurrentSaveStatePreview(saveState); }
               }
               onClick={() => {
                 const slot = parseSaveStateSlot(saveState);
@@ -326,7 +324,7 @@ export const SaveStatesModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
           Close
         </Button>
       </ModalFooter>

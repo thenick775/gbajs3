@@ -423,12 +423,9 @@ describe('<NavigationMenu />', () => {
         isPending: false,
         error: null,
         mutate: executeLogoutSpy as UseMutateFunction<
-          void,
-          Error,
-          void,
-          unknown
+          void
         >
-      } as UseMutationResult<void, Error, void, unknown>);
+      } as UseMutationResult<void, Error, void>);
 
       renderWithContext(<NavigationMenu />);
 

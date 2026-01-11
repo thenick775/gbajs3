@@ -2,9 +2,9 @@ import { FooterWrapper } from '../shared/styled.tsx';
 
 import type { ReactNode } from 'react';
 
-type ModalFooterProps = {
+interface ModalFooterProps {
   children: ReactNode;
-};
+}
 
 export const ModalFooter = ({ children }: ModalFooterProps) => {
   return (

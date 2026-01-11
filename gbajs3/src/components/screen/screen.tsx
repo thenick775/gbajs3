@@ -113,7 +113,7 @@ export const Screen = () => {
   );
 
   const refSetCanvas = useCallback(
-    (node: HTMLCanvasElement | null) => setCanvas(node),
+    (node: HTMLCanvasElement | null) => { setCanvas(node); },
     [setCanvas]
   );
 

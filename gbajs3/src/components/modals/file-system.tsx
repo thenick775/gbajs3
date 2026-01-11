@@ -42,7 +42,7 @@ export const FileSystemModal = () => {
   // is open is the auto save state timer, if the modified time of the current auto save state has
   // changed, we should refresh the file system view
   useEffect(
-    () => setAllFiles(emulator?.listAllFiles()),
+    () => { setAllFiles(emulator?.listAllFiles()); },
     [emulator, modifiedTime]
   );
 
@@ -73,7 +73,7 @@ export const FileSystemModal = () => {
       </FlexModalBody>
       <ModalFooter>
         <CircleCheckButton copy="Save File System" onClick={emulator?.fsSync} />
-        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
           Close
         </Button>
       </ModalFooter>

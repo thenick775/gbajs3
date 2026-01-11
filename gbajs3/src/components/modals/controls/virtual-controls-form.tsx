@@ -7,19 +7,19 @@ import { virtualControlsLocalStorageKey } from '../../controls/consts.tsx';
 import { ManagedCheckbox } from '../../shared/managed-checkbox.tsx';
 import { ManagedSwitch } from '../../shared/managed-switch.tsx';
 
-type VirtualControlsFormProps = {
+interface VirtualControlsFormProps {
   id: string;
   onAfterSubmit: () => void;
-};
+}
 
-export type AreVirtualControlsEnabledProps = {
+export interface AreVirtualControlsEnabledProps {
   OpadAndButtons: boolean;
   SaveState: boolean;
   LoadState: boolean;
   QuickReload: boolean;
   SendSaveToServer: boolean;
   NotificationsEnabled: boolean;
-};
+}
 
 type ControlsInputProps = AreVirtualControlsEnabledProps;
 

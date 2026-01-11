@@ -99,7 +99,7 @@ describe('<EmulatorFileSystem />', () => {
 
       if (fileNode.children?.length) {
         fileNode.children.forEach((child) =>
-          assertFileTree(child, stopDepth, acc + 1)
+          { assertFileTree(child, stopDepth, acc + 1); }
         );
       }
     };

@@ -10,11 +10,11 @@ import * as contextHooks from '../../hooks/context.tsx';
 import type { CoreCallbackOptions } from './use-add-callbacks.tsx';
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
-type Expected = {
+interface Expected {
   saveDataUpdatedCallback: (() => void) | null;
   autoSaveStateLoadedCallback: (() => void) | null;
   autoSaveStateCapturedCallback: (() => void) | null;
-};
+}
 
 type TestCase = [label: string, input: CoreCallbackOptions, expected: Expected];
 

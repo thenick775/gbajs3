@@ -11,7 +11,7 @@ import { InitialBoundsContext } from './initial-bounds-context.tsx';
 
 import type { InitialBounds } from './initial-bounds-context.tsx';
 
-type InitialBoundsProviderProps = { children: ReactNode };
+interface InitialBoundsProviderProps { children: ReactNode }
 
 export const InitialBoundsProvider = ({
   children
@@ -27,12 +27,12 @@ export const InitialBoundsProvider = ({
 
   const setInitialBound = useCallback(
     (key: string, bounds?: DOMRect) =>
-      setInitialBounds((prevState) => ({ ...prevState, [key]: bounds })),
+      { setInitialBounds((prevState) => ({ ...prevState, [key]: bounds })); },
     []
   );
 
   const clearInitialBounds = useCallback(
-    () => setInitialBounds(undefined),
+    () => { setInitialBounds(undefined); },
     [setInitialBounds]
   );
 

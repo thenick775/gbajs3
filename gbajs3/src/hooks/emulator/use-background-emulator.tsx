@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 
 import { useEmulatorContext, useRunningContext } from '../context.tsx';
 
-type UseBackgroundEmulatorProps = {
+interface UseBackgroundEmulatorProps {
   isPaused: boolean;
-};
+}
 
 /**
  * Performs the following actions when the page goes into the background

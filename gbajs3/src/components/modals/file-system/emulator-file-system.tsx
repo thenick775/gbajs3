@@ -17,11 +17,11 @@ import {
 
 import type { FileNode } from '../../../emulator/mgba/mgba-emulator.tsx';
 
-type EmulatorFileSystemProps = {
+interface EmulatorFileSystemProps {
   allFiles?: FileNode;
   deleteFile: (path: string) => Promise<void>;
   downloadFile: (path: string) => void;
-};
+}
 
 const LeafLabelWrapper = styled('div')`
   display: flex;
@@ -80,7 +80,7 @@ export const EmulatorFileSystem = ({
           <IconButton
             aria-label={`Download ${nodeName}`}
             sx={{ padding: 0, margin: 0 }}
-            onClick={() => downloadFile(node.path)}
+            onClick={() => { downloadFile(node.path); }}
           >
             <BiCloudDownload />
           </IconButton>

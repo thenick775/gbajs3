@@ -157,7 +157,7 @@ export const LegalModal = () => {
         <p>© {year}, Nicholas VanCise. All rights reserved.</p>
       </ModalBody>
       <ModalFooter>
-        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
           Close
         </Button>
       </ModalFooter>

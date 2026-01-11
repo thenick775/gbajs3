@@ -2,9 +2,9 @@ import { useState, type ReactNode } from 'react';
 
 import { ResizeContext } from '../contexts/resize-context.tsx';
 
-type ResizeProviderProps = {
+interface ResizeProviderProps {
   children: ReactNode;
-};
+}
 
 export const ResizeProvider = ({ children }: ResizeProviderProps) => {
   const [areItemsResizable, setAreItemsResizable] = useState(false);

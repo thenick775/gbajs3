@@ -4,11 +4,11 @@ import { Copy } from './styled.tsx';
 
 import type { JSX } from 'react';
 
-type ErrorWithIconProps = {
+interface ErrorWithIconProps {
   text: string;
   icon: JSX.Element;
   className?: string;
-};
+}
 
 const ErrorWrapper = styled('div')`
   display: flex;

@@ -4,26 +4,26 @@ import { ButtonBase } from '../shared/custom-button-base.tsx';
 
 import type { ReactNode } from 'react';
 
-type NavLeafProps = {
+interface NavLeafProps {
   title: string;
   icon: ReactNode;
   $link?: string;
   $disabled?: boolean;
   $withPadding?: boolean;
   onClick?: () => void;
-};
+}
 
-type LeafWrapperProps = {
+interface LeafWrapperProps {
   $disabled: boolean;
-};
+}
 
-type NavLinkProps = {
+interface NavLinkProps {
   $withPadding: boolean;
-};
+}
 
-type NavLeafButtonProps = {
+interface NavLeafButtonProps {
   $withPadding: boolean;
-};
+}
 
 const NavLeafWrapper = styled('li')<LeafWrapperProps>`
   cursor: pointer;
@@ -31,7 +31,7 @@ const NavLeafWrapper = styled('li')<LeafWrapperProps>`
   list-style-type: none;
   padding: 0 2px;
 
-  ${({ $disabled = false, theme }) =>
+  ${({ $disabled, theme }) =>
     $disabled &&
     `color: ${theme.disabledGray};
      pointer-events: none;
@@ -52,7 +52,7 @@ const NavLeafButton = styled(ButtonBase)<NavLeafButtonProps>`
   margin: 0;
 
   padding: 0.5rem
-    ${({ $withPadding = false }) => ($withPadding ? '1rem' : '0.5rem')};
+    ${({ $withPadding }) => ($withPadding ? '1rem' : '0.5rem')};
 
   text-align: inherit;
   width: 100%;
@@ -70,14 +70,14 @@ const NavLink = styled('a')<NavLinkProps>`
   outline-offset: 0;
 
   padding: 0.5rem
-    ${({ $withPadding = false }) => ($withPadding ? '1rem' : '0.5rem')};
+    ${({ $withPadding }) => ($withPadding ? '1rem' : '0.5rem')};
 `;
 
 export const NavLeaf = ({
   title,
   icon,
-  onClick = undefined,
-  $link = undefined,
+  onClick,
+  $link,
   $disabled = false,
   $withPadding = false
 }: NavLeafProps) => {

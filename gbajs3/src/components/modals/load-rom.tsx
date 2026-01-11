@@ -18,10 +18,10 @@ import {
 } from '../shared/loading-indicator.tsx';
 import { CenteredText } from '../shared/styled.tsx';
 
-type RomErrorProps = {
+interface RomErrorProps {
   $withMarginTop?: boolean;
   $isCentered?: boolean;
-};
+}
 
 const LoadRomButton = styled('button')`
   padding: 0.5rem 1rem;
@@ -169,7 +169,7 @@ export const LoadRomModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
           Close
         </Button>
       </ModalFooter>

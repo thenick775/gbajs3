@@ -5,9 +5,9 @@ import { ButtonBase } from '../../shared/custom-button-base.tsx';
 
 import type { Theme } from '@mui/material/styles';
 
-type ControlledProps = {
+interface ControlledProps {
   $controlled: boolean;
-};
+}
 
 type PanelControlSliderProps = {
   $gridArea: string;

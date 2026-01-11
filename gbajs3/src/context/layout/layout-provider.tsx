@@ -10,7 +10,7 @@ import { LayoutContext } from './layout-context.tsx';
 
 import type { Layout, Layouts } from './layout-context.tsx';
 
-type LayoutProviderProps = { children: ReactNode };
+interface LayoutProviderProps { children: ReactNode }
 
 const layoutLocalStorageKey = 'componentLayoutsV2';
 
@@ -24,7 +24,7 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
   const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
   const orientation = useOrientation();
 
-  const clearLayouts = useCallback(() => setLayouts({}), [setLayouts]);
+  const clearLayouts = useCallback(() => { setLayouts({}); }, [setLayouts]);
 
   const layoutType =
     isLargerThanPhone && !isMobileLandscape
@@ -35,7 +35,7 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
 
   const setLayout = useCallback(
     (layoutKey: string, layout: Layout) =>
-      setLayouts((prevState) => {
+      { setLayouts((prevState) => {
         return {
           ...prevState,
           [layoutKey]: {
@@ -46,7 +46,7 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
             }
           }
         };
-      }),
+      }); },
     [setLayouts, layoutType]
   );
 

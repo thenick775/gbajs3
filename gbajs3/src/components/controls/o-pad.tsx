@@ -16,31 +16,31 @@ import {
 
 import type { Position } from 'react-rnd';
 
-type InitialPosition = {
+interface InitialPosition {
   top: string;
   left: string;
-};
+}
 
-type OPadProps = {
+interface OPadProps {
   initialPosition?: InitialPosition;
   disableDragging?: boolean;
-};
+}
 
-type CenterKnobProps = {
+interface CenterKnobProps {
   $isControlled: boolean;
-};
+}
 
-type BackgroundContainerProps = {
+interface BackgroundContainerProps {
   $initialPosition?: InitialPosition;
   $areItemsDraggable?: boolean;
-};
+}
 
-type KeyState = {
+interface KeyState {
   UP?: number;
   DOWN?: number;
   LEFT?: number;
   RIGHT?: number;
-};
+}
 
 const BackgroundContainer = styled('section', {
   shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
@@ -74,7 +74,7 @@ const CenterKnob = styled('div')<CenterKnobProps>`
   border: 2px solid ${({ theme }) => theme.gbaThemeBlue};
   border-radius: 50%;
   background-color: ${({ theme }) => theme.pureBlack};
-  transition: ${({ $isControlled = false }) =>
+  transition: ${({ $isControlled }) =>
     $isControlled ? `transform 0.3s ease-in-out` : `none`};
 
   &:before {
@@ -148,20 +148,20 @@ export const OPad = ({ initialPosition }: OPadProps) => {
 
   const pressEmulatorArrow = useCallback(
     (keyId: string, pointerId: number) =>
-      setIsKeyDown((prevState) => ({ ...prevState, [keyId]: pointerId })),
+      { setIsKeyDown((prevState) => ({ ...prevState, [keyId]: pointerId })); },
     []
   );
 
   const unpressEmulatorArrow = useCallback(
     (pointerId: number) =>
-      setIsKeyDown((prevState) =>
+      { setIsKeyDown((prevState) =>
         Object.fromEntries(
           Object.entries(prevState).map(([key, value]) => [
             key,
             value === pointerId ? undefined : value
           ])
         )
-      ),
+      ); },
     []
   );
 
@@ -271,7 +271,7 @@ export const OPad = ({ initialPosition }: OPadProps) => {
       disabled={!areItemsDraggable}
       position={dragPosition}
       onStop={(_, data) =>
-        setLayout('oPad', { position: { x: data.x, y: data.y } })
+        { setLayout('oPad', { position: { x: data.x, y: data.y } }); }
       }
     >
       <BackgroundContainer

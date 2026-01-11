@@ -8,7 +8,7 @@ import { ErrorWithIcon } from './error-with-icon.tsx';
 
 import type { Extension } from '../../emulator/mgba/mgba-emulator.tsx';
 
-type DragAndDropInputProps = {
+interface DragAndDropInputProps {
   ariaLabel: string;
   children: ReactNode;
   error?: string;
@@ -24,11 +24,11 @@ type DragAndDropInputProps = {
     fileName: string;
     index: number;
   }) => ReactNode;
-};
+}
 
-type DropAreaProps = {
+interface DropAreaProps {
   $isDragActive?: boolean;
-};
+}
 
 const DropArea = styled('div')<DropAreaProps>`
   cursor: pointer;
@@ -110,7 +110,7 @@ const AcceptedFiles = ({
           <IconButton
             aria-label={`Delete ${fileName}`}
             sx={{ padding: 0 }}
-            onClick={() => onDeleteFile(fileName)}
+            onClick={() => { onDeleteFile(fileName); }}
           >
             <BiTrash />
           </IconButton>

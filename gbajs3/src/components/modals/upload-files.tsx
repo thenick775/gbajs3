@@ -35,23 +35,23 @@ import { StyledBiPlus } from '../shared/styled.tsx';
 
 import type { FileTypes } from '../../emulator/mgba/mgba-emulator.tsx';
 
-type InputProps = {
+interface InputProps {
   files?: File[];
   fileUrls?: { url: string; type: keyof FileTypes }[];
   romFileToRun?: string;
-};
+}
 
 type RunRomCheckboxProps = {
   fileName: string;
 } & Pick<CheckboxProps, 'checked' | 'onChange'>;
 
-type AdditionalFileActionsProps = {
+interface AdditionalFileActionsProps {
   fileName: string;
   selectedFileName?: string;
   setSelectedFileName: (name: string | null) => void;
   isChecked: boolean;
   isRomFile: boolean;
-};
+}
 
 const defaultFileUrl: { url: string; type: keyof FileTypes } = {
   url: '',
@@ -159,7 +159,7 @@ const AdditionalFileActions = ({
     <RunRomCheckboxProps
       fileName={fileName}
       checked={isChecked || fileName === selectedFileName}
-      onChange={() => setSelectedFileName(isChecked ? null : fileName)}
+      onChange={() => { setSelectedFileName(isChecked ? null : fileName); }}
     />
   );
 };
@@ -197,7 +197,7 @@ export const UploadFilesModal = () => {
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) =>
-      setValue('files', acceptedFiles, { shouldValidate: true }),
+      { setValue('files', acceptedFiles, { shouldValidate: true }); },
     [setValue]
   );
 
@@ -295,7 +295,7 @@ export const UploadFilesModal = () => {
                       <AdditionalFileActions
                         selectedFileName={watch('romFileToRun')}
                         setSelectedFileName={(name) =>
-                          setValue('romFileToRun', name ?? defaultNoSelectedRom)
+                          { setValue('romFileToRun', name ?? defaultNoSelectedRom); }
                         }
                         isRomFile={
                           emulator?.isFileExtensionOfType(fileName, 'rom') ??
@@ -343,7 +343,7 @@ export const UploadFilesModal = () => {
                                   <IconButton
                                     aria-label={`Remove URL ${index}`}
                                     sx={{ padding: '5px' }}
-                                    onClick={() => remove(index)}
+                                    onClick={() => { remove(index); }}
                                   >
                                     <BiTrash />
                                   </IconButton>
@@ -397,7 +397,7 @@ export const UploadFilesModal = () => {
               <IconButton
                 aria-label={`Add upload url`}
                 sx={{ padding: 0, marginTop: '10px' }}
-                onClick={() => append(defaultFileUrl)}
+                onClick={() => { append(defaultFileUrl); }}
               >
                 <StyledBiPlus />
               </IconButton>
@@ -434,7 +434,7 @@ export const UploadFilesModal = () => {
         <Button
           style={{ minWidth: 'fit-content' }}
           variant="outlined"
-          onClick={() => setIsModalOpen(false)}
+          onClick={() => { setIsModalOpen(false); }}
         >
           Close
         </Button>

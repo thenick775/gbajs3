@@ -32,7 +32,7 @@ describe('useShowLoadPublicRoms', () => {
       isModalOpen: isModalOpenSpy()
     }));
 
-    renderHookWithContext(() => useShowLoadPublicRoms());
+    renderHookWithContext(() => { useShowLoadPublicRoms(); });
 
     expect(setModalContextSpy).toHaveBeenCalledOnce();
     expect(setModalContextSpy).toHaveBeenCalledWith(expect.anything());
@@ -60,7 +60,7 @@ describe('useShowLoadPublicRoms', () => {
       setIsModalOpen: setIsModalOpenSpy
     }));
 
-    renderHookWithContext(() => useShowLoadPublicRoms());
+    renderHookWithContext(() => { useShowLoadPublicRoms(); });
 
     expect(setModalContextSpy).not.toHaveBeenCalled();
     expect(setModalContextSpy).not.toHaveBeenCalled();

@@ -25,10 +25,10 @@ import { Copy } from '../shared/styled.tsx';
 
 import type { PublicRomUploadStatus } from '../../hooks/use-show-load-public-roms.tsx';
 
-type UploadPublicExternalRomsModalProps = {
+interface UploadPublicExternalRomsModalProps {
   url: URL;
   onLoadOrDismiss: (statusMsg: PublicRomUploadStatus) => void;
-};
+}
 
 const LinkBreakWord = styled('a')`
   word-break: break-all;
@@ -84,7 +84,7 @@ export const UploadPublicExternalRomsModal = ({
     <>
       <ModalHeader
         title="Upload Public Rom"
-        onClose={() => onLoadOrDismiss('temporarily-dismissed')}
+        onClose={() => { onLoadOrDismiss('temporarily-dismissed'); }}
       />
       <ModalBody>
         <LoadingIndicator

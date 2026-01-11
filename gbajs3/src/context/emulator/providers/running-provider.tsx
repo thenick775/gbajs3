@@ -2,9 +2,9 @@ import { useState, type ReactNode } from 'react';
 
 import { RunningContext } from '../contexts/running-context.tsx';
 
-type RunningProviderProps = {
+interface RunningProviderProps {
   children: ReactNode;
-};
+}
 
 export const RunningProvider = ({ children }: RunningProviderProps) => {
   const [isRunning, setIsRunning] = useState(false);

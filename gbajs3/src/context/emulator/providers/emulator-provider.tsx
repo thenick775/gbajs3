@@ -4,9 +4,9 @@ import { useRestoreAutoSaveStateData } from '../../../hooks/emulator/use-restore
 import { useEmulator } from '../../../hooks/use-emulator.tsx';
 import { EmulatorContext } from '../contexts/emulator-context.tsx';
 
-type EmulatorProviderProps = {
+interface EmulatorProviderProps {
   children: ReactNode;
-};
+}
 
 export const EmulatorProvider = ({ children }: EmulatorProviderProps) => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);

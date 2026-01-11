@@ -29,7 +29,7 @@ import { NumberInput } from '../shared/number-input.tsx';
 
 import type { SubmitHandler } from 'react-hook-form';
 
-export type EmulatorSettings = {
+export interface EmulatorSettings {
   allowOpposingDirections: boolean;
   fileSystemNotificationsEnabled: boolean;
   frameSkip?: number;
@@ -56,13 +56,13 @@ export type EmulatorSettings = {
   autoSaveStateLoadNotificationEnabled: boolean;
   autoSaveStateCaptureNotificationEnabled: boolean;
   slowdownEnabled: boolean;
-};
+}
 
-type TabPanelProps = {
+interface TabPanelProps {
   children: ReactNode;
   index: number;
   value: number;
-};
+}
 
 const StyledForm = styled('form')`
   display: flex;
@@ -237,7 +237,7 @@ export const EmulatorSettingsModal = () => {
   };
 
   const handleTabChange = (_: React.SyntheticEvent, tabIndex: number) =>
-    setTabValue(tabIndex);
+    { setTabValue(tabIndex); };
 
   return (
     <>
@@ -502,7 +502,7 @@ export const EmulatorSettingsModal = () => {
         >
           Reset
         </Button>
-        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
           Close
         </Button>
       </ModalFooter>

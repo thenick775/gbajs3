@@ -7,12 +7,12 @@ const SaveListSchema = z.array(z.string());
 export type SaveListResponse = z.infer<typeof SaveListSchema>;
 
 export const useListSaves = (
-  options?: UseQueryOptions<SaveListResponse, Error>
+  options?: UseQueryOptions<SaveListResponse>
 ) => {
   const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
   const { accessToken } = useAuthContext();
 
-  return useQuery<SaveListResponse, Error>({
+  return useQuery<SaveListResponse>({
     queryKey: ['gbaSaves', accessToken, apiLocation],
     queryFn: async () => {
       const url = `${apiLocation}/api/save/list`;

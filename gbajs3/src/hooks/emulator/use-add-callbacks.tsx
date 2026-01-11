@@ -8,16 +8,16 @@ import { useFileStat } from './use-file-stat.tsx';
 
 import type { EmulatorSettings } from '../../components/modals/emulator-settings.tsx';
 
-export type CoreCallbackOptions = {
+export interface CoreCallbackOptions {
   saveFileSystemOnInGameSave: boolean;
   autoSaveStateLoadNotificationEnabled: boolean;
   autoSaveStateCaptureNotificationEnabled: boolean;
   fileSystemNotificationsEnabled: boolean;
-};
+}
 
-type SyncActionIfEnabledProps = {
+interface SyncActionIfEnabledProps {
   withToast?: boolean;
-};
+}
 
 // return a function or null based on a condition, null clears the callback in
 // question, undefined allows for partial updates if desired in the future

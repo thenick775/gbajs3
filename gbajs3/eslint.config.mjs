@@ -17,7 +17,8 @@ export default [
   jsxA11Y.flatConfigs.recommended,
   styledA11y.flatConfigs.recommended,
   jestDom.configs['flat/recommended'],
-  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
   ...pluginQuery.configs['flat/recommended'],
   {
     files: ['**/__tests__/**/*.[jt]s?(x)', '**/*.{test,spec}.[jt]s?(x)'],
@@ -60,8 +61,14 @@ export default [
           checksVoidReturn: false
         }
       ],
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        { allowNumber: true }
+      ],
       'react-refresh/only-export-components': 'warn',
       'import/no-default-export': 'error',
+      // https://typescript-eslint.io/rules/no-empty-function/#how-to-use
+      'no-empty-function': 'off',
 
       'import/order': [
         'error',

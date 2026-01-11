@@ -24,15 +24,15 @@ describe('useUnloadEmulator hook', () => {
       isRunning: false
     }));
 
-    renderHookWithContext(() => useUnloadEmulator());
+    renderHookWithContext(() => { useUnloadEmulator(); });
 
     fireEvent(window, new Event('pagehide'));
 
     await waitFor(() =>
-      expect(setItemSpy).not.toHaveBeenCalledWith(
+      { expect(setItemSpy).not.toHaveBeenCalledWith(
         emulatorAutoSaveUnloadLocalStorageKey,
         expect.anything()
-      )
+      ); }
     );
   });
 
@@ -64,11 +64,11 @@ describe('useUnloadEmulator hook', () => {
       isRunning: true
     }));
 
-    renderHookWithContext(() => useUnloadEmulator());
+    renderHookWithContext(() => { useUnloadEmulator(); });
 
     fireEvent(window, new Event('pagehide'));
 
-    await waitFor(() => expect(forceAutoSaveStateSpy).toHaveBeenCalledOnce());
+    await waitFor(() => { expect(forceAutoSaveStateSpy).toHaveBeenCalledOnce(); });
 
     expect(getAutoSaveStateSpy).toHaveBeenCalledOnce();
 

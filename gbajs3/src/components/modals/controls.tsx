@@ -15,20 +15,20 @@ import {
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 import { ControlProfiles } from './controls/control-profiles.tsx';
 
-type TabPanelProps = {
+interface TabPanelProps {
   children: ReactNode;
   index: number;
   value: number;
-};
+}
 
-type ControlTabsProps = {
+interface ControlTabsProps {
   setFormId: Dispatch<React.SetStateAction<string>>;
   virtualControlsFormId: string;
   controlProfilesFormId: string;
   keyBindingsFormId: string;
   resetPositionsButtonId: string;
   setIsSuccessfulSubmit: (successfulSubmit: boolean) => void;
-};
+}
 
 const StyledModalBody = styled(ModalBody)`
   padding: 0 0 1rem 0;
@@ -96,7 +96,7 @@ const ControlTabs = ({
     setIsSuccessfulSubmit(false);
   };
 
-  const onAfterSubmit = () => setIsSuccessfulSubmit(true);
+  const onAfterSubmit = () => { setIsSuccessfulSubmit(true); };
 
   const clearLayoutsAndInitialBounds = () => {
     clearInitialBounds();
@@ -169,7 +169,7 @@ export const ControlsModal = () => {
             showSuccess={isSuccessfulSubmit}
           />
         )}
-        <Button variant="outlined" onClick={() => setIsModalOpen(false)}>
+        <Button variant="outlined" onClick={() => { setIsModalOpen(false); }}>
           Close
         </Button>
       </ModalFooter>
