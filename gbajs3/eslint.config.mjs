@@ -67,6 +67,10 @@ export default [
       ],
       'react-refresh/only-export-components': 'warn',
       'import/no-default-export': 'error',
+      'import/no-unresolved': [
+        'error',
+        { caseSensitive: true, ignore: ['^react-error-boundary$'] }
+      ],
       // https://typescript-eslint.io/rules/no-empty-function/#how-to-use
       'no-empty-function': 'off',
 
