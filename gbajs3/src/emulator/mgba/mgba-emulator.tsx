@@ -433,8 +433,8 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     parseCheatsString,
     parsedCheatsToFile,
     // POC only
-    listShaders: mGBA.listShaders,
-    loadShader: mGBA.loadShader,
-    unloadShader: mGBA.unloadShader
+    listShaders: () => mGBA.listShaders(),
+    loadShader: (shaderPath: string) => { mGBA.loadShader(shaderPath); },
+    unloadShader: () => { mGBA.unloadShader(); }
   };
 };
