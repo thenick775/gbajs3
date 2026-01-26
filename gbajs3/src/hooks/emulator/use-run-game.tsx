@@ -114,7 +114,7 @@ export const useRunGame = () => {
         // POC only
         if (emulatorSettings.shader)
           emulator?.loadShader(
-            `${emulator?.filePaths().shaderPath}/${emulatorSettings.shader}`
+            `${emulator.filePaths().shaderPath}/${emulatorSettings.shader}`
           );
       }
 
