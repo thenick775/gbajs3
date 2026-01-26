@@ -179,7 +179,7 @@ export const EmulatorSettingsModal = () => {
     : '';
   const defaultShaderPaths = emulator
     ?.listShaders()
-    ?.filter((ss) => ss !== '.' && ss !== '..');
+    .filter((ss) => ss !== '.' && ss !== '..');
 
   const onSubmit: SubmitHandler<EmulatorSettings> = ({
     saveFileName,
@@ -226,7 +226,7 @@ export const EmulatorSettingsModal = () => {
 
     // POC Only
     if (shader && isRunning)
-      emulator?.loadShader(`${emulator?.filePaths().shaderPath}/${shader}`);
+      emulator?.loadShader(`${emulator.filePaths().shaderPath}/${shader}`);
     else if (emulatorSettings?.shader) emulator?.unloadShader();
   };
 
