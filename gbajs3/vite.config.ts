@@ -148,7 +148,7 @@ export default defineConfig(({ mode }) => {
           ]
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,wasm}'],
+          globPatterns: ['**/*.{js,css,html,wasm,data}'],
           ignoreURLParametersMatching: [/^state$/],
           navigateFallbackDenylist: [
             /^\/admin/,
