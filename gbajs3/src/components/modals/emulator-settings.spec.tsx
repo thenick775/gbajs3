@@ -285,6 +285,7 @@ describe('<EmulatorSettingsModal />', () => {
   it('removes settings when reset button is clicked', async () => {
     const addCallbacksSpy: (options: CoreCallbackOptions) => void = vi.fn();
     const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
+    const unloadShaderSpy: () => void = vi.fn();
 
     const removeItemSpy = vi.spyOn(Storage.prototype, 'removeItem');
 
@@ -304,7 +305,8 @@ describe('<EmulatorSettingsModal />', () => {
         defaultAudioSampleRates: () => defaultSampleRates,
         defaultAudioBufferSizes: () => defaultAudioBufferSizes,
         getCurrentAutoSaveStatePath: () => null,
-        listShaders: () => ['lcd.shader']
+        listShaders: () => ['lcd.shader'],
+        unloadShader: unloadShaderSpy
       } as GBAEmulator
     }));
 
