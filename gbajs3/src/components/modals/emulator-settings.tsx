@@ -252,6 +252,8 @@ export const EmulatorSettingsModal = () => {
       restoreAutoSaveStateOnLoad: true,
       highResolutionScale: 1
     });
+
+    emulator?.unloadShader();
   };
 
   const handleTabChange = (_: React.SyntheticEvent, tabIndex: number) => {
