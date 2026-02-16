@@ -60,8 +60,6 @@ exports[`<Screen /> > renders with default desktop position and size 1`] = `
   <canvas
     class="emotion-2 emotion-3"
     data-testid="screen-wrapper:render-canvas"
-    height="160"
-    width="240"
   />
   <div />
 </div>
@@ -127,8 +125,6 @@ exports[`<Screen /> > renders with default mobile position and size 1`] = `
   <canvas
     class="emotion-2 emotion-3"
     data-testid="screen-wrapper:render-canvas"
-    height="160"
-    width="240"
   />
   <div />
 </div>

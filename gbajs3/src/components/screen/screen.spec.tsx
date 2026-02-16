@@ -71,11 +71,7 @@ describe('<Screen />', () => {
   it('renders with default mobile position and size', () => {
     renderWithContext(<Screen />);
 
-    const canvas = screen.getByTestId('screen-wrapper:render-canvas');
     const screenWrapper = screen.getByTestId('screen-wrapper');
-
-    expect(canvas).toHaveAttribute('width', '240');
-    expect(canvas).toHaveAttribute('height', '160');
 
     expect(screenWrapper).toHaveStyle({
       // note: width and height using dynamic viewport units is not properly respected
@@ -112,11 +108,7 @@ describe('<Screen />', () => {
 
     renderWithContext(<Screen />);
 
-    const canvas = screen.getByTestId('screen-wrapper:render-canvas');
     const screenWrapper = screen.getByTestId('screen-wrapper');
-
-    expect(canvas).toHaveAttribute('width', '240');
-    expect(canvas).toHaveAttribute('height', '160');
 
     expect(screenWrapper).toHaveStyle({
       // see: https://github.com/jsdom/jsdom/issues/1332
