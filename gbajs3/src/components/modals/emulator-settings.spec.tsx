@@ -64,22 +64,21 @@ describe('<EmulatorSettingsModal />', () => {
     const addCallbacksSpy: (options: CoreCallbackOptions) => void = vi.fn();
     const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
 
-    const { useEmulatorContext: originalEmulator } = await vi.importActual<
-      typeof contextHooks
-    >('../../hooks/context.tsx');
     const { useAddCallbacks: originalCallbacks } = await vi.importActual<
       typeof addCallbackHooks
     >('../../hooks/emulator/use-add-callbacks.tsx');
 
-    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-      ...originalEmulator(),
-      emulator: {
-        setCoreSettings: setCoreSettingsSpy,
-        defaultAudioSampleRates: () => defaultSampleRates,
-        defaultAudioBufferSizes: () => defaultAudioBufferSizes,
-        getCurrentAutoSaveStatePath: () => null
-      } as GBAEmulator
-    }));
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(
+      () =>
+        ({
+          emulator: {
+            setCoreSettings: setCoreSettingsSpy,
+            defaultAudioSampleRates: () => defaultSampleRates,
+            defaultAudioBufferSizes: () => defaultAudioBufferSizes,
+            getCurrentAutoSaveStatePath: () => null
+          }
+        }) as ReturnType<typeof contextHooks.useEmulatorContext>
+    );
 
     vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
       ...originalCallbacks(),
@@ -131,23 +130,22 @@ describe('<EmulatorSettingsModal />', () => {
     const addCallbacksSpy: (options: CoreCallbackOptions) => void = vi.fn();
     const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
 
-    const { useEmulatorContext: originalEmulator } = await vi.importActual<
-      typeof contextHooks
-    >('../../hooks/context.tsx');
     const { useAddCallbacks: originalCallbacks } = await vi.importActual<
       typeof addCallbackHooks
     >('../../hooks/emulator/use-add-callbacks.tsx');
 
-    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-      ...originalEmulator(),
-      emulator: {
-        setCoreSettings: setCoreSettingsSpy,
-        getCurrentSaveName: () => 'current_save.sav',
-        defaultAudioSampleRates: () => defaultSampleRates,
-        defaultAudioBufferSizes: () => defaultAudioBufferSizes,
-        getCurrentAutoSaveStatePath: () => null
-      } as GBAEmulator
-    }));
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(
+      () =>
+        ({
+          emulator: {
+            setCoreSettings: setCoreSettingsSpy,
+            getCurrentSaveName: () => 'current_save.sav',
+            defaultAudioSampleRates: () => defaultSampleRates,
+            defaultAudioBufferSizes: () => defaultAudioBufferSizes,
+            getCurrentAutoSaveStatePath: () => null
+          }
+        }) as ReturnType<typeof contextHooks.useEmulatorContext>
+    );
 
     vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
       ...originalCallbacks(),
@@ -283,24 +281,25 @@ describe('<EmulatorSettingsModal />', () => {
 
     const removeItemSpy = vi.spyOn(Storage.prototype, 'removeItem');
 
-    const {
-      useEmulatorContext: originalEmulator,
-      useRunningContext: originalRunning
-    } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+    const { useRunningContext: originalRunning } = await vi.importActual<
+      typeof contextHooks
+    >('../../hooks/context.tsx');
     const { useAddCallbacks: originalCallbacks } = await vi.importActual<
       typeof addCallbackHooks
     >('../../hooks/emulator/use-add-callbacks.tsx');
 
-    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-      ...originalEmulator(),
-      emulator: {
-        setCoreSettings: setCoreSettingsSpy,
-        getCurrentSaveName: () => 'current_save.sav',
-        defaultAudioSampleRates: () => defaultSampleRates,
-        defaultAudioBufferSizes: () => defaultAudioBufferSizes,
-        getCurrentAutoSaveStatePath: () => null
-      } as GBAEmulator
-    }));
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(
+      () =>
+        ({
+          emulator: {
+            setCoreSettings: setCoreSettingsSpy,
+            getCurrentSaveName: () => 'current_save.sav',
+            defaultAudioSampleRates: () => defaultSampleRates,
+            defaultAudioBufferSizes: () => defaultAudioBufferSizes,
+            getCurrentAutoSaveStatePath: () => null
+          }
+        }) as ReturnType<typeof contextHooks.useEmulatorContext>
+    );
 
     vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
       ...originalCallbacks(),
@@ -347,20 +346,21 @@ describe('<EmulatorSettingsModal />', () => {
   });
 
   it('displays current save name from emulator when running if no override is present', async () => {
-    const {
-      useEmulatorContext: originalEmulator,
-      useRunningContext: originalRunning
-    } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+    const { useRunningContext: originalRunning } = await vi.importActual<
+      typeof contextHooks
+    >('../../hooks/context.tsx');
 
-    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-      ...originalEmulator(),
-      emulator: {
-        getCurrentSaveName: () => 'current_save.sav',
-        defaultAudioSampleRates: () => defaultSampleRates,
-        defaultAudioBufferSizes: () => defaultAudioBufferSizes,
-        getCurrentAutoSaveStatePath: () => null
-      } as GBAEmulator
-    }));
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(
+      () =>
+        ({
+          emulator: {
+            getCurrentSaveName: () => 'current_save.sav',
+            defaultAudioSampleRates: () => defaultSampleRates,
+            defaultAudioBufferSizes: () => defaultAudioBufferSizes,
+            getCurrentAutoSaveStatePath: () => null
+          }
+        }) as ReturnType<typeof contextHooks.useEmulatorContext>
+    );
 
     vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
       ...originalRunning(),

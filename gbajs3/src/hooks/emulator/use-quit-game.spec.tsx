@@ -55,7 +55,7 @@ describe('useQuitGame hook', () => {
 
     expect(startFadeSpy).toHaveBeenCalledOnce();
     // blob is not implemented, but we can check the type
-    expect(startFadeSpy).toHaveBeenCalledWith(testCanvas, new Blob());
+    expect(startFadeSpy).toHaveBeenCalledWith(testCanvas, expect.any(Blob));
     // if the emulator is running, it is expected that we attempt to cancel the fade
     // if the fade itself is not actively running, it is a no-op
     expect(cancelFadeSpy).toHaveBeenCalledOnce();

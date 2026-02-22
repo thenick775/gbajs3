@@ -223,7 +223,8 @@ export default defineConfig(({ mode }) => {
           'src/emulator/mgba/wasm/**',
           '**/*.d.ts',
           '**/*eslint*',
-          '**/service-worker/**'
+          '**/service-worker/**',
+          '**/.DS_Store'
         ]
       }
     }
