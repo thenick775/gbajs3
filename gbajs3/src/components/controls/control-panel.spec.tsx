@@ -103,17 +103,14 @@ describe('<ControlPanel />', () => {
     expect(controlPanelWrapper).toMatchSnapshot();
   });
 
-  it('sets initial bounds when rendered', async () => {
-    const setInitialBoundSpy = vi.fn();
-
-    const { useInitialBoundsContext: originalBounds } = await vi.importActual<
-      typeof contextHooks
-    >('../../hooks/context.tsx');
+  it('sets initial bounds when rendered', () => {
+    const setInitialBoundSpy: (key: string, bounds?: DOMRect) => void = vi.fn();
 
     vi.spyOn(contextHooks, 'useInitialBoundsContext').mockImplementation(
       () => ({
-        ...originalBounds(),
-        setInitialBound: setInitialBoundSpy
+        setInitialBound: setInitialBoundSpy,
+        initialBounds: { screen: {} as DOMRect },
+        clearInitialBounds: vi.fn()
       })
     );
 

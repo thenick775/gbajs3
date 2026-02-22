@@ -81,6 +81,9 @@ describe('fallbackRender', () => {
 
   it('copies error stack clipboard', async () => {
     const user = userEvent.setup();
+
+    const writeTextSpy = vi.spyOn(window.navigator.clipboard, 'writeText');
+
     renderWithContext(
       <AppErrorBoundary>
         <ThrowError />
@@ -91,12 +94,15 @@ describe('fallbackRender', () => {
 
     await user.click(screen.getByText('Copy trace'));
 
-    const copiedText = await window.navigator.clipboard.readText();
-    expect(copiedText).toContain('Error: A test error\n    at');
+    expect(writeTextSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Error: A test error\n    at')
+    );
   });
 
   it('copies error stack clipboard text fallback', async () => {
     const user = userEvent.setup();
+
+    const writeTextSpy = vi.spyOn(window.navigator.clipboard, 'writeText');
 
     renderWithContext(
       <AppErrorBoundary>
@@ -108,12 +114,13 @@ describe('fallbackRender', () => {
 
     await user.click(screen.getByText('Copy trace'));
 
-    const copiedText = await window.navigator.clipboard.readText();
-    expect(copiedText).toBe('Error had empty stack');
+    expect(writeTextSpy).toHaveBeenCalledWith('Error had empty stack');
   });
 
   it('copies clipboard text fallback', async () => {
     const user = userEvent.setup();
+
+    const writeTextSpy = vi.spyOn(window.navigator.clipboard, 'writeText');
 
     renderWithContext(
       <AppErrorBoundary>
@@ -125,7 +132,6 @@ describe('fallbackRender', () => {
 
     await user.click(screen.getByText('Copy trace'));
 
-    const copiedText = await window.navigator.clipboard.readText();
-    expect(copiedText).toBe('No stack available');
+    expect(writeTextSpy).toHaveBeenCalledWith('No stack available');
   });
 });

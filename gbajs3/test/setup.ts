@@ -1,12 +1,20 @@
 import '@testing-library/jest-dom/vitest';
+import { Blob, File } from 'node:buffer';
+
 import { createSerializer } from '@emotion/jest';
+import { FormData, Request, Response } from 'undici';
 import { afterAll, afterEach, beforeAll, beforeEach, expect, vi } from 'vitest';
 
 import { gbaServerLocationPlaceholder } from './mocks/handlers.ts';
 import { server } from './mocks/server.ts';
 
-// see: https://github.com/mswjs/msw/issues/2166#issuecomment-2363457424
-import 'blob-polyfill';
+Object.defineProperties(globalThis, {
+  Blob: { value: Blob },
+  File: { value: File },
+  FormData: { value: FormData },
+  Request: { value: Request },
+  Response: { value: Response }
+});
 
 /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument
    -- This still works with only a type mismatch, see https://github.com/emotion-js/emotion/issues/3132
@@ -37,14 +45,9 @@ beforeEach(() => {
     }))
   });
 
-  Object.defineProperty(URL, 'createObjectURL', {
-    writable: true,
-    value: vi.fn()
-  });
-
-  Object.defineProperty(URL, 'revokeObjectURL', {
-    writable: true,
-    value: vi.fn()
+  Object.defineProperties(URL, {
+    createObjectURL: { writable: true, value: vi.fn() },
+    revokeObjectURL: { writable: true, value: vi.fn() }
   });
 });
 
