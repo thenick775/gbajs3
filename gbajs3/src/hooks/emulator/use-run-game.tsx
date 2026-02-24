@@ -111,7 +111,6 @@ export const useRunGame = () => {
           highResolutionScale: emulatorSettings.highResolutionScale
         });
 
-        // POC only
         if (emulatorSettings.shader)
           emulator?.loadShader(
             `${emulator.filePaths().shaderPath}/${emulatorSettings.shader}`

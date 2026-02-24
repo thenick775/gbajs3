@@ -113,7 +113,6 @@ export type GBAEmulator = {
     autoSaveStateName: string,
     data: Uint8Array
   ) => Promise<void>;
-  // POC only
   listShaders: () => string[];
   loadShader: (shaderPath: string) => void;
   unloadShader: () => void;
@@ -481,9 +480,12 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     parseCheatsString,
     parsedCheatsToFile,
     clearFilesystem,
-    // POC only
     listShaders: () => mGBA.listShaders(),
-    loadShader: (shaderPath: string) => { mGBA.loadShader(shaderPath); },
-    unloadShader: () => { mGBA.unloadShader(); }
+    loadShader: (shaderPath: string) => {
+      mGBA.loadShader(shaderPath);
+    },
+    unloadShader: () => {
+      mGBA.unloadShader();
+    }
   };
 };
