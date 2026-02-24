@@ -56,7 +56,6 @@ export type EmulatorSettings = {
   autoSaveStateLoadNotificationEnabled: boolean;
   autoSaveStateCaptureNotificationEnabled: boolean;
   slowdownEnabled: boolean;
-  // POC only, this should be a part of the settings API
   shader?: string;
   highResolutionScale?: number;
 };
@@ -159,7 +158,6 @@ export const EmulatorSettingsModal = () => {
       autoSaveStateCaptureNotificationEnabled:
         emulatorSettings?.autoSaveStateCaptureNotificationEnabled ?? true,
       slowdownEnabled: emulatorSettings?.slowdownEnabled ?? true,
-      // POC only
       shader: emulatorSettings?.shader ?? '',
       highResolutionScale: emulatorSettings?.highResolutionScale ?? 1
     }
@@ -216,7 +214,6 @@ export const EmulatorSettingsModal = () => {
       highResolutionScale: rest.highResolutionScale
     });
 
-    // POC Only
     if (shader && isRunning)
       emulator?.loadShader(`${emulator.filePaths().shaderPath}/${shader}`);
     else if (emulatorSettings?.shader) emulator?.unloadShader();
