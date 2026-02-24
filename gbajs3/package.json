@@ -21,7 +21,7 @@
     "@mui/x-tree-view": "^9.10.1",
     "@react-oauth/google": "^0.13.5",
     "@tanstack/react-query": "^5.101.2",
-    "@thenick775/mgba-wasm": "file:thenick775-mgba-wasm-2.4.1.tgz",
+    "@thenick775/mgba-wasm": "^2.5.0-beta.1",
     "@uidotdev/usehooks": "^2.4.1",
     "@zip.js/zip.js": "^2.8.26",
     "jwt-decode": "^4.0.0",
