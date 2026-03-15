@@ -41,7 +41,6 @@
     "zod": "^4.1.13"
   },
   "overrides": {
-    "react-draggable": "^4.5.0",
     "vite-plugin-pwa": {
       "vite": "$vite"
     },
