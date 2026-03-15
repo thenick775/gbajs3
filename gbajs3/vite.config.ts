@@ -193,7 +193,7 @@ export default defineConfig(({ mode }) => {
               },
               {
                 name: 'query',
-                test: /node_modules[\\/](?:@tanstack[\\/]react-query|zod)([\\/]|$)/
+                test: /node_modules[\\/](?:@tanstack|zod)([\\/]|$)/
               },
               {
                 name: 'ui',
