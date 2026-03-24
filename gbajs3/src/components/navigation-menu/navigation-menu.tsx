@@ -25,7 +25,8 @@ import {
   BiFileFind,
   BiBrain,
   BiRefresh,
-  BiDownload
+  BiDownload,
+  BiX
 } from 'react-icons/bi';
 import { MdImportExport } from 'react-icons/md';
 
@@ -157,13 +158,16 @@ const HamburgerButton = styled(ButtonBase)<
 `;
 
 const NavigationMenuClearDismiss = styled('button')`
-  position: absolute;
-  width: calc(100dvw - ${NavigationMenuWidth}px);
-  left: ${NavigationMenuWidth}px;
-  height: 99%;
-  background: 0 0;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
   z-index: 140;
   border: none;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  transition: opacity 0.15s ease;
 `;
 
 export const NavigationMenu = () => {
@@ -219,9 +223,23 @@ export const NavigationMenu = () => {
             aria-label="Menu Toggle"
             $areItemsDraggable={areItemsDraggable}
           >
-            <BiMenu
-              style={{ height: '29px', width: '29px', verticalAlign: 'middle' }}
-            />
+            {isExpanded ? (
+              <BiX
+                style={{
+                  height: '29px',
+                  width: '29px',
+                  verticalAlign: 'middle'
+                }}
+              />
+            ) : (
+              <BiMenu
+                style={{
+                  height: '29px',
+                  width: '29px',
+                  verticalAlign: 'middle'
+                }}
+              />
+            )}
           </HamburgerButton>
         </Draggable>
         <StyledMenuHeader id={menuHeaderId}>Menu</StyledMenuHeader>
