@@ -191,39 +191,39 @@ export const NavigationMenu = () => {
 
   return (
     <>
-      <Draggable
-        nodeRef={menuButtonRef}
-        bounds="parent"
-        axis="y"
-        position={menuButtonLayout?.position ?? { x: 0, y: 0 }}
-        disabled={!areItemsDraggable}
-        onStop={(_, data) => {
-          setLayout('menuButton', {
-            position: { x: 0, y: data.y },
-            standalone: true
-          });
-        }}
-      >
-        <HamburgerButton
-          ref={menuButtonRef}
-          id="menu-btn"
-          $isExpanded={isExpanded}
-          onClick={() => {
-            setIsExpanded((prevState) => !prevState);
-          }}
-          aria-label="Menu Toggle"
-          $areItemsDraggable={areItemsDraggable}
-        >
-          <BiMenu
-            style={{ height: '29px', width: '29px', verticalAlign: 'middle' }}
-          />
-        </HamburgerButton>
-      </Draggable>
       <NavigationMenuWrapper
         data-testid="menu-wrapper"
         id="menu-wrapper"
         $isExpanded={isExpanded}
       >
+        <Draggable
+          nodeRef={menuButtonRef}
+          bounds="parent"
+          axis="y"
+          position={menuButtonLayout?.position ?? { x: 0, y: 0 }}
+          disabled={!areItemsDraggable}
+          onStop={(_, data) => {
+            setLayout('menuButton', {
+              position: { x: 0, y: data.y },
+              standalone: true
+            });
+          }}
+        >
+          <HamburgerButton
+            ref={menuButtonRef}
+            id="menu-btn"
+            $isExpanded={isExpanded}
+            onClick={() => {
+              setIsExpanded((prevState) => !prevState);
+            }}
+            aria-label="Menu Toggle"
+            $areItemsDraggable={areItemsDraggable}
+          >
+            <BiMenu
+              style={{ height: '29px', width: '29px', verticalAlign: 'middle' }}
+            />
+          </HamburgerButton>
+        </Draggable>
         <StyledMenuHeader id={menuHeaderId}>Menu</StyledMenuHeader>
         <MenuItemWrapper aria-labelledby={menuHeaderId}>
           <NavLeaf
