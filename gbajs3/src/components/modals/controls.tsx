@@ -144,10 +144,10 @@ const ControlTabs = ({
 export const ControlsModal = () => {
   const { setIsModalOpen } = useModalContext();
   const baseId = useId();
-  const [formId, setFormId] = useState<string>(
+  const [formId, setFormId] = useState(
     `${baseId}--virtual-controls-form`
   );
-  const [isSuccessfulSubmit, setIsSuccessfulSubmit] = useState<boolean>(false);
+  const [isSuccessfulSubmit, setIsSuccessfulSubmit] = useState(false);
 
   return (
     <>

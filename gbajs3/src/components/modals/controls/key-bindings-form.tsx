@@ -31,23 +31,33 @@ export const KeyBindingsForm = ({
 }: KeyBindingsFormProps) => {
   const { emulator } = useEmulatorContext();
   const { isRunning } = useRunningContext();
+
+  const defaultKeyBindings = emulator?.defaultKeyBindings() ?? [];
+
+  // Initialize local storage state
+  const [currentKeyBindings, setCurrentKeyBindings] = useLocalStorage<
+    KeyBinding[] | undefined
+  >(emulatorKeyBindingsLocalStorageKey);
+
+  // Build defaultValues for useForm
+  const defaultValues: KeyBindingInputProps = (
+    currentKeyBindings ?? defaultKeyBindings
+  ).reduce<KeyBindingInputProps>((acc, kb) => {
+    acc[kb.gbaInput] = kb;
+    return acc;
+  }, {});
+
   const {
     handleSubmit,
     setValue,
     control,
     formState: { errors }
-  } = useForm<KeyBindingInputProps>();
-
-  const defaultKeyBindings = emulator?.defaultKeyBindings();
-
-  const [currentKeyBindings, setCurrentKeyBindings] = useLocalStorage<
-    KeyBinding[] | undefined
-  >(emulatorKeyBindingsLocalStorageKey);
+  } = useForm({
+    defaultValues
+  });
 
   const onSubmit = (formData: KeyBindingInputProps) => {
-    const keyBindings = Object.entries(formData).map(
-      ([, keyBinding]) => keyBinding
-    );
+    const keyBindings = Object.values(formData);
 
     if (isRunning) emulator?.remapKeyBindings(keyBindings);
 
@@ -63,7 +73,7 @@ export const KeyBindingsForm = ({
       id={id}
       onSubmit={handleSubmit(onSubmit)}
     >
-      {renderedBindings?.map((keyBinding) => (
+      {renderedBindings.map((keyBinding) => (
         <Controller
           key={`gba_input_${keyBinding.gbaInput.toLowerCase()}`}
           control={control}

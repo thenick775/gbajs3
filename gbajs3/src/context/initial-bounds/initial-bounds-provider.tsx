@@ -20,12 +20,9 @@ export const InitialBoundsProvider = ({
 }: InitialBoundsProviderProps) => {
   const [initialBounds, setInitialBounds] = useState<InitialBounds>();
   const orientation = useOrientation();
-  const prevOrientation = useRef<number>(orientation.angle);
+  const prevOrientation = useRef(orientation.angle);
   const windowSize = useWindowSize();
-  const prevSize = useRef<{
-    width: number | null;
-    height: number | null;
-  }>(windowSize);
+  const prevSize = useRef(windowSize);
 
   const setInitialBound = useCallback((key: string, bounds?: DOMRect) => {
     setInitialBounds((prevState) => ({ ...prevState, [key]: bounds }));

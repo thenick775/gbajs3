@@ -51,7 +51,7 @@ const exportEmscriptenFsAsZip = async (
 
   const { writer, finalize } = await setupZipTarget(zipName, zipOptions);
 
-  await files.reduce<Promise<void>>(
+  await files.reduce(
     (chain, relPath) =>
       chain.then(async () => {
         const bytes = emulator?.getFile('/' + relPath);
