@@ -74,7 +74,6 @@ const NavigationMenuWrapper = styled('div')<ExpandableComponentProps>`
   position: fixed;
   background-color: ${({ theme }) => theme.mediumBlack};
   transition: left 0.4s ease-in-out;
-  -webkit-transition: left 0.4s ease-in-out;
   z-index: 150;
   text-align: left;
   left: 0;
@@ -123,15 +122,18 @@ const HamburgerButton = styled(ButtonBase)<
   z-index: 200;
   position: fixed;
   left: ${NavigationMenuWidth - 50}px;
-  top: 12px;
+  top: 88dvh;
   transition: 0.4s ease-in-out;
-  -webkit-transition: 0.4s ease-in-out;
   transition-property: left;
   cursor: pointer;
   border-radius: 0.25rem;
   border: none;
   min-height: 36px;
   min-width: 40px;
+
+  @media ${({ theme }) => theme.isLargerThanPhone} {
+    top: 12px;
+  }
 
   @media ${({ theme }) => theme.isMobileLandscape} {
     bottom: 15px;
@@ -157,7 +159,9 @@ const HamburgerButton = styled(ButtonBase)<
   `}
 `;
 
-const NavigationMenuClearDismiss = styled('button')`
+const NavigationMenuClearDismiss = styled('button')<{
+  $visible: boolean;
+}>`
   position: fixed;
   left: 0;
   right: 0;
@@ -167,11 +171,14 @@ const NavigationMenuClearDismiss = styled('button')`
   border: none;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  transition: opacity 0.15s ease;
+
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  pointer-events: ${({ $visible }) => ($visible ? 'auto' : 'none')};
+
+  transition: opacity 0.4s ease-in-out;
 `;
 
 export const NavigationMenu = () => {
-  const [isExpanded, setIsExpanded] = useState(true);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
   const { setModalContent, setIsModalOpen } = useModalContext();
   const { isAuthenticated } = useAuthContext();
@@ -183,10 +190,15 @@ export const NavigationMenu = () => {
   const menuButtonLayout = getLayout('menuButton');
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
+  const [isExpandedByUser, setIsExpandedByUser] = useState<boolean | null>(
+    null
+  );
   const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
   const menuHeaderId = useId();
   const { quickReload, isQuickReloadAvailable } = useQuickReload();
 
+  const isExpanded =
+    isExpandedByUser ?? (isLargerThanPhone && !isMobileLandscape);
   const isMenuItemDisabledByAuth = !isAuthenticated();
   const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
   const hasNoLocalRoms = !emulator?.listRoms().length;
@@ -218,7 +230,7 @@ export const NavigationMenu = () => {
             id="menu-btn"
             $isExpanded={isExpanded}
             onClick={() => {
-              setIsExpanded((prevState) => !prevState);
+              setIsExpandedByUser((prevState) => !prevState);
             }}
             aria-label="Menu Toggle"
             $areItemsDraggable={areItemsDraggable}
@@ -458,14 +470,13 @@ export const NavigationMenu = () => {
           />
         </MenuItemWrapper>
       </NavigationMenuWrapper>
-      {isExpanded && (!isLargerThanPhone || isMobileLandscape) && (
-        <NavigationMenuClearDismiss
-          aria-label="Menu Dismiss"
-          onClick={() => {
-            setIsExpanded(false);
-          }}
-        />
-      )}
+      <NavigationMenuClearDismiss
+        $visible={isExpanded && (!isLargerThanPhone || isMobileLandscape)}
+        aria-label="Menu Dismiss"
+        onClick={() => {
+          setIsExpandedByUser(false);
+        }}
+      />
     </>
   );
 };

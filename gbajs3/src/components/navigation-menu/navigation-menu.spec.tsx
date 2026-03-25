@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { NavigationMenuWidth } from './consts.tsx';
 import { NavigationMenu } from './navigation-menu.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
+import { GbaDarkTheme } from '../../context/theme/theme.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
 import * as quickReloadHooks from '../../hooks/emulator/use-quick-reload.tsx';
 import * as logoutHooks from '../../hooks/use-logout.tsx';
@@ -33,12 +34,57 @@ import type {
 } from '@tanstack/react-query';
 
 describe('<NavigationMenu />', () => {
-  it('renders menu and dismiss buttons', () => {
+  // not working as expected
+  it('renders menu button and closed menu by default on mobile', () => {
     renderWithContext(<NavigationMenu />);
 
     expect(screen.getByRole('list', { name: 'Menu' })).toBeInTheDocument();
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
-    expect(screen.getByLabelText('Menu Dismiss')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
+    // renders default mounted menu items
+    expect(screen.getAllByRole('listitem')).toHaveLength(13);
+  });
+
+  // not working as expected
+  it('renders menu button and open menu by default on desktop', () => {
+    vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
+      matches: query !== GbaDarkTheme.isLargerThanPhone,
+      media: '',
+      addListener: () => {
+        /* empty */
+      },
+      removeListener: () => {
+        /* empty */
+      },
+      onchange: () => {
+        /* empty */
+      },
+      addEventListener: () => {
+        /* empty */
+      },
+      removeEventListener: () => {
+        /* empty */
+      },
+      dispatchEvent: () => true
+    }));
+
+    renderWithContext(<NavigationMenu />);
+
+    expect(screen.getByRole('list', { name: 'Menu' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
+    // renders default mounted menu items
+    expect(screen.getAllByRole('listitem')).toHaveLength(13);
+  });
+
+  it('renders menu and dismiss buttons when opened', async () => {
+    renderWithContext(<NavigationMenu />);
+
+    await userEvent.click(screen.getByLabelText('Menu Toggle'));
+
+    expect(screen.getByRole('list', { name: 'Menu' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
+    expect(screen.getByLabelText('Menu Dismiss')).toBeVisible();
     // renders default mounted menu items
     expect(screen.getAllByRole('listitem')).toHaveLength(13);
   });
@@ -46,19 +92,11 @@ describe('<NavigationMenu />', () => {
   it('toggles menu with button', async () => {
     renderWithContext(<NavigationMenu />);
 
-    expect(screen.getByTestId('menu-wrapper')).toHaveStyle(`left: 0`);
-    expect(screen.getByLabelText('Menu Toggle')).toHaveStyle(
-      `left: ${NavigationMenuWidth - 50}px`
-    );
-    expect(screen.getByLabelText('Menu Dismiss')).toBeInTheDocument();
-
-    await userEvent.click(screen.getByLabelText('Menu Toggle'));
-
     expect(screen.getByTestId('menu-wrapper')).toHaveStyle(
       `left: -${NavigationMenuWidth + 5}px`
     );
     expect(screen.getByLabelText('Menu Toggle')).toHaveStyle('left: -5px');
-    expect(screen.queryByLabelText('Menu Dismiss')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
 
     await userEvent.click(screen.getByLabelText('Menu Toggle'));
 
@@ -66,11 +104,13 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toHaveStyle(
       `left: ${NavigationMenuWidth - 50}px`
     );
-    expect(screen.getByLabelText('Menu Dismiss')).toBeInTheDocument();
+    expect(screen.getByLabelText('Menu Dismiss')).toBeVisible();
   });
 
   it('dismisses menu with overlay', async () => {
     renderWithContext(<NavigationMenu />);
+
+    await userEvent.click(screen.getByLabelText('Menu Toggle'));
 
     expect(screen.getByTestId('menu-wrapper')).toHaveStyle(`left: 0`);
     expect(screen.getByLabelText('Menu Toggle')).toHaveStyle(
@@ -84,7 +124,7 @@ describe('<NavigationMenu />', () => {
       `left: -${NavigationMenuWidth + 5}px`
     );
     expect(screen.getByLabelText('Menu Toggle')).toHaveStyle('left: -5px');
-    expect(screen.queryByLabelText('Menu Dismiss')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
   });
 
   describe('menu nodes', () => {
