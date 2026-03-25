@@ -32,6 +32,7 @@ type UploadPublicExternalRomsModalProps = {
 
 const LinkBreakWord = styled('a')`
   word-break: break-all;
+  color: ${({ theme }) => theme.pureWhite};
 `;
 
 const URLDisplay = ({ url }: { url: URL }) => {

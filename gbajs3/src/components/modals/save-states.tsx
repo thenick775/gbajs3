@@ -29,68 +29,84 @@ type SaveStateListItemProps = {
 };
 
 const LoadSaveStateButton = styled('button')`
-  padding: 0.5rem 0.5rem;
   width: 100%;
-  color: ${({ theme }) => theme.blueCharcoal};
-  background-color: ${({ theme }) => theme.pureWhite};
-  border: none;
+  padding: 0.875rem 1rem;
   text-align: left;
+  cursor: pointer;
+
+  color: ${({ theme }) => theme.modalTextPrimary};
+  background: transparent;
+  border: 0;
+
+  font: inherit;
+  line-height: 1.35;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
 
   &:hover {
-    color: ${({ theme }) => theme.darkGrayBlue};
-    background-color: ${({ theme }) => theme.aliceBlue1};
+    background-color: #141b27;
+  }
+
+  &:focus-visible {
+    outline: none;
+    position: relative;
+    z-index: 1;
+    background-color: #141b27;
+    box-shadow:
+      inset 0 0 0 1px ${({ theme }) => theme.gbaThemeBlue},
+      0 0 0 2px rgba(53, 111, 202, 0.2);
+  }
+
+  &:active {
+    background-color: #141b27;
   }
 `;
 
 const StyledLi = styled('li')`
-  display: flex;
-  flex-direction: column;
-  color: ${({ theme }) => theme.blueCharcoal};
-  background-color: ${({ theme }) => theme.pureWhite};
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  margin: 0;
 `;
 
 const ButtonGrid = styled('div')`
-  cursor: pointer;
   display: grid;
-  grid-template-columns: auto 32px 32px;
-  gap: 10px;
+  grid-template-columns: 1fr 36px 36px;
+  align-items: center;
 `;
 
 const SaveStatesList = styled('ul')`
-  list-style-type: none;
+  list-style: none;
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
 
-  & > ${StyledLi}:first-of-type {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-  }
+  background: ${({ theme }) => theme.modalSurfaceElevated};
+  border: 1px solid #283243;
+  border-radius: 10px;
+  overflow: hidden;
 
-  & > ${StyledLi}:last-child {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-  }
-
-  & > ${StyledLi}:not(:first-of-type) {
-    border-top-width: 0;
+  & > ${StyledLi} + ${StyledLi} {
+    border-top: 1px solid #283243;
   }
 `;
 
 const StyledBiTrash = styled(BiTrash)`
-  height: 100%;
-  width: 20px;
+  width: 18px;
+  height: 18px;
 `;
 
 const StyledFaRegEye = styled(FaRegEye)`
-  height: 100%;
-  width: 20px;
+  width: 18px;
+  height: 18px;
 `;
 
 const StateSlotContainer = styled('div')`
-  border-bottom: 1px solid ${({ theme }) => theme.pattensBlue};
+  border-bottom: 1px solid #283243;
   margin-bottom: 16px;
   padding-bottom: 16px;
 `;
@@ -101,6 +117,26 @@ const SaveStatePreview = styled('img')`
   object-fit: contain;
   display: block;
   image-rendering: pixelated;
+  background: ${({ theme }) => theme.modalSurface};
+`;
+
+const EmptyState = styled(CenteredText)`
+  padding: 1rem;
+  color: ${({ theme }) => theme.modalTextSecondary};
+`;
+
+const StyledIconButton = styled(IconButton)`
+  && {
+    padding: 0;
+    height: 100%;
+    width: 36px;
+    color: ${({ theme }) => theme.modalTextSecondary};
+
+    &:hover {
+      background-color: #141b27;
+      color: ${({ theme }) => theme.modalTextPrimary};
+    }
+  }
 `;
 
 const uint8ArrayToBase64DataUrl = (binary?: Uint8Array) =>
@@ -131,25 +167,23 @@ const SaveStateListItem = ({
 }: SaveStateListItemProps) => (
   <StyledLi>
     <ButtonGrid>
-      <LoadSaveStateButton onClick={onClick}>
+      <LoadSaveStateButton onClick={onClick} title={saveStateName}>
         {saveStateName}
       </LoadSaveStateButton>
-      <IconButton
+      <StyledIconButton
         aria-label={`${
           isSaveStatePreviewSelected ? 'Close' : 'View'
         } ${saveStateName}`}
-        sx={{ padding: 0 }}
         onClick={onSaveStatePreviewSelected}
       >
         <StyledFaRegEye />
-      </IconButton>
-      <IconButton
+      </StyledIconButton>
+      <StyledIconButton
         aria-label={`Delete ${saveStateName}`}
-        sx={{ padding: 0 }}
         onClick={onDelete}
       >
         <StyledBiTrash />
-      </IconButton>
+      </StyledIconButton>
     </ButtonGrid>
     <Collapse in={isSaveStatePreviewSelected}>
       <SaveStatePreview src={previewDataUrl} alt={`${saveStateName} Preview`} />
@@ -174,7 +208,6 @@ export const SaveStatesModal = () => {
 
   const refreshSaveStates = useCallback(() => {
     const saveStatesList = emulator?.listCurrentSaveStates();
-
     setCurrentSaveStates(saveStatesList);
   }, [emulator]);
 
@@ -191,7 +224,7 @@ export const SaveStatesModal = () => {
 
   const currentGameName = emulator?.getCurrentGameName();
   const currentSaveStateSlot = currentGameName
-    ? currentSlots[currentGameName] ?? 0
+    ? (currentSlots[currentGameName] ?? 0)
     : 0;
 
   const setCurrentSaveStateSlot = (slot: number) => {
@@ -238,7 +271,6 @@ export const SaveStatesModal = () => {
             sx={{ width: '100%' }}
           />
         </StateSlotContainer>
-
         <SaveStatesList>
           {autoSaveStateNameWithoutPath && (
             <SaveStateListItem
@@ -295,13 +327,13 @@ export const SaveStatesModal = () => {
             />
           ))}
           {!autoSaveStateNameWithoutPath && !currentSaveStates?.length && (
-            <li>
-              <CenteredText>No save states</CenteredText>
-            </li>
+            <StyledLi>
+              <EmptyState>No save states</EmptyState>
+            </StyledLi>
           )}
         </SaveStatesList>
         <IconButton
-          aria-label={`Create new save state`}
+          aria-label="Create new save state"
           sx={{ padding: 0 }}
           onClick={async () => {
             const nextSaveStateSlot = currentSaveStateSlot + 1;

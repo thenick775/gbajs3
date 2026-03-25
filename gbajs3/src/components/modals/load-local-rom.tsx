@@ -9,45 +9,70 @@ import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 import { useRunGame } from '../../hooks/emulator/use-run-game.tsx';
 import { CenteredText } from '../shared/styled.tsx';
 
+const StyledLi = styled('li')`
+  margin: 0;
+`;
+
 const LoadRomButton = styled('button')`
-  padding: 0.5rem 1rem;
   width: 100%;
-  color: ${({ theme }) => theme.blueCharcoal};
-  text-decoration: none;
-  background-color: ${({ theme }) => theme.pureWhite};
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  display: block;
+  padding: 0.875rem 1rem;
   text-align: left;
+  cursor: pointer;
+
+  color: ${({ theme }) => theme.modalTextPrimary};
+  background-color: transparent;
+  border: 0;
+
+  font: inherit;
+  line-height: 1.35;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
 
   &:hover {
-    color: ${({ theme }) => theme.darkGrayBlue};
-    background-color: ${({ theme }) => theme.aliceBlue1};
+    background-color: #141b27;
+  }
+
+  &:focus-visible {
+    outline: none;
+    position: relative;
+    z-index: 1;
+    background-color: #141b27;
+    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.gbaThemeBlue};
+  }
+
+  &:active {
+    background-color: #141b27;
   }
 `;
 
-const StyledLi = styled('li')`
-  cursor: pointer;
-`;
-
 const RomList = styled('ul')`
-  list-style-type: none;
+  list-style: none;
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
 
-  & > ${StyledLi}:first-of-type > ${LoadRomButton} {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-  }
+  background: ${({ theme }) => theme.modalSurfaceElevated};
+  border: 1px solid #283243;
+  border-radius: 10px;
+  overflow: hidden;
 
-  & > ${StyledLi}:last-child > ${LoadRomButton} {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
+  & > ${StyledLi} + ${StyledLi} {
+    border-top: 1px solid #283243;
   }
+`;
 
-  & > ${StyledLi}:not(:first-of-type) > ${LoadRomButton} {
-    border-top-width: 0;
-  }
+const EmptyState = styled(CenteredText)`
+  padding: 1rem;
+  color: ${({ theme }) => theme.modalTextSecondary};
 `;
 
 export const LoadLocalRomModal = () => {
@@ -75,11 +100,11 @@ export const LoadLocalRomModal = () => {
             </StyledLi>
           ))}
           {!localRoms?.length && (
-            <li>
-              <CenteredText>
+            <StyledLi>
+              <EmptyState>
                 No local roms, load a game and save your file system
-              </CenteredText>
-            </li>
+              </EmptyState>
+            </StyledLi>
           )}
         </RomList>
       </ModalBody>
