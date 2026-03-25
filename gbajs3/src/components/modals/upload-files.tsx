@@ -99,12 +99,14 @@ const orderFileNamesByExtension = (types?: FileTypes) => {
   return (a: string, b: string) => rank(a) - rank(b);
 };
 
+// TODO: find a better place for this logic, slightly duplicated
 const fetchFileFromUrl = async (fileUrl: URL) => {
   const res = await fetch(fileUrl);
   if (!res.ok) {
     throw new Error(`Received unexpected status code: ${res.status}`);
   }
 
+  // extract file name from response headers if possible
   const fileName = res.headers
     .get('Content-Disposition')
     ?.split(';')
@@ -161,10 +163,8 @@ export const UploadFilesModal = () => {
   const runGame = useRunGame();
   const writeFileToEmulator = useWriteFileToEmulator();
   const { syncActionIfEnabled } = useAddCallbacks();
-
   const [uploadType, setUploadType] = useState<'files' | 'urls'>('files');
   const uploadFilesFormId = useId();
-
   const {
     handleSubmit,
     setValue,
@@ -179,7 +179,6 @@ export const UploadFilesModal = () => {
       romFileToRun: undefined
     }
   });
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'fileUrls'
@@ -219,14 +218,7 @@ export const UploadFilesModal = () => {
 
       await Promise.all(
         externalFilesSettled
-          .filter(
-            (
-              r
-            ): r is PromiseFulfilledResult<{
-              file: File;
-              type: keyof FileTypes;
-            }> => r.status === 'fulfilled'
-          )
+          .filter((r) => r.status === 'fulfilled')
           .map((r) => writeFileToEmulator(r.value.file, r.value.type))
       );
     }
@@ -247,9 +239,9 @@ export const UploadFilesModal = () => {
 
   const handleUploadType = (
     _: React.MouseEvent<HTMLElement>,
-    type: 'files' | 'urls' | null
+    uploadType: 'files' | 'urls' | null
   ) => {
-    if (type) setUploadType(type);
+    if (uploadType) setUploadType(uploadType);
   };
 
   return (
@@ -316,7 +308,6 @@ export const UploadFilesModal = () => {
                 )}
               />
             </GridItem>
-
             <GridItem $isVisible={uploadType === 'urls'}>
               <UrlFieldContainer>
                 {fields.map((item, index) => (
@@ -365,7 +356,6 @@ export const UploadFilesModal = () => {
                           }
                         })}
                       />
-
                       <FormControl size="small">
                         <InputLabel>File Type</InputLabel>
                         <Controller
@@ -389,7 +379,6 @@ export const UploadFilesModal = () => {
                   </div>
                 ))}
               </UrlFieldContainer>
-
               <IconButton
                 aria-label="Add upload url"
                 sx={{ padding: 0, marginTop: '10px' }}
@@ -403,7 +392,6 @@ export const UploadFilesModal = () => {
           </GridContainer>
         </form>
       </ModalBody>
-
       <ModalFooter>
         <div style={{ width: '100%' }}>
           <ToggleButtonGroup
@@ -421,7 +409,6 @@ export const UploadFilesModal = () => {
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-
         <Button
           style={{ minWidth: 'fit-content' }}
           form={uploadFilesFormId}
@@ -431,7 +418,6 @@ export const UploadFilesModal = () => {
         >
           Upload
         </Button>
-
         <Button
           style={{ minWidth: 'fit-content' }}
           variant="outlined"

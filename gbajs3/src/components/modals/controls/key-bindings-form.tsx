@@ -31,29 +31,21 @@ export const KeyBindingsForm = ({
 }: KeyBindingsFormProps) => {
   const { emulator } = useEmulatorContext();
   const { isRunning } = useRunningContext();
-
-  const defaultKeyBindings = emulator?.defaultKeyBindings() ?? [];
-
-  // Initialize local storage state
   const [currentKeyBindings, setCurrentKeyBindings] = useLocalStorage<
     KeyBinding[] | undefined
   >(emulatorKeyBindingsLocalStorageKey);
-
-  // Build defaultValues for useForm
-  const defaultValues: KeyBindingInputProps = (
-    currentKeyBindings ?? defaultKeyBindings
-  ).reduce<KeyBindingInputProps>((acc, kb) => {
-    acc[kb.gbaInput] = kb;
-    return acc;
-  }, {});
-
+  const defaultKeyBindings = emulator?.defaultKeyBindings();
+  const renderedBindings = currentKeyBindings ?? defaultKeyBindings ?? [];
   const {
     handleSubmit,
     setValue,
     control,
     formState: { errors }
   } = useForm({
-    defaultValues
+    defaultValues: renderedBindings.reduce<KeyBindingInputProps>((acc, kb) => {
+      acc[kb.gbaInput] = kb;
+      return acc;
+    }, {})
   });
 
   const onSubmit = (formData: KeyBindingInputProps) => {
@@ -64,8 +56,6 @@ export const KeyBindingsForm = ({
     setCurrentKeyBindings(keyBindings);
     onAfterSubmit();
   };
-
-  const renderedBindings = currentKeyBindings ?? defaultKeyBindings;
 
   return (
     <StyledForm
