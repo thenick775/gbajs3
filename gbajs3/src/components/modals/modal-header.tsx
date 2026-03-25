@@ -10,28 +10,39 @@ type ModalHeaderProps = {
 };
 
 const CloseButton = styled('button')`
-  width: 1em;
-  height: 1em;
-  padding: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
   margin: 0 0 0 auto;
   cursor: pointer;
-  color: ${({ theme }) => theme.pureBlack};
-  border: 0;
-  border-radius: 0.25rem;
-  opacity: 0.5;
 
-  &:focus {
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    opacity: 1;
-  }
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  background-color: transparent;
+
+  opacity: 1;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
 
   &:hover {
-    opacity: 0.75;
+    background-color: #1a2230;
+    border-color: #2a3a52;
   }
 
-  background: transparent
-    url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e")
-    center/1em auto no-repeat;
+  &:focus-visible {
+    outline: none;
+    background-color: #1a2230;
+    border-color: #2f6feb;
+    box-shadow: 0 0 0 0.25rem rgba(47, 111, 235, 0.25);
+  }
+
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3e%3cpath d='M3.227 3.227a.75.75 0 011.06 0L8 6.94l3.713-3.713a.75.75 0 111.06 1.06L9.06 8l3.713 3.713a.75.75 0 11-1.06 1.06L8 9.06l-3.713 3.713a.75.75 0 11-1.06-1.06L6.94 8 3.227 4.287a.75.75 0 010-1.06z' fill='%23a9b4c2'/%3e%3c/svg%3e");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 1.1rem 1.1rem;
 `;
 
 export const ModalHeader = ({

@@ -425,12 +425,13 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   font-size: 1.5rem;
   padding: 8px;
   border-radius: 50%;
-  color: rgba(0, 0, 0, 0.54);
+  color: #fff;
   -webkit-transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  --IconButton-hoverBg: rgba(0, 0, 0, 0.04);
+  --IconButton-hoverBg: rgba(255, 255, 255, 0.08);
   padding: 5px;
   font-size: 1.125rem;
+  color: #a7adb8;
   padding: 0px;
   color: #000;
 }
@@ -463,11 +464,15 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 
 .emotion-33.Mui-disabled {
   background-color: transparent;
-  color: rgba(0, 0, 0, 0.26);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .emotion-33.MuiIconButton-loading {
   color: transparent;
+}
+
+.emotion-33:hover {
+  background-color: #111722;
 }
 
 .emotion-33:active {
@@ -482,7 +487,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   cursor: pointer;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
-  color: #1976d2;
+  color: #356fca;
   height: 4px;
   width: 100%;
   padding: 13px 0;
@@ -567,7 +572,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -moz-transform: translate(-1px, -50%);
   -ms-transform: translate(-1px, -50%);
   transform: translate(-1px, -50%);
-  background-color: #fff;
+  background-color: #0a0d12;
   opacity: 0.8;
 }
 
@@ -629,7 +634,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 
 .emotion-49:hover,
 .emotion-49.Mui-focusVisible {
-  box-shadow: 0px 0px 0px 8px rgba(25, 118, 210, 0.16);
+  box-shadow: 0px 0px 0px 8px rgba(53, 111, 202, 0.16);
 }
 
 @media (hover: none) {
@@ -640,7 +645,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 }
 
 .emotion-49.Mui-active {
-  box-shadow: 0px 0px 0px 14px rgba(25, 118, 210, 0.16);
+  box-shadow: 0px 0px 0px 14px rgba(53, 111, 202, 0.16);
 }
 
 .emotion-50 {
@@ -1575,12 +1580,13 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   font-size: 1.5rem;
   padding: 8px;
   border-radius: 50%;
-  color: rgba(0, 0, 0, 0.54);
+  color: #fff;
   -webkit-transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  --IconButton-hoverBg: rgba(0, 0, 0, 0.04);
+  --IconButton-hoverBg: rgba(255, 255, 255, 0.08);
   padding: 5px;
   font-size: 1.125rem;
+  color: #a7adb8;
   padding: 0px;
   color: #000;
 }
@@ -1613,11 +1619,15 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 
 .emotion-33.Mui-disabled {
   background-color: transparent;
-  color: rgba(0, 0, 0, 0.26);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .emotion-33.MuiIconButton-loading {
   color: transparent;
+}
+
+.emotion-33:hover {
+  background-color: #111722;
 }
 
 .emotion-33:active {
@@ -1632,7 +1642,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   cursor: pointer;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
-  color: #1976d2;
+  color: #356fca;
   height: 4px;
   width: 100%;
   padding: 13px 0;
@@ -1717,7 +1727,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -moz-transform: translate(-1px, -50%);
   -ms-transform: translate(-1px, -50%);
   transform: translate(-1px, -50%);
-  background-color: #fff;
+  background-color: #0a0d12;
   opacity: 0.8;
 }
 
@@ -1779,7 +1789,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 
 .emotion-49:hover,
 .emotion-49.Mui-focusVisible {
-  box-shadow: 0px 0px 0px 8px rgba(25, 118, 210, 0.16);
+  box-shadow: 0px 0px 0px 8px rgba(53, 111, 202, 0.16);
 }
 
 @media (hover: none) {
@@ -1790,7 +1800,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 }
 
 .emotion-49.Mui-active {
-  box-shadow: 0px 0px 0px 14px rgba(25, 118, 210, 0.16);
+  box-shadow: 0px 0px 0px 14px rgba(53, 111, 202, 0.16);
 }
 
 .emotion-50 {

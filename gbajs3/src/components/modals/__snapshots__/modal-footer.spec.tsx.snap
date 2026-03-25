@@ -18,7 +18,8 @@ exports[`<ModalFooter /> > container matches snapshot 1`] = `
   -ms-flex-pack: end;
   -webkit-justify-content: flex-end;
   justify-content: flex-end;
-  border-top: 1px solid #dee2e6;
+  background: #161e2a;
+  border-top: 1px solid #1f2a3a;
   padding: 1rem 1rem;
 }
 

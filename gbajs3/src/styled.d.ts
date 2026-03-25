@@ -27,6 +27,17 @@ declare module '@mui/material/styles' {
     darkGray: string;
     panelControlGray: string;
     panelBlueGray: string;
+    // new canonical theme values
+    modalBackdrop: string;
+    modalSurface: string;
+    modalSurfaceElevated: string;
+    modalBorder: string;
+    modalBorderStrong: string;
+    modalTextPrimary: string;
+    modalTextSecondary: string;
+    modalTextMuted: string;
+    modalHoverSurface: string;
+    modalDropzoneSurface: string;
   }
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- extending type
@@ -55,5 +66,16 @@ declare module '@mui/material/styles' {
     darkGray: string;
     panelControlGray: string;
     panelBlueGray: string;
+    // new canonical theme values
+    modalBackdrop: string;
+    modalSurface: string;
+    modalSurfaceElevated: string;
+    modalBorder: string;
+    modalBorderStrong: string;
+    modalTextPrimary: string;
+    modalTextSecondary: string;
+    modalTextMuted: string;
+    modalHoverSurface: string;
+    modalDropzoneSurface: string;
   }
 }

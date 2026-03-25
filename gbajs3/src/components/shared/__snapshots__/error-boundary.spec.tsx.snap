@@ -55,7 +55,8 @@ exports[`fallbackRender > renders styled fallback 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  border-bottom: 1px solid #dee2e6;
+  background: #161e2a;
+  border-bottom: 1px solid #1f2a3a;
   padding: 1rem 1rem;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
@@ -65,12 +66,16 @@ exports[`fallbackRender > renders styled fallback 1`] = `
 
 .emotion-6 {
   margin: 0;
+  color: #e6edf3;
+  font-weight: 600;
 }
 
 .emotion-8 {
   padding: 1rem;
   overflow-y: auto;
   touch-action: pan-x pan-y;
+  color: #e6edf3;
+  background: #121821;
   padding: 1em 1em 0 1em;
 }
 
@@ -107,7 +112,8 @@ exports[`fallbackRender > renders styled fallback 1`] = `
   -ms-flex-pack: end;
   -webkit-justify-content: flex-end;
   justify-content: flex-end;
-  border-top: 1px solid #dee2e6;
+  background: #161e2a;
+  border-top: 1px solid #1f2a3a;
   padding: 1rem 1rem;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
@@ -167,13 +173,19 @@ exports[`fallbackRender > renders styled fallback 1`] = `
   color: var(--variant-containedColor);
   background-color: var(--variant-containedBg);
   box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
-  --variant-textColor: #0288d1;
-  --variant-outlinedColor: #0288d1;
-  --variant-outlinedBorder: rgba(2, 136, 209, 0.5);
-  --variant-containedColor: #fff;
-  --variant-containedBg: #0288d1;
+  --variant-textColor: #29b6f6;
+  --variant-outlinedColor: #29b6f6;
+  --variant-outlinedBorder: rgba(41, 182, 246, 0.5);
+  --variant-containedColor: rgba(0, 0, 0, 0.87);
+  --variant-containedBg: #29b6f6;
   -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: none;
+  background-color: #356fca;
+  color: #ffffff;
 }
 
 .emotion-18::-moz-focus-inner {
@@ -198,7 +210,7 @@ exports[`fallbackRender > renders styled fallback 1`] = `
 }
 
 .emotion-18.Mui-disabled {
-  color: rgba(0, 0, 0, 0.26);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .emotion-18:hover {
@@ -220,22 +232,36 @@ exports[`fallbackRender > renders styled fallback 1`] = `
 }
 
 .emotion-18.Mui-disabled {
-  color: rgba(0, 0, 0, 0.26);
+  color: rgba(255, 255, 255, 0.3);
   box-shadow: none;
-  background-color: rgba(0, 0, 0, 0.12);
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 @media (hover: hover) {
   .emotion-18:hover {
-    --variant-containedBg: #01579b;
-    --variant-textBg: rgba(2, 136, 209, 0.04);
-    --variant-outlinedBorder: #0288d1;
-    --variant-outlinedBg: rgba(2, 136, 209, 0.04);
+    --variant-containedBg: #0288d1;
+    --variant-textBg: rgba(41, 182, 246, 0.08);
+    --variant-outlinedBorder: #29b6f6;
+    --variant-outlinedBg: rgba(41, 182, 246, 0.08);
   }
 }
 
 .emotion-18.MuiButton-loading {
   color: transparent;
+}
+
+.emotion-18:hover {
+  background-color: #447cda;
+  box-shadow: none;
+}
+
+.emotion-18:active {
+  background-color: #2d61b4;
+}
+
+.emotion-18.Mui-disabled {
+  background-color: #151b26;
+  color: #697381;
 }
 
 .emotion-19 {
@@ -286,13 +312,19 @@ exports[`fallbackRender > renders styled fallback 1`] = `
   color: var(--variant-containedColor);
   background-color: var(--variant-containedBg);
   box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
-  --variant-textColor: #2e7d32;
-  --variant-outlinedColor: #2e7d32;
-  --variant-outlinedBorder: rgba(46, 125, 50, 0.5);
-  --variant-containedColor: #fff;
-  --variant-containedBg: #2e7d32;
+  --variant-textColor: #66bb6a;
+  --variant-outlinedColor: #66bb6a;
+  --variant-outlinedBorder: rgba(102, 187, 106, 0.5);
+  --variant-containedColor: rgba(0, 0, 0, 0.87);
+  --variant-containedBg: #66bb6a;
   -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: none;
+  background-color: #356fca;
+  color: #ffffff;
 }
 
 .emotion-19::-moz-focus-inner {
@@ -317,7 +349,7 @@ exports[`fallbackRender > renders styled fallback 1`] = `
 }
 
 .emotion-19.Mui-disabled {
-  color: rgba(0, 0, 0, 0.26);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .emotion-19:hover {
@@ -339,22 +371,36 @@ exports[`fallbackRender > renders styled fallback 1`] = `
 }
 
 .emotion-19.Mui-disabled {
-  color: rgba(0, 0, 0, 0.26);
+  color: rgba(255, 255, 255, 0.3);
   box-shadow: none;
-  background-color: rgba(0, 0, 0, 0.12);
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 @media (hover: hover) {
   .emotion-19:hover {
-    --variant-containedBg: #1b5e20;
-    --variant-textBg: rgba(46, 125, 50, 0.04);
-    --variant-outlinedBorder: #2e7d32;
-    --variant-outlinedBg: rgba(46, 125, 50, 0.04);
+    --variant-containedBg: #388e3c;
+    --variant-textBg: rgba(102, 187, 106, 0.08);
+    --variant-outlinedBorder: #66bb6a;
+    --variant-outlinedBg: rgba(102, 187, 106, 0.08);
   }
 }
 
 .emotion-19.MuiButton-loading {
   color: transparent;
+}
+
+.emotion-19:hover {
+  background-color: #447cda;
+  box-shadow: none;
+}
+
+.emotion-19:active {
+  background-color: #2d61b4;
+}
+
+.emotion-19.Mui-disabled {
+  background-color: #151b26;
+  color: #697381;
 }
 
 .emotion-20 {
@@ -405,13 +451,19 @@ exports[`fallbackRender > renders styled fallback 1`] = `
   color: var(--variant-containedColor);
   background-color: var(--variant-containedBg);
   box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
-  --variant-textColor: #9c27b0;
-  --variant-outlinedColor: #9c27b0;
-  --variant-outlinedBorder: rgba(156, 39, 176, 0.5);
-  --variant-containedColor: #fff;
-  --variant-containedBg: #9c27b0;
+  --variant-textColor: #ce93d8;
+  --variant-outlinedColor: #ce93d8;
+  --variant-outlinedBorder: rgba(206, 147, 216, 0.5);
+  --variant-containedColor: rgba(0, 0, 0, 0.87);
+  --variant-containedBg: #ce93d8;
   -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  text-transform: none;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: none;
+  background-color: #356fca;
+  color: #ffffff;
 }
 
 .emotion-20::-moz-focus-inner {
@@ -436,7 +488,7 @@ exports[`fallbackRender > renders styled fallback 1`] = `
 }
 
 .emotion-20.Mui-disabled {
-  color: rgba(0, 0, 0, 0.26);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .emotion-20:hover {
@@ -458,22 +510,36 @@ exports[`fallbackRender > renders styled fallback 1`] = `
 }
 
 .emotion-20.Mui-disabled {
-  color: rgba(0, 0, 0, 0.26);
+  color: rgba(255, 255, 255, 0.3);
   box-shadow: none;
-  background-color: rgba(0, 0, 0, 0.12);
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 @media (hover: hover) {
   .emotion-20:hover {
-    --variant-containedBg: #7b1fa2;
-    --variant-textBg: rgba(156, 39, 176, 0.04);
-    --variant-outlinedBorder: #9c27b0;
-    --variant-outlinedBg: rgba(156, 39, 176, 0.04);
+    --variant-containedBg: #ab47bc;
+    --variant-textBg: rgba(206, 147, 216, 0.08);
+    --variant-outlinedBorder: #ce93d8;
+    --variant-outlinedBg: rgba(206, 147, 216, 0.08);
   }
 }
 
 .emotion-20.MuiButton-loading {
   color: transparent;
+}
+
+.emotion-20:hover {
+  background-color: #447cda;
+  box-shadow: none;
+}
+
+.emotion-20:active {
+  background-color: #2d61b4;
+}
+
+.emotion-20.Mui-disabled {
+  background-color: #151b26;
+  color: #697381;
 }
 
 <div

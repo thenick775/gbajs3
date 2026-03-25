@@ -6,14 +6,17 @@ import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 
 const modalStyles = {
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
     zIndex: 400
   },
   content: {
     width: 'calc(100dvw - 20px)',
     height: 'fit-content',
     margin: '25px auto auto auto',
-    backgroundColor: '#fff',
+    backgroundColor: '#121821',
+    border: '1px solid #1f2a3a',
+    borderRadius: '12px',
+    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4)',
     inset: '10px',
     maxWidth: '500px',
     padding: '0',

@@ -32,18 +32,33 @@ type DropAreaProps = {
 
 const DropArea = styled('div')<DropAreaProps>`
   cursor: pointer;
-  border-color: ${({ theme }) => theme.blackRussian};
+  border: 2px dashed ${({ theme }) => theme.modalBorderStrong};
   background-color: ${({ $isDragActive = false, theme }) =>
-    $isDragActive ? theme.arcticAirBlue : theme.aliceBlue2};
-  border-width: 1px;
-  border-style: dashed;
-  padding: 0.5rem;
+    $isDragActive ? theme.modalHoverSurface : theme.modalDropzoneSurface};
+  color: ${({ theme }) => theme.modalTextSecondary};
+  padding: 0.75rem;
   text-align: center;
+  border-radius: 10px;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.modalHoverSurface};
+    border-color: ${({ theme }) => theme.gbaThemeBlue};
+  }
+
+  &:focus-within {
+    border-color: ${({ theme }) => theme.gbaThemeBlue};
+    box-shadow: 0 0 0 0.25rem rgba(47, 111, 235, 0.25);
+  }
 `;
 
 const BiCloudUploadLarge = styled(BiCloudUpload)`
   height: 60px;
   width: auto;
+  color: #e6edf3;
 `;
 
 const ErrorContainer = styled('div')`
@@ -58,9 +73,12 @@ const FileList = styled('ul')`
   margin: 0;
   max-width: 100%;
   padding: 10px 5px 5px 5px;
+  color: ${({ theme }) => theme.modalTextSecondary};
 
   > p {
     margin: 0;
+    color: ${({ theme }) => theme.modalTextPrimary};
+    font-weight: 500;
   }
 `;
 
@@ -69,18 +87,58 @@ const AcceptedFile = styled('li')`
   display: flex;
   gap: 10px;
   justify-content: space-between;
+  background: ${({ theme }) => theme.modalSurfaceElevated};
+  border: 1px solid ${({ theme }) => theme.modalBorder};
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
 
   > p {
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: ${({ theme }) => theme.modalTextPrimary};
   }
 `;
 
 const IconSeparator = styled('div')`
   display: flex;
   gap: 8px;
+  align-items: center;
+`;
+
+const StyledIconButton = styled(IconButton)`
+  && {
+    padding: 6px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: ${({ theme }) => theme.modalTextSecondary};
+    background: transparent;
+    transition:
+      background-color 120ms ease,
+      border-color 120ms ease,
+      color 120ms ease,
+      box-shadow 120ms ease;
+
+    &:hover {
+      background-color: ${({ theme }) => theme.modalHoverSurface};
+      border-color: ${({ theme }) => theme.modalBorderStrong};
+      color: ${({ theme }) => theme.modalTextPrimary};
+    }
+
+    &:focus-visible {
+      outline: none;
+      background-color: ${({ theme }) => theme.modalHoverSurface};
+      border-color: ${({ theme }) => theme.gbaThemeBlue};
+      box-shadow: 0 0 0 0.25rem rgba(47, 111, 235, 0.25);
+      color: ${({ theme }) => theme.modalTextPrimary};
+    }
+  }
+`;
+
+const StyledBiTrash = styled(BiTrash)`
+  width: 18px;
+  height: 18px;
 `;
 
 const AcceptedFiles = ({
@@ -107,15 +165,14 @@ const AcceptedFiles = ({
             index,
             totalFiles: fileNames.length
           })}
-          <IconButton
+          <StyledIconButton
             aria-label={`Delete ${fileName}`}
-            sx={{ padding: 0 }}
             onClick={() => {
               onDeleteFile(fileName);
             }}
           >
-            <BiTrash />
-          </IconButton>
+            <StyledBiTrash />
+          </StyledIconButton>
         </IconSeparator>
       </AcceptedFile>
     ))}
@@ -192,14 +249,14 @@ export const DragAndDropInput = ({
   const rejectedFileErrors = error
     ? [error]
     : fileRejections.length && acceptedFiles.length
-    ? ['Some files were rejected']
-    : [
-        ...new Set(
-          fileRejections
-            .flatMap((rejection) => rejection.errors)
-            .map((error) => error.message)
-        )
-      ];
+      ? ['Some files were rejected']
+      : [
+          ...new Set(
+            fileRejections
+              .flatMap((rejection) => rejection.errors)
+              .map((error) => error.message)
+          )
+        ];
 
   const onDeleteFile = (name: string) => {
     const files = acceptedFiles.filter((file) => file.name !== name);
@@ -220,7 +277,7 @@ export const DragAndDropInput = ({
           'aria-label': ariaLabel
         })}
       >
-        <input data-testid={`hidden-file-input`} {...getInputProps({ name })} />
+        <input data-testid="hidden-file-input" {...getInputProps({ name })} />
         <BiCloudUploadLarge />
         {children}
       </DropArea>
