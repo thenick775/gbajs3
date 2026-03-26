@@ -14,9 +14,8 @@ describe('useShowLoadPublicRoms', () => {
     const setIsModalOpenSpy = vi.fn();
     const setModalContextSpy = vi.fn();
     const isModalOpenSpy = vi.fn(() => true).mockReturnValueOnce(false);
-    const { useModalContext: original } = await vi.importActual<
-      typeof contextHooks
-    >('./context.tsx');
+    const { useModalContext: original } =
+      await vi.importActual<typeof contextHooks>('./context.tsx');
 
     // pwa prompt must also have appeared if iOS and been dismissed if so
     localStorage.setItem(PromptLocalStorageKey, '{"isiOS":"true","visits":2}');
@@ -43,9 +42,8 @@ describe('useShowLoadPublicRoms', () => {
   it('marks url as error if invalid', async () => {
     const setIsModalOpenSpy = vi.fn();
     const setModalContextSpy = vi.fn();
-    const { useModalContext: original } = await vi.importActual<
-      typeof contextHooks
-    >('./context.tsx');
+    const { useModalContext: original } =
+      await vi.importActual<typeof contextHooks>('./context.tsx');
 
     // pwa prompt must also have appeared if iOS and been dismissed if so
     localStorage.setItem(PromptLocalStorageKey, '{"isiOS":"true","visits":2}');
@@ -72,5 +70,40 @@ describe('useShowLoadPublicRoms', () => {
       'hasLoadedPublicExternalRoms',
       '{"bad url":"error"}'
     );
+  });
+
+  it('should not reopen modal if URL was already attempted this session', async () => {
+    const setIsModalOpenSpy = vi.fn();
+    const setModalContextSpy = vi.fn();
+    const isModalOpenSpy = vi.fn(() => false);
+    const { useModalContext: original } =
+      await vi.importActual<typeof contextHooks>('./context.tsx');
+
+    vi.spyOn(window, 'location', 'get').mockReturnValue({
+      search: `?romURL=${valid_url}`
+    } as Location);
+
+    vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+      ...original(),
+      setModalContent: setModalContextSpy,
+      setIsModalOpen: setIsModalOpenSpy,
+      isModalOpen: isModalOpenSpy()
+    }));
+
+    const { rerender } = renderHookWithContext(() => {
+      useShowLoadPublicRoms();
+    });
+
+    expect(setModalContextSpy).toHaveBeenCalledOnce();
+
+    setModalContextSpy.mockClear();
+    setIsModalOpenSpy.mockClear();
+
+    // simulate re-render after overlay dismiss
+    rerender();
+
+    // modal should not reopen since url was already attempted
+    expect(setModalContextSpy).not.toHaveBeenCalled();
+    expect(setIsModalOpenSpy).not.toHaveBeenCalled();
   });
 });
