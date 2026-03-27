@@ -42,36 +42,30 @@ type EditableProfileLoadButtonProps = {
 };
 
 const StyledLi = styled('li')`
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: auto 32px;
-  gap: 10px;
-
-  color: ${({ theme }) => theme.blueCharcoal};
-  background-color: ${({ theme }) => theme.pureWhite};
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  margin: 0;
 `;
 
 const ProfilesList = styled('ul')`
-  list-style-type: none;
+  list-style: none;
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
 
-  & > ${StyledLi}:first-of-type {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-  }
+  background: ${({ theme }) => theme.modalSurfaceElevated};
+  border: 1px solid #283243;
+  border-radius: 10px;
+  overflow: hidden;
 
-  & > ${StyledLi}:last-child {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
+  & > ${StyledLi} + ${StyledLi} {
+    border-top: 1px solid #283243;
   }
+`;
 
-  & > ${StyledLi}:not(:first-of-type) {
-    border-top-width: 0;
-  }
+const RowGrid = styled('div')`
+  display: grid;
+  grid-template-columns: 1fr 36px;
+  align-items: center;
 `;
 
 const StyledBiTrash = styled(BiTrash)`
@@ -90,28 +84,60 @@ const StyledBiSave = styled(BiSave)`
 `;
 
 const LoadProfileButton = styled('button')`
-  padding: 0.5rem 0.5rem;
   width: 100%;
-  color: ${({ theme }) => theme.blueCharcoal};
-  background-color: ${({ theme }) => theme.pureWhite};
-  border: none;
+  padding: 0.875rem 1rem;
+  color: ${({ theme }) => theme.modalTextPrimary};
+  background: transparent;
+  border: 0;
   text-align: left;
-  font-size: 16px;
-  height: 32px;
+  font: inherit;
+  line-height: 1.35;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
 
   &:hover {
-    color: ${({ theme }) => theme.darkGrayBlue};
-    background-color: ${({ theme }) => theme.aliceBlue1};
+    background-color: #141b27;
+  }
+
+  &:focus-visible {
+    outline: none;
+    position: relative;
+    z-index: 1;
+    background-color: #141b27;
+    box-shadow:
+      inset 0 0 0 1px ${({ theme }) => theme.gbaThemeBlue},
+      0 0 0 2px rgba(53, 111, 202, 0.2);
+  }
+
+  &:active {
+    background-color: #141b27;
   }
 `;
 
 const FlexContainer = styled('div')`
   display: flex;
-  gap: 10px;
+  gap: 0;
   min-width: 0;
+  align-items: center;
+`;
+
+const EditField = styled(TextField)`
+  width: 100%;
+
+  & .MuiInputBase-root {
+    color: ${({ theme }) => theme.modalTextPrimary};
+  }
+
+  & .MuiInputBase-input {
+    padding: 0.875rem 1rem;
+  }
+`;
+
+const EmptyState = styled(CenteredText)`
+  padding: 1rem;
+  color: ${({ theme }) => theme.modalTextSecondary};
 `;
 
 const StatefulIconButton = ({
@@ -120,9 +146,7 @@ const StatefulIconButton = ({
   falsyIcon,
   ...rest
 }: StatefulIconButtonProps) => (
-  <IconButton sx={{ padding: 0 }} {...rest}>
-    {condition ? truthyIcon : falsyIcon}
-  </IconButton>
+  <IconButton {...rest}>{condition ? truthyIcon : falsyIcon}</IconButton>
 );
 
 const EditableProfileLoadButton = ({
@@ -142,14 +166,8 @@ const EditableProfileLoadButton = ({
   return (
     <FlexContainer>
       {isEditing ? (
-        <TextField
+        <EditField
           variant="standard"
-          sx={{
-            width: '100%',
-            '& .MuiInputBase-input': {
-              paddingLeft: '8px'
-            }
-          }}
           error={!storedName}
           value={storedName}
           onChange={(e) => {
@@ -157,7 +175,9 @@ const EditableProfileLoadButton = ({
           }}
         />
       ) : (
-        <LoadProfileButton onClick={loadProfile}>{name}</LoadProfileButton>
+        <LoadProfileButton onClick={loadProfile} title={name}>
+          {name}
+        </LoadProfileButton>
       )}
       <StatefulIconButton
         condition={isEditing}
@@ -223,35 +243,36 @@ export const ControlProfiles = ({ id }: ControlProfilesProps) => {
         {virtualControlProfiles?.map(
           (profile: VirtualControlProfile, idx: number) => (
             <StyledLi key={`${profile.name}_${idx}_action_list_item`}>
-              <EditableProfileLoadButton
-                name={profile.name}
-                loadProfile={() => {
-                  loadProfile(profile.layouts);
-                }}
-                onSubmit={(name) => {
-                  updateProfile(profile.id, name);
-                }}
-              />
-              <IconButton
-                aria-label={`Delete ${profile.name}`}
-                sx={{ padding: 0 }}
-                onClick={() => {
-                  deleteProfile(profile.id);
-                }}
-              >
-                <StyledBiTrash />
-              </IconButton>
+              <RowGrid>
+                <EditableProfileLoadButton
+                  name={profile.name}
+                  loadProfile={() => {
+                    loadProfile(profile.layouts);
+                  }}
+                  onSubmit={(name) => {
+                    updateProfile(profile.id, name);
+                  }}
+                />
+                <IconButton
+                  aria-label={`Delete ${profile.name}`}
+                  onClick={() => {
+                    deleteProfile(profile.id);
+                  }}
+                >
+                  <StyledBiTrash />
+                </IconButton>
+              </RowGrid>
             </StyledLi>
           )
         )}
         {!virtualControlProfiles?.length && (
-          <li>
-            <CenteredText>No control profiles</CenteredText>
-          </li>
+          <StyledLi>
+            <EmptyState>No control profiles</EmptyState>
+          </StyledLi>
         )}
       </ProfilesList>
       <IconButton
-        aria-label={`Create New Profile`}
+        aria-label="Create New Profile"
         sx={{ padding: 0 }}
         onClick={() => {
           addProfile();

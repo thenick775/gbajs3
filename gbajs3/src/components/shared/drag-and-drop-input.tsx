@@ -95,8 +95,6 @@ const AcceptedFile = styled('li')`
   > p {
     margin: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     color: ${({ theme }) => theme.modalTextPrimary};
   }
 `;

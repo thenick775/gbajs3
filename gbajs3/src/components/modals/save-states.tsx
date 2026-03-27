@@ -125,20 +125,6 @@ const EmptyState = styled(CenteredText)`
   color: ${({ theme }) => theme.modalTextSecondary};
 `;
 
-const StyledIconButton = styled(IconButton)`
-  && {
-    padding: 0;
-    height: 100%;
-    width: 36px;
-    color: ${({ theme }) => theme.modalTextSecondary};
-
-    &:hover {
-      background-color: #141b27;
-      color: ${({ theme }) => theme.modalTextPrimary};
-    }
-  }
-`;
-
 const uint8ArrayToBase64DataUrl = (binary?: Uint8Array) =>
   binary?.length
     ? `data:image/png;base64,${btoa(
@@ -170,20 +156,17 @@ const SaveStateListItem = ({
       <LoadSaveStateButton onClick={onClick} title={saveStateName}>
         {saveStateName}
       </LoadSaveStateButton>
-      <StyledIconButton
+      <IconButton
         aria-label={`${
           isSaveStatePreviewSelected ? 'Close' : 'View'
         } ${saveStateName}`}
         onClick={onSaveStatePreviewSelected}
       >
         <StyledFaRegEye />
-      </StyledIconButton>
-      <StyledIconButton
-        aria-label={`Delete ${saveStateName}`}
-        onClick={onDelete}
-      >
+      </IconButton>
+      <IconButton aria-label={`Delete ${saveStateName}`} onClick={onDelete}>
         <StyledBiTrash />
-      </StyledIconButton>
+      </IconButton>
     </ButtonGrid>
     <Collapse in={isSaveStatePreviewSelected}>
       <SaveStatePreview src={previewDataUrl} alt={`${saveStateName} Preview`} />

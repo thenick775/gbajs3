@@ -19,18 +19,12 @@ const LoadRomButton = styled('button')`
   padding: 0.875rem 1rem;
   text-align: left;
   cursor: pointer;
-
   color: ${({ theme }) => theme.modalTextPrimary};
   background-color: transparent;
   border: 0;
-
   font: inherit;
   line-height: 1.35;
-
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
   transition:
     background-color 120ms ease,
     color 120ms ease,
