@@ -155,7 +155,7 @@ export const VirtualControls = () => {
     'select-button': {
       defaultMobile: {
         top: '88dvh',
-        left: '25dvw'
+        left: '50dvw'
       },
       mobileWithUrlBar: {
         top: '92dvh',
@@ -173,7 +173,7 @@ export const VirtualControls = () => {
     'start-button': {
       defaultMobile: {
         top: '88dvh',
-        left: '55dvw'
+        left: '50dvw'
       },
       mobileWithUrlBar: {
         top: '92dvh',
@@ -324,7 +324,7 @@ export const VirtualControls = () => {
 
   const currentGameName = emulator?.getCurrentGameName();
   const currentSaveStateSlot = currentGameName
-    ? currentSaveStateSlots[currentGameName] ?? 0
+    ? (currentSaveStateSlots[currentGameName] ?? 0)
     : 0;
 
   const virtualButtons = [
@@ -355,6 +355,12 @@ export const VirtualControls = () => {
       isRectangular: true,
       children: <VirtualButtonTextSmall>Select</VirtualButtonTextSmall>,
       initialPosition: initialPositionForKey('select-button'),
+      initialOffset: isMobileWithUrlBar
+        ? undefined
+        : {
+            x: 'calc(-100% - 12px)',
+            y: '0px'
+          },
       keyName: 'select-button',
       enabled: shouldShowVirtualButtonsAndOpad
     },
@@ -363,6 +369,12 @@ export const VirtualControls = () => {
       isRectangular: true,
       children: <VirtualButtonTextSmall>Start</VirtualButtonTextSmall>,
       initialPosition: initialPositionForKey('start-button'),
+      initialOffset: isMobileWithUrlBar
+        ? undefined
+        : {
+            x: '12px',
+            y: '0px'
+          },
       keyName: 'start-button',
       enabled: shouldShowVirtualButtonsAndOpad
     },
