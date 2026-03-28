@@ -72,6 +72,10 @@ const VirtualButtonBase = styled(ButtonBase)`
     transform: translateY(1px) scale(0.98);
     border-color: ${({ theme }) => theme.virtualControlAccentBorder};
     box-shadow: ${({ theme }) => theme.virtualControlPressedShadow};
+
+    &:before {
+      border-color: ${({ theme }) => theme.virtualControlAccentHalo};
+    }
   }
 
   @media ${({ theme }) => theme.isMobileLandscape} {
