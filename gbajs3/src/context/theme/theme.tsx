@@ -23,8 +23,9 @@ export const GbaDarkTheme: ThemeOptions = {
   pattensBlue: '#dee2e6',
   pureBlack: '#000',
   pureWhite: '#fff',
-  panelControlGray: '#a9a9a9',
-  panelBlueGray: '#4f555a',
+  panelControlGray: '#2a3442',
+  panelBlueGray: '#1a2230',
+  panelControlText: '#c7d1dc',
 
   // darker modal tokens, closer to the approved mock
   modalSurface: '#0a0d12',

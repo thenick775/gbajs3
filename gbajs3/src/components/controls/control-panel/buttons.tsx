@@ -57,7 +57,7 @@ export const SliderButton = ({ icon, ...rest }: SliderButtonProps) => {
       size="small"
       sx={{
         padding: 0,
-        color: theme.pureBlack,
+        color: theme.panelControlText,
         '&:active': { color: theme.gbaThemeBlue }
       }}
       {...rest}

@@ -22,6 +22,7 @@ declare module '@mui/material/styles' {
     pureWhite: string;
     panelControlGray: string;
     panelBlueGray: string;
+    panelControlText: string;
     // new canonical theme values
     modalSurface: string;
     modalSurfaceElevated: string;
@@ -80,6 +81,7 @@ declare module '@mui/material/styles' {
     pureWhite: string;
     panelControlGray: string;
     panelBlueGray: string;
+    panelControlText: string;
     // new canonical theme values
     modalSurface: string;
     modalSurfaceElevated: string;

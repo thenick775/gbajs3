@@ -2,7 +2,7 @@
 
 exports[`<ControlPanel /> > renders with default desktop position and size 1`] = `
 .emotion-0 {
-  background-color: #4f555a;
+  background-color: #1a2230;
   list-style: none;
   padding: 10px;
   margin: 0;
@@ -40,7 +40,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -62,7 +62,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: play;
   border: none;
@@ -103,7 +103,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -125,7 +125,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: quit;
   border: none;
@@ -166,7 +166,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -188,7 +188,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: drag;
   border: none;
@@ -229,7 +229,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -251,7 +251,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: resize;
   border: none;
@@ -292,7 +292,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -314,7 +314,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: rewind;
   border: none;
@@ -351,7 +351,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 
 .emotion-31 {
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -373,7 +373,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: volume;
   max-height: 40px;
@@ -433,7 +433,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   font-size: 1.125rem;
   color: #a7adb8;
   padding: 0px;
-  color: #000;
+  color: #c7d1dc;
 }
 
 .emotion-33::-moz-focus-inner {
@@ -495,6 +495,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
+  color: #1c76fd;
   width: 85px;
   margin: 0 10px;
   max-height: 40px;
@@ -523,6 +524,19 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   .emotion-35 {
     padding: 20px 0;
   }
+}
+
+.emotion-35>.MuiSlider-rail {
+  opacity: 0.28;
+}
+
+.emotion-35>.MuiSlider-track {
+  background-color: rgba(24,84,176,1);
+  border-color: rgba(24,84,176,1);
+}
+
+.emotion-35>.MuiSlider-thumb {
+  background-color: rgba(24,84,176,1);
 }
 
 .emotion-35>.MuiSlider-markActive {
@@ -706,7 +720,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 
 .emotion-56 {
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -728,7 +742,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: fastForward;
   max-height: 40px;
@@ -1173,7 +1187,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 
 exports[`<ControlPanel /> > renders with default mobile position and size 1`] = `
 .emotion-0 {
-  background-color: #4f555a;
+  background-color: #1a2230;
   list-style: none;
   padding: 10px;
   margin: 0;
@@ -1195,7 +1209,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -1217,7 +1231,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: play;
   border: none;
@@ -1258,7 +1272,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -1280,7 +1294,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: quit;
   border: none;
@@ -1321,7 +1335,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -1343,7 +1357,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: drag;
   border: none;
@@ -1384,7 +1398,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -1406,7 +1420,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: resize;
   border: none;
@@ -1447,7 +1461,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   line-height: inherit;
   padding: inherit;
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -1469,7 +1483,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: rewind;
   border: none;
@@ -1506,7 +1520,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 
 .emotion-31 {
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -1528,7 +1542,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: volume;
   max-height: 40px;
@@ -1588,7 +1602,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   font-size: 1.125rem;
   color: #a7adb8;
   padding: 0px;
-  color: #000;
+  color: #c7d1dc;
 }
 
 .emotion-33::-moz-focus-inner {
@@ -1650,6 +1664,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
+  color: #1c76fd;
   width: 85px;
   margin: 0 10px;
   max-height: 40px;
@@ -1678,6 +1693,19 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   .emotion-35 {
     padding: 20px 0;
   }
+}
+
+.emotion-35>.MuiSlider-rail {
+  opacity: 0.28;
+}
+
+.emotion-35>.MuiSlider-track {
+  background-color: rgba(24,84,176,1);
+  border-color: rgba(24,84,176,1);
+}
+
+.emotion-35>.MuiSlider-thumb {
+  background-color: rgba(24,84,176,1);
 }
 
 .emotion-35>.MuiSlider-markActive {
@@ -1861,7 +1889,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 
 .emotion-56 {
   cursor: pointer;
-  background-color: #a9a9a9;
+  background-color: #2a3442;
   border-radius: 0.25rem;
   min-width: 40px;
   min-height: 40px;
@@ -1883,7 +1911,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
-  color: #000;
+  color: #c7d1dc;
   width: 100%;
   grid-area: fastForward;
   max-height: 40px;

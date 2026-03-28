@@ -27,7 +27,7 @@ const interactivePanelControlStyle = ({
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${theme.pureBlack};
+  color: ${theme.panelControlText};
   width: ${$controlled ? 'auto' : '100%'};
 
   ${!$controlled &&
@@ -57,6 +57,20 @@ export const PanelControlSlider = styled('div')<PanelControlSliderProps>`
 
 export const MutedMarkSlider = styled(Slider)`
   flex-grow: 1;
+  color: ${({ theme }) => theme.gbaThemeBlue};
+
+  > .MuiSlider-rail {
+    opacity: 0.28;
+  }
+
+  > .MuiSlider-track {
+    background-color: rgba(24, 84, 176, 1);
+    border-color: rgba(24, 84, 176, 1);
+  }
+
+  > .MuiSlider-thumb {
+    background-color: rgba(24, 84, 176, 1);
+  }
 
   > .MuiSlider-markActive {
     opacity: 1;
