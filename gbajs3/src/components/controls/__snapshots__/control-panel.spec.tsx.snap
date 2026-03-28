@@ -81,7 +81,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 }
 
 .emotion-5:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-5:active {
@@ -144,7 +144,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 }
 
 .emotion-10:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-10:active {
@@ -207,7 +207,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 }
 
 .emotion-15:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-15:active {
@@ -270,7 +270,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 }
 
 .emotion-20:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-20:active {
@@ -333,7 +333,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 }
 
 .emotion-25:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-25:active {
@@ -1236,7 +1236,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 }
 
 .emotion-5:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-5:active {
@@ -1299,7 +1299,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 }
 
 .emotion-10:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-10:active {
@@ -1362,7 +1362,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 }
 
 .emotion-15:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-15:active {
@@ -1425,7 +1425,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 }
 
 .emotion-20:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-20:active {
@@ -1488,7 +1488,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 }
 
 .emotion-25:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .emotion-25:active {

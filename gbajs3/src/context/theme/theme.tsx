@@ -5,16 +5,11 @@ export const GbaDarkTheme: ThemeOptions = {
   isLargerThanPhone: 'only screen and (min-width: 600px)',
   isMobileLandscape:
     'only screen and (max-height: 450px) and (max-width: 1000px) and (orientation: landscape)',
-  isMobilePortrait:
-    'only screen and (max-width: 1000px) and (orientation: portrait)',
   isMobileWithUrlBar:
     'only screen and (max-height: 700px) and (orientation: portrait)',
 
   // css colors
   aliceBlue1: '#f8f9fa',
-  aliceBlue2: '#edf2f7',
-  arcticAirBlue: '#cad8e5',
-  blackRussian: '#1a202c',
   blueCharcoal: '#212529',
   checkMarkGreen: '#7ac142',
   darkCharcoal: '#333',
@@ -33,16 +28,31 @@ export const GbaDarkTheme: ThemeOptions = {
   panelBlueGray: '#4f555a',
 
   // darker modal tokens, closer to the approved mock
-  modalBackdrop: 'rgba(0, 0, 0, 0.80)',
   modalSurface: '#0a0d12',
   modalSurfaceElevated: '#0c1017',
   modalBorder: '#1b2330',
   modalBorderStrong: '#6f7480',
   modalTextPrimary: '#f1f3f6',
   modalTextSecondary: '#a7adb8',
-  modalTextMuted: '#7d8591',
+  modalTextHeading: '#e6edf3',
+  modalIconMuted: '#a9b4c2',
   modalHoverSurface: '#111722',
   modalDropzoneSurface: '#090d14',
+  modalSectionSurface: '#161e2a',
+  modalSectionBorder: '#1f2a3a',
+  modalListBorder: '#283243',
+  modalListItemHoverSurface: '#141b27',
+  modalCloseButtonHoverSurface: '#1a2230',
+  modalCloseButtonHoverBorder: '#2a3a52',
+  modalContainerSurface: '#121821',
+  focusRingPrimary: 'rgba(47, 111, 235, 0.25)',
+  focusRingPrimarySoft: 'rgba(53, 111, 202, 0.2)',
+  menuBackdrop: 'rgba(0, 0, 0, 0.6)',
+  menuToggleFocusRing: 'rgba(13, 110, 253, 0.25)',
+  modalTabBorder: 'rgba(0, 0, 0, 0.12)',
+  errorOverlay: 'rgba(0, 0, 0, 0.5)',
+  listItemBorderSubtle: 'rgba(0, 0, 0, 0.125)',
+  virtualControlBorder: 'rgba(255, 255, 255, 0.9)',
 
   palette: {
     mode: 'dark',

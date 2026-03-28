@@ -37,7 +37,7 @@ const ErrorWrapper = styled('div')`
 `;
 
 const Overlay = styled('div')`
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ theme }) => theme.errorOverlay};
   width: 100dvw;
   height: 100dvh;
   position: absolute;

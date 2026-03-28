@@ -31,19 +31,19 @@ const LoadRomButton = styled('button')`
     box-shadow 120ms ease;
 
   &:hover {
-    background-color: #141b27;
+    background-color: ${({ theme }) => theme.modalListItemHoverSurface};
   }
 
   &:focus-visible {
     outline: none;
     position: relative;
     z-index: 1;
-    background-color: #141b27;
+    background-color: ${({ theme }) => theme.modalListItemHoverSurface};
     box-shadow: inset 0 0 0 1px ${({ theme }) => theme.gbaThemeBlue};
   }
 
   &:active {
-    background-color: #141b27;
+    background-color: ${({ theme }) => theme.modalListItemHoverSurface};
   }
 `;
 
@@ -55,12 +55,12 @@ const RomList = styled('ul')`
   padding: 0;
 
   background: ${({ theme }) => theme.modalSurfaceElevated};
-  border: 1px solid #283243;
+  border: 1px solid ${({ theme }) => theme.modalListBorder};
   border-radius: 10px;
   overflow: hidden;
 
   & > ${StyledLi} + ${StyledLi} {
-    border-top: 1px solid #283243;
+    border-top: 1px solid ${({ theme }) => theme.modalListBorder};
   }
 `;
 

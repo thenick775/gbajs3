@@ -27,7 +27,7 @@ const LoadSaveButton = styled('button')`
   color: ${({ theme }) => theme.blueCharcoal};
   text-decoration: none;
   background-color: ${({ theme }) => theme.pureWhite};
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  border: 1px solid ${({ theme }) => theme.listItemBorderSubtle};
   text-align: left;
 
   &:hover {

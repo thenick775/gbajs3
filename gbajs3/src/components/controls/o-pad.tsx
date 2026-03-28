@@ -46,7 +46,6 @@ const BackgroundContainer = styled('section', {
   shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
 })<BackgroundContainerProps>`
   position: absolute;
-  background-color: red;
   border-radius: 50%;
   width: 12rem;
   height: 12rem;
@@ -56,7 +55,7 @@ const BackgroundContainer = styled('section', {
   justify-content: center;
   cursor: pointer;
   border-color: ${({ $areItemsDraggable = false, theme }) =>
-    $areItemsDraggable ? theme.gbaThemeBlue : 'rgba(255, 255, 255, 0.9)'};
+    $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorder};
   border-style: ${({ $areItemsDraggable = false }) =>
     $areItemsDraggable ? 'dashed' : 'solid'};
   border-width: 2px;

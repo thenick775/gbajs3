@@ -47,7 +47,7 @@ type RectangularButtonProps = {
 const VirtualButtonBase = styled(ButtonBase)`
   background-color: ${({ theme }) => theme.darkGray};
   border-style: solid;
-  border-color: rgba(255, 255, 255, 0.9);
+  border-color: ${({ theme }) => theme.virtualControlBorder};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,7 +68,7 @@ const CircularButton = styled(VirtualButtonBase, {
   height: ${({ $diameter }) => $diameter}px;
   border-radius: 100px;
   border-color: ${({ $areItemsDraggable = false, theme }) =>
-    $areItemsDraggable ? theme.gbaThemeBlue : 'rgba(255, 255, 255, 0.9)'};
+    $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorder};
   border-style: ${({ $areItemsDraggable = false }) =>
     $areItemsDraggable ? 'dashed' : 'solid'};
 `;
@@ -80,7 +80,7 @@ const RectangularButton = styled(VirtualButtonBase, {
   width: fit-content;
   min-width: 85px;
   border-color: ${({ $areItemsDraggable = false, theme }) =>
-    $areItemsDraggable ? theme.gbaThemeBlue : 'rgba(255, 255, 255, 0.9)'};
+    $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorder};
   border-style: ${({ $areItemsDraggable = false }) =>
     $areItemsDraggable ? 'dashed' : 'solid'};
 `;

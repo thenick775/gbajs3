@@ -51,14 +51,14 @@ const DropArea = styled('div')<DropAreaProps>`
 
   &:focus-within {
     border-color: ${({ theme }) => theme.gbaThemeBlue};
-    box-shadow: 0 0 0 0.25rem rgba(47, 111, 235, 0.25);
+    box-shadow: 0 0 0 0.25rem ${({ theme }) => theme.focusRingPrimary};
   }
 `;
 
 const BiCloudUploadLarge = styled(BiCloudUpload)`
   height: 60px;
   width: auto;
-  color: #e6edf3;
+  color: ${({ theme }) => theme.modalTextHeading};
 `;
 
 const ErrorContainer = styled('div')`
@@ -128,7 +128,7 @@ const StyledIconButton = styled(IconButton)`
       outline: none;
       background-color: ${({ theme }) => theme.modalHoverSurface};
       border-color: ${({ theme }) => theme.gbaThemeBlue};
-      box-shadow: 0 0 0 0.25rem rgba(47, 111, 235, 0.25);
+      box-shadow: 0 0 0 0.25rem ${({ theme }) => theme.focusRingPrimary};
       color: ${({ theme }) => theme.modalTextPrimary};
     }
   }

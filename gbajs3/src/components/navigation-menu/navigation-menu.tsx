@@ -147,7 +147,7 @@ const HamburgerButton = styled(ButtonBase)<
 
   &:focus {
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    box-shadow: 0 0 0 0.25rem ${({ theme }) => theme.menuToggleFocusRing};
   }
 
   ${({ $areItemsDraggable, theme }) =>
@@ -169,7 +169,7 @@ const NavigationMenuClearDismiss = styled('button')<{
   height: 100%;
   z-index: 140;
   border: none;
-  background: rgba(0, 0, 0, 0.6);
+  background: ${({ theme }) => theme.menuBackdrop};
   backdrop-filter: blur(8px);
 
   opacity: ${({ $visible }) => ($visible ? 1 : 0)};

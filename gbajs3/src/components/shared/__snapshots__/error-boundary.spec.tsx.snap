@@ -2,7 +2,7 @@
 
 exports[`fallbackRender > renders styled fallback 1`] = `
 .emotion-0 {
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   width: 100dvw;
   height: 100dvh;
   position: absolute;

@@ -5,12 +5,8 @@ declare module '@mui/material/styles' {
   interface Theme {
     isLargerThanPhone: string;
     isMobileLandscape: string;
-    isMobilePortrait: string;
     isMobileWithUrlBar: string;
     aliceBlue1: string;
-    aliceBlue2: string;
-    arcticAirBlue: string;
-    blackRussian: string;
     blueCharcoal: string;
     checkMarkGreen: string;
     darkCharcoal: string;
@@ -28,28 +24,39 @@ declare module '@mui/material/styles' {
     panelControlGray: string;
     panelBlueGray: string;
     // new canonical theme values
-    modalBackdrop: string;
     modalSurface: string;
     modalSurfaceElevated: string;
     modalBorder: string;
     modalBorderStrong: string;
     modalTextPrimary: string;
     modalTextSecondary: string;
-    modalTextMuted: string;
+    modalTextHeading: string;
+    modalIconMuted: string;
     modalHoverSurface: string;
     modalDropzoneSurface: string;
+    modalSectionSurface: string;
+    modalSectionBorder: string;
+    modalListBorder: string;
+    modalListItemHoverSurface: string;
+    modalCloseButtonHoverSurface: string;
+    modalCloseButtonHoverBorder: string;
+    modalContainerSurface: string;
+    focusRingPrimary: string;
+    focusRingPrimarySoft: string;
+    menuBackdrop: string;
+    menuToggleFocusRing: string;
+    modalTabBorder: string;
+    errorOverlay: string;
+    listItemBorderSubtle: string;
+    virtualControlBorder: string;
   }
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- extending type
   interface ThemeOptions {
     isLargerThanPhone: string;
     isMobileLandscape: string;
-    isMobilePortrait: string;
     isMobileWithUrlBar: string;
     aliceBlue1: string;
-    aliceBlue2: string;
-    arcticAirBlue: string;
-    blackRussian: string;
     blueCharcoal: string;
     checkMarkGreen: string;
     darkCharcoal: string;
@@ -67,15 +74,30 @@ declare module '@mui/material/styles' {
     panelControlGray: string;
     panelBlueGray: string;
     // new canonical theme values
-    modalBackdrop: string;
     modalSurface: string;
     modalSurfaceElevated: string;
     modalBorder: string;
     modalBorderStrong: string;
     modalTextPrimary: string;
     modalTextSecondary: string;
-    modalTextMuted: string;
+    modalTextHeading: string;
+    modalIconMuted: string;
     modalHoverSurface: string;
     modalDropzoneSurface: string;
+    modalSectionSurface: string;
+    modalSectionBorder: string;
+    modalListBorder: string;
+    modalListItemHoverSurface: string;
+    modalCloseButtonHoverSurface: string;
+    modalCloseButtonHoverBorder: string;
+    modalContainerSurface: string;
+    focusRingPrimary: string;
+    focusRingPrimarySoft: string;
+    menuBackdrop: string;
+    menuToggleFocusRing: string;
+    modalTabBorder: string;
+    errorOverlay: string;
+    listItemBorderSubtle: string;
+    virtualControlBorder: string;
   }
 }

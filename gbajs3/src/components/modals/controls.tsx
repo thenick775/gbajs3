@@ -36,7 +36,7 @@ const StyledModalBody = styled(ModalBody)`
 
 const TabsWithBorder = styled(Tabs)`
   border-bottom: 1px solid;
-  border-color: rgba(0, 0, 0, 0.12);
+  border-color: ${({ theme }) => theme.modalTabBorder};
 
   & .MuiTabs-scrollButtons {
     width: fit-content;

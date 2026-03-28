@@ -81,7 +81,7 @@ export const PanelControlButton = styled(ButtonBase)<
   padding: 0;
 
   &:focus {
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    box-shadow: 0 0 0 0.25rem ${({ theme }) => theme.menuToggleFocusRing};
   }
 
   &:active {
