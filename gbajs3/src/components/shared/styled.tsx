@@ -12,7 +12,7 @@ export const CenteredText = styled(Copy)`
 
 export const Header = styled('h3')`
   margin: 0;
-  color: ${({ theme }) => theme.modalTextHeading};
+  color: ${({ theme }) => theme.surfaceTextPrimary};
   font-weight: 600;
 `;
 
@@ -29,7 +29,7 @@ export const BodyWrapper = styled('div')`
   padding: 1rem;
   overflow-y: auto;
   touch-action: pan-x pan-y;
-  color: ${({ theme }) => theme.modalTextHeading};
+  color: ${({ theme }) => theme.surfaceTextPrimary};
   background: ${({ theme }) => theme.modalContainerSurface};
 `;
 

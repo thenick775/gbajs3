@@ -58,7 +58,7 @@ const DropArea = styled('div')<DropAreaProps>`
 const BiCloudUploadLarge = styled(BiCloudUpload)`
   height: 60px;
   width: auto;
-  color: ${({ theme }) => theme.modalTextHeading};
+  color: ${({ theme }) => theme.surfaceTextPrimary};
 `;
 
 const ErrorContainer = styled('div')`

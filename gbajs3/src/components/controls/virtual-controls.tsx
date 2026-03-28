@@ -37,13 +37,18 @@ const VirtualButtonTextLarge = styled(Copy)`
   text-align: center;
   vertical-align: middle;
   line-height: 54px;
-  color: ${({ theme }) => theme.pureWhite};
+  color: ${({ theme }) => theme.surfaceTextPrimary};
+  font-weight: 600;
+  letter-spacing: 0.01em;
   font-size: 1.5em;
 `;
 
 const VirtualButtonTextSmall = styled('p')`
-  color: ${({ theme }) => theme.pureWhite};
+  color: ${({ theme }) => theme.surfaceTextPrimary};
   margin: 4px 5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: center;
 `;
 
 const keyToAriaLabel = (key: string) =>

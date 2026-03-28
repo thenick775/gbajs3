@@ -20,7 +20,6 @@ declare module '@mui/material/styles' {
     pattensBlue: string;
     pureBlack: string;
     pureWhite: string;
-    darkGray: string;
     panelControlGray: string;
     panelBlueGray: string;
     // new canonical theme values
@@ -30,7 +29,7 @@ declare module '@mui/material/styles' {
     modalBorderStrong: string;
     modalTextPrimary: string;
     modalTextSecondary: string;
-    modalTextHeading: string;
+    surfaceTextPrimary: string;
     modalIconMuted: string;
     modalHoverSurface: string;
     modalDropzoneSurface: string;
@@ -48,7 +47,16 @@ declare module '@mui/material/styles' {
     modalTabBorder: string;
     errorOverlay: string;
     listItemBorderSubtle: string;
-    virtualControlBorder: string;
+    virtualControlSurface: string;
+    virtualControlSurfaceStrong: string;
+    virtualControlBorderSubtle: string;
+    virtualControlInnerBorder: string;
+    virtualControlShadow: string;
+    virtualControlPressedShadow: string;
+    virtualControlAccentBorder: string;
+    virtualControlAccentBorderStrong: string;
+    virtualControlAccentHalo: string;
+    virtualControlArrow: string;
   }
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- extending type
@@ -70,7 +78,6 @@ declare module '@mui/material/styles' {
     pattensBlue: string;
     pureBlack: string;
     pureWhite: string;
-    darkGray: string;
     panelControlGray: string;
     panelBlueGray: string;
     // new canonical theme values
@@ -80,7 +87,7 @@ declare module '@mui/material/styles' {
     modalBorderStrong: string;
     modalTextPrimary: string;
     modalTextSecondary: string;
-    modalTextHeading: string;
+    surfaceTextPrimary: string;
     modalIconMuted: string;
     modalHoverSurface: string;
     modalDropzoneSurface: string;
@@ -98,6 +105,15 @@ declare module '@mui/material/styles' {
     modalTabBorder: string;
     errorOverlay: string;
     listItemBorderSubtle: string;
-    virtualControlBorder: string;
+    virtualControlSurface: string;
+    virtualControlSurfaceStrong: string;
+    virtualControlBorderSubtle: string;
+    virtualControlInnerBorder: string;
+    virtualControlShadow: string;
+    virtualControlPressedShadow: string;
+    virtualControlAccentBorder: string;
+    virtualControlAccentBorderStrong: string;
+    virtualControlAccentHalo: string;
+    virtualControlArrow: string;
   }
 }

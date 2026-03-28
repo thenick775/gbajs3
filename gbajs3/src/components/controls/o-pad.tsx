@@ -49,20 +49,32 @@ const BackgroundContainer = styled('section', {
   border-radius: 50%;
   width: 12rem;
   height: 12rem;
-  background: ${({ theme }) => theme.pureBlack};
+  background: ${({ theme }) => theme.virtualControlSurface};
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  backdrop-filter: blur(6px);
   border-color: ${({ $areItemsDraggable = false, theme }) =>
-    $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorder};
+    $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorderSubtle};
   border-style: ${({ $areItemsDraggable = false }) =>
     $areItemsDraggable ? 'dashed' : 'solid'};
   border-width: 2px;
+  box-shadow: ${({ theme }) => theme.virtualControlShadow};
   z-index: 12;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 18px;
+    border-radius: 50%;
+    border: 1px solid ${({ theme }) => theme.virtualControlInnerBorder};
+  }
 
   @media ${({ theme }) => theme.isMobileLandscape} {
     background-color: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 `;
 
@@ -70,25 +82,27 @@ const CenterKnob = styled('div')<CenterKnobProps>`
   position: absolute;
   height: 4rem;
   width: 4rem;
-  border: 2px solid ${({ theme }) => theme.gbaThemeBlue};
+  border: 1px solid ${({ theme }) => theme.virtualControlAccentBorderStrong};
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.pureBlack};
+  background: ${({ theme }) => theme.virtualControlSurfaceStrong};
+  box-shadow: ${({ theme }) => theme.virtualControlPressedShadow};
   transition: ${({ $isControlled }) =>
     $isControlled ? `transform 0.3s ease-in-out` : `none`};
 
   &:before {
     position: absolute;
     content: '';
-    top: -0.8rem;
-    left: -0.8rem;
-    right: -0.8rem;
-    bottom: -0.8rem;
-    border: 0.8rem solid ${({ theme }) => theme.gbaThemeBlue}50;
+    top: -0.55rem;
+    left: -0.55rem;
+    right: -0.55rem;
+    bottom: -0.55rem;
+    border: 0.55rem solid ${({ theme }) => theme.virtualControlAccentHalo};
     border-radius: 50%;
   }
 
   @media ${({ theme }) => theme.isMobileLandscape} {
     background-color: transparent;
+    box-shadow: none;
   }
 `;
 
@@ -100,31 +114,31 @@ const DirectionArrow = styled('div')`
 `;
 
 const UpArrow = styled(DirectionArrow)`
-  border-width: 0 15px 25px 15px;
-  border-color: transparent transparent ${({ theme }) => theme.pureWhite}
-    transparent;
-  top: 10px;
+  border-width: 0 12px 18px 12px;
+  border-color: transparent transparent
+    ${({ theme }) => theme.virtualControlArrow} transparent;
+  top: 16px;
 `;
 
 const DownArrow = styled(DirectionArrow)`
-  border-width: 25px 15px 0 15px;
-  border-color: ${({ theme }) => theme.pureWhite} transparent transparent
-    transparent;
-  bottom: 10px;
+  border-width: 18px 12px 0 12px;
+  border-color: ${({ theme }) => theme.virtualControlArrow} transparent
+    transparent transparent;
+  bottom: 16px;
 `;
 
 const LeftArrow = styled(DirectionArrow)`
-  border-width: 15px 25px 15px 0;
-  border-color: transparent ${({ theme }) => theme.pureWhite} transparent
-    transparent;
-  left: 10px;
+  border-width: 12px 18px 12px 0;
+  border-color: transparent ${({ theme }) => theme.virtualControlArrow}
+    transparent transparent;
+  left: 16px;
 `;
 
 const RightArrow = styled(DirectionArrow)`
-  border-width: 15px 0 15px 25px;
+  border-width: 12px 0 12px 18px;
   border-color: transparent transparent transparent
-    ${({ theme }) => theme.pureWhite};
-  right: 10px;
+    ${({ theme }) => theme.virtualControlArrow};
+  right: 16px;
 `;
 
 export const OPad = ({ initialPosition }: OPadProps) => {

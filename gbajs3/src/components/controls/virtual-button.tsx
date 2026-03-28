@@ -45,9 +45,9 @@ type RectangularButtonProps = {
 };
 
 const VirtualButtonBase = styled(ButtonBase)`
-  background-color: ${({ theme }) => theme.darkGray};
+  background: ${({ theme }) => theme.virtualControlSurface};
   border-style: solid;
-  border-color: ${({ theme }) => theme.virtualControlBorder};
+  border-color: ${({ theme }) => theme.virtualControlBorderSubtle};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,9 +55,29 @@ const VirtualButtonBase = styled(ButtonBase)`
   cursor: pointer;
   box-sizing: content-box;
   border-width: 2px;
+  color: ${({ theme }) => theme.surfaceTextPrimary};
+  backdrop-filter: blur(6px);
+  box-shadow: ${({ theme }) => theme.virtualControlShadow};
+
+  &:before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: inherit;
+    border: 1px solid ${({ theme }) => theme.virtualControlInnerBorder};
+    pointer-events: none;
+  }
+
+  &:active {
+    transform: translateY(1px) scale(0.98);
+    border-color: ${({ theme }) => theme.virtualControlAccentBorder};
+    box-shadow: ${({ theme }) => theme.virtualControlPressedShadow};
+  }
 
   @media ${({ theme }) => theme.isMobileLandscape} {
     background-color: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 `;
 
@@ -68,7 +88,7 @@ const CircularButton = styled(VirtualButtonBase, {
   height: ${({ $diameter }) => $diameter}px;
   border-radius: 100px;
   border-color: ${({ $areItemsDraggable = false, theme }) =>
-    $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorder};
+    $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorderSubtle};
   border-style: ${({ $areItemsDraggable = false }) =>
     $areItemsDraggable ? 'dashed' : 'solid'};
 `;
@@ -76,13 +96,18 @@ const CircularButton = styled(VirtualButtonBase, {
 const RectangularButton = styled(VirtualButtonBase, {
   shouldForwardProp: (propName) => propName !== '$areItemsDraggable'
 })<RectangularButtonProps>`
-  border-radius: 16px;
+  border-radius: 999px;
   width: fit-content;
   min-width: 85px;
+  padding-inline: 0.65rem;
   border-color: ${({ $areItemsDraggable = false, theme }) =>
-    $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorder};
+    $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorderSubtle};
   border-style: ${({ $areItemsDraggable = false }) =>
     $areItemsDraggable ? 'dashed' : 'solid'};
+
+  &:before {
+    inset: 5px 8px;
+  }
 `;
 
 export const VirtualButton = ({
