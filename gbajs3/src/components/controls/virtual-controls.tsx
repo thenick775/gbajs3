@@ -128,7 +128,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 35px - 3%)`,
-        left: `calc(${horizontalStartPos}px + 450px)`
+        left: `calc(${horizontalStartPos}px + 465px)`
       },
       mobileLandscape: {
         top: '235px',
@@ -145,7 +145,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 35px)`,
-        left: `calc(${horizontalStartPos}px + 375px)`
+        left: `calc(${horizontalStartPos}px + 400px)`
       },
       mobileLandscape: {
         top: 'calc(235px + 3%)',
@@ -159,15 +159,15 @@ export const VirtualControls = () => {
       },
       mobileWithUrlBar: {
         top: '92dvh',
-        left: '50dvw'
+        left: '40dvw'
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 60px)`,
-        left: `${horizontalStartPos}px`
+        left: `${horizontalStartPos + 120}px`
       },
       mobileLandscape: {
         top: 'calc(100dvh - 60px)',
-        left: '220px'
+        left: '335px'
       }
     },
     'start-button': {
@@ -177,7 +177,7 @@ export const VirtualControls = () => {
       },
       mobileWithUrlBar: {
         top: '92dvh',
-        left: '75dvw'
+        left: '70dvw'
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 60px)`,
@@ -185,7 +185,7 @@ export const VirtualControls = () => {
       },
       mobileLandscape: {
         top: 'calc(100dvh - 60px)',
-        left: 'calc(100dvw - 255px)'
+        left: 'calc(100dvw - 305px)'
       }
     },
     'l-button': {
@@ -209,7 +209,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 13px)`,
-        left: `calc(${horizontalStartPos}px + 190px)`
+        left: `calc(${horizontalStartPos}px + 225px)`
       },
       mobileLandscape: {
         top: 'calc(100dvh - 60px)',
@@ -223,7 +223,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 10px)`,
-        left: `calc(${horizontalStartPos}px + 205px)`
+        left: `calc(${horizontalStartPos}px + 235px)`
       },
       mobileLandscape: {
         top: '5px',
@@ -237,7 +237,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 10px)`,
-        left: `calc(${horizontalStartPos}px + 300px)`
+        left: `calc(${horizontalStartPos}px + 330px)`
       },
       mobileLandscape: {
         top: '55px',
@@ -254,7 +254,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 60px)`,
-        left: `calc(${horizontalStartPos}px + 248px)`
+        left: `calc(${horizontalStartPos}px + 278px)`
       },
       mobileLandscape: {
         top: '105px',
@@ -271,7 +271,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 60px)`,
-        left: `calc(${horizontalStartPos}px + 300px)`
+        left: `calc(${horizontalStartPos}px + 330px)`
       },
       mobileLandscape: {
         top: '155px',
@@ -283,9 +283,13 @@ export const VirtualControls = () => {
         top: `calc(${verticalStartPos}px + 11%)`,
         left: '10px'
       },
+      mobileWithUrlBar: {
+        top: `calc(${verticalStartPos}px + 9%)`,
+        left: '10px'
+      },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 10px)`,
-        left: `calc(${horizontalStartPos}px + 450px)`
+        left: `calc(${horizontalStartPos}px + 460px)`
       },
       mobileLandscape: {
         top: 'calc(100dvh - 205px)',
