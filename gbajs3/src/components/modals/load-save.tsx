@@ -22,44 +22,63 @@ type SaveErrorProps = {
 };
 
 const LoadSaveButton = styled('button')`
-  padding: 0.5rem 1rem;
   width: 100%;
-  color: ${({ theme }) => theme.blueCharcoal};
-  text-decoration: none;
-  background-color: ${({ theme }) => theme.pureWhite};
-  border: 1px solid ${({ theme }) => theme.listItemBorderSubtle};
+  display: block;
+  padding: 0.875rem 1rem;
   text-align: left;
+  cursor: pointer;
+  color: ${({ theme }) => theme.modalTextPrimary};
+  background-color: transparent;
+  border: 0;
+  font: inherit;
+  line-height: 1.35;
+  overflow: hidden;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
 
   &:hover {
-    color: ${({ theme }) => theme.darkGrayBlue};
-    background-color: ${({ theme }) => theme.aliceBlue1};
+    background-color: ${({ theme }) => theme.modalListItemHoverSurface};
+  }
+
+  &:focus-visible {
+    outline: none;
+    position: relative;
+    z-index: 1;
+    background-color: ${({ theme }) => theme.modalListItemHoverSurface};
+    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.gbaThemeBlue};
+  }
+
+  &:active {
+    background-color: ${({ theme }) => theme.modalListItemHoverSurface};
   }
 `;
 
 const StyledLi = styled('li')`
-  cursor: pointer;
+  margin: 0;
 `;
 
 const SaveList = styled('ul')`
-  list-style-type: none;
+  list-style: none;
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
 
-  & > ${StyledLi}:first-of-type > ${LoadSaveButton} {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-  }
+  background: ${({ theme }) => theme.modalSurfaceElevated};
+  border: 1px solid ${({ theme }) => theme.modalListBorder};
+  border-radius: 10px;
+  overflow: hidden;
 
-  & > ${StyledLi}:last-child > ${LoadSaveButton} {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
+  & > ${StyledLi} + ${StyledLi} {
+    border-top: 1px solid ${({ theme }) => theme.modalListBorder};
   }
+`;
 
-  & > ${StyledLi}:not(:first-of-type) > ${LoadSaveButton} {
-    border-top-width: 0;
-  }
+const EmptyState = styled(CenteredText)`
+  padding: 1rem;
+  color: ${({ theme }) => theme.modalTextSecondary};
 `;
 
 const SaveError = styled(ErrorWithIcon)<SaveErrorProps>`
@@ -125,12 +144,12 @@ export const LoadSaveModal = () => {
                 </StyledLi>
               ))}
               {!saveList?.length && !saveListError && (
-                <li>
-                  <CenteredText>
+                <StyledLi>
+                  <EmptyState>
                     No saves on the server, load a game and send your save to
                     the server
-                  </CenteredText>
-                </li>
+                  </EmptyState>
+                </StyledLi>
               )}
             </SaveList>
           </LoadingIndicator>
