@@ -1,10 +1,15 @@
-import { IconButton } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import {
+  PanelControlWrapper,
+  PanelControlButton,
+  PanelSliderButton
+} from './styled.tsx';
 
-import { PanelControlWrapper, PanelControlButton } from './styled.tsx';
-
-import type { IconButtonProps } from '@mui/material';
-import type { MouseEventHandler, PointerEventHandler, ReactNode } from 'react';
+import type {
+  ComponentProps,
+  MouseEventHandler,
+  PointerEventHandler,
+  ReactNode
+} from 'react';
 
 type PanelButtonProps = {
   ariaLabel: string;
@@ -20,7 +25,7 @@ type PanelButtonProps = {
 
 type SliderButtonProps = {
   icon: ReactNode;
-} & IconButtonProps;
+} & Omit<ComponentProps<typeof PanelSliderButton>, 'children'>;
 
 export const PanelButton = ({
   ariaLabel,
@@ -49,20 +54,6 @@ export const PanelButton = ({
   </PanelControlWrapper>
 );
 
-export const SliderButton = ({ icon, ...rest }: SliderButtonProps) => {
-  const theme = useTheme();
-
-  return (
-    <IconButton
-      size="small"
-      sx={{
-        padding: 0,
-        color: theme.panelControlText,
-        '&:active': { color: theme.gbaThemeBlue }
-      }}
-      {...rest}
-    >
-      {icon}
-    </IconButton>
-  );
-};
+export const SliderButton = ({ icon, ...rest }: SliderButtonProps) => (
+  <PanelSliderButton {...rest}>{icon}</PanelSliderButton>
+);

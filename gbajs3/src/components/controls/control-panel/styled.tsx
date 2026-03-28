@@ -58,6 +58,7 @@ export const PanelControlSlider = styled('div')<PanelControlSliderProps>`
 export const MutedMarkSlider = styled(Slider)`
   flex-grow: 1;
   color: ${({ theme }) => theme.gbaThemeBlue};
+  padding: 0;
 
   > .MuiSlider-rail {
     opacity: 0.28;
@@ -75,6 +76,10 @@ export const MutedMarkSlider = styled(Slider)`
   > .MuiSlider-markActive {
     opacity: 1;
     background-color: currentColor;
+  }
+
+  @media (pointer: coarse) {
+    padding: 0;
   }
 `;
 
@@ -96,6 +101,30 @@ export const PanelControlButton = styled(ButtonBase)<
 
   &:focus {
     box-shadow: 0 0 0 0.25rem ${({ theme }) => theme.menuToggleFocusRing};
+  }
+
+  &:active {
+    color: ${({ theme }) => theme.gbaThemeBlue};
+  }
+
+  @media ${({ theme }) => theme.isMobileLandscape} {
+    flex-shrink: 1;
+    min-width: unset;
+  }
+`;
+
+export const PanelSliderButton = styled(ButtonBase)`
+  ${({ theme }) =>
+    interactivePanelControlStyle({
+      $controlled: true,
+      theme: theme
+    })}
+
+  border: none;
+
+  & svg {
+    width: 2em;
+    height: 2em;
   }
 
   &:active {

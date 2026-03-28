@@ -68,7 +68,7 @@ const Slider = ({
           marks
           sx={{
             width: '85px',
-            margin: '0 10px',
+            margin: '0 8px',
             maxHeight: '40px',
             pointerEvents: disablePointerEvents ? 'none' : undefined
           }}
