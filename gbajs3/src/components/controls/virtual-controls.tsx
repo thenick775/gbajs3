@@ -190,11 +190,11 @@ export const VirtualControls = () => {
     },
     'l-button': {
       defaultMobile: {
-        top: `${verticalStartPos + 15}px`,
+        top: `${verticalStartPos + 13}px`,
         left: '15px'
       },
       largerThanPhone: {
-        top: `calc(${verticalStartPos}px + 15px)`,
+        top: `calc(${verticalStartPos}px + 13px)`,
         left: `${horizontalStartPos}px`
       },
       mobileLandscape: {
@@ -204,11 +204,11 @@ export const VirtualControls = () => {
     },
     'r-button': {
       defaultMobile: {
-        top: `${verticalStartPos + 15}px`,
+        top: `${verticalStartPos + 13}px`,
         left: 'calc(100dvw - 15px)'
       },
       largerThanPhone: {
-        top: `calc(${verticalStartPos}px + 15px)`,
+        top: `calc(${verticalStartPos}px + 13px)`,
         left: `calc(${horizontalStartPos}px + 190px)`
       },
       mobileLandscape: {

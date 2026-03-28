@@ -102,6 +102,7 @@ const RectangularButton = styled(VirtualButtonBase, {
 })<RectangularButtonProps>`
   border-radius: 999px;
   width: fit-content;
+  height: 34px;
   min-width: 85px;
   padding-inline: 0.65rem;
   border-color: ${({ $areItemsDraggable = false, theme }) =>
