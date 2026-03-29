@@ -489,12 +489,12 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
 }
 
 .emotion-37>.MuiSlider-track {
-  background-color: rgba(24,84,176,1);
-  border-color: rgba(24,84,176,1);
+  background-color: rgba(24, 84, 176, 1);
+  border-color: rgba(24, 84, 176, 1);
 }
 
 .emotion-37>.MuiSlider-thumb {
-  background-color: rgba(24,84,176,1);
+  background-color: rgba(24, 84, 176, 1);
 }
 
 .emotion-37>.MuiSlider-markActive {
@@ -1614,12 +1614,12 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
 }
 
 .emotion-37>.MuiSlider-track {
-  background-color: rgba(24,84,176,1);
-  border-color: rgba(24,84,176,1);
+  background-color: rgba(24, 84, 176, 1);
+  border-color: rgba(24, 84, 176, 1);
 }
 
 .emotion-37>.MuiSlider-thumb {
-  background-color: rgba(24,84,176,1);
+  background-color: rgba(24, 84, 176, 1);
 }
 
 .emotion-37>.MuiSlider-markActive {

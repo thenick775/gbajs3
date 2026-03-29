@@ -34,7 +34,6 @@ import type {
 } from '@tanstack/react-query';
 
 describe('<NavigationMenu />', () => {
-  // not working as expected
   it('renders menu button and closed menu by default on mobile', () => {
     renderWithContext(<NavigationMenu />);
 
@@ -43,12 +42,14 @@ describe('<NavigationMenu />', () => {
     expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
     // renders default mounted menu items
     expect(screen.getAllByRole('listitem')).toHaveLength(13);
+    expect(screen.getByTestId('menu-wrapper')).toHaveStyle({
+      left: '-255px'
+    });
   });
 
-  // not working as expected
   it('renders menu button and open menu by default on desktop', () => {
     vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
-      matches: query !== GbaDarkTheme.isLargerThanPhone,
+      matches: query === GbaDarkTheme.isLargerThanPhone,
       media: '',
       addListener: () => {
         /* empty */
@@ -75,6 +76,9 @@ describe('<NavigationMenu />', () => {
     expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
     // renders default mounted menu items
     expect(screen.getAllByRole('listitem')).toHaveLength(13);
+    expect(screen.getByTestId('menu-wrapper')).toHaveStyle({
+      left: 0
+    });
   });
 
   it('renders menu and dismiss buttons when opened', async () => {

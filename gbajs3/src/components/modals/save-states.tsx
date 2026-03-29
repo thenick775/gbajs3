@@ -33,14 +33,11 @@ const LoadSaveStateButton = styled('button')`
   padding: 0.875rem 1rem;
   text-align: left;
   cursor: pointer;
-
   color: ${({ theme }) => theme.modalTextPrimary};
   background: transparent;
   border: 0;
-
   font: inherit;
   line-height: 1.35;
-
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

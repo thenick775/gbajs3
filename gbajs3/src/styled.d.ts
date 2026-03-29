@@ -23,6 +23,7 @@ declare module '@mui/material/styles' {
     panelControlGray: string;
     panelBlueGray: string;
     panelControlText: string;
+    panelSliderAccent: string;
     // new canonical theme values
     modalSurface: string;
     modalSurfaceElevated: string;
@@ -82,6 +83,7 @@ declare module '@mui/material/styles' {
     panelControlGray: string;
     panelBlueGray: string;
     panelControlText: string;
+    panelSliderAccent: string;
     // new canonical theme values
     modalSurface: string;
     modalSurfaceElevated: string;

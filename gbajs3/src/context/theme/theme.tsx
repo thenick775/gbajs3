@@ -26,8 +26,9 @@ export const GbaDarkTheme: ThemeOptions = {
   panelControlGray: '#2a3442',
   panelBlueGray: '#1a2230',
   panelControlText: '#c7d1dc',
+  panelSliderAccent: 'rgba(24, 84, 176, 1)',
 
-  // darker modal tokens, closer to the approved mock
+  // new canonical css colors
   modalSurface: '#0a0d12',
   modalSurfaceElevated: '#0c1017',
   modalBorder: '#1b2330',
@@ -56,7 +57,8 @@ export const GbaDarkTheme: ThemeOptions = {
   virtualControlSurfaceStrong: 'rgba(15, 20, 30, 0.94)',
   virtualControlBorderSubtle: 'rgba(255, 255, 255, 0.14)',
   virtualControlInnerBorder: 'rgba(255, 255, 255, 0.04)',
-  virtualControlShadow: '0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.04)',
+  virtualControlShadow:
+    '0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.04)',
   virtualControlPressedShadow: '0 8px 18px rgba(0, 0, 0, 0.18)',
   virtualControlAccentBorder: 'rgba(28, 118, 253, 0.5)',
   virtualControlAccentBorderStrong: 'rgba(28, 118, 253, 0.55)',

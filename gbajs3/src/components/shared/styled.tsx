@@ -47,5 +47,5 @@ export const FooterWrapper = styled('div')`
 export const StyledBiPlus = styled(BiPlus)`
   width: 25px;
   height: 25px;
-  color: ${({ theme }) => theme.gbaThemeBlue}; // TODO: dont think this is good?
+  color: ${({ theme }) => theme.gbaThemeBlue};
 `;

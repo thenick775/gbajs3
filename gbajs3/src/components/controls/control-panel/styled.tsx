@@ -65,12 +65,12 @@ export const MutedMarkSlider = styled(Slider)`
   }
 
   > .MuiSlider-track {
-    background-color: rgba(24, 84, 176, 1);
-    border-color: rgba(24, 84, 176, 1);
+    background-color: ${({ theme }) => theme.panelSliderAccent};
+    border-color: ${({ theme }) => theme.panelSliderAccent};
   }
 
   > .MuiSlider-thumb {
-    background-color: rgba(24, 84, 176, 1);
+    background-color: ${({ theme }) => theme.panelSliderAccent};
   }
 
   > .MuiSlider-markActive {
