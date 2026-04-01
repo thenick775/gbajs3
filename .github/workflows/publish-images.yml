@@ -31,11 +31,11 @@ jobs:
         image:
           - name: gba-postgres
             directory: ./postgres
-            build_arg_name: PG_DB_USER
+            needs_pg_db_user: true
           - name: gba-webserver
             directory: ./gbajs3
-            build_arg_name: CLIENT_HOST
-            build_with_tag: true
+            needs_client_host: true
+            needs_release_version: true
           - name: gba-auth-server
             directory: ./auth
           - name: gba-admin-server
@@ -56,15 +56,20 @@ jobs:
         env:
           REPO_NAME: ${{ needs.setup.outputs.repo_name }}
           IMAGE_TAG: ${{ needs.setup.outputs.image_tag }}
-          BUILD_ARG_NAME: ${{ matrix.image.build_arg_name }}
-          BUILD_ARG_VALUE: ${{ secrets[matrix.image.build_arg_name] || '' }}
-          BUILD_WITH_TAG: ${{ matrix.image.build_with_tag }}
+          NEEDS_PG_DB_USER: ${{ matrix.image.needs_pg_db_user }}
+          NEEDS_CLIENT_HOST: ${{ matrix.image.needs_client_host }}
+          NEEDS_RELEASE_VERSION: ${{ matrix.image.needs_release_version }}
+          PG_DB_USER: ${{ secrets.PG_DB_USER }}
+          CLIENT_HOST: ${{ secrets.CLIENT_HOST }}
         run: |
           BUILD_ARG_FLAGS=""
-          if [ -n "$BUILD_ARG_NAME" ] && [ -n "$BUILD_ARG_VALUE" ]; then
-            BUILD_ARG_FLAGS="--build-arg $BUILD_ARG_NAME=$BUILD_ARG_VALUE"
+          if [ "$NEEDS_PG_DB_USER" = "true" ]; then
+            BUILD_ARG_FLAGS="$BUILD_ARG_FLAGS --build-arg PG_DB_USER=$PG_DB_USER"
           fi
-          if [ "$BUILD_WITH_TAG" = "true" ]; then
+          if [ "$NEEDS_CLIENT_HOST" = "true" ]; then
+            BUILD_ARG_FLAGS="$BUILD_ARG_FLAGS --build-arg CLIENT_HOST=$CLIENT_HOST"
+          fi
+          if [ "$NEEDS_RELEASE_VERSION" = "true" ]; then
             BUILD_ARG_FLAGS="$BUILD_ARG_FLAGS --build-arg RELEASE_VERSION=$IMAGE_TAG"
           fi
 
