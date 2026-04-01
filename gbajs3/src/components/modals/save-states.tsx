@@ -39,8 +39,6 @@ const LoadSaveStateButton = styled('button')`
   font: inherit;
   line-height: 1.35;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 
   transition:
     background-color 120ms ease,
