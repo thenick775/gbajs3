@@ -1,9 +1,6 @@
+import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import {
-  useLocalStorage,
-  useMediaQuery,
-  useOrientation
-} from '@uidotdev/usehooks';
+import { useLocalStorage, useOrientation } from '@uidotdev/usehooks';
 import { useCallback, type ReactNode } from 'react';
 
 import { LayoutContext } from './layout-context.tsx';
@@ -34,8 +31,8 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
     isLargerThanPhone && !isMobileLandscape
       ? 'desktop'
       : orientation.type.startsWith('landscape')
-      ? 'landscape'
-      : 'portrait';
+        ? 'landscape'
+        : 'portrait';
 
   const setLayout = useCallback(
     (layoutKey: string, layout: Layout) => {

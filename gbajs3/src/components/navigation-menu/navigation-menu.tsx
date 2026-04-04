@@ -1,6 +1,11 @@
 import { useMediaQuery } from '@mui/material';
 import { useTheme, styled } from '@mui/material/styles';
-import { useId, useRef, useState } from 'react';
+import {
+  useId,
+  useRef,
+  useState,
+  type LazyExoticComponent
+} from 'react';
 import Draggable from 'react-draggable';
 import toast from 'react-hot-toast';
 import {
@@ -44,27 +49,82 @@ import {
 import { useQuickReload } from '../../hooks/emulator/use-quick-reload.tsx';
 import { useLogout } from '../../hooks/use-logout.tsx';
 import { useShowLoadPublicRoms } from '../../hooks/use-show-load-public-roms.tsx';
-import { AboutModal } from '../modals/about.tsx';
-import { CheatsModal } from '../modals/cheats.tsx';
-import { ControlsModal } from '../modals/controls.tsx';
-import { DownloadSaveModal } from '../modals/download-save.tsx';
-import { EmulatorSettingsModal } from '../modals/emulator-settings.tsx';
-import { FileSystemModal } from '../modals/file-system.tsx';
-import { ImportExportModal } from '../modals/import-export.tsx';
-import { LegalModal } from '../modals/legal.tsx';
-import { LoadLocalRomModal } from '../modals/load-local-rom.tsx';
-import { LoadRomModal } from '../modals/load-rom.tsx';
-import { LoadSaveModal } from '../modals/load-save.tsx';
-import { LoginModal } from '../modals/login.tsx';
-import { SaveStatesModal } from '../modals/save-states.tsx';
-import { UploadFilesModal } from '../modals/upload-files.tsx';
-import { UploadRomToServerModal } from '../modals/upload-rom-to-server.tsx';
-import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
+import {
+  lazyNamedModal,
+  renderLazyModal
+} from '../modals/lazy-modal.tsx';
 import { ButtonBase } from '../shared/custom-button-base.tsx';
+
+import type { ModalComponent } from '../modals/lazy-modal.tsx';
 
 type ExpandableComponentProps = {
   $isExpanded?: boolean;
 };
+
+const AboutModal = lazyNamedModal(
+  () => import('../modals/about.tsx'),
+  (module) => module.AboutModal
+);
+const CheatsModal = lazyNamedModal(
+  () => import('../modals/cheats.tsx'),
+  (module) => module.CheatsModal
+);
+const ControlsModal = lazyNamedModal(
+  () => import('../modals/controls.tsx'),
+  (module) => module.ControlsModal
+);
+const DownloadSaveModal = lazyNamedModal(
+  () => import('../modals/download-save.tsx'),
+  (module) => module.DownloadSaveModal
+);
+const EmulatorSettingsModal = lazyNamedModal(
+  () => import('../modals/emulator-settings.tsx'),
+  (module) => module.EmulatorSettingsModal
+);
+const FileSystemModal = lazyNamedModal(
+  () => import('../modals/file-system.tsx'),
+  (module) => module.FileSystemModal
+);
+const ImportExportModal = lazyNamedModal(
+  () => import('../modals/import-export.tsx'),
+  (module) => module.ImportExportModal
+);
+const LegalModal = lazyNamedModal(
+  () => import('../modals/legal.tsx'),
+  (module) => module.LegalModal
+);
+const LoadLocalRomModal = lazyNamedModal(
+  () => import('../modals/load-local-rom.tsx'),
+  (module) => module.LoadLocalRomModal
+);
+const LoadRomModal = lazyNamedModal(
+  () => import('../modals/load-rom.tsx'),
+  (module) => module.LoadRomModal
+);
+const LoadSaveModal = lazyNamedModal(
+  () => import('../modals/load-save.tsx'),
+  (module) => module.LoadSaveModal
+);
+const LoginModal = lazyNamedModal(
+  () => import('../modals/login.tsx'),
+  (module) => module.LoginModal
+);
+const SaveStatesModal = lazyNamedModal(
+  () => import('../modals/save-states.tsx'),
+  (module) => module.SaveStatesModal
+);
+const UploadFilesModal = lazyNamedModal(
+  () => import('../modals/upload-files.tsx'),
+  (module) => module.UploadFilesModal
+);
+const UploadRomToServerModal = lazyNamedModal(
+  () => import('../modals/upload-rom-to-server.tsx'),
+  (module) => module.UploadRomToServerModal
+);
+const UploadSaveToServerModal = lazyNamedModal(
+  () => import('../modals/upload-save-to-server.tsx'),
+  (module) => module.UploadSaveToServerModal
+);
 
 const NavigationMenuWrapper = styled('div')<ExpandableComponentProps>`
   display: flex;
@@ -205,6 +265,11 @@ export const NavigationMenu = () => {
   const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
   const hasNoLocalRoms = !emulator?.listRoms().length;
 
+  const openLazyModal = (Modal: LazyExoticComponent<ModalComponent>) => {
+    setModalContent(renderLazyModal(Modal));
+    setIsModalOpen(true);
+  };
+
   useShowLoadPublicRoms();
 
   return (
@@ -263,8 +328,7 @@ export const NavigationMenu = () => {
             icon={<BiInfoCircle />}
             $withPadding
             onClick={() => {
-              setModalContent(<AboutModal />);
-              setIsModalOpen(true);
+              openLazyModal(AboutModal);
             }}
           />
 
@@ -279,8 +343,7 @@ export const NavigationMenu = () => {
               $disabled={isRunning}
               icon={<BiUpload />}
               onClick={() => {
-                setModalContent(<UploadFilesModal />);
-                setIsModalOpen(true);
+                openLazyModal(UploadFilesModal);
               }}
             />
             <NavLeaf
@@ -288,8 +351,7 @@ export const NavigationMenu = () => {
               $disabled={isRunning || hasNoLocalRoms}
               icon={<BiRedo />}
               onClick={() => {
-                setModalContent(<LoadLocalRomModal />);
-                setIsModalOpen(true);
+                openLazyModal(LoadLocalRomModal);
               }}
             />
           </NavComponent>
@@ -332,8 +394,7 @@ export const NavigationMenu = () => {
               $disabled={!isRunning}
               icon={<BiDownload />}
               onClick={() => {
-                setModalContent(<DownloadSaveModal />);
-                setIsModalOpen(true);
+                openLazyModal(DownloadSaveModal);
               }}
             />
             <NavLeaf
@@ -341,8 +402,7 @@ export const NavigationMenu = () => {
               $disabled={!isRunning}
               icon={<BiBookmarks />}
               onClick={() => {
-                setModalContent(<SaveStatesModal />);
-                setIsModalOpen(true);
+                openLazyModal(SaveStatesModal);
               }}
             />
             <NavLeaf
@@ -350,8 +410,7 @@ export const NavigationMenu = () => {
               $disabled={!isRunning}
               icon={<BiEdit />}
               onClick={() => {
-                setModalContent(<CheatsModal />);
-                setIsModalOpen(true);
+                openLazyModal(CheatsModal);
               }}
             />
           </NavComponent>
@@ -369,8 +428,7 @@ export const NavigationMenu = () => {
             icon={<BiJoystick />}
             $withPadding
             onClick={() => {
-              setModalContent(<ControlsModal />);
-              setIsModalOpen(true);
+              openLazyModal(ControlsModal);
             }}
           />
 
@@ -379,8 +437,7 @@ export const NavigationMenu = () => {
             icon={<BiFileFind />}
             $withPadding
             onClick={() => {
-              setModalContent(<FileSystemModal />);
-              setIsModalOpen(true);
+              openLazyModal(FileSystemModal);
             }}
           />
 
@@ -389,8 +446,7 @@ export const NavigationMenu = () => {
             icon={<BiBrain />}
             $withPadding
             onClick={() => {
-              setModalContent(<EmulatorSettingsModal />);
-              setIsModalOpen(true);
+              openLazyModal(EmulatorSettingsModal);
             }}
           />
 
@@ -403,8 +459,7 @@ export const NavigationMenu = () => {
               title="Login"
               icon={<BiLogInCircle />}
               onClick={() => {
-                setModalContent(<LoginModal />);
-                setIsModalOpen(true);
+                openLazyModal(LoginModal);
               }}
             />
             <NavLeaf
@@ -418,8 +473,7 @@ export const NavigationMenu = () => {
               $disabled={isMenuItemDisabledByAuth}
               icon={<BiCloudDownload />}
               onClick={() => {
-                setModalContent(<LoadSaveModal />);
-                setIsModalOpen(true);
+                openLazyModal(LoadSaveModal);
               }}
             />
             <NavLeaf
@@ -427,8 +481,7 @@ export const NavigationMenu = () => {
               $disabled={isMenuItemDisabledByAuth}
               icon={<BiCloudDownload />}
               onClick={() => {
-                setModalContent(<LoadRomModal />);
-                setIsModalOpen(true);
+                openLazyModal(LoadRomModal);
               }}
             />
             <NavLeaf
@@ -436,8 +489,7 @@ export const NavigationMenu = () => {
               $disabled={isMenuItemDisabledByAuth || !isRunning}
               icon={<BiCloudUpload />}
               onClick={() => {
-                setModalContent(<UploadSaveToServerModal />);
-                setIsModalOpen(true);
+                openLazyModal(UploadSaveToServerModal);
               }}
             />
             <NavLeaf
@@ -445,8 +497,7 @@ export const NavigationMenu = () => {
               $disabled={isMenuItemDisabledByAuth || !isRunning}
               icon={<BiCloudUpload />}
               onClick={() => {
-                setModalContent(<UploadRomToServerModal />);
-                setIsModalOpen(true);
+                openLazyModal(UploadRomToServerModal);
               }}
             />
           </NavComponent>
@@ -455,8 +506,7 @@ export const NavigationMenu = () => {
             title="Import/Export"
             icon={<MdImportExport />}
             onClick={() => {
-              setModalContent(<ImportExportModal />);
-              setIsModalOpen(true);
+              openLazyModal(ImportExportModal);
             }}
             $withPadding
           />
@@ -465,8 +515,7 @@ export const NavigationMenu = () => {
             title="Legal"
             icon={<BiCheckShield />}
             onClick={() => {
-              setModalContent(<LegalModal />);
-              setIsModalOpen(true);
+              openLazyModal(LegalModal);
             }}
             $withPadding
           />

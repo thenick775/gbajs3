@@ -1,4 +1,3 @@
-import mGBA from '@thenick775/mgba-wasm';
 import { useEffect, useState } from 'react';
 
 import {
@@ -12,6 +11,7 @@ export const useEmulator = (canvas: HTMLCanvasElement | null) => {
   useEffect(() => {
     const initialize = async () => {
       if (canvas) {
+        const { default: mGBA } = await import('@thenick775/mgba-wasm');
         const Module = await mGBA({ canvas });
 
         const mGBAVersion =
