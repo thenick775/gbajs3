@@ -16,14 +16,14 @@ describe('<LoginModal />', () => {
   });
 
   it('logs user into the server and closes modal', async () => {
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const setLoginTokenSpy = vi.fn();
     const { useModalContext: originalModal, useAuthContext: originalAuth } =
       await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     vi.spyOn(contextHooks, 'useAuthContext').mockImplementation(() => ({
@@ -45,12 +45,12 @@ describe('<LoginModal />', () => {
     await waitForElementToBeRemoved(screen.queryByTestId('login-spinner'));
 
     expect(setLoginTokenSpy).toHaveBeenCalledOnce();
-    expect(setIsModalOpenSpy).toHaveBeenCalledOnce();
+    expect(closeModalSpy).toHaveBeenCalledOnce();
 
     expect(setLoginTokenSpy).toHaveBeenCalledWith(
       expect.stringMatching(/^.+$/)
     );
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
   it('renders form validation errors', async () => {
@@ -76,14 +76,14 @@ describe('<LoginModal />', () => {
   });
 
   it('closes modal using the close button', async () => {
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const { useModalContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     renderWithContext(<LoginModal />);
@@ -93,6 +93,6 @@ describe('<LoginModal />', () => {
     expect(closeButton).toBeInTheDocument();
     await userEvent.click(closeButton);
 
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 });

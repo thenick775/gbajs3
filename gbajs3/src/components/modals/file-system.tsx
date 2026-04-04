@@ -21,7 +21,7 @@ const FlexModalBody = styled(ModalBody)`
 `;
 
 export const FileSystemModal = () => {
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
   const [allFiles, setAllFiles] = useState<FileNode | undefined>();
@@ -72,12 +72,7 @@ export const FileSystemModal = () => {
       </FlexModalBody>
       <ModalFooter>
         <CircleCheckButton copy="Save File System" onClick={emulator?.fsSync} />
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

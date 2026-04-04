@@ -1,7 +1,7 @@
 import { useMediaQuery } from '@mui/material';
 import { useTheme, styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
-import { type LazyExoticComponent, useId } from 'react';
+import { useId } from 'react';
 import toast from 'react-hot-toast';
 import { IconContext } from 'react-icons';
 import {
@@ -27,11 +27,9 @@ import {
 } from '../../hooks/context.tsx';
 import { useAddCallbacks } from '../../hooks/emulator/use-add-callbacks.tsx';
 import { useQuickReload } from '../../hooks/emulator/use-quick-reload.tsx';
-import { lazyNamedModal, renderLazyModal } from '../modals/lazy-modal.tsx';
 import { Copy } from '../shared/styled.tsx';
 
 import type { AreVirtualControlsEnabledProps } from '../modals/controls/virtual-controls-form.tsx';
-import type { ModalComponent } from '../modals/lazy-modal.tsx';
 import type { CurrentSaveStateSlots } from '../modals/save-states.tsx';
 
 const VirtualButtonTextLarge = styled(Copy)`
@@ -60,11 +58,6 @@ const keyToAriaLabel = (key: string) =>
       (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
     );
 
-const UploadSaveToServerModal = lazyNamedModal(
-  () => import('../modals/upload-save-to-server.tsx'),
-  (module) => module.UploadSaveToServerModal
-);
-
 export const VirtualControls = () => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
@@ -73,7 +66,7 @@ export const VirtualControls = () => {
   const { emulator } = useEmulatorContext();
   const { isRunning } = useRunningContext();
   const { isAuthenticated } = useAuthContext();
-  const { setModalContent, setIsModalOpen } = useModalContext();
+  const { openModal } = useModalContext();
   const { getLayout } = useLayoutContext();
   const { initialBounds } = useInitialBoundsContext();
   const virtualControlToastId = useId();
@@ -337,11 +330,6 @@ export const VirtualControls = () => {
     ? (currentSaveStateSlots[currentGameName] ?? 0)
     : 0;
 
-  const openLazyModal = (Modal: LazyExoticComponent<ModalComponent>) => {
-    setModalContent(renderLazyModal(Modal));
-    setIsModalOpen(true);
-  };
-
   const virtualButtons = [
     {
       keyId: 'A',
@@ -432,7 +420,7 @@ export const VirtualControls = () => {
       children: <BiSolidCloudUpload />,
       onPointerDown: () => {
         if (isAuthenticated() && isRunning) {
-          openLazyModal(UploadSaveToServerModal);
+          openModal({ type: 'uploadSaveToServer' });
         } else if (areNotificationsEnabled) {
           toast.error('Please log in and load a game', {
             id: virtualControlToastId

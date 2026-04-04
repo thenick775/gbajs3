@@ -15,7 +15,7 @@ describe('<UploadPublicExternalRomsModal />', () => {
   it('uploads rom from external url', async () => {
     const runGameSpy = vi.fn(() => true);
     const onLoadOrDismissSpy = vi.fn();
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const uploadRomSpy: (file: File, cb?: () => void) => void = vi.fn(
       (_file: File, cb?: () => void) => cb?.()
     );
@@ -32,7 +32,7 @@ describe('<UploadPublicExternalRomsModal />', () => {
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -81,7 +81,7 @@ describe('<UploadPublicExternalRomsModal />', () => {
 
     expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();
     expect(onLoadOrDismissSpy).toHaveBeenCalledWith('loaded');
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
   it('renders external rom error', async () => {
@@ -140,14 +140,14 @@ describe('<UploadPublicExternalRomsModal />', () => {
 
   it('temporarily dismisses modal', async () => {
     const onLoadOrDismissSpy = vi.fn();
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const { useModalContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     renderWithContext(
@@ -166,19 +166,19 @@ describe('<UploadPublicExternalRomsModal />', () => {
 
     expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();
     expect(onLoadOrDismissSpy).toHaveBeenCalledWith('temporarily-dismissed');
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
   it('closes modal using the permanently dismiss button', async () => {
     const onLoadOrDismissSpy = vi.fn();
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const { useModalContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     renderWithContext(
@@ -198,6 +198,6 @@ describe('<UploadPublicExternalRomsModal />', () => {
     // marks rom as skipped
     expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();
     expect(onLoadOrDismissSpy).toHaveBeenCalledWith('skipped');
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 });

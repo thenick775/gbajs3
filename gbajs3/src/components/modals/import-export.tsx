@@ -96,7 +96,7 @@ const importZipToEmulatorFs = (
 };
 
 export const ImportExportModal = () => {
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const writeFileToEmulator = useWriteFileToEmulator();
   const { syncActionIfEnabled } = useAddCallbacks();
@@ -121,7 +121,7 @@ export const ImportExportModal = () => {
   const onSubmit: SubmitHandler<InputProps> = async ({ zipFile }) => {
     await importZipToEmulatorFs(zipFile, writeFileToEmulator);
     await syncActionIfEnabled();
-    setIsModalOpen(false);
+    closeModal();
   };
 
   return (
@@ -179,12 +179,7 @@ export const ImportExportModal = () => {
         >
           Export
         </Button>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

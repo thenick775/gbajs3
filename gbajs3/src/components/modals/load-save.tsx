@@ -92,7 +92,7 @@ const SaveError = styled(ErrorWithIcon)<SaveErrorProps>`
 
 export const LoadSaveModal = () => {
   const theme = useTheme();
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const saveListId = useId();
   const { syncActionIfEnabled } = useAddCallbacks();
@@ -175,12 +175,7 @@ export const LoadSaveModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

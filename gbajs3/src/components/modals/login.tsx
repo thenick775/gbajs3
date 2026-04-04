@@ -30,7 +30,7 @@ const StyledForm = styled('form')`
 
 export const LoginModal = () => {
   const theme = useTheme();
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { setLoginToken } = useAuthContext();
   const loginFormId = useId();
   const {
@@ -47,7 +47,7 @@ export const LoginModal = () => {
   } = useLogin({
     onSuccess: (token) => {
       setLoginToken(token);
-      setIsModalOpen(false);
+      closeModal();
       reset();
     }
   });
@@ -109,12 +109,7 @@ export const LoginModal = () => {
         <Button form={loginFormId} type="submit" variant="contained">
           Login
         </Button>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

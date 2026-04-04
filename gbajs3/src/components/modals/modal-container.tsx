@@ -2,6 +2,7 @@ import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Modal from 'react-modal';
 
+import { ModalRenderer } from './modal-renderer.tsx';
 import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 
 const modalStyles = {
@@ -38,7 +39,7 @@ const landscapeModalStyles = {
 };
 
 export const ModalContainer = () => {
-  const { modalContent, isModalOpen, setIsModalOpen } = useModalContext();
+  const { modal, isModalOpen, closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const theme = useTheme();
   const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
@@ -49,14 +50,12 @@ export const ModalContainer = () => {
       closeTimeoutMS={400}
       isOpen={isModalOpen}
       style={isMobileLandscape ? landscapeModalStyles : modalStyles}
-      onRequestClose={() => {
-        setIsModalOpen(false);
-      }}
+      onRequestClose={closeModal}
       onAfterOpen={emulator?.disableKeyboardInput}
       onAfterClose={emulator?.enableKeyboardInput}
       aria={{ labelledby: 'modalHeader' }}
     >
-      {modalContent}
+      <ModalRenderer modal={modal} />
     </Modal>
   );
 };

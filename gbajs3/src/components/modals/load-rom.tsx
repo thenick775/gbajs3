@@ -99,7 +99,7 @@ const RomError = styled(ErrorWithIcon)<RomErrorProps>`
 
 export const LoadRomModal = () => {
   const theme = useTheme();
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const romListId = useId();
   const runGame = useRunGame();
@@ -188,12 +188,7 @@ export const LoadRomModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

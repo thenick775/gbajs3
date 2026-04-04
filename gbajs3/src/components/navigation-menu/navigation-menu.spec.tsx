@@ -10,22 +10,6 @@ import { GbaDarkTheme } from '../../context/theme/theme.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
 import * as quickReloadHooks from '../../hooks/emulator/use-quick-reload.tsx';
 import * as logoutHooks from '../../hooks/use-logout.tsx';
-import { AboutModal } from '../modals/about.tsx';
-import { CheatsModal } from '../modals/cheats.tsx';
-import { ControlsModal } from '../modals/controls.tsx';
-import { DownloadSaveModal } from '../modals/download-save.tsx';
-import { EmulatorSettingsModal } from '../modals/emulator-settings.tsx';
-import { FileSystemModal } from '../modals/file-system.tsx';
-import { ImportExportModal } from '../modals/import-export.tsx';
-import { LegalModal } from '../modals/legal.tsx';
-import { LoadLocalRomModal } from '../modals/load-local-rom.tsx';
-import { LoadRomModal } from '../modals/load-rom.tsx';
-import { LoadSaveModal } from '../modals/load-save.tsx';
-import { LoginModal } from '../modals/login.tsx';
-import { SaveStatesModal } from '../modals/save-states.tsx';
-import { UploadFilesModal } from '../modals/upload-files.tsx';
-import { UploadRomToServerModal } from '../modals/upload-rom-to-server.tsx';
-import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 import type {
@@ -133,25 +117,23 @@ describe('<NavigationMenu />', () => {
 
   describe('menu nodes', () => {
     it.each([
-      ['About', <AboutModal />],
-      ['Upload Files', <UploadFilesModal />],
-      ['Controls', <ControlsModal />],
-      ['File System', <FileSystemModal />],
-      ['Emulator Settings', <EmulatorSettingsModal />],
-      ['Import/Export', <ImportExportModal />],
-      ['Legal', <LegalModal />],
-      ['Login', <LoginModal />]
+      ['About', { type: 'about' }],
+      ['Upload Files', { type: 'uploadFiles' }],
+      ['Controls', { type: 'controls' }],
+      ['File System', { type: 'fileSystem' }],
+      ['Emulator Settings', { type: 'emulatorSettings' }],
+      ['Import/Export', { type: 'importExport' }],
+      ['Legal', { type: 'legal' }],
+      ['Login', { type: 'login' }]
     ])('%s opens modal on click', async (title, expected) => {
-      const setIsModalOpenSpy = vi.fn();
-      const setModalContextSpy = vi.fn();
+      const openModalSpy = vi.fn();
       const { useModalContext: original } = await vi.importActual<
         typeof contextHooks
       >('../../hooks/context.tsx');
 
       vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
         ...original(),
-        setModalContent: setModalContextSpy,
-        setIsModalOpen: setIsModalOpenSpy
+        openModal: openModalSpy
       }));
 
       renderWithContext(<NavigationMenu />);
@@ -162,19 +144,17 @@ describe('<NavigationMenu />', () => {
 
       await userEvent.click(menuNode);
 
-      expect(setModalContextSpy).toHaveBeenCalledWith(expected);
-      expect(setIsModalOpenSpy).toHaveBeenCalledWith(true);
+      expect(openModalSpy).toHaveBeenCalledWith(expected);
     });
 
     it.each([
-      ['Download Save', <DownloadSaveModal />],
-      ['Manage Save States', <SaveStatesModal />],
-      ['Manage Cheats', <CheatsModal />]
+      ['Download Save', { type: 'downloadSave' }],
+      ['Manage Save States', { type: 'saveStates' }],
+      ['Manage Cheats', { type: 'cheats' }]
     ])(
       '%s opens modal on click with running emulator',
       async (title, expected) => {
-        const setIsModalOpenSpy = vi.fn();
-        const setModalContextSpy = vi.fn();
+        const openModalSpy = vi.fn();
         const {
           useModalContext: originalModal,
           useRunningContext: originalRunning
@@ -184,8 +164,7 @@ describe('<NavigationMenu />', () => {
 
         vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
           ...originalModal(),
-          setModalContent: setModalContextSpy,
-          setIsModalOpen: setIsModalOpenSpy
+          openModal: openModalSpy
         }));
 
         vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
@@ -201,14 +180,12 @@ describe('<NavigationMenu />', () => {
 
         await userEvent.click(menuNode);
 
-        expect(setModalContextSpy).toHaveBeenCalledWith(expected);
-        expect(setIsModalOpenSpy).toHaveBeenCalledWith(true);
+        expect(openModalSpy).toHaveBeenCalledWith(expected);
       }
     );
 
     it('Load Local Rom opens modal on click when local roms are present', async () => {
-      const setIsModalOpenSpy = vi.fn();
-      const setModalContextSpy = vi.fn();
+      const openModalSpy = vi.fn();
       const { useModalContext: original } = await vi.importActual<
         typeof contextHooks
       >('../../hooks/context.tsx');
@@ -218,8 +195,7 @@ describe('<NavigationMenu />', () => {
 
       vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
         ...original(),
-        setModalContent: setModalContextSpy,
-        setIsModalOpen: setIsModalOpenSpy
+        openModal: openModalSpy
       }));
 
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -239,8 +215,7 @@ describe('<NavigationMenu />', () => {
 
       await userEvent.click(menuNode);
 
-      expect(setModalContextSpy).toHaveBeenCalledWith(<LoadLocalRomModal />);
-      expect(setIsModalOpenSpy).toHaveBeenCalledWith(true);
+      expect(openModalSpy).toHaveBeenCalledWith({ type: 'loadLocalRom' });
     });
 
     it('Load Local Rom renders as disabled', async () => {
@@ -489,20 +464,18 @@ describe('<NavigationMenu />', () => {
     });
 
     it.each([
-      ['Load Save (Server)', <LoadSaveModal />],
-      ['Load Rom (Server)', <LoadRomModal />]
+      ['Load Save (Server)', { type: 'loadSave' }],
+      ['Load Rom (Server)', { type: 'loadRom' }]
     ])(
       '%s opens modal on click with authentication',
       async (title, expected) => {
-        const setIsModalOpenSpy = vi.fn();
-        const setModalContextSpy = vi.fn();
+        const openModalSpy = vi.fn();
         const { useModalContext: originalModal, useAuthContext: originalAuth } =
           await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
 
         vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
           ...originalModal(),
-          setModalContent: setModalContextSpy,
-          setIsModalOpen: setIsModalOpenSpy
+          openModal: openModalSpy
         }));
 
         vi.spyOn(contextHooks, 'useAuthContext').mockImplementation(() => ({
@@ -518,19 +491,17 @@ describe('<NavigationMenu />', () => {
 
         await userEvent.click(menuNode);
 
-        expect(setModalContextSpy).toHaveBeenCalledWith(expected);
-        expect(setIsModalOpenSpy).toHaveBeenCalledWith(true);
+        expect(openModalSpy).toHaveBeenCalledWith(expected);
       }
     );
 
     it.each([
-      ['Send Save to Server', <UploadSaveToServerModal />],
-      ['Send Rom to Server', <UploadRomToServerModal />]
+      ['Send Save to Server', { type: 'uploadSaveToServer' }],
+      ['Send Rom to Server', { type: 'uploadRomToServer' }]
     ])(
       '%s opens modal on click with authentication and running emulator',
       async (title, expected) => {
-        const setIsModalOpenSpy = vi.fn();
-        const setModalContextSpy = vi.fn();
+        const openModalSpy = vi.fn();
         const {
           useModalContext: originalModal,
           useAuthContext: originalAuth,
@@ -541,8 +512,7 @@ describe('<NavigationMenu />', () => {
 
         vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
           ...originalModal(),
-          setModalContent: setModalContextSpy,
-          setIsModalOpen: setIsModalOpenSpy
+          openModal: openModalSpy
         }));
 
         vi.spyOn(contextHooks, 'useAuthContext').mockImplementation(() => ({
@@ -563,8 +533,7 @@ describe('<NavigationMenu />', () => {
 
         await userEvent.click(menuNode);
 
-        expect(setModalContextSpy).toHaveBeenCalledWith(expected);
-        expect(setIsModalOpenSpy).toHaveBeenCalledWith(true);
+        expect(openModalSpy).toHaveBeenCalledWith(expected);
       }
     );
   });

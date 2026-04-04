@@ -11,8 +11,7 @@ const invalid_url = `bad url`;
 
 describe('useShowLoadPublicRoms', () => {
   it('should open modal if all conditions are met', async () => {
-    const setIsModalOpenSpy = vi.fn();
-    const setModalContextSpy = vi.fn();
+    const openModalSpy = vi.fn();
     const isModalOpenSpy = vi.fn(() => true).mockReturnValueOnce(false);
     const { useModalContext: original } =
       await vi.importActual<typeof contextHooks>('./context.tsx');
@@ -26,8 +25,7 @@ describe('useShowLoadPublicRoms', () => {
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
-      setModalContent: setModalContextSpy,
-      setIsModalOpen: setIsModalOpenSpy,
+      openModal: openModalSpy,
       isModalOpen: isModalOpenSpy()
     }));
 
@@ -35,13 +33,18 @@ describe('useShowLoadPublicRoms', () => {
       useShowLoadPublicRoms();
     });
 
-    expect(setModalContextSpy).toHaveBeenCalledOnce();
-    expect(setModalContextSpy).toHaveBeenCalledWith(expect.anything());
+    expect(openModalSpy).toHaveBeenCalledOnce();
+    expect(openModalSpy).toHaveBeenCalledWith({
+      type: 'uploadPublicExternalRoms',
+      props: {
+        url: new URL(valid_url),
+        onLoadOrDismiss: expect.any(Function)
+      }
+    });
   });
 
   it('marks url as error if invalid', async () => {
-    const setIsModalOpenSpy = vi.fn();
-    const setModalContextSpy = vi.fn();
+    const openModalSpy = vi.fn();
     const { useModalContext: original } =
       await vi.importActual<typeof contextHooks>('./context.tsx');
 
@@ -56,16 +59,14 @@ describe('useShowLoadPublicRoms', () => {
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
-      setModalContent: setModalContextSpy,
-      setIsModalOpen: setIsModalOpenSpy
+      openModal: openModalSpy
     }));
 
     renderHookWithContext(() => {
       useShowLoadPublicRoms();
     });
 
-    expect(setModalContextSpy).not.toHaveBeenCalled();
-    expect(setModalContextSpy).not.toHaveBeenCalled();
+    expect(openModalSpy).not.toHaveBeenCalled();
     expect(setItemSpy).toHaveBeenCalledWith(
       'hasLoadedPublicExternalRoms',
       '{"bad url":"error"}'
@@ -73,8 +74,7 @@ describe('useShowLoadPublicRoms', () => {
   });
 
   it('should not reopen modal if URL was already attempted this session', async () => {
-    const setIsModalOpenSpy = vi.fn();
-    const setModalContextSpy = vi.fn();
+    const openModalSpy = vi.fn();
     const isModalOpenSpy = vi.fn(() => false);
     const { useModalContext: original } =
       await vi.importActual<typeof contextHooks>('./context.tsx');
@@ -85,8 +85,7 @@ describe('useShowLoadPublicRoms', () => {
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
-      setModalContent: setModalContextSpy,
-      setIsModalOpen: setIsModalOpenSpy,
+      openModal: openModalSpy,
       isModalOpen: isModalOpenSpy()
     }));
 
@@ -94,16 +93,14 @@ describe('useShowLoadPublicRoms', () => {
       useShowLoadPublicRoms();
     });
 
-    expect(setModalContextSpy).toHaveBeenCalledOnce();
+    expect(openModalSpy).toHaveBeenCalledOnce();
 
-    setModalContextSpy.mockClear();
-    setIsModalOpenSpy.mockClear();
+    openModalSpy.mockClear();
 
     // simulate re-render after overlay dismiss
     rerender();
 
     // modal should not reopen since url was already attempted
-    expect(setModalContextSpy).not.toHaveBeenCalled();
-    expect(setIsModalOpenSpy).not.toHaveBeenCalled();
+    expect(openModalSpy).not.toHaveBeenCalled();
   });
 });

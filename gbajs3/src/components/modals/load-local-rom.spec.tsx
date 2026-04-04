@@ -43,7 +43,7 @@ describe('<LoadLocalRomModal />', () => {
   });
 
   it('loads a local rom and closes modal', async () => {
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const runGameSpy = vi.fn();
     const {
       useEmulatorContext: originalEmulator,
@@ -52,7 +52,7 @@ describe('<LoadLocalRomModal />', () => {
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -73,18 +73,18 @@ describe('<LoadLocalRomModal />', () => {
 
     expect(runGameSpy).toHaveBeenCalledOnce();
     expect(runGameSpy).toHaveBeenCalledWith('rom1.gba');
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
   it('closes modal using the close button', async () => {
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const { useModalContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     renderWithContext(<LoadLocalRomModal />);
@@ -93,6 +93,6 @@ describe('<LoadLocalRomModal />', () => {
     const closeButton = screen.getByText('Close', { selector: 'button' });
     await userEvent.click(closeButton);
 
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 });

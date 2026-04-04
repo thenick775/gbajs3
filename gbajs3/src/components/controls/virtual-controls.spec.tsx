@@ -10,7 +10,6 @@ import { GbaDarkTheme } from '../../context/theme/theme.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
 import * as addCallbackHooks from '../../hooks/emulator/use-add-callbacks.tsx';
 import * as quickReloadHooks from '../../hooks/emulator/use-quick-reload.tsx';
-import { UploadSaveToServerModal } from '../modals/upload-save-to-server.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
@@ -177,8 +176,7 @@ describe('<VirtualControls />', () => {
     });
 
     it('upload save opens modal if authenticated and running a game', async () => {
-      const setIsModalOpenSpy = vi.fn();
-      const setModalContextSpy = vi.fn();
+      const openModalSpy = vi.fn();
       const {
         useAuthContext: originalAuth,
         useModalContext: originalContext,
@@ -197,23 +195,20 @@ describe('<VirtualControls />', () => {
 
       vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
         ...originalContext(),
-        setModalContent: setModalContextSpy,
-        setIsModalOpen: setIsModalOpenSpy
+        openModal: openModalSpy
       }));
 
       renderWithContext(<VirtualControls />);
 
       await userEvent.click(screen.getByLabelText('Uploadsave Button'));
 
-      expect(setModalContextSpy).toHaveBeenCalledWith(
-        <UploadSaveToServerModal />
-      );
-      expect(setIsModalOpenSpy).toHaveBeenCalledWith(true);
+      expect(openModalSpy).toHaveBeenCalledWith({
+        type: 'uploadSaveToServer'
+      });
     });
 
     it('upload save renders error toast', async () => {
-      const setIsModalOpenSpy = vi.fn();
-      const setModalContextSpy = vi.fn();
+      const openModalSpy = vi.fn();
 
       const { useModalContext: original } = await vi.importActual<
         typeof contextHooks
@@ -221,8 +216,7 @@ describe('<VirtualControls />', () => {
 
       vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
         ...original(),
-        setModalContent: setModalContextSpy,
-        setIsModalOpen: setIsModalOpenSpy
+        openModal: openModalSpy
       }));
 
       const toastErrorSpy = vi.spyOn(toast.default, 'error');
@@ -235,8 +229,7 @@ describe('<VirtualControls />', () => {
         'Please log in and load a game',
         { id: expect.any(String) }
       );
-      expect(setModalContextSpy).not.toHaveBeenCalled();
-      expect(setIsModalOpenSpy).not.toHaveBeenCalled();
+      expect(openModalSpy).not.toHaveBeenCalled();
     });
 
     it('loads save state', async () => {

@@ -60,7 +60,7 @@ const DynamicBody = ({
 
 export const UploadRomToServerModal = () => {
   const theme = useTheme();
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const uploadRomToServerButtonId = useId();
   const {
@@ -98,12 +98,7 @@ export const UploadRomToServerModal = () => {
         >
           Upload
         </Button>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

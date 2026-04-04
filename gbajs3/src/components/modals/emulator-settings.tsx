@@ -106,7 +106,7 @@ const a11yProps = (index: number) => ({
 export const EmulatorSettingsModal = () => {
   const { emulator } = useEmulatorContext();
   const { isRunning } = useRunningContext();
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { addCallbacks } = useAddCallbacks();
   const [emulatorSettings, setEmulatorSettings] = useLocalStorage<
     EmulatorSettings | undefined
@@ -503,12 +503,7 @@ export const EmulatorSettingsModal = () => {
         >
           Reset
         </Button>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

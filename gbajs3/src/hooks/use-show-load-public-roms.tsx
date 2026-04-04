@@ -3,7 +3,6 @@ import { useEffect, useId, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useModalContext } from './context.tsx';
-import { UploadPublicExternalRomsModal } from '../components/modals/upload-public-external-roms.tsx';
 
 export type PublicRomUploadStatus =
   | 'loaded'
@@ -54,7 +53,7 @@ export const usePublicRoms = () => {
 // Note: query parameters are NOT persisted when saving the app as a PWA to the home screen.
 // This is still an outstanding issue that needs to be addressed through other means.
 export const useShowLoadPublicRoms = () => {
-  const { setModalContent, isModalOpen, setIsModalOpen } = useModalContext();
+  const { openModal, isModalOpen } = useModalContext();
   const { shouldShowPublicRomModal, setHasLoadedPublicRoms, romURL } =
     usePublicRoms();
   // prevent modal display from causing issues when dismissed through overlay
@@ -78,16 +77,16 @@ export const useShowLoadPublicRoms = () => {
           }));
         };
 
-        setModalContent(
-          <UploadPublicExternalRomsModal
-            url={url}
-            onLoadOrDismiss={storeResult}
-          />
-        );
+        openModal({
+          type: 'uploadPublicExternalRoms',
+          props: {
+            url,
+            onLoadOrDismiss: storeResult
+          }
+        });
 
         // mark url as attempted for this session
         setAttemptedUrls((prev) => [...prev, romURL]);
-        setIsModalOpen(true);
       } catch {
         toast.error('Invalid external rom URL', { id: externalRomToastId });
         setHasLoadedPublicRoms((prevState) => ({
@@ -100,8 +99,7 @@ export const useShowLoadPublicRoms = () => {
     romURL,
     shouldShowPublicRomModal,
     attemptedUrls,
-    setIsModalOpen,
-    setModalContent,
+    openModal,
     setHasLoadedPublicRoms,
     isModalOpen,
     externalRomToastId

@@ -171,7 +171,7 @@ const SaveStateListItem = ({
 
 export const SaveStatesModal = () => {
   const theme = useTheme();
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const [currentSaveStates, setCurrentSaveStates] = useState<
     string[] | undefined
@@ -337,12 +337,7 @@ export const SaveStatesModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

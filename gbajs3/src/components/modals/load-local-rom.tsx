@@ -70,7 +70,7 @@ const EmptyState = styled(CenteredText)`
 `;
 
 export const LoadLocalRomModal = () => {
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const romListId = useId();
   const runGame = useRunGame();
@@ -86,7 +86,7 @@ export const LoadLocalRomModal = () => {
               <LoadRomButton
                 onClick={() => {
                   runGame(romName);
-                  setIsModalOpen(false);
+                  closeModal();
                 }}
               >
                 {romName}
@@ -103,12 +103,7 @@ export const LoadLocalRomModal = () => {
         </RomList>
       </ModalBody>
       <ModalFooter>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

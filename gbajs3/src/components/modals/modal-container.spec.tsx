@@ -10,12 +10,16 @@ import * as contextHooks from '../../hooks/context.tsx';
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
 
 const DismissModalButton = () => {
-  const { setIsModalOpen } = contextHooks.useModalContext();
+  const { closeModal, isModalOpen, openModal } = contextHooks.useModalContext();
   return (
     <button
       data-testid="dismiss-modal-button"
       onClick={() => {
-        setIsModalOpen((prevState) => !prevState);
+        if (isModalOpen) {
+          closeModal();
+        } else {
+          openModal({ type: 'about' });
+        }
       }}
     />
   );
@@ -34,16 +38,18 @@ describe('<ModalContainer />', () => {
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
       isModalOpen: true,
-      modalContent: <p>Some modal content</p>
+      modal: { type: 'about' }
     }));
 
     renderWithContext(<ModalContainer />);
 
-    expect(screen.getByText('Some modal content')).toBeVisible();
+    expect(
+      await screen.findByRole('heading', { name: 'About' })
+    ).toBeInTheDocument();
   });
 
   it('does not render children if nodal is not open', async () => {
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const { useModalContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
@@ -51,34 +57,33 @@ describe('<ModalContainer />', () => {
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
       isModalOpen: false,
-      setIsModalOpen: setIsModalOpenSpy,
-      modalContent: <p>Some modal content</p>
+      closeModal: closeModalSpy,
+      modal: null
     }));
 
     renderWithContext(<ModalContainer />);
 
-    expect(screen.queryByText('Some modal content')).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('closes modal', async () => {
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const { useModalContext: originalModal } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
-      setIsModalOpen: setIsModalOpenSpy,
+      closeModal: closeModalSpy,
       isModalOpen: true,
-      modalContent: <p>Some modal content</p>
+      modal: { type: 'about' }
     }));
 
     renderWithContext(<ModalContainer />);
 
     await userEvent.keyboard('{Escape}');
 
-    expect(setIsModalOpenSpy).toHaveBeenCalledOnce();
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
   it('disables keyboard input after open', async () => {
@@ -96,7 +101,7 @@ describe('<ModalContainer />', () => {
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
       isModalOpen: true,
-      modalContent: <p>Some modal content</p>
+      modal: { type: 'about' }
     }));
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({

@@ -45,7 +45,7 @@ describe('<UploadFilesModal />', () => {
       typeof addCallbackHooks
     >('../../hooks/emulator/use-add-callbacks.tsx');
 
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const syncActionIfEnabledSpy = vi.fn();
     const runGameSpy = vi.fn();
 
@@ -53,7 +53,7 @@ describe('<UploadFilesModal />', () => {
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -101,7 +101,7 @@ describe('<UploadFilesModal />', () => {
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
     expect(runGameSpy).toHaveBeenCalledOnce();
     expect(runGameSpy).toHaveBeenCalledWith('rom1.gba');
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
   it('allows choosing which ROM to run (checkbox toggling)', async () => {
@@ -171,13 +171,13 @@ describe('<UploadFilesModal />', () => {
       typeof addCallbackHooks
     >('../../hooks/emulator/use-add-callbacks.tsx');
 
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const syncActionIfEnabledSpy = vi.fn();
     const writeFileToEmulatorSpy = vi.fn().mockResolvedValue(undefined);
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -212,7 +212,7 @@ describe('<UploadFilesModal />', () => {
       );
     });
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
   it('respects selected URL file type', async () => {
@@ -223,13 +223,13 @@ describe('<UploadFilesModal />', () => {
       typeof addCallbackHooks
     >('../../hooks/emulator/use-add-callbacks.tsx');
 
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const syncActionIfEnabledSpy = vi.fn();
     const writeFileToEmulatorSpy = vi.fn().mockResolvedValue(undefined);
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
@@ -274,7 +274,7 @@ describe('<UploadFilesModal />', () => {
       'save'
     );
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
   it('shows invalid URL validation error', async () => {
@@ -336,14 +336,14 @@ describe('<UploadFilesModal />', () => {
   });
 
   it('closes modal using the close button', async () => {
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const { useModalContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     renderWithContext(<UploadFilesModal />);
@@ -352,6 +352,6 @@ describe('<UploadFilesModal />', () => {
     expect(closeButton).toBeInTheDocument();
     await userEvent.click(closeButton);
 
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 });

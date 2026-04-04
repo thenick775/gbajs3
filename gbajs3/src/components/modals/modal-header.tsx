@@ -47,7 +47,7 @@ export const ModalHeader = ({
   showExitIndicator = true,
   onClose
 }: ModalHeaderProps) => {
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
 
   return (
     <HeaderWrapper>
@@ -56,7 +56,7 @@ export const ModalHeader = ({
         <CloseButton
           aria-label="Close"
           onClick={() => {
-            setIsModalOpen(false);
+            closeModal();
             onClose?.();
           }}
         />

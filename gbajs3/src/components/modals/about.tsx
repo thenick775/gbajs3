@@ -15,7 +15,7 @@ const FlexWrapper = styled('div')`
 `;
 
 export const AboutModal = () => {
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const releaseVersion = import.meta.env.VITE_GBA_RELEASE_VERSION;
 
   return (
@@ -63,12 +63,7 @@ export const AboutModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

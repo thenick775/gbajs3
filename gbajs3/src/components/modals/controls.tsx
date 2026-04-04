@@ -142,11 +142,9 @@ const ControlTabs = ({
 };
 
 export const ControlsModal = () => {
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const baseId = useId();
-  const [formId, setFormId] = useState(
-    `${baseId}--virtual-controls-form`
-  );
+  const [formId, setFormId] = useState(`${baseId}--virtual-controls-form`);
   const [isSuccessfulSubmit, setIsSuccessfulSubmit] = useState(false);
 
   return (
@@ -171,12 +169,7 @@ export const ControlsModal = () => {
             showSuccess={isSuccessfulSubmit}
           />
         )}
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

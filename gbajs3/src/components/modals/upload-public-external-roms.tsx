@@ -25,7 +25,7 @@ import { Copy } from '../shared/styled.tsx';
 
 import type { PublicRomUploadStatus } from '../../hooks/use-show-load-public-roms.tsx';
 
-type UploadPublicExternalRomsModalProps = {
+export type UploadPublicExternalRomsModalProps = {
   url: URL;
   onLoadOrDismiss: (statusMsg: PublicRomUploadStatus) => void;
 };
@@ -55,7 +55,7 @@ export const UploadPublicExternalRomsModal = ({
   onLoadOrDismiss
 }: UploadPublicExternalRomsModalProps) => {
   const theme = useTheme();
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const [currentRomURL, setCurrentRomURL] = useState<string | null>(null);
   const uploadRomButtonId = useId();
@@ -72,7 +72,7 @@ export const UploadPublicExternalRomsModal = ({
         const hasSucceeded = runGame(file.name);
         if (hasSucceeded) {
           onLoadOrDismiss('loaded');
-          setIsModalOpen(false);
+          closeModal();
         }
       };
 
@@ -125,7 +125,7 @@ export const UploadPublicExternalRomsModal = ({
           variant="outlined"
           onClick={() => {
             onLoadOrDismiss(externalRomLoadError ? 'skipped-error' : 'skipped');
-            setIsModalOpen(false);
+            closeModal();
           }}
         >
           Don't ask again

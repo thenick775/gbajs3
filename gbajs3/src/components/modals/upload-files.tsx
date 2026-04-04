@@ -158,7 +158,7 @@ const AdditionalFileActions = ({
 };
 
 export const UploadFilesModal = () => {
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const runGame = useRunGame();
   const writeFileToEmulator = useWriteFileToEmulator();
@@ -230,7 +230,7 @@ export const UploadFilesModal = () => {
 
     if (gameToRun) runGame(gameToRun);
 
-    setIsModalOpen(false);
+    closeModal();
   };
 
   const files = watch('files');
@@ -421,9 +421,7 @@ export const UploadFilesModal = () => {
         <Button
           style={{ minWidth: 'fit-content' }}
           variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
+          onClick={closeModal}
         >
           Close
         </Button>

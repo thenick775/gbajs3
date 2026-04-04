@@ -13,7 +13,7 @@ import { downloadBlob } from './file-utilities/blob.ts';
 
 export const DownloadSaveModal = () => {
   const theme = useTheme();
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const downloadSaveButtonId = useId();
   const [error, setError] = useState(false);
@@ -54,12 +54,7 @@ export const DownloadSaveModal = () => {
         >
           Download
         </Button>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

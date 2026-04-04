@@ -103,7 +103,7 @@ describe('<ImportExportModal />', () => {
 
   it('imports a zip and closes modal', async () => {
     const syncActionIfEnabledSpy = vi.fn();
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const readZipSpy = vi
       .spyOn(zipUtils, 'readZipEntriesFromBlob')
       .mockImplementation(async (_, onEntry) => {
@@ -127,7 +127,7 @@ describe('<ImportExportModal />', () => {
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     const testZip = new File(['dummy'], 'export.zip', {
@@ -148,7 +148,7 @@ describe('<ImportExportModal />', () => {
       expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
     });
     await waitFor(() => {
-      expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+      expect(closeModalSpy).toHaveBeenCalledOnce();
     });
   });
 
@@ -163,7 +163,7 @@ describe('<ImportExportModal />', () => {
     const uploadScreenshotSpy = vi.fn((_file: File, cb?: () => void) => cb?.());
 
     const syncActionIfEnabledSpy = vi.fn();
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
 
     const {
       useEmulatorContext: originalEmulator,
@@ -199,7 +199,7 @@ describe('<ImportExportModal />', () => {
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...originalModal(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {
@@ -348,14 +348,14 @@ describe('<ImportExportModal />', () => {
   });
 
   it('closes modal when clicking Close', async () => {
-    const setIsModalOpenSpy = vi.fn();
+    const closeModalSpy = vi.fn();
     const { useModalContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
       ...original(),
-      setIsModalOpen: setIsModalOpenSpy
+      closeModal: closeModalSpy
     }));
 
     renderWithContext(<ImportExportModal />);
@@ -365,6 +365,6 @@ describe('<ImportExportModal />', () => {
 
     await userEvent.click(closeButton);
 
-    expect(setIsModalOpenSpy).toHaveBeenCalledWith(false);
+    expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 });

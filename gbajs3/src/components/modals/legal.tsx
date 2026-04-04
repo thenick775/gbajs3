@@ -6,7 +6,7 @@ import { ModalHeader } from './modal-header.tsx';
 import { useModalContext } from '../../hooks/context.tsx';
 
 export const LegalModal = () => {
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const currentDate = new Date();
   const year = currentDate.getFullYear();
 
@@ -157,12 +157,7 @@ export const LegalModal = () => {
         <p>© {year}, Nicholas VanCise. All rights reserved.</p>
       </ModalBody>
       <ModalFooter>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>

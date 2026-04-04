@@ -68,7 +68,7 @@ const HelpText = styled('p')<HelpTextProps>`
 `;
 
 export const CheatsModal = () => {
-  const { setIsModalOpen } = useModalContext();
+  const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const [viewRawCheats, setViewRawCheats] = useState(false);
   const { syncActionIfEnabled } = useAddCallbacks();
@@ -249,12 +249,7 @@ export const CheatsModal = () => {
         >
           {viewRawCheats ? 'Parsed' : 'Raw'}
         </Button>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Button variant="outlined" onClick={closeModal}>
           Close
         </Button>
       </ModalFooter>
