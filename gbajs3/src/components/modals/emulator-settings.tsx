@@ -163,6 +163,14 @@ export const EmulatorSettingsModal = () => {
 
   const defaultAudioSampleRates = emulator?.defaultAudioSampleRates();
   const defaultAudioBufferSizes = emulator?.defaultAudioBufferSizes();
+  const audioSampleRate = watch('audioSampleRate');
+  const audioBufferSize = watch('audioBufferSize');
+  const renderedAudioSampleRate = defaultAudioSampleRates
+    ? audioSampleRate
+    : '';
+  const renderedAudioBufferSize = defaultAudioBufferSizes
+    ? audioBufferSize
+    : '';
 
   const onSubmit: SubmitHandler<EmulatorSettings> = ({
     saveFileName,
@@ -355,7 +363,7 @@ export const EmulatorSettingsModal = () => {
                 <Select
                   label="Audio Sample Rate"
                   disabled={isRunning}
-                  value={watch('audioSampleRate')}
+                  value={renderedAudioSampleRate}
                   {...register('audioSampleRate', {
                     required: {
                       value: true,
@@ -376,7 +384,7 @@ export const EmulatorSettingsModal = () => {
                 <Select
                   label="Audio Buffer Size"
                   disabled={isRunning}
-                  value={watch('audioBufferSize')}
+                  value={renderedAudioBufferSize}
                   {...register('audioBufferSize', {
                     required: {
                       value: true,
