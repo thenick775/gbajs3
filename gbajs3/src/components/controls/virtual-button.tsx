@@ -69,7 +69,7 @@ const VirtualButtonBase = styled(ButtonBase)`
     pointer-events: none;
   }
 
-  &:active {
+  &:not(:disabled):active {
     transform: translateY(1px) scale(0.98);
     border-color: ${({ theme }) => theme.virtualControlAccentBorder};
     box-shadow: ${({ theme }) => theme.virtualControlPressedShadow};
