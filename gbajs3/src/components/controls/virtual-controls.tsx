@@ -341,7 +341,7 @@ export const VirtualControls = () => {
         y: '0px'
       },
       keyName: 'a-button',
-      enabled: shouldShowVirtualButtonsAndOpad
+      shown: shouldShowVirtualButtonsAndOpad
     },
     {
       keyId: 'B',
@@ -352,7 +352,7 @@ export const VirtualControls = () => {
         y: '0px'
       },
       keyName: 'b-button',
-      enabled: shouldShowVirtualButtonsAndOpad
+      shown: shouldShowVirtualButtonsAndOpad
     },
     {
       keyId: 'SELECT',
@@ -366,7 +366,7 @@ export const VirtualControls = () => {
             y: '0px'
           },
       keyName: 'select-button',
-      enabled: shouldShowVirtualButtonsAndOpad
+      shown: shouldShowVirtualButtonsAndOpad
     },
     {
       keyId: 'START',
@@ -380,7 +380,7 @@ export const VirtualControls = () => {
             y: '0px'
           },
       keyName: 'start-button',
-      enabled: shouldShowVirtualButtonsAndOpad
+      shown: shouldShowVirtualButtonsAndOpad
     },
     {
       keyId: 'L',
@@ -388,7 +388,7 @@ export const VirtualControls = () => {
       children: <VirtualButtonTextSmall>L</VirtualButtonTextSmall>,
       initialPosition: initialPositionForKey('l-button'),
       keyName: 'l-button',
-      enabled: shouldShowVirtualButtonsAndOpad
+      shown: shouldShowVirtualButtonsAndOpad
     },
     {
       keyId: 'R',
@@ -400,7 +400,7 @@ export const VirtualControls = () => {
         y: '0px'
       },
       keyName: 'r-button',
-      enabled: shouldShowVirtualButtonsAndOpad
+      shown: shouldShowVirtualButtonsAndOpad
     },
     {
       children: <BiRefresh />,
@@ -416,7 +416,7 @@ export const VirtualControls = () => {
       initialPosition: initialPositionForKey('quickreload-button'),
       keyName: 'quickreload-button',
       disabled: !isEmulatorReady,
-      enabled: shouldShowVirtualControl(areVirtualControlsEnabled?.QuickReload)
+      shown: shouldShowVirtualControl(areVirtualControlsEnabled?.QuickReload)
     },
     {
       children: <BiSolidCloudUpload />,
@@ -437,7 +437,9 @@ export const VirtualControls = () => {
       },
       keyName: 'uploadsave-button',
       disabled: !isEmulatorReady,
-      enabled: shouldShowVirtualControl(areVirtualControlsEnabled?.SendSaveToServer)
+      shown: shouldShowVirtualControl(
+        areVirtualControlsEnabled?.SendSaveToServer
+      )
     },
     {
       children: <BiSolidBookmark />,
@@ -466,7 +468,7 @@ export const VirtualControls = () => {
       },
       keyName: 'loadstate-button',
       disabled: !isEmulatorReady,
-      enabled: shouldShowVirtualControl(areVirtualControlsEnabled?.LoadState)
+      shown: shouldShowVirtualControl(areVirtualControlsEnabled?.LoadState)
     },
     {
       children: <BiSave />,
@@ -497,7 +499,7 @@ export const VirtualControls = () => {
       },
       keyName: 'savestate-button',
       disabled: !isEmulatorReady,
-      enabled: shouldShowVirtualControl(areVirtualControlsEnabled?.SaveState)
+      shown: shouldShowVirtualControl(areVirtualControlsEnabled?.SaveState)
     }
   ];
 
@@ -506,14 +508,17 @@ export const VirtualControls = () => {
       {shouldShowVirtualButtonsAndOpad && (
         <OPad initialPosition={initialPositionForKey('o-pad')} />
       )}
-      {virtualButtons.map((virtualButtonProps) => (
-        <VirtualButton
-          ariaLabel={keyToAriaLabel(virtualButtonProps.keyName)}
-          inputName={virtualButtonProps.keyName}
-          key={virtualButtonProps.keyName}
-          {...virtualButtonProps}
-        />
-      ))}
+      {virtualButtons.map(
+        ({ keyName, shown, ...rest }) =>
+          shown && (
+            <VirtualButton
+              ariaLabel={keyToAriaLabel(keyName)}
+              inputName={keyName}
+              key={keyName}
+              {...rest}
+            />
+          )
+      )}
     </IconContext.Provider>
   );
 };

@@ -30,7 +30,6 @@ type VirtualButtonProps = {
   };
   onPointerDown?: PointerEventHandler<HTMLButtonElement>;
   disabled?: boolean;
-  enabled?: boolean;
   ariaLabel: string;
 };
 
@@ -136,15 +135,12 @@ export const VirtualButton = ({
   initialPosition,
   initialOffset,
   disabled = false,
-  enabled = false, // TODO: can we remove this prop?
   ariaLabel
 }: VirtualButtonProps) => {
   const { emulator } = useEmulatorContext();
   const { areItemsDraggable } = useDragContext();
   const { getLayout, setLayout } = useLayoutContext();
   const dragRef = useRef<HTMLButtonElement | null>(null);
-
-  if (!enabled) return null;
 
   // used for "virtual controls" that go direct to the emulator and have a keyId
   const emulatorPointerEvents =
