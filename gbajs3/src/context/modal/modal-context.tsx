@@ -22,6 +22,9 @@ type ModalPayloadMap = {
   uploadPublicExternalRoms: UploadPublicExternalRomsModalProps;
 };
 
+/**
+ * A typed discriminated union of all possible modals and their props, if any
+ */
 export type ModalInput = {
   [K in keyof ModalPayloadMap]: ModalPayloadMap[K] extends undefined
     ? { type: K }

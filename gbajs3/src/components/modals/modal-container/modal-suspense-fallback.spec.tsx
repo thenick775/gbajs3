@@ -2,7 +2,7 @@ import { act, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { ModalSuspenseFallback } from './modal-suspense-fallback.tsx';
-import { renderWithContext } from '../../../test/render-with-context.tsx';
+import { renderWithContext } from '../../../../test/render-with-context.tsx';
 
 describe('<ModalSuspenseFallback />', () => {
   it('renders the loading modal chrome', () => {

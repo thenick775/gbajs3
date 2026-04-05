@@ -1,14 +1,14 @@
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { ModalRenderer } from './modal-renderer.tsx';
-import { renderWithContext } from '../../../test/render-with-context.tsx';
+import { LazyModalContent } from './lazy-modal-content.tsx';
+import { renderWithContext } from '../../../../test/render-with-context.tsx';
 
-import type { ModalState } from '../../context/modal/modal-context.tsx';
+import type { ModalState } from '../../../context/modal/modal-context.tsx';
 
 describe('<ModalRenderer />', () => {
   it('renders nothing when modal is null', () => {
-    const { container } = renderWithContext(<ModalRenderer modal={null} />);
+    const { container } = renderWithContext(<LazyModalContent modal={null} />);
 
     expect(container).toBeEmptyDOMElement();
   });
@@ -31,7 +31,7 @@ describe('<ModalRenderer />', () => {
     [{ type: 'uploadFiles' }, 'Upload Files'],
     [{ type: 'emulatorSettings' }, 'Emulator Settings']
   ])('renders prop-less modal %s', async (modal, heading) => {
-    renderWithContext(<ModalRenderer modal={modal} />);
+    renderWithContext(<LazyModalContent modal={modal} />);
 
     expect(
       await screen.findByRole('heading', { name: heading })
@@ -42,7 +42,7 @@ describe('<ModalRenderer />', () => {
     const onLoadOrDismiss = () => undefined;
 
     renderWithContext(
-      <ModalRenderer
+      <LazyModalContent
         modal={{
           type: 'uploadPublicExternalRoms',
           props: {
@@ -64,7 +64,7 @@ describe('<ModalRenderer />', () => {
   it('throws for an invalid modal type at runtime', () => {
     expect(() => {
       renderWithContext(
-        <ModalRenderer modal={JSON.parse('{"type":"not-real"}')} />
+        <LazyModalContent modal={JSON.parse('{"type":"not-real"}')} />
       );
     }).toThrow('Unhandled modal type');
   });

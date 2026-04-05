@@ -7,7 +7,7 @@ import {
   FooterWrapper,
   Header,
   HeaderWrapper
-} from '../shared/styled.tsx';
+} from '../../shared/styled.tsx';
 
 const modalLoaderDelayMs = 300;
 

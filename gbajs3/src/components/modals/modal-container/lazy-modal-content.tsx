@@ -5,11 +5,9 @@ import {
   type LazyExoticComponent
 } from 'react';
 
-import {
-  ModalSuspenseFallback
-} from './modal-suspense-fallback.tsx';
+import { ModalSuspenseFallback } from './modal-suspense-fallback.tsx';
 
-import type { ModalState } from '../../context/modal/modal-context.tsx';
+import type { ModalState } from '../../../context/modal/modal-context.tsx';
 
 type LazyModalComponent<TProps = object> = LazyExoticComponent<
   ComponentType<TProps>
@@ -27,71 +25,71 @@ const lazyNamedModal: LazyNamedModal = (load, pick) =>
 
 const modals = {
   about: lazyNamedModal(
-    () => import('./about.tsx'),
+    () => import('../about.tsx'),
     (module) => module.AboutModal
   ),
   cheats: lazyNamedModal(
-    () => import('./cheats.tsx'),
+    () => import('../cheats.tsx'),
     (module) => module.CheatsModal
   ),
   controls: lazyNamedModal(
-    () => import('./controls.tsx'),
+    () => import('../controls.tsx'),
     (module) => module.ControlsModal
   ),
   downloadSave: lazyNamedModal(
-    () => import('./download-save.tsx'),
+    () => import('../download-save.tsx'),
     (module) => module.DownloadSaveModal
   ),
   emulatorSettings: lazyNamedModal(
-    () => import('./emulator-settings.tsx'),
+    () => import('../emulator-settings.tsx'),
     (module) => module.EmulatorSettingsModal
   ),
   fileSystem: lazyNamedModal(
-    () => import('./file-system.tsx'),
+    () => import('../file-system.tsx'),
     (module) => module.FileSystemModal
   ),
   importExport: lazyNamedModal(
-    () => import('./import-export.tsx'),
+    () => import('../import-export.tsx'),
     (module) => module.ImportExportModal
   ),
   legal: lazyNamedModal(
-    () => import('./legal.tsx'),
+    () => import('../legal.tsx'),
     (module) => module.LegalModal
   ),
   loadLocalRom: lazyNamedModal(
-    () => import('./load-local-rom.tsx'),
+    () => import('../load-local-rom.tsx'),
     (module) => module.LoadLocalRomModal
   ),
   loadRom: lazyNamedModal(
-    () => import('./load-rom.tsx'),
+    () => import('../load-rom.tsx'),
     (module) => module.LoadRomModal
   ),
   loadSave: lazyNamedModal(
-    () => import('./load-save.tsx'),
+    () => import('../load-save.tsx'),
     (module) => module.LoadSaveModal
   ),
   login: lazyNamedModal(
-    () => import('./login.tsx'),
+    () => import('../login.tsx'),
     (module) => module.LoginModal
   ),
   saveStates: lazyNamedModal(
-    () => import('./save-states.tsx'),
+    () => import('../save-states.tsx'),
     (module) => module.SaveStatesModal
   ),
   uploadFiles: lazyNamedModal(
-    () => import('./upload-files.tsx'),
+    () => import('../upload-files.tsx'),
     (module) => module.UploadFilesModal
   ),
   uploadPublicExternalRoms: lazyNamedModal(
-    () => import('./upload-public-external-roms.tsx'),
+    () => import('../upload-public-external-roms.tsx'),
     (module) => module.UploadPublicExternalRomsModal
   ),
   uploadRomToServer: lazyNamedModal(
-    () => import('./upload-rom-to-server.tsx'),
+    () => import('../upload-rom-to-server.tsx'),
     (module) => module.UploadRomToServerModal
   ),
   uploadSaveToServer: lazyNamedModal(
-    () => import('./upload-save-to-server.tsx'),
+    () => import('../upload-save-to-server.tsx'),
     (module) => module.UploadSaveToServerModal
   )
 };
@@ -142,7 +140,7 @@ const renderModalBody = (modal: Exclude<ModalState, null>) => {
   }
 };
 
-export const ModalRenderer = ({ modal }: { modal: ModalState }) => {
+export const LazyModalContent = ({ modal }: { modal: ModalState }) => {
   if (!modal) return null;
 
   return (

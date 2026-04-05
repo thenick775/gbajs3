@@ -2,7 +2,7 @@ import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Modal from 'react-modal';
 
-import { ModalRenderer } from './modal-renderer.tsx';
+import { LazyModalContent } from './modal-container/lazy-modal-content.tsx';
 import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 
 const modalStyles = {
@@ -58,7 +58,7 @@ export const ModalContainer = () => {
       }}
       aria={{ labelledby: 'modalHeader' }}
     >
-      <ModalRenderer modal={modal} />
+      <LazyModalContent modal={modal} />
     </Modal>
   );
 };
