@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { ModalRenderer } from './modal-renderer.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
 
+import type { ModalState } from '../../context/modal/modal-context.tsx';
+
 describe('<ModalRenderer />', () => {
   it('renders nothing when modal is null', () => {
     const { container } = renderWithContext(<ModalRenderer modal={null} />);
@@ -11,15 +13,32 @@ describe('<ModalRenderer />', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders a prop-less modal by type', async () => {
-    renderWithContext(<ModalRenderer modal={{ type: 'about' }} />);
+  it.each<[Exclude<ModalState, null>, string]>([
+    [{ type: 'about' }, 'About'],
+    [{ type: 'controls' }, 'Controls'],
+    [{ type: 'fileSystem' }, 'File System'],
+    [{ type: 'importExport' }, 'Import/Export'],
+    [{ type: 'legal' }, 'Legal'],
+    [{ type: 'login' }, 'Login'],
+    [{ type: 'downloadSave' }, 'Download Save'],
+    [{ type: 'saveStates' }, 'Manage Save States'],
+    [{ type: 'cheats' }, 'Manage Cheats'],
+    [{ type: 'loadLocalRom' }, 'Load Local Rom'],
+    [{ type: 'loadSave' }, 'Load Save'],
+    [{ type: 'loadRom' }, 'Load Rom'],
+    [{ type: 'uploadSaveToServer' }, 'Send Save to Server'],
+    [{ type: 'uploadRomToServer' }, 'Send Rom to Server'],
+    [{ type: 'uploadFiles' }, 'Upload Files'],
+    [{ type: 'emulatorSettings' }, 'Emulator Settings']
+  ])('renders prop-less modal %s', async (modal, heading) => {
+    renderWithContext(<ModalRenderer modal={modal} />);
 
     expect(
-      await screen.findByRole('heading', { name: 'About' })
+      await screen.findByRole('heading', { name: heading })
     ).toBeInTheDocument();
   });
 
-  it('renders a propful modal with its props', async () => {
+  it('renders a prop-ful modal with its props', async () => {
     const onLoadOrDismiss = () => undefined;
 
     renderWithContext(
@@ -37,6 +56,16 @@ describe('<ModalRenderer />', () => {
     expect(
       await screen.findByRole('heading', { name: 'Upload Public Rom' })
     ).toBeInTheDocument();
-    expect(screen.getByText('https://example.com/test.gba')).toBeInTheDocument();
+    expect(
+      screen.getByText('https://example.com/test.gba')
+    ).toBeInTheDocument();
+  });
+
+  it('throws for an invalid modal type at runtime', () => {
+    expect(() => {
+      renderWithContext(
+        <ModalRenderer modal={JSON.parse('{"type":"not-real"}')} />
+      );
+    }).toThrow('Unhandled modal type');
   });
 });
