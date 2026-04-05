@@ -53,6 +53,7 @@ type ModalContextProps = {
   modal: ModalState;
   openModal: (modal: ModalInput) => void;
   closeModal: () => void;
+  clearModal: () => void;
   isModalOpen: boolean;
 };
 

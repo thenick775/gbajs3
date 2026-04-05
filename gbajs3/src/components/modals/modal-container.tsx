@@ -39,7 +39,7 @@ const landscapeModalStyles = {
 };
 
 export const ModalContainer = () => {
-  const { modal, isModalOpen, closeModal } = useModalContext();
+  const { modal, isModalOpen, closeModal, clearModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const theme = useTheme();
   const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
@@ -52,7 +52,10 @@ export const ModalContainer = () => {
       style={isMobileLandscape ? landscapeModalStyles : modalStyles}
       onRequestClose={closeModal}
       onAfterOpen={emulator?.disableKeyboardInput}
-      onAfterClose={emulator?.enableKeyboardInput}
+      onAfterClose={() => {
+        clearModal();
+        emulator?.enableKeyboardInput();
+      }}
       aria={{ labelledby: 'modalHeader' }}
     >
       <ModalRenderer modal={modal} />

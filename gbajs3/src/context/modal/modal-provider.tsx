@@ -12,18 +12,24 @@ type ModalProviderProps = {
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {
   const [modal, setModal] = useState<ModalState>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = useCallback((nextModal: ModalInput) => {
     setModal(nextModal);
+    setIsModalOpen(true);
   }, []);
 
   const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
+
+  const clearModal = useCallback(() => {
     setModal(null);
   }, []);
 
   return (
     <ModalContext.Provider
-      value={{ modal, openModal, closeModal, isModalOpen: modal !== null }}
+      value={{ modal, openModal, closeModal, clearModal, isModalOpen }}
     >
       {children}
     </ModalContext.Provider>

@@ -88,6 +88,7 @@ describe('<ModalContainer />', () => {
 
   it('disables keyboard input after open', async () => {
     const disableKeyboardInputSpy: () => void = vi.fn();
+    const enableKeyboardInputSpy: () => void = vi.fn();
     const {
       useModalContext: originalModal,
       useEmulatorContext: originalEmulator
@@ -107,13 +108,15 @@ describe('<ModalContainer />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...originalEmulator(),
       emulator: {
-        disableKeyboardInput: disableKeyboardInputSpy
+        disableKeyboardInput: disableKeyboardInputSpy,
+        enableKeyboardInput: enableKeyboardInputSpy
       } as GBAEmulator
     }));
 
     renderWithContext(<ModalContainer />);
 
     expect(disableKeyboardInputSpy).toHaveBeenCalledOnce();
+    expect(enableKeyboardInputSpy).not.toHaveBeenCalled();
   });
 
   it('enables keyboard input after close', async () => {
