@@ -60,12 +60,13 @@ export const useShowLoadPublicRoms = () => {
   // prevent modal display from causing issues when dismissed through overlay
   const [attemptedUrls, setAttemptedUrls] = useState<string[]>([]);
   const externalRomToastId = useId();
+  const isEmulatorReady = !!emulator;
 
   useEffect(() => {
     if (
       shouldShowPublicRomModal &&
       romURL &&
-      emulator &&
+      isEmulatorReady &&
       !isModalOpen &&
       !attemptedUrls.includes(romURL)
     ) {
@@ -100,7 +101,7 @@ export const useShowLoadPublicRoms = () => {
   }, [
     romURL,
     shouldShowPublicRomModal,
-    emulator,
+    isEmulatorReady,
     attemptedUrls,
     openModal,
     setHasLoadedPublicRoms,

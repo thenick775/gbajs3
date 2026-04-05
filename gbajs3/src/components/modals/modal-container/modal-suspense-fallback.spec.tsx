@@ -5,7 +5,7 @@ import { ModalSuspenseFallback } from './modal-suspense-fallback.tsx';
 import { renderWithContext } from '../../../../test/render-with-context.tsx';
 
 describe('<ModalSuspenseFallback />', () => {
-  it('renders the loading modal chrome', () => {
+  it('renders the loading modal and suspense fallback after the delay elapses', () => {
     vi.useFakeTimers();
 
     renderWithContext(<ModalSuspenseFallback />);
@@ -15,6 +15,7 @@ describe('<ModalSuspenseFallback />', () => {
     });
 
     expect(screen.getByRole('heading', { name: 'Loading' })).toBeVisible();
+    expect(screen.getByTestId('modal-loading-indicator')).toBeVisible();
 
     vi.useRealTimers();
   });
@@ -25,23 +26,6 @@ describe('<ModalSuspenseFallback />', () => {
     const { container } = renderWithContext(<ModalSuspenseFallback />);
 
     expect(container).toBeEmptyDOMElement();
-
-    vi.useRealTimers();
-  });
-
-  it('renders the suspense fallback after the delay elapses', () => {
-    vi.useFakeTimers();
-
-    renderWithContext(<ModalSuspenseFallback />);
-
-    act(() => {
-      vi.advanceTimersByTime(300);
-    });
-
-    expect(
-      screen.getByRole('heading', { name: 'Loading' })
-    ).toBeInTheDocument();
-    expect(document.querySelectorAll('[aria-busy="true"] span').length).toBe(4);
 
     vi.useRealTimers();
   });

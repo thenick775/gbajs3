@@ -231,9 +231,7 @@ describe('<VirtualControls />', () => {
       const {
         useModalContext: original,
         useEmulatorContext: originalEmulator
-      } = await vi.importActual<
-        typeof contextHooks
-      >('../../hooks/context.tsx');
+      } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
 
       vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
         ...original(),

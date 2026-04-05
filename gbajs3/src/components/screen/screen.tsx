@@ -80,7 +80,7 @@ const LoadingCoreBadge = styled('div')`
   z-index: 3;
   opacity: 0;
   animation: emulator-loading-badge-fade-in 120ms ease forwards;
-  animation-delay: 150ms; // TODO: evaluate whether or not this should be 300 like the menu
+  animation-delay: 150ms;
 
   @keyframes emulator-loading-badge-fade-in {
     to {
@@ -208,10 +208,7 @@ export const Screen = () => {
         height={defaultGBACanvasHeight}
       />
       {!!canvas && !emulator && (
-        <LoadingCoreBadge
-          aria-label="Emulator loading"
-          data-testid="screen-loading-indicator"
-        >
+        <LoadingCoreBadge aria-label="Emulator loading">
           <BeatLoader color={theme.gbaThemeBlue} margin={3} size={7} />
         </LoadingCoreBadge>
       )}

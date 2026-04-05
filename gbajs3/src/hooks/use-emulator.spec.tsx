@@ -17,7 +17,7 @@ describe('useEmulator', () => {
   });
 
   it('initializes mGBA and returns the wrapped emulator when canvas exists', async () => {
-    const canvas = document.createElement('canvas');
+    const canvas = {} as HTMLCanvasElement;
     const fsInitSpy: () => Promise<void> = vi.fn().mockResolvedValue(undefined);
     const module = {
       version: {

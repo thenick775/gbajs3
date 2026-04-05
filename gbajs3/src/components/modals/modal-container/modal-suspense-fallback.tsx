@@ -60,8 +60,13 @@ export const ModalSuspenseFallback = () => {
       </HeaderWrapper>
       <LoadingBody>
         <LoadingStackShell>
-          <LoadingStack aria-live="polite" aria-busy="true">
-            <BeatLoader color={theme.gbaThemeBlue} margin={4} size={10} />
+          <LoadingStack>
+            <BeatLoader
+              data-testid="modal-loading-indicator"
+              color={theme.gbaThemeBlue}
+              margin={4}
+              size={10}
+            />
           </LoadingStack>
         </LoadingStackShell>
       </LoadingBody>

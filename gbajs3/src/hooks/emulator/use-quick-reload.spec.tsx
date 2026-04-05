@@ -180,6 +180,27 @@ describe('useQuickReload hook', () => {
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         setCanvas: vi.fn(),
         canvas: null,
+        emulator: {
+          getCurrentGameName: () => undefined,
+          getCurrentAutoSaveStatePath: () => null
+        } as GBAEmulator
+      }));
+
+      const {
+        result: {
+          current: { isQuickReloadAvailable }
+        }
+      } = renderHookWithContext(() => useQuickReload());
+
+      expect(isQuickReloadAvailable).toBe(true);
+    });
+
+    it('is not available if there is only a stored game name while emulator is loading', () => {
+      localStorage.setItem(emulatorGameNameLocalStorageKey, '"some_rom_2.gba"');
+
+      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+        setCanvas: vi.fn(),
+        canvas: null,
         emulator: null
       }));
 

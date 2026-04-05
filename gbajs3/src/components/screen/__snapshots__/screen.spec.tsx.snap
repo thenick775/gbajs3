@@ -87,7 +87,6 @@ exports[`<Screen /> > renders with default desktop position and size 1`] = `
   <div
     aria-label="Emulator loading"
     class="emotion-4 emotion-5"
-    data-testid="screen-loading-indicator"
   >
     <span
       style="display: inherit;"
@@ -194,7 +193,6 @@ exports[`<Screen /> > renders with default mobile position and size 1`] = `
   <div
     aria-label="Emulator loading"
     class="emotion-4 emotion-5"
-    data-testid="screen-loading-indicator"
   >
     <span
       style="display: inherit;"

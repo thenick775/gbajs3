@@ -48,8 +48,7 @@ describe('<Screen />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...originalEmulator(),
       emulator: null,
-      canvas: document.createElement('canvas'),
-      setCanvas: vi.fn()
+      canvas: {} as HTMLCanvasElement
     }));
 
     renderWithContext(<Screen />);
