@@ -2,25 +2,6 @@ import { createContext } from 'react';
 
 import type { UploadPublicExternalRomsModalProps } from '../../components/modals/upload-public-external-roms.tsx';
 
-export type ModalType =
-  | 'about'
-  | 'uploadFiles'
-  | 'controls'
-  | 'fileSystem'
-  | 'emulatorSettings'
-  | 'importExport'
-  | 'legal'
-  | 'login'
-  | 'downloadSave'
-  | 'saveStates'
-  | 'cheats'
-  | 'loadLocalRom'
-  | 'loadSave'
-  | 'loadRom'
-  | 'uploadSaveToServer'
-  | 'uploadRomToServer'
-  | 'uploadPublicExternalRoms';
-
 type ModalPayloadMap = {
   about: undefined;
   uploadFiles: undefined;
@@ -42,10 +23,10 @@ type ModalPayloadMap = {
 };
 
 export type ModalInput = {
-  [K in ModalType]: ModalPayloadMap[K] extends undefined
+  [K in keyof ModalPayloadMap]: ModalPayloadMap[K] extends undefined
     ? { type: K }
     : { type: K; props: ModalPayloadMap[K] };
-}[ModalType];
+}[keyof ModalPayloadMap];
 
 export type ModalState = ModalInput | null;
 
