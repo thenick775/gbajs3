@@ -32,6 +32,8 @@ export const useAddCallbacks = () => {
   const autoSaveStatePath = emulator?.getCurrentAutoSaveStatePath();
   const { trigger } = useFileStat(autoSaveStatePath);
   const savedFileSystemToastId = useId();
+  const autoSaveStateLoadedToastId = useId();
+  const autoSaveStateCapturedToastId = useId();
 
   const syncActionIfEnabled = useCallback(
     async ({ withToast = true }: SyncActionIfEnabledProps = {}) => {
@@ -64,17 +66,28 @@ export const useAddCallbacks = () => {
         ),
         autoSaveStateLoadedCallback: optionalFunc(
           options.autoSaveStateLoadNotificationEnabled,
-          () => toast.success('Auto save state loaded')
+          () =>
+            toast.success('Auto save state loaded', {
+              id: autoSaveStateLoadedToastId
+            })
         ),
         autoSaveStateCapturedCallback: optionalFunc(
           options.autoSaveStateCaptureNotificationEnabled,
           () => {
-            toast.success('Auto save state captured');
+            toast.success('Auto save state captured', {
+              id: autoSaveStateCapturedToastId
+            });
             trigger();
           }
         )
       }),
-    [emulator, savedFileSystemToastId, trigger]
+    [
+      autoSaveStateCapturedToastId,
+      autoSaveStateLoadedToastId,
+      emulator,
+      savedFileSystemToastId,
+      trigger
+    ]
   );
 
   return {

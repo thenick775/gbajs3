@@ -345,7 +345,10 @@ describe('<NavigationMenu />', () => {
 
       expect(screenshotSpy).toHaveBeenCalledOnce();
       expect(toastSuccessSpy).toHaveBeenCalledWith(
-        'Screenshot saved successfully'
+        'Screenshot saved successfully',
+        {
+          id: expect.any(String)
+        }
       );
     });
 
@@ -381,7 +384,9 @@ describe('<NavigationMenu />', () => {
 
       await userEvent.click(menuNode);
 
-      expect(toastErrorSpy).toHaveBeenCalledWith('Screenshot has failed');
+      expect(toastErrorSpy).toHaveBeenCalledWith('Screenshot has failed', {
+        id: expect.any(String)
+      });
     });
 
     it('Full Screen requests canvas full screen on click when running', async () => {
@@ -448,7 +453,10 @@ describe('<NavigationMenu />', () => {
       await userEvent.click(menuNode);
 
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        'Full screen request has failed'
+        'Full screen request has failed',
+        {
+          id: expect.any(String)
+        }
       );
     });
 

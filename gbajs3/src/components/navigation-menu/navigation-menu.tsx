@@ -195,6 +195,8 @@ export const NavigationMenu = () => {
   );
   const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
   const menuHeaderId = useId();
+  const screenshotToastId = useId();
+  const fullScreenToastId = useId();
   const { quickReload, isQuickReloadAvailable } = useQuickReload();
 
   const isExpanded =
@@ -304,8 +306,13 @@ export const NavigationMenu = () => {
               icon={<BiScreenshot />}
               onClick={() => {
                 if (emulator?.screenshot())
-                  toast.success('Screenshot saved successfully');
-                else toast.error('Screenshot has failed');
+                  toast.success('Screenshot saved successfully', {
+                    id: screenshotToastId
+                  });
+                else
+                  toast.error('Screenshot has failed', {
+                    id: screenshotToastId
+                  });
               }}
             />
             <NavLeaf
@@ -314,7 +321,9 @@ export const NavigationMenu = () => {
               icon={<BiFullscreen />}
               onClick={() => {
                 canvas?.requestFullscreen().catch(() => {
-                  toast.error('Full screen request has failed');
+                  toast.error('Full screen request has failed', {
+                    id: fullScreenToastId
+                  });
                 });
               }}
             />

@@ -172,7 +172,7 @@ describe('<VirtualControls />', () => {
       expect(quickReloadSpy).toHaveBeenCalledOnce();
       expect(toastErrorSpy).toHaveBeenCalledWith(
         'Load a game to quick reload',
-        { id: expect.anything() }
+        { id: expect.any(String) }
       );
     });
 
@@ -233,7 +233,7 @@ describe('<VirtualControls />', () => {
 
       expect(toastErrorSpy).toHaveBeenCalledWith(
         'Please log in and load a game',
-        { id: expect.anything() }
+        { id: expect.any(String) }
       );
       expect(setModalContextSpy).not.toHaveBeenCalled();
       expect(setIsModalOpenSpy).not.toHaveBeenCalled();
@@ -265,7 +265,7 @@ describe('<VirtualControls />', () => {
       expect(loadSaveStateSpy).toHaveBeenCalledOnce();
       expect(loadSaveStateSpy).toHaveBeenCalledWith(2);
       expect(toastSuccessSpy).toHaveBeenCalledWith('Loaded slot: 2', {
-        id: expect.anything()
+        id: expect.any(String)
       });
     });
 
@@ -293,7 +293,7 @@ describe('<VirtualControls />', () => {
       expect(loadSaveStateSpy).toHaveBeenCalledOnce();
       expect(loadSaveStateSpy).toHaveBeenCalledWith(0);
       expect(toastErrorSpy).toHaveBeenCalledWith('Failed to load slot: 0', {
-        id: expect.anything()
+        id: expect.any(String)
       });
     });
 
@@ -322,7 +322,7 @@ describe('<VirtualControls />', () => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
         'Load a game to load state slots',
         {
-          id: expect.anything()
+          id: expect.any(String)
         }
       );
     });
@@ -363,7 +363,7 @@ describe('<VirtualControls />', () => {
       expect(createSaveStateSpy).toHaveBeenCalledWith(2);
       expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
       expect(toastSuccessSpy).toHaveBeenCalledWith('Saved slot: 2', {
-        id: expect.anything()
+        id: expect.any(String)
       });
     });
 
@@ -401,7 +401,7 @@ describe('<VirtualControls />', () => {
       expect(createSaveStateSpy).toHaveBeenCalledWith(0);
       expect(syncActionIfEnabledSpy).not.toHaveBeenCalled();
       expect(toastErrorSpy).toHaveBeenCalledWith('Failed to save slot: 0', {
-        id: expect.anything()
+        id: expect.any(String)
       });
     });
 
@@ -430,7 +430,7 @@ describe('<VirtualControls />', () => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
         'Load a game to save state slots',
         {
-          id: expect.anything()
+          id: expect.any(String)
         }
       );
     });

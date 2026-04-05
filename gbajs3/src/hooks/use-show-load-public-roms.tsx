@@ -1,5 +1,5 @@
 import { useIsFirstRender, useLocalStorage } from '@uidotdev/usehooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useModalContext } from './context.tsx';
@@ -59,6 +59,7 @@ export const useShowLoadPublicRoms = () => {
     usePublicRoms();
   // prevent modal display from causing issues when dismissed through overlay
   const [attemptedUrls, setAttemptedUrls] = useState<string[]>([]);
+  const externalRomToastId = useId();
 
   useEffect(() => {
     if (
@@ -88,7 +89,7 @@ export const useShowLoadPublicRoms = () => {
         setAttemptedUrls((prev) => [...prev, romURL]);
         setIsModalOpen(true);
       } catch {
-        toast.error('Invalid external rom URL');
+        toast.error('Invalid external rom URL', { id: externalRomToastId });
         setHasLoadedPublicRoms((prevState) => ({
           ...prevState,
           [romURL]: 'error'
@@ -102,6 +103,7 @@ export const useShowLoadPublicRoms = () => {
     setIsModalOpen,
     setModalContent,
     setHasLoadedPublicRoms,
-    isModalOpen
+    isModalOpen,
+    externalRomToastId
   ]);
 };
