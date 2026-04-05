@@ -1,5 +1,5 @@
-import { keyframes } from '@emotion/react';
 import { styled, useTheme } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
 import { BeatLoader } from 'react-spinners';
 
 import {
@@ -27,20 +27,9 @@ const LoadingStack = styled('div')`
   text-align: center;
 `;
 
-const revealLoader = keyframes`
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const LoadingStackShell = styled('div', {
-  shouldForwardProp: (propName) => propName !== '$delayMs'
-})<{ $delayMs: number }>`
-  opacity: 0;
-  transform: translateY(4px);
-  animation: ${revealLoader} 140ms ease forwards;
-  animation-delay: ${({ $delayMs }) => `${$delayMs}ms`};
+const LoadingStackShell = styled('div')`
+  opacity: 1;
+  transform: translateY(0);
 `;
 
 const LoadingFooter = styled(FooterWrapper)`
@@ -50,6 +39,19 @@ const LoadingFooter = styled(FooterWrapper)`
 
 export const ModalSuspenseFallback = () => {
   const theme = useTheme();
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setShouldRender(true);
+    }, modalLoaderDelayMs);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
+  if (!shouldRender) return null;
 
   return (
     <>
@@ -57,7 +59,7 @@ export const ModalSuspenseFallback = () => {
         <Header id="modalHeader">Loading</Header>
       </HeaderWrapper>
       <LoadingBody>
-        <LoadingStackShell $delayMs={modalLoaderDelayMs}>
+        <LoadingStackShell>
           <LoadingStack aria-live="polite" aria-busy="true">
             <BeatLoader color={theme.gbaThemeBlue} margin={4} size={10} />
           </LoadingStack>
