@@ -188,4 +188,39 @@ describe('useRunGame hook', () => {
       videoSync: false
     });
   });
+
+  it('does not persist the game name when emulator is unavailable', () => {
+    const setIsRunningSpy = vi.fn();
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      setCanvas: vi.fn(),
+      canvas: null,
+      emulator: null
+    }));
+
+    vi.spyOn(addCallbacksHooks, 'useAddCallbacks').mockImplementation(() => ({
+      addCallbacks: vi.fn(),
+      addCallbacksAndSaveSettings: vi.fn(),
+      syncActionIfEnabled: vi.fn()
+    }));
+
+    vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
+      isRunning: false,
+      setIsRunning: setIsRunningSpy
+    }));
+
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+
+    const { result } = renderHookWithContext(() => useRunGame());
+
+    act(() => {
+      expect(result.current('some_rom.gba')).toBeFalsy();
+    });
+
+    expect(setIsRunningSpy).toHaveBeenCalledWith(false);
+    expect(setItemSpy).not.toHaveBeenCalledWith(
+      emulatorGameNameLocalStorageKey,
+      '"some_rom.gba"'
+    );
+  });
 });

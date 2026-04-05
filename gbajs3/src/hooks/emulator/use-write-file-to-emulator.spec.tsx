@@ -273,4 +273,22 @@ describe('useWriteFileToEmulator hook', () => {
     expect(emulator.uploadScreenshot).not.toHaveBeenCalled();
     expect(emulator.uploadAutoSaveState).not.toHaveBeenCalled();
   });
+
+  it('resolves immediately when emulator is unavailable', async () => {
+    const { useEmulatorContext: original } = await vi.importActual<
+      typeof contextHooks
+    >('../context.tsx');
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      ...original(),
+      emulator: null
+    }));
+
+    const { result } = renderHookWithContext(() => useWriteFileToEmulator());
+    const file = makeFile('game.gba');
+
+    await act(async () => {
+      await expect(result.current(file, 'rom')).resolves.toBeUndefined();
+    });
+  });
 });

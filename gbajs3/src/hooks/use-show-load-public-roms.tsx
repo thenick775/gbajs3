@@ -2,7 +2,7 @@ import { useIsFirstRender, useLocalStorage } from '@uidotdev/usehooks';
 import { useEffect, useId, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { useModalContext } from './context.tsx';
+import { useEmulatorContext, useModalContext } from './context.tsx';
 
 export type PublicRomUploadStatus =
   | 'loaded'
@@ -53,6 +53,7 @@ export const usePublicRoms = () => {
 // Note: query parameters are NOT persisted when saving the app as a PWA to the home screen.
 // This is still an outstanding issue that needs to be addressed through other means.
 export const useShowLoadPublicRoms = () => {
+  const { emulator } = useEmulatorContext();
   const { openModal, isModalOpen } = useModalContext();
   const { shouldShowPublicRomModal, setHasLoadedPublicRoms, romURL } =
     usePublicRoms();
@@ -64,6 +65,7 @@ export const useShowLoadPublicRoms = () => {
     if (
       shouldShowPublicRomModal &&
       romURL &&
+      emulator &&
       !isModalOpen &&
       !attemptedUrls.includes(romURL)
     ) {
@@ -98,6 +100,7 @@ export const useShowLoadPublicRoms = () => {
   }, [
     romURL,
     shouldShowPublicRomModal,
+    emulator,
     attemptedUrls,
     openModal,
     setHasLoadedPublicRoms,

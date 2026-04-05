@@ -64,9 +64,9 @@ export const useRunGame = () => {
         : undefined;
       const isSuccessfulRun = emulator?.run(romPath, saveOverridePath);
       setIsRunning(!!isSuccessfulRun);
-      setStoredGameName(romName);
 
       if (isSuccessfulRun) {
+        setStoredGameName(romName);
         emulator?.setVolume(currentEmulatorVolume);
 
         if (currentKeyBindings) emulator?.remapKeyBindings(currentKeyBindings);

@@ -118,11 +118,8 @@ describe('<NavigationMenu />', () => {
   describe('menu nodes', () => {
     it.each([
       ['About', { type: 'about' }],
-      ['Upload Files', { type: 'uploadFiles' }],
       ['Controls', { type: 'controls' }],
-      ['File System', { type: 'fileSystem' }],
       ['Emulator Settings', { type: 'emulatorSettings' }],
-      ['Import/Export', { type: 'importExport' }],
       ['Legal', { type: 'legal' }],
       ['Login', { type: 'login' }]
     ])('%s opens modal on click', async (title, expected) => {
@@ -146,6 +143,47 @@ describe('<NavigationMenu />', () => {
 
       expect(openModalSpy).toHaveBeenCalledWith(expected);
     });
+
+    it.each([
+      ['Upload Files', { type: 'uploadFiles' }],
+      ['File System', { type: 'fileSystem' }],
+      ['Import/Export', { type: 'importExport' }]
+    ])(
+      '%s opens modal on click when emulator is ready',
+      async (title, expected) => {
+        const openModalSpy = vi.fn();
+        const {
+          useModalContext: originalModal,
+          useEmulatorContext: originalEmulator
+        } = await vi.importActual<typeof contextHooks>(
+          '../../hooks/context.tsx'
+        );
+
+        vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+          ...originalModal(),
+          openModal: openModalSpy
+        }));
+
+        vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+          ...originalEmulator(),
+          emulator: {
+            getCurrentAutoSaveStatePath: () => null,
+            getCurrentGameName: () => undefined,
+            listRoms: () => ['some_rom.gba']
+          } as GBAEmulator
+        }));
+
+        renderWithContext(<NavigationMenu />);
+
+        const menuNode = screen.getByText(title);
+
+        expect(menuNode).toBeInTheDocument();
+
+        await userEvent.click(menuNode);
+
+        expect(openModalSpy).toHaveBeenCalledWith(expected);
+      }
+    );
 
     it.each([
       ['Download Save', { type: 'downloadSave' }],
@@ -235,6 +273,15 @@ describe('<NavigationMenu />', () => {
       expect(menuNode).toBeInTheDocument();
       expect(menuNode).toBeDisabled();
     });
+
+    it.each(['Upload Files', 'File System', 'Import/Export'])(
+      '%s renders as disabled while emulator is loading',
+      (title) => {
+        renderWithContext(<NavigationMenu />);
+
+        expect(screen.getByRole('button', { name: title })).toBeDisabled();
+      }
+    );
 
     it('Quick Reload calls hook on click when running', async () => {
       const quickReloadSpy: () => void = vi.fn();
@@ -470,8 +517,13 @@ describe('<NavigationMenu />', () => {
       '%s opens modal on click with authentication',
       async (title, expected) => {
         const openModalSpy = vi.fn();
-        const { useModalContext: originalModal, useAuthContext: originalAuth } =
-          await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+        const {
+          useModalContext: originalModal,
+          useAuthContext: originalAuth,
+          useEmulatorContext: originalEmulator
+        } = await vi.importActual<typeof contextHooks>(
+          '../../hooks/context.tsx'
+        );
 
         vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
           ...originalModal(),
@@ -483,7 +535,18 @@ describe('<NavigationMenu />', () => {
           isAuthenticated: () => true
         }));
 
+        vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+          ...originalEmulator(),
+          emulator: {
+            getCurrentAutoSaveStatePath: () => null,
+            getCurrentGameName: () => undefined,
+            listRoms: () => ['some_rom.gba']
+          } as GBAEmulator
+        }));
+
         renderWithContext(<NavigationMenu />);
+
+        await userEvent.click(screen.getByRole('button', { name: 'Profile' }));
 
         const menuNode = screen.getByText(title);
 
@@ -492,6 +555,26 @@ describe('<NavigationMenu />', () => {
         await userEvent.click(menuNode);
 
         expect(openModalSpy).toHaveBeenCalledWith(expected);
+      }
+    );
+
+    it.each(['Load Save (Server)', 'Load Rom (Server)'])(
+      '%s renders as disabled while emulator is loading',
+      async (title) => {
+        const { useAuthContext: originalAuth } = await vi.importActual<
+          typeof contextHooks
+        >('../../hooks/context.tsx');
+
+        vi.spyOn(contextHooks, 'useAuthContext').mockImplementation(() => ({
+          ...originalAuth(),
+          isAuthenticated: () => true
+        }));
+
+        renderWithContext(<NavigationMenu />);
+
+        await userEvent.click(screen.getByRole('button', { name: 'Profile' }));
+
+        expect(screen.getByRole('button', { name: title })).toBeDisabled();
       }
     );
 

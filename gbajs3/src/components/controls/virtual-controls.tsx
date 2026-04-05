@@ -72,6 +72,7 @@ export const VirtualControls = () => {
   const virtualControlToastId = useId();
   const { quickReload } = useQuickReload();
   const { syncActionIfEnabled } = useAddCallbacks();
+  const isEmulatorReady = !!emulator;
   const [currentSaveStateSlots] = useLocalStorage<CurrentSaveStateSlots>(
     saveStateSlotsLocalStorageKey,
     {}
@@ -414,6 +415,7 @@ export const VirtualControls = () => {
       width: 40,
       initialPosition: initialPositionForKey('quickreload-button'),
       keyName: 'quickreload-button',
+      disabled: !isEmulatorReady,
       enabled: shouldShowVirtualControl(areVirtualControlsEnabled?.QuickReload)
     },
     {
@@ -434,9 +436,8 @@ export const VirtualControls = () => {
         y: '0px'
       },
       keyName: 'uploadsave-button',
-      enabled: shouldShowVirtualControl(
-        areVirtualControlsEnabled?.SendSaveToServer
-      )
+      disabled: !isEmulatorReady,
+      enabled: shouldShowVirtualControl(areVirtualControlsEnabled?.SendSaveToServer)
     },
     {
       children: <BiSolidBookmark />,
@@ -464,6 +465,7 @@ export const VirtualControls = () => {
         y: '0px'
       },
       keyName: 'loadstate-button',
+      disabled: !isEmulatorReady,
       enabled: shouldShowVirtualControl(areVirtualControlsEnabled?.LoadState)
     },
     {
@@ -494,6 +496,7 @@ export const VirtualControls = () => {
         y: '0px'
       },
       keyName: 'savestate-button',
+      disabled: !isEmulatorReady,
       enabled: shouldShowVirtualControl(areVirtualControlsEnabled?.SaveState)
     }
   ];

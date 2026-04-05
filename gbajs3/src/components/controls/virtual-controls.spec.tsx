@@ -114,6 +114,15 @@ describe('<VirtualControls />', () => {
       ).not.toBeInTheDocument();
     });
 
+    it('renders utility virtual controls as disabled while emulator is loading', () => {
+      renderWithContext(<VirtualControls />);
+
+      expect(screen.getByLabelText('Quickreload Button')).toBeDisabled();
+      expect(screen.getByLabelText('Uploadsave Button')).toBeDisabled();
+      expect(screen.getByLabelText('Loadstate Button')).toBeDisabled();
+      expect(screen.getByLabelText('Savestate Button')).toBeDisabled();
+    });
+
     it('quick reloads game', async () => {
       const quickReloadSpy: () => void = vi.fn();
       const { useEmulatorContext: original } = await vi.importActual<
@@ -179,6 +188,7 @@ describe('<VirtualControls />', () => {
       const openModalSpy = vi.fn();
       const {
         useAuthContext: originalAuth,
+        useEmulatorContext: originalEmulator,
         useModalContext: originalContext,
         useRunningContext: originalRunning
       } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
@@ -191,6 +201,14 @@ describe('<VirtualControls />', () => {
       vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
         ...originalRunning(),
         isRunning: true
+      }));
+
+      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+        ...originalEmulator(),
+        emulator: {
+          getCurrentAutoSaveStatePath: () => null,
+          getCurrentGameName: () => 'some_rom.gba'
+        } as GBAEmulator
       }));
 
       vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
@@ -210,13 +228,24 @@ describe('<VirtualControls />', () => {
     it('upload save renders error toast', async () => {
       const openModalSpy = vi.fn();
 
-      const { useModalContext: original } = await vi.importActual<
+      const {
+        useModalContext: original,
+        useEmulatorContext: originalEmulator
+      } = await vi.importActual<
         typeof contextHooks
       >('../../hooks/context.tsx');
 
       vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
         ...original(),
         openModal: openModalSpy
+      }));
+
+      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+        ...originalEmulator(),
+        emulator: {
+          getCurrentAutoSaveStatePath: () => null,
+          getCurrentGameName: () => undefined
+        } as GBAEmulator
       }));
 
       const toastErrorSpy = vi.spyOn(toast.default, 'error');

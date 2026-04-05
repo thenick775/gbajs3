@@ -29,6 +29,7 @@ type VirtualButtonProps = {
     y: string | number;
   };
   onPointerDown?: PointerEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
   enabled?: boolean;
   ariaLabel: string;
 };
@@ -78,6 +79,16 @@ const VirtualButtonBase = styled(ButtonBase)`
     }
   }
 
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+
+    &:before {
+      border-color: ${({ theme }) => theme.virtualControlInnerBorder};
+    }
+  }
+
   @media ${({ theme }) => theme.isMobileLandscape} {
     background-color: transparent;
     box-shadow: none;
@@ -124,7 +135,8 @@ export const VirtualButton = ({
   onPointerDown,
   initialPosition,
   initialOffset,
-  enabled = false,
+  disabled = false,
+  enabled = false, // TODO: can we remove this prop?
   ariaLabel
 }: VirtualButtonProps) => {
   const { emulator } = useEmulatorContext();
@@ -136,7 +148,7 @@ export const VirtualButton = ({
 
   // used for "virtual controls" that go direct to the emulator and have a keyId
   const emulatorPointerEvents =
-    keyId && !areItemsDraggable
+    keyId && !areItemsDraggable && !disabled
       ? {
           onPointerDown: () => {
             emulator?.simulateKeyDown(keyId);
@@ -158,18 +170,19 @@ export const VirtualButton = ({
 
   // due to using pointer events for the buttons without a click handler,
   // we need to manage key events ourselves for buttons with an emulator keyId
-  const keyboardEvents = keyId
-    ? {
-        onKeyDown: (e: KeyboardEvent<HTMLButtonElement>) => {
-          if (e.code === 'Space' || e.key === ' ')
-            emulator?.simulateKeyDown(keyId);
-        },
-        onKeyUp: (e: KeyboardEvent<HTMLButtonElement>) => {
-          if (e.code === 'Space' || e.key === ' ')
-            emulator?.simulateKeyUp(keyId);
+  const keyboardEvents =
+    keyId && !disabled
+      ? {
+          onKeyDown: (e: KeyboardEvent<HTMLButtonElement>) => {
+            if (e.code === 'Space' || e.key === ' ')
+              emulator?.simulateKeyDown(keyId);
+          },
+          onKeyUp: (e: KeyboardEvent<HTMLButtonElement>) => {
+            if (e.code === 'Space' || e.key === ' ')
+              emulator?.simulateKeyUp(keyId);
+          }
         }
-      }
-    : undefined;
+      : undefined;
 
   const layout = getLayout(inputName);
   const position = layout?.position ?? { x: 0, y: 0 };
@@ -179,8 +192,9 @@ export const VirtualButton = ({
     $initialPosition: initialPosition,
     $areItemsDraggable: areItemsDraggable,
     'aria-label': ariaLabel,
+    disabled,
     // used for "virtual controls" that don't interface with the emulator
-    onPointerDown: !areItemsDraggable ? onPointerDown : undefined,
+    onPointerDown: !areItemsDraggable && !disabled ? onPointerDown : undefined,
     style: {
       top: initialPosition?.top ?? '0',
       left: initialPosition?.left ?? '0'

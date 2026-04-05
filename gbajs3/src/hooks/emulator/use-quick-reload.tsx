@@ -14,7 +14,7 @@ export const useQuickReload = () => {
   );
 
   const gameName = emulator?.getCurrentGameName() ?? storedGameName;
-  const isQuickReloadAvailable = isRunning || !!gameName;
+  const isQuickReloadAvailable = !!emulator && (isRunning || !!gameName);
 
   const quickReload = useCallback(() => {
     if (isRunning) emulator?.quickReload();

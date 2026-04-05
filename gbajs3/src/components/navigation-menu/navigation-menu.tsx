@@ -185,9 +185,10 @@ export const NavigationMenu = () => {
 
   const isExpanded =
     isExpandedByUser ?? (isLargerThanPhone && !isMobileLandscape);
+  const isEmulatorReady = !!emulator;
   const isMenuItemDisabledByAuth = !isAuthenticated();
   const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
-  const hasNoLocalRoms = !emulator?.listRoms().length;
+  const hasNoLocalRoms = isEmulatorReady && !emulator.listRoms().length;
 
   useShowLoadPublicRoms();
 
@@ -259,7 +260,7 @@ export const NavigationMenu = () => {
           >
             <NavLeaf
               title="Upload Files"
-              $disabled={isRunning}
+              $disabled={isRunning || !isEmulatorReady}
               icon={<BiUpload />}
               onClick={() => {
                 openModal({ type: 'uploadFiles' });
@@ -267,7 +268,7 @@ export const NavigationMenu = () => {
             />
             <NavLeaf
               title="Load Local Rom"
-              $disabled={isRunning || hasNoLocalRoms}
+              $disabled={isRunning || !isEmulatorReady || hasNoLocalRoms}
               icon={<BiRedo />}
               onClick={() => {
                 openModal({ type: 'loadLocalRom' });
@@ -355,6 +356,7 @@ export const NavigationMenu = () => {
             title="File System"
             icon={<BiFileFind />}
             $withPadding
+            $disabled={!isEmulatorReady}
             onClick={() => {
               openModal({ type: 'fileSystem' });
             }}
@@ -389,7 +391,7 @@ export const NavigationMenu = () => {
             />
             <NavLeaf
               title="Load Save (Server)"
-              $disabled={isMenuItemDisabledByAuth}
+              $disabled={isMenuItemDisabledByAuth || !isEmulatorReady}
               icon={<BiCloudDownload />}
               onClick={() => {
                 openModal({ type: 'loadSave' });
@@ -397,7 +399,7 @@ export const NavigationMenu = () => {
             />
             <NavLeaf
               title="Load Rom (Server)"
-              $disabled={isMenuItemDisabledByAuth}
+              $disabled={isMenuItemDisabledByAuth || !isEmulatorReady}
               icon={<BiCloudDownload />}
               onClick={() => {
                 openModal({ type: 'loadRom' });
@@ -424,6 +426,7 @@ export const NavigationMenu = () => {
           <NavLeaf
             title="Import/Export"
             icon={<MdImportExport />}
+            $disabled={!isEmulatorReady}
             onClick={() => {
               openModal({ type: 'importExport' });
             }}

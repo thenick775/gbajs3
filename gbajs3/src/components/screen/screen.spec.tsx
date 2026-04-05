@@ -40,6 +40,23 @@ describe('<Screen />', () => {
     expect(setCanvasSpy).toHaveBeenCalledWith(canvas);
   });
 
+  it('renders a loading indicator while canvas exists and emulator is unavailable', async () => {
+    const { useEmulatorContext: originalEmulator } = await vi.importActual<
+      typeof contextHooks
+    >('../../hooks/context.tsx');
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      ...originalEmulator(),
+      emulator: null,
+      canvas: document.createElement('canvas'),
+      setCanvas: vi.fn()
+    }));
+
+    renderWithContext(<Screen />);
+
+    expect(screen.getByLabelText('Emulator loading')).toBeInTheDocument();
+  });
+
   it('sets initial bounds when rendered', async () => {
     const setInitialBoundSpy = vi.fn();
 

@@ -2,6 +2,7 @@ import { useMediaQuery } from '@mui/material';
 import { useTheme, styled } from '@mui/material/styles';
 import { useCallback, useRef } from 'react';
 import { Rnd, type Props as RndProps } from 'react-rnd';
+import { BeatLoader } from 'react-spinners';
 
 import {
   useDragContext,
@@ -69,6 +70,25 @@ const ScreenWrapper = styled(Rnd, {
   }
 `;
 
+const LoadingCoreBadge = styled('div')`
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  animation: emulator-loading-badge-fade-in 120ms ease forwards;
+  animation-delay: 150ms; // TODO: evaluate whether or not this should be 300 like the menu
+
+  @keyframes emulator-loading-badge-fade-in {
+    to {
+      opacity: 1;
+    }
+  }
+`;
+
 // overrides rnd styles to fallback to css
 const defaultSize = {
   width: '',
@@ -83,7 +103,7 @@ export const Screen = () => {
   const isMobileLandscape = useMediaQuery(theme.isMobileLandscape, {
     noSsr: true
   });
-  const { setCanvas } = useEmulatorContext();
+  const { emulator, canvas, setCanvas } = useEmulatorContext();
   const { areItemsDraggable } = useDragContext();
   const { areItemsResizable } = useResizeContext();
   const { getLayout, setLayout } = useLayoutContext();
@@ -187,6 +207,14 @@ export const Screen = () => {
         width={defaultGBACanvasWidth}
         height={defaultGBACanvasHeight}
       />
+      {!!canvas && !emulator && (
+        <LoadingCoreBadge
+          aria-label="Emulator loading"
+          data-testid="screen-loading-indicator"
+        >
+          <BeatLoader color={theme.gbaThemeBlue} margin={3} size={7} />
+        </LoadingCoreBadge>
+      )}
     </ScreenWrapper>
   );
 };

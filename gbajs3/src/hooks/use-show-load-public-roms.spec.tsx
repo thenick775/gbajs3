@@ -13,7 +13,7 @@ describe('useShowLoadPublicRoms', () => {
   it('should open modal if all conditions are met', async () => {
     const openModalSpy = vi.fn();
     const isModalOpenSpy = vi.fn(() => true).mockReturnValueOnce(false);
-    const { useModalContext: original } =
+    const { useModalContext: original, useEmulatorContext: originalEmulator } =
       await vi.importActual<typeof contextHooks>('./context.tsx');
 
     // pwa prompt must also have appeared if iOS and been dismissed if so
@@ -27,6 +27,11 @@ describe('useShowLoadPublicRoms', () => {
       ...original(),
       openModal: openModalSpy,
       isModalOpen: isModalOpenSpy()
+    }));
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      ...originalEmulator(),
+      emulator: {} as never
     }));
 
     renderHookWithContext(() => {
@@ -45,7 +50,7 @@ describe('useShowLoadPublicRoms', () => {
 
   it('marks url as error if invalid', async () => {
     const openModalSpy = vi.fn();
-    const { useModalContext: original } =
+    const { useModalContext: original, useEmulatorContext: originalEmulator } =
       await vi.importActual<typeof contextHooks>('./context.tsx');
 
     // pwa prompt must also have appeared if iOS and been dismissed if so
@@ -62,6 +67,11 @@ describe('useShowLoadPublicRoms', () => {
       openModal: openModalSpy
     }));
 
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      ...originalEmulator(),
+      emulator: {} as never
+    }));
+
     renderHookWithContext(() => {
       useShowLoadPublicRoms();
     });
@@ -76,7 +86,7 @@ describe('useShowLoadPublicRoms', () => {
   it('should not reopen modal if URL was already attempted this session', async () => {
     const openModalSpy = vi.fn();
     const isModalOpenSpy = vi.fn(() => false);
-    const { useModalContext: original } =
+    const { useModalContext: original, useEmulatorContext: originalEmulator } =
       await vi.importActual<typeof contextHooks>('./context.tsx');
 
     vi.spyOn(window, 'location', 'get').mockReturnValue({
@@ -87,6 +97,11 @@ describe('useShowLoadPublicRoms', () => {
       ...original(),
       openModal: openModalSpy,
       isModalOpen: isModalOpenSpy()
+    }));
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      ...originalEmulator(),
+      emulator: {} as never
     }));
 
     const { rerender } = renderHookWithContext(() => {
@@ -102,5 +117,39 @@ describe('useShowLoadPublicRoms', () => {
 
     // modal should not reopen since url was already attempted
     expect(openModalSpy).not.toHaveBeenCalled();
+  });
+
+  it('waits for emulator readiness before opening the public rom modal', async () => {
+    const openModalSpy = vi.fn();
+    const { useModalContext: original, useEmulatorContext: originalEmulator } =
+      await vi.importActual<typeof contextHooks>('./context.tsx');
+
+    vi.spyOn(window, 'location', 'get').mockReturnValue({
+      search: `?romURL=${valid_url}`
+    } as Location);
+
+    let emulator: object | null = null;
+
+    vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+      ...original(),
+      openModal: openModalSpy,
+      isModalOpen: false
+    }));
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      ...originalEmulator(),
+      emulator: emulator as never
+    }));
+
+    const { rerender } = renderHookWithContext(() => {
+      useShowLoadPublicRoms();
+    });
+
+    expect(openModalSpy).not.toHaveBeenCalled();
+
+    emulator = {};
+    rerender();
+
+    expect(openModalSpy).toHaveBeenCalledOnce();
   });
 });

@@ -52,6 +52,27 @@ exports[`<Screen /> > renders with default desktop position and size 1`] = `
   image-rendering: pixelated;
 }
 
+.emotion-4 {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  -webkit-animation: emulator-loading-badge-fade-in 120ms ease forwards;
+  animation: emulator-loading-badge-fade-in 120ms ease forwards;
+  -webkit-animation-delay: 150ms;
+  animation-delay: 150ms;
+}
+
 <div
   class="emotion-0 emotion-1 react-draggable"
   data-testid="screen-wrapper"
@@ -63,6 +84,25 @@ exports[`<Screen /> > renders with default desktop position and size 1`] = `
     height="160"
     width="240"
   />
+  <div
+    aria-label="Emulator loading"
+    class="emotion-4 emotion-5"
+    data-testid="screen-loading-indicator"
+  >
+    <span
+      style="display: inherit;"
+    >
+      <span
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0s infinite linear; animation-fill-mode: both;"
+      />
+      <span
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0.35s infinite linear; animation-fill-mode: both;"
+      />
+      <span
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0s infinite linear; animation-fill-mode: both;"
+      />
+    </span>
+  </div>
   <div />
 </div>
 `;
@@ -119,6 +159,27 @@ exports[`<Screen /> > renders with default mobile position and size 1`] = `
   image-rendering: pixelated;
 }
 
+.emotion-4 {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  -webkit-animation: emulator-loading-badge-fade-in 120ms ease forwards;
+  animation: emulator-loading-badge-fade-in 120ms ease forwards;
+  -webkit-animation-delay: 150ms;
+  animation-delay: 150ms;
+}
+
 <div
   class="emotion-0 emotion-1 react-draggable"
   data-testid="screen-wrapper"
@@ -130,6 +191,25 @@ exports[`<Screen /> > renders with default mobile position and size 1`] = `
     height="160"
     width="240"
   />
+  <div
+    aria-label="Emulator loading"
+    class="emotion-4 emotion-5"
+    data-testid="screen-loading-indicator"
+  >
+    <span
+      style="display: inherit;"
+    >
+      <span
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0s infinite linear; animation-fill-mode: both;"
+      />
+      <span
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0.35s infinite linear; animation-fill-mode: both;"
+      />
+      <span
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0s infinite linear; animation-fill-mode: both;"
+      />
+    </span>
+  </div>
   <div />
 </div>
 `;

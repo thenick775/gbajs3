@@ -180,10 +180,7 @@ describe('useQuickReload hook', () => {
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         setCanvas: vi.fn(),
         canvas: null,
-        emulator: {
-          getCurrentGameName: () => undefined,
-          getCurrentAutoSaveStatePath: () => null
-        } as GBAEmulator
+        emulator: null
       }));
 
       const {
@@ -192,7 +189,7 @@ describe('useQuickReload hook', () => {
         }
       } = renderHookWithContext(() => useQuickReload());
 
-      expect(isQuickReloadAvailable).toBe(true);
+      expect(isQuickReloadAvailable).toBe(false);
     });
 
     it('is not available if there is no current or stored game name', () => {
