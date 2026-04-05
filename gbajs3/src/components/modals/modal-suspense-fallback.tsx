@@ -1,5 +1,5 @@
+import { keyframes } from '@emotion/react';
 import { styled, useTheme } from '@mui/material/styles';
-import { useEffect, useState, type ReactNode } from 'react';
 import { BeatLoader } from 'react-spinners';
 
 import {
@@ -8,6 +8,8 @@ import {
   Header,
   HeaderWrapper
 } from '../shared/styled.tsx';
+
+const modalLoaderDelayMs = 300;
 
 const LoadingBody = styled(BodyWrapper)`
   min-height: 280px;
@@ -25,15 +27,20 @@ const LoadingStack = styled('div')`
   text-align: center;
 `;
 
+const revealLoader = keyframes`
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 const LoadingStackShell = styled('div', {
-  shouldForwardProp: (propName) => propName !== '$visible'
-})<{ $visible: boolean }>`
-  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-  transform: ${({ $visible }) =>
-    $visible ? 'translateY(0)' : 'translateY(4px)'};
-  transition:
-    opacity 140ms ease,
-    transform 140ms ease;
+  shouldForwardProp: (propName) => propName !== '$delayMs'
+})<{ $delayMs: number }>`
+  opacity: 0;
+  transform: translateY(4px);
+  animation: ${revealLoader} 140ms ease forwards;
+  animation-delay: ${({ $delayMs }) => `${$delayMs}ms`};
 `;
 
 const LoadingFooter = styled(FooterWrapper)`
@@ -41,30 +48,8 @@ const LoadingFooter = styled(FooterWrapper)`
   box-sizing: border-box;
 `;
 
-const FadeInWrapper = styled('div', {
-  shouldForwardProp: (propName) => propName !== '$visible'
-})<{ $visible: boolean }>`
-  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-  transform: ${({ $visible }) =>
-    $visible ? 'translateY(0)' : 'translateY(6px)'};
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease;
-`;
-
-export const ModalSuspenseFallback = ({ delayMs = 300 }) => {
+export const ModalSuspenseFallback = () => {
   const theme = useTheme();
-  const [showLoader, setShowLoader] = useState(false);
-
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setShowLoader(true);
-    }, delayMs);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [delayMs]);
 
   return (
     <>
@@ -72,7 +57,7 @@ export const ModalSuspenseFallback = ({ delayMs = 300 }) => {
         <Header id="modalHeader">Loading</Header>
       </HeaderWrapper>
       <LoadingBody>
-        <LoadingStackShell $visible={showLoader}>
+        <LoadingStackShell $delayMs={modalLoaderDelayMs}>
           <LoadingStack aria-live="polite" aria-busy="true">
             <BeatLoader color={theme.gbaThemeBlue} margin={4} size={10} />
           </LoadingStack>
@@ -81,20 +66,4 @@ export const ModalSuspenseFallback = ({ delayMs = 300 }) => {
       <LoadingFooter aria-hidden="true" />
     </>
   );
-};
-
-export const ModalContentFadeIn = ({ children }: { children: ReactNode }) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setIsVisible(true);
-    }, 0);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, []);
-
-  return <FadeInWrapper $visible={isVisible}>{children}</FadeInWrapper>;
 };

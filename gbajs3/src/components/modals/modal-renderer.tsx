@@ -6,8 +6,7 @@ import {
 } from 'react';
 
 import {
-  ModalSuspenseFallback,
-  ModalContentFadeIn
+  ModalSuspenseFallback
 } from './modal-suspense-fallback.tsx';
 
 import type { ModalState } from '../../context/modal/modal-context.tsx';
@@ -148,7 +147,7 @@ export const ModalRenderer = ({ modal }: { modal: ModalState }) => {
 
   return (
     <Suspense fallback={<ModalSuspenseFallback />}>
-      <ModalContentFadeIn>{renderModalBody(modal)}</ModalContentFadeIn>
+      {renderModalBody(modal)}
     </Suspense>
   );
 };
