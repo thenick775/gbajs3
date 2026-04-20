@@ -11,7 +11,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useId, useState, type ReactNode } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
@@ -115,7 +115,6 @@ export const EmulatorSettingsModal = () => {
     register,
     reset,
     control,
-    watch,
     handleSubmit,
     formState: { isSubmitSuccessful }
   } = useForm<EmulatorSettings>({
@@ -160,16 +159,15 @@ export const EmulatorSettingsModal = () => {
   });
   const [tabValue, setTabValue] = useState(0);
   const emulatorSettingsFormId = useId();
+  const watchedSettings = useWatch({ control });
 
   const defaultAudioSampleRates = emulator?.defaultAudioSampleRates();
   const defaultAudioBufferSizes = emulator?.defaultAudioBufferSizes();
-  const audioSampleRate = watch('audioSampleRate');
-  const audioBufferSize = watch('audioBufferSize');
   const renderedAudioSampleRate = defaultAudioSampleRates
-    ? audioSampleRate
+    ? watchedSettings.audioSampleRate
     : '';
   const renderedAudioBufferSize = defaultAudioBufferSizes
-    ? audioBufferSize
+    ? watchedSettings.audioBufferSize
     : '';
 
   const onSubmit: SubmitHandler<EmulatorSettings> = ({
@@ -333,27 +331,27 @@ export const EmulatorSettingsModal = () => {
               />
               <ManagedCheckbox
                 label="Allow opposing directions"
-                watcher={watch('allowOpposingDirections')}
+                watcher={watchedSettings.allowOpposingDirections}
                 {...register('allowOpposingDirections')}
               />
               <ManagedCheckbox
                 label="Rewind enabled"
-                watcher={watch('rewindEnable')}
+                watcher={watchedSettings.rewindEnable}
                 {...register('rewindEnable')}
               />
               <ManagedCheckbox
                 label="Slowdown enabled"
-                watcher={watch('slowdownEnabled')}
+                watcher={watchedSettings.slowdownEnabled}
                 {...register('slowdownEnabled')}
               />
               <ManagedCheckbox
                 label="Auto save state enabled"
-                watcher={watch('autoSaveStateEnable')}
+                watcher={watchedSettings.autoSaveStateEnable}
                 {...register('autoSaveStateEnable')}
               />
               <ManagedCheckbox
                 label="Restore auto save state"
-                watcher={watch('restoreAutoSaveStateOnLoad')}
+                watcher={watchedSettings.restoreAutoSaveStateOnLoad}
                 {...register('restoreAutoSaveStateOnLoad')}
               />
             </TabPanel>
@@ -402,17 +400,17 @@ export const EmulatorSettingsModal = () => {
               </FormControl>
               <ManagedCheckbox
                 label="Mute on rewind"
-                watcher={watch('muteOnRewind')}
+                watcher={watchedSettings.muteOnRewind}
                 {...register('muteOnRewind')}
               />
               <ManagedCheckbox
                 label="Mute on fast forward"
-                watcher={watch('muteOnFastForward')}
+                watcher={watchedSettings.muteOnFastForward}
                 {...register('muteOnFastForward')}
               />
               <ManagedCheckbox
                 label="Mute on slowdown"
-                watcher={watch('muteOnSlowdown')}
+                watcher={watchedSettings.muteOnSlowdown}
                 {...register('muteOnSlowdown')}
               />
             </TabPanel>
@@ -441,56 +439,56 @@ export const EmulatorSettingsModal = () => {
               />
               <ManagedCheckbox
                 label="Timestep Sync"
-                watcher={watch('timestepSync')}
+                watcher={watchedSettings.timestepSync}
                 {...register('timestepSync')}
               />
               <ManagedCheckbox
                 label="Video Sync"
-                watcher={watch('videoSync')}
+                watcher={watchedSettings.videoSync}
                 {...register('videoSync')}
               />
               <ManagedCheckbox
                 label="Audio Sync"
-                watcher={watch('audioSync')}
+                watcher={watchedSettings.audioSync}
                 {...register('audioSync')}
               />
               <ManagedCheckbox
                 label="FPS Counter"
-                watcher={watch('showFpsCounter')}
+                watcher={watchedSettings.showFpsCounter}
                 {...register('showFpsCounter')}
               />
               <ManagedCheckbox
                 label="Threaded Video"
-                watcher={watch('threadedVideo')}
+                watcher={watchedSettings.threadedVideo}
                 {...register('threadedVideo')}
               />
             </TabPanel>
             <TabPanel value={tabValue} index={3}>
               <ManagedCheckbox
                 label="Save file system on create / update / delete"
-                watcher={watch('saveFileSystemOnCreateUpdateDelete')}
+                watcher={watchedSettings.saveFileSystemOnCreateUpdateDelete}
                 {...register('saveFileSystemOnCreateUpdateDelete')}
               />
               <ManagedCheckbox
                 label="Save file system on in-game save"
-                watcher={watch('saveFileSystemOnInGameSave')}
+                watcher={watchedSettings.saveFileSystemOnInGameSave}
                 {...register('saveFileSystemOnInGameSave')}
               />
             </TabPanel>
             <TabPanel value={tabValue} index={4}>
               <ManagedCheckbox
                 label="File system notifications"
-                watcher={watch('fileSystemNotificationsEnabled')}
+                watcher={watchedSettings.fileSystemNotificationsEnabled}
                 {...register('fileSystemNotificationsEnabled')}
               />
               <ManagedCheckbox
                 label="Auto save state load notification"
-                watcher={watch('autoSaveStateLoadNotificationEnabled')}
+                watcher={watchedSettings.autoSaveStateLoadNotificationEnabled}
                 {...register('autoSaveStateLoadNotificationEnabled')}
               />
               <ManagedCheckbox
                 label="Auto save state capture notification"
-                watcher={watch('autoSaveStateCaptureNotificationEnabled')}
+                watcher={watchedSettings.autoSaveStateCaptureNotificationEnabled}
                 {...register('autoSaveStateCaptureNotificationEnabled')}
               />
             </TabPanel>
