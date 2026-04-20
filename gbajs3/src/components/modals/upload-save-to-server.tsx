@@ -20,41 +20,36 @@ type DynamicBodyProps = {
   hasError: boolean;
 };
 
-const DynamicBody = ({
+const BodyContents = ({
   errorColor,
   loadingColor,
   respStatus,
   isLoading,
   hasError
 }: DynamicBodyProps) => {
-  let BodyContents = null;
   if (isLoading) {
-    BodyContents = () => (
+    return (
       <PacmanIndicator data-testid="upload-save-spinner" color={loadingColor} />
     );
-  } else if (hasError) {
-    BodyContents = () => (
+  }
+
+  if (hasError) {
+    return (
       <ErrorWithIcon
         icon={<BiError style={{ color: errorColor }} />}
         text="Save file upload has failed"
       />
     );
-  } else if (respStatus === 200) {
-    BodyContents = () => (
-      <CenteredText>Save file upload was successful!</CenteredText>
-    );
-  } else {
-    BodyContents = () => (
-      <CenteredText>
-        Are you sure you want to upload your current save file to the server?
-      </CenteredText>
-    );
+  }
+
+  if (respStatus === 200) {
+    return <CenteredText>Save file upload was successful!</CenteredText>;
   }
 
   return (
-    <ModalBody>
-      <BodyContents />
-    </ModalBody>
+    <CenteredText>
+      Are you sure you want to upload your current save file to the server?
+    </CenteredText>
   );
 };
 
@@ -73,13 +68,15 @@ export const UploadSaveToServerModal = () => {
   return (
     <>
       <ModalHeader title="Send Save to Server" />
-      <DynamicBody
-        errorColor={theme.errorRed}
-        loadingColor={theme.gbaThemeBlue}
-        isLoading={isLoading}
-        hasError={!!error}
-        respStatus={data?.status}
-      />
+      <ModalBody>
+        <BodyContents
+          errorColor={theme.errorRed}
+          loadingColor={theme.gbaThemeBlue}
+          isLoading={isLoading}
+          hasError={!!error}
+          respStatus={data?.status}
+        />
+      </ModalBody>
       <ModalFooter>
         <Button
           id={uploadSaveToServerButtonId}

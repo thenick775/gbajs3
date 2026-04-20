@@ -20,41 +20,36 @@ type DynamicBodyProps = {
   hasError: boolean;
 };
 
-const DynamicBody = ({
+const BodyContents = ({
   errorColor,
   loadingColor,
   respStatus,
   isLoading,
   hasError
 }: DynamicBodyProps) => {
-  let BodyContents = null;
   if (isLoading) {
-    BodyContents = () => (
+    return (
       <PacmanIndicator data-testid="upload-rom-spinner" color={loadingColor} />
     );
-  } else if (hasError) {
-    BodyContents = () => (
+  }
+
+  if (hasError) {
+    return (
       <ErrorWithIcon
         icon={<BiError style={{ color: errorColor }} />}
         text="Rom file upload has failed"
       />
     );
-  } else if (respStatus === 200) {
-    BodyContents = () => (
-      <CenteredText>Rom file upload was successful!</CenteredText>
-    );
-  } else {
-    BodyContents = () => (
-      <CenteredText>
-        Are you sure you want to upload your current rom file to the server?
-      </CenteredText>
-    );
+  }
+
+  if (respStatus === 200) {
+    return <CenteredText>Rom file upload was successful!</CenteredText>;
   }
 
   return (
-    <ModalBody>
-      <BodyContents />
-    </ModalBody>
+    <CenteredText>
+      Are you sure you want to upload your current rom file to the server?
+    </CenteredText>
   );
 };
 
@@ -73,13 +68,15 @@ export const UploadRomToServerModal = () => {
   return (
     <>
       <ModalHeader title="Send Rom to Server" />
-      <DynamicBody
-        errorColor={theme.errorRed}
-        loadingColor={theme.gbaThemeBlue}
-        isLoading={isLoading}
-        hasError={!!error}
-        respStatus={data?.status}
-      />
+      <ModalBody>
+        <BodyContents
+          errorColor={theme.errorRed}
+          loadingColor={theme.gbaThemeBlue}
+          isLoading={isLoading}
+          hasError={!!error}
+          respStatus={data?.status}
+        />
+      </ModalBody>
       <ModalFooter>
         <Button
           id={uploadRomToServerButtonId}
