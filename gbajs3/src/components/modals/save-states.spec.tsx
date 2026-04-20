@@ -173,6 +173,7 @@ describe('<SaveStatesModal />', () => {
       typeof contextHooks
     >('../../hooks/context.tsx');
 
+    // must be stable
     const stable: { emulator: GBAEmulator | null } = { emulator: null };
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => {
       const ctx = original();
