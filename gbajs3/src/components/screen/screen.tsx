@@ -139,10 +139,8 @@ export const Screen = () => {
     [setCanvas]
   );
 
-  const currentDimensions =
-    rndRef.current?.resizableElement.current?.getBoundingClientRect();
-  const width = currentDimensions?.width ?? 0;
-  const height = currentDimensions?.height ?? 0;
+  const width = initialBounds?.screen?.width ?? 0;
+  const height = initialBounds?.screen?.height ?? 0;
   const position =
     screenLayout?.position ??
     (isMobileLandscape
