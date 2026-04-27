@@ -22,13 +22,11 @@ export const FileSystemModal = () => {
   const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
-  const [fileSystemChangeTime, setFileSystemChangeTime] = useState<
-    number | null
-  >(null);
-
-  const autoSaveStatePath = emulator?.getCurrentAutoSaveStatePath();
-  const { modifiedTime } = useFileStat(autoSaveStatePath);
-  const fileSystemChangeKey = modifiedTime ?? fileSystemChangeTime;
+  const [, setFileSystemChangeTime] = useState<number | null>(null);
+  // the only flow that can force the file system to change without user interaction after the modal
+  // is open is the auto save state timer, if the modified time of the current auto save state has
+  // changed, we should refresh the file system view
+  useFileStat(emulator?.getCurrentAutoSaveStatePath());
 
   const deleteFile = useCallback(
     async (path: string) => {
@@ -59,7 +57,6 @@ export const FileSystemModal = () => {
       <ModalHeader title="File System" />
       <FlexModalBody>
         <EmulatorFileSystem
-          key={fileSystemChangeKey}
           allFiles={renderedFiles}
           deleteFile={deleteFile}
           downloadFile={downloadFile}
