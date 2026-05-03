@@ -133,9 +133,10 @@ describe('<SaveStatesModal />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),
       emulator: {
+        ...original().emulator,
         getCurrentGameName: () => 'rom0.gba',
         listCurrentSaveStates: listCurrentSaveStatesSpy as () => string[],
-        getSaveState: getSaveStateSpy as (saveStateName: string) => Uint8Array,
+        getSaveState: getSaveStateSpy,
         createSaveState: createSaveStateSpy,
         getAutoSaveState: () => null,
         getCurrentAutoSaveStatePath: () => null
@@ -166,25 +167,32 @@ describe('<SaveStatesModal />', () => {
 
   it('renders error if creating save state fails', async () => {
     const getSaveStateSpy = vi.fn(() => new Uint8Array());
-    const createSaveState: (slot: number) => boolean = () => false;
-    // must be stable
-    const emu = {
-      listCurrentSaveStates: () => ['rom0.ss0'],
-      getCurrentGameName: () => 'rom0.gba',
-      getSaveState: getSaveStateSpy as (saveStateName: string) => Uint8Array,
-      createSaveState: createSaveState,
-      getAutoSaveState: () => null,
-      getCurrentAutoSaveStatePath: () => null
-    } as GBAEmulator;
+    const createSaveState = () => false;
 
     const { useEmulatorContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
-    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-      ...original(),
-      emulator: emu
-    }));
+    // must be stable
+    const stable: { emulator: GBAEmulator | null } = { emulator: null };
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => {
+      const ctx = original();
+
+      stable.emulator ??= {
+        ...ctx.emulator,
+        listCurrentSaveStates: () => ['rom0.ss0'],
+        getCurrentGameName: () => 'rom0.gba',
+        getSaveState: getSaveStateSpy,
+        createSaveState,
+        getAutoSaveState: () => null,
+        getCurrentAutoSaveStatePath: () => null
+      } as GBAEmulator;
+
+      return {
+        ...ctx,
+        emulator: stable.emulator
+      };
+    });
 
     renderWithContext(<SaveStatesModal />);
 
@@ -217,11 +225,10 @@ describe('<SaveStatesModal />', () => {
       return {
         ...original(),
         emulator: {
+          ...original().emulator,
           getCurrentGameName: () => 'rom0.gba',
           listCurrentSaveStates: listCurrentSaveStatesSpy as () => string[],
-          getSaveState: getSaveStateSpy as (
-            saveStateName: string
-          ) => Uint8Array,
+          getSaveState: getSaveStateSpy,
           deleteSaveState: deleteSaveStateSpy,
           getAutoSaveState: () => null,
           getCurrentAutoSaveStatePath: () => null
@@ -292,24 +299,31 @@ describe('<SaveStatesModal />', () => {
   it('loads save state', async () => {
     const loadSaveStateSpy: (_: number) => boolean = vi.fn(() => true);
     const getSaveStateSpy = vi.fn(() => new Uint8Array());
-    // must be stable
-    const emu = {
-      listCurrentSaveStates: () => ['some_rom.ss1'],
-      getCurrentGameName: () => 'some_rom.gba',
-      loadSaveState: loadSaveStateSpy,
-      getSaveState: getSaveStateSpy as (saveStateName: string) => Uint8Array,
-      getAutoSaveState: () => null,
-      getCurrentAutoSaveStatePath: () => null
-    } as GBAEmulator;
 
     const { useEmulatorContext: original } = await vi.importActual<
       typeof contextHooks
     >('../../hooks/context.tsx');
 
-    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
-      ...original(),
-      emulator: emu
-    }));
+    // must be stable
+    const stable: { emulator: GBAEmulator | null } = { emulator: null };
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => {
+      const ctx = original();
+
+      stable.emulator ??= {
+        ...ctx.emulator,
+        listCurrentSaveStates: () => ['some_rom.ss1'],
+        getCurrentGameName: () => 'some_rom.gba',
+        loadSaveState: loadSaveStateSpy,
+        getSaveState: getSaveStateSpy,
+        getAutoSaveState: () => null,
+        getCurrentAutoSaveStatePath: () => null
+      } as GBAEmulator;
+
+      return {
+        ...ctx,
+        emulator: stable.emulator
+      };
+    });
 
     renderWithContext(<SaveStatesModal />);
 

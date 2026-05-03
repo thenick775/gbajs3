@@ -956,7 +956,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary emotion-51"
+              class="MuiSlider-thumb MuiSlider-thumb emotion-51"
               data-index="0"
               style="left: 100%;"
             >
@@ -1080,7 +1080,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary emotion-51"
+              class="MuiSlider-thumb MuiSlider-thumb emotion-51"
               data-index="0"
               style="left: 0%;"
             >
@@ -2081,7 +2081,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary emotion-51"
+              class="MuiSlider-thumb MuiSlider-thumb emotion-51"
               data-index="0"
               style="left: 100%;"
             >
@@ -2205,7 +2205,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary emotion-51"
+              class="MuiSlider-thumb MuiSlider-thumb emotion-51"
               data-index="0"
               style="left: 0%;"
             >

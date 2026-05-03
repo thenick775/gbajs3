@@ -73,7 +73,8 @@ describe('<FileSystemModal />', () => {
       return {
         ...original(),
         emulator: {
-          listAllFiles: listAllFilesSpy as () => FileNode,
+          ...original().emulator,
+          listAllFiles: listAllFilesSpy,
           deleteFile: deleteFileSpy,
           getCurrentAutoSaveStatePath: () => null
         } as GBAEmulator

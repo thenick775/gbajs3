@@ -1,7 +1,7 @@
 import { useMediaQuery } from '@mui/material';
 import { useTheme, styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useForm, useWatch, type SubmitHandler } from 'react-hook-form';
 
 import { virtualControlsLocalStorageKey } from '../../controls/consts.tsx';
 import { ManagedCheckbox } from '../../shared/managed-checkbox.tsx';
@@ -48,7 +48,7 @@ export const VirtualControlsForm = ({
     );
   };
 
-  const { register, handleSubmit, watch } = useForm<ControlsInputProps>({
+  const { register, handleSubmit, control } = useForm<ControlsInputProps>({
     values: areVirtualControlsEnabled ?? {
       OpadAndButtons: shouldShowVirtualControl(undefined),
       SaveState: shouldShowVirtualControl(undefined),
@@ -61,6 +61,7 @@ export const VirtualControlsForm = ({
       keepDirtyValues: true
     }
   });
+  const watchedControls = useWatch({ control });
 
   const onSubmit: SubmitHandler<ControlsInputProps> = (formData) => {
     setAreVirtualControlsEnabled((prevState) => ({
@@ -78,32 +79,32 @@ export const VirtualControlsForm = ({
     >
       <ManagedCheckbox
         label="Virtual D-pad/Buttons"
-        watcher={watch('OpadAndButtons')}
+        watcher={watchedControls.OpadAndButtons}
         {...register('OpadAndButtons')}
       />
       <ManagedCheckbox
         label="Save State"
-        watcher={watch('SaveState')}
+        watcher={watchedControls.SaveState}
         {...register('SaveState')}
       />
       <ManagedCheckbox
         label="Load State"
-        watcher={watch('LoadState')}
+        watcher={watchedControls.LoadState}
         {...register('LoadState')}
       />
       <ManagedCheckbox
         label="Quick Reload"
-        watcher={watch('QuickReload')}
+        watcher={watchedControls.QuickReload}
         {...register('QuickReload')}
       />
       <ManagedCheckbox
         label="Send save to server"
-        watcher={watch('SendSaveToServer')}
+        watcher={watchedControls.SendSaveToServer}
         {...register('SendSaveToServer')}
       />
       <ManagedSwitch
         label="Enable Notifications"
-        watcher={watch('NotificationsEnabled')}
+        watcher={watchedControls.NotificationsEnabled}
         {...register('NotificationsEnabled')}
       />
     </StyledForm>

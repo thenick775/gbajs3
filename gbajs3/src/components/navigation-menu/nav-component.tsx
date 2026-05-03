@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import AnimateHeight, { type Height } from 'react-animate-height';
 
 import { ButtonBase } from '../shared/custom-button-base.tsx';
@@ -59,18 +59,22 @@ export const NavComponent = ({
   $isExpanded = false,
   $disabled = false
 }: NavComponentProps) => {
-  const [height, setHeight] = useState<Height>($isExpanded ? 'auto' : 0);
+  const [isExpanded, setIsExpanded] = useState($isExpanded);
+  const [previousIsExpanded, setPreviousIsExpanded] = useState($isExpanded);
 
-  useEffect(() => {
-    setHeight($isExpanded ? 'auto' : 0);
-  }, [$isExpanded]);
+  if ($isExpanded !== previousIsExpanded) {
+    setPreviousIsExpanded($isExpanded);
+    setIsExpanded($isExpanded);
+  }
+
+  const height: Height = isExpanded ? 'auto' : 0;
 
   return (
     <NavComponentWrapper $disabled={$disabled}>
       <HoverWrapper
         disabled={$disabled}
         onClick={() => {
-          setHeight(height === 0 ? 'auto' : 0);
+          setIsExpanded((currentIsExpanded) => !currentIsExpanded);
         }}
       >
         {icon}
