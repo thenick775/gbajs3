@@ -47,6 +47,10 @@ export const InitialBoundsProvider = ({
 
   useEffect(() => {
     if (
+      prevSize.current.width !== null &&
+      prevSize.current.height !== null &&
+      windowSize.width !== null &&
+      windowSize.height !== null &&
       windowSize.width !== prevSize.current.width &&
       windowSize.height !== prevSize.current.height &&
       hasInitialBounds
