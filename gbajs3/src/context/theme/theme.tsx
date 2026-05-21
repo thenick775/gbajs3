@@ -55,8 +55,16 @@ export const GbaDarkTheme: ThemeOptions = {
   listItemBorderSubtle: 'rgba(0, 0, 0, 0.125)',
   virtualControlSurface: 'rgba(8, 12, 18, 0.86)',
   virtualControlSurfaceStrong: 'rgba(15, 20, 30, 0.94)',
-  virtualControlBorderSubtle: 'rgba(255, 255, 255, 0.18)',
-  virtualControlInnerBorder: 'rgba(255, 255, 255, 0.07)',
+  // virtualControlBorderSubtle: 'rgba(255, 255, 255, 0.18)',
+  // virtualControlInnerBorder: 'rgba(255, 255, 255, 0.07)',
+  virtualControlBorderSubtle: 'rgba(255, 255, 255, 0.14)',
+  virtualControlInnerBorder: 'rgba(255, 255, 255, 0.04)',
+  virtualControlButtonSurface:
+    'radial-gradient(circle at 50% 48%, rgba(5, 8, 13, 0.98) 0%, rgba(8, 12, 18, 0.98) 58%, rgba(16, 22, 32, 0.94) 100%)',
+  virtualControlButtonSurfacePill:
+    'linear-gradient(180deg, rgba(16, 22, 32, 0.94), rgba(8, 12, 18, 0.98) 42%, rgba(7, 10, 16, 0.99) 100%)',
+  virtualControlButtonHighlight: 'rgba(255, 255, 255, 0.03)',
+  virtualControlButtonInnerShadow: 'rgba(0, 0, 0, 0.32)',
   virtualControlShadow:
     '0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.04)',
   virtualControlPressedShadow: '0 8px 18px rgba(0, 0, 0, 0.18)',
