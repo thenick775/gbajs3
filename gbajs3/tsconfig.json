@@ -18,7 +18,10 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Types */
+    "types": ["vite/client", "wicg-file-system-access"]
   },
   "include": ["src", "test/setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

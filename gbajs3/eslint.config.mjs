@@ -66,6 +66,7 @@ export default [
         'error',
         { allowNumber: true }
       ],
+      '@typescript-eslint/no-deprecated': 'error',
       'react-refresh/only-export-components': 'warn',
       'import/no-default-export': 'error',
       'import/no-unresolved': [
