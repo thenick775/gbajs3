@@ -523,6 +523,13 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   transform: translateY(-50%);
 }
 
+@media (forced-colors: active) {
+  .emotion-38 {
+    border: 1px solid transparent;
+    box-sizing: border-box;
+  }
+}
+
 .emotion-39 {
   display: block;
   position: absolute;
@@ -581,6 +588,12 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   -moz-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+@media (forced-colors: active) {
+  .emotion-51 {
+    border: 1px solid ButtonBorder;
+  }
 }
 
 .emotion-51::before {
@@ -956,7 +969,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary emotion-51"
+              class="MuiSlider-thumb MuiSlider-thumb emotion-51"
               data-index="0"
               style="left: 100%;"
             >
@@ -1080,7 +1093,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary emotion-51"
+              class="MuiSlider-thumb MuiSlider-thumb emotion-51"
               data-index="0"
               style="left: 0%;"
             >
@@ -1648,6 +1661,13 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   transform: translateY(-50%);
 }
 
+@media (forced-colors: active) {
+  .emotion-38 {
+    border: 1px solid transparent;
+    box-sizing: border-box;
+  }
+}
+
 .emotion-39 {
   display: block;
   position: absolute;
@@ -1706,6 +1726,12 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   -moz-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+@media (forced-colors: active) {
+  .emotion-51 {
+    border: 1px solid ButtonBorder;
+  }
 }
 
 .emotion-51::before {
@@ -2081,7 +2107,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary emotion-51"
+              class="MuiSlider-thumb MuiSlider-thumb emotion-51"
               data-index="0"
               style="left: 100%;"
             >
@@ -2205,7 +2231,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
               style="left: 100%;"
             />
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary emotion-51"
+              class="MuiSlider-thumb MuiSlider-thumb emotion-51"
               data-index="0"
               style="left: 0%;"
             >
