@@ -53,6 +53,10 @@ declare module '@mui/material/styles' {
     virtualControlSurfaceStrong: string;
     virtualControlBorderSubtle: string;
     virtualControlInnerBorder: string;
+    virtualControlButtonSurface: string;
+    virtualControlButtonSurfacePill: string;
+    virtualControlButtonHighlight: string;
+    virtualControlButtonInnerShadow: string;
     virtualControlShadow: string;
     virtualControlPressedShadow: string;
     virtualControlAccentBorder: string;
@@ -113,6 +117,10 @@ declare module '@mui/material/styles' {
     virtualControlSurfaceStrong: string;
     virtualControlBorderSubtle: string;
     virtualControlInnerBorder: string;
+    virtualControlButtonSurface: string;
+    virtualControlButtonSurfacePill: string;
+    virtualControlButtonHighlight: string;
+    virtualControlButtonInnerShadow: string;
     virtualControlShadow: string;
     virtualControlPressedShadow: string;
     virtualControlAccentBorder: string;

@@ -57,35 +57,25 @@ const VirtualButtonBase = styled(ButtonBase)`
   border-width: 2px;
   color: ${({ theme }) => theme.surfaceTextPrimary};
   backdrop-filter: blur(6px);
+  overflow: hidden;
+  isolation: isolate;
   box-shadow: ${({ theme }) => theme.virtualControlShadow};
 
-  &:before {
-    content: '';
-    position: absolute;
-    inset: 5px;
-    border-radius: inherit;
-    border: 1px solid ${({ theme }) => theme.virtualControlInnerBorder};
-    pointer-events: none;
+  & > * {
+    position: relative;
+    z-index: 1;
   }
 
   &:not(:disabled):active {
     transform: translateY(1px) scale(0.98);
     border-color: ${({ theme }) => theme.virtualControlAccentBorder};
     box-shadow: ${({ theme }) => theme.virtualControlPressedShadow};
-
-    &:before {
-      border-color: ${({ theme }) => theme.virtualControlAccentHalo};
-    }
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     box-shadow: none;
-
-    &:before {
-      border-color: ${({ theme }) => theme.virtualControlInnerBorder};
-    }
   }
 
   @media ${({ theme }) => theme.isMobileLandscape} {
@@ -105,6 +95,41 @@ const CircularButton = styled(VirtualButtonBase, {
     $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorderSubtle};
   border-style: ${({ $areItemsDraggable = false }) =>
     $areItemsDraggable ? 'dashed' : 'solid'};
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: inherit;
+    border: 1px solid ${({ theme }) => theme.virtualControlInnerBorder};
+    background: rgba(4, 7, 12, 0.22);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.015);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border-radius: inherit;
+    background: ${({ $areItemsDraggable = false, theme }) =>
+      $areItemsDraggable
+        ? theme.virtualControlSurfaceStrong
+        : theme.virtualControlButtonSurface};
+    box-shadow:
+      inset 0 3px 8px rgba(0, 0, 0, 0.42),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+      0 1px 0 rgba(255, 255, 255, 0.02);
+    pointer-events: none;
+  }
+
+  &:not(:disabled):active {
+    &::after {
+      box-shadow:
+        inset 0 4px 10px rgba(0, 0, 0, 0.48),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.02),
+        0 1px 0 rgba(255, 255, 255, 0.015);
+    }
+  }
 `;
 
 const RectangularButton = styled(VirtualButtonBase, {
@@ -119,9 +144,40 @@ const RectangularButton = styled(VirtualButtonBase, {
     $areItemsDraggable ? theme.gbaThemeBlue : theme.virtualControlBorderSubtle};
   border-style: ${({ $areItemsDraggable = false }) =>
     $areItemsDraggable ? 'dashed' : 'solid'};
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 4px 6px;
+    border-radius: 999px;
+    border: 1px solid ${({ theme }) => theme.virtualControlInnerBorder};
+    background: rgba(4, 7, 12, 0.18);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.015);
+    pointer-events: none;
+  }
 
-  &:before {
-    inset: 3px 5px;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 7px 10px;
+    border-radius: 999px;
+    background: ${({ $areItemsDraggable = false, theme }) =>
+      $areItemsDraggable
+        ? theme.virtualControlSurfaceStrong
+        : theme.virtualControlButtonSurfacePill};
+    box-shadow:
+      inset 0 2px 6px rgba(0, 0, 0, 0.3),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+      0 1px 0 rgba(255, 255, 255, 0.015);
+    pointer-events: none;
+  }
+
+  &:not(:disabled):active {
+    &::after {
+      box-shadow:
+        inset 0 3px 7px rgba(0, 0, 0, 0.34),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.02),
+        0 1px 0 rgba(255, 255, 255, 0.01);
+    }
   }
 `;
 
