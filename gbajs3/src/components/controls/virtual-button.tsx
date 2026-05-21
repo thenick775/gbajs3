@@ -62,7 +62,7 @@ const VirtualButtonBase = styled(ButtonBase)`
   &:before {
     content: '';
     position: absolute;
-    inset: 8px;
+    inset: 5px;
     border-radius: inherit;
     border: 1px solid ${({ theme }) => theme.virtualControlInnerBorder};
     pointer-events: none;
@@ -121,7 +121,7 @@ const RectangularButton = styled(VirtualButtonBase, {
     $areItemsDraggable ? 'dashed' : 'solid'};
 
   &:before {
-    inset: 5px 8px;
+    inset: 3px 5px;
   }
 `;
 
