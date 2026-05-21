@@ -53,11 +53,9 @@ describe('useUnloadEmulator hook', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...originalEmulator(),
       emulator: {
-        forceAutoSaveState: forceAutoSaveStateSpy as () => boolean,
-        getAutoSaveState: getAutoSaveStateSpy as () => {
-          autoSaveStateName: string;
-          data: Uint8Array;
-        }
+        ...originalEmulator().emulator,
+        forceAutoSaveState: forceAutoSaveStateSpy,
+        getAutoSaveState: getAutoSaveStateSpy
       } as GBAEmulator
     }));
 

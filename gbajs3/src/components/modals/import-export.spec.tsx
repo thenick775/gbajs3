@@ -23,7 +23,7 @@ import {
 import * as contextHooks from '../../hooks/context.tsx';
 import * as addCallbackHooks from '../../hooks/emulator/use-add-callbacks.tsx';
 
-type GenericFileUploadSpy = (_file: File, cb?: () => void) => void;
+import type { filePaths } from '@thenick775/mgba-wasm';
 
 describe('<ImportExportModal />', () => {
   const defaultFSData: FileNode = {
@@ -176,16 +176,14 @@ describe('<ImportExportModal />', () => {
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...originalEmulator(),
       emulator: {
-        uploadAutoSaveState: uploadAutoSaveStateSpy as (
-          autoSaveStateName: string,
-          data: Uint8Array
-        ) => Promise<void>,
-        uploadRom: uploadRomSpy as GenericFileUploadSpy,
-        uploadSaveOrSaveState: uploadSaveOrSaveStateSpy as GenericFileUploadSpy,
-        uploadCheats: uploadCheatsSpy as GenericFileUploadSpy,
-        uploadPatch: uploadPatchSpy as GenericFileUploadSpy,
-        uploadScreenshot: uploadScreenshotSpy as GenericFileUploadSpy,
-        filePaths: () => ({ autosave: '/autosave' }),
+        ...originalEmulator().emulator,
+        uploadAutoSaveState: uploadAutoSaveStateSpy,
+        uploadRom: uploadRomSpy,
+        uploadSaveOrSaveState: uploadSaveOrSaveStateSpy,
+        uploadCheats: uploadCheatsSpy,
+        uploadPatch: uploadPatchSpy,
+        uploadScreenshot: uploadScreenshotSpy,
+        filePaths: () => ({ autosave: '/autosave' }) as filePaths,
         getCurrentAutoSaveStatePath: () => null,
         isFileExtensionOfType: isFileExtensionOfType
       } as GBAEmulator
