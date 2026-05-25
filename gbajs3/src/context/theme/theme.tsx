@@ -9,11 +9,8 @@ export const GbaDarkTheme: ThemeOptions = {
     'only screen and (max-height: 700px) and (orientation: portrait)',
 
   // css colors
-  aliceBlue1: '#f8f9fa',
-  blueCharcoal: '#212529',
   checkMarkGreen: '#7ac142',
   darkCharcoal: '#333',
-  darkGrayBlue: '#495057',
   disabledGray: '#6c757d',
   errorRed: '#d32f2f',
   gbaThemeBlue: '#1c76fd',
@@ -52,7 +49,6 @@ export const GbaDarkTheme: ThemeOptions = {
   menuToggleFocusRing: 'rgba(13, 110, 253, 0.25)',
   modalTabBorder: 'rgba(0, 0, 0, 0.12)',
   errorOverlay: 'rgba(0, 0, 0, 0.5)',
-  listItemBorderSubtle: 'rgba(0, 0, 0, 0.125)',
   virtualControlSurface: 'rgba(8, 12, 18, 0.86)',
   virtualControlSurfaceStrong: 'rgba(15, 20, 30, 0.94)',
   virtualControlBorderSubtle: 'rgba(255, 255, 255, 0.14)',
@@ -61,8 +57,6 @@ export const GbaDarkTheme: ThemeOptions = {
     'radial-gradient(circle at 50% 48%, rgba(5, 8, 13, 0.98) 0%, rgba(8, 12, 18, 0.98) 58%, rgba(16, 22, 32, 0.94) 100%)',
   virtualControlButtonSurfacePill:
     'linear-gradient(180deg, rgba(16, 22, 32, 0.94), rgba(8, 12, 18, 0.98) 42%, rgba(7, 10, 16, 0.99) 100%)',
-  virtualControlButtonHighlight: 'rgba(255, 255, 255, 0.03)',
-  virtualControlButtonInnerShadow: 'rgba(0, 0, 0, 0.32)',
   virtualControlShadow:
     '0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.04)',
   virtualControlPressedShadow: '0 8px 18px rgba(0, 0, 0, 0.18)',
