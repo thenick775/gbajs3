@@ -55,8 +55,6 @@ export const GbaDarkTheme: ThemeOptions = {
   listItemBorderSubtle: 'rgba(0, 0, 0, 0.125)',
   virtualControlSurface: 'rgba(8, 12, 18, 0.86)',
   virtualControlSurfaceStrong: 'rgba(15, 20, 30, 0.94)',
-  // virtualControlBorderSubtle: 'rgba(255, 255, 255, 0.18)',
-  // virtualControlInnerBorder: 'rgba(255, 255, 255, 0.07)',
   virtualControlBorderSubtle: 'rgba(255, 255, 255, 0.14)',
   virtualControlInnerBorder: 'rgba(255, 255, 255, 0.04)',
   virtualControlButtonSurface:

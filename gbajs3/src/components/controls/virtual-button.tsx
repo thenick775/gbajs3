@@ -130,6 +130,13 @@ const CircularButton = styled(VirtualButtonBase, {
         0 1px 0 rgba(255, 255, 255, 0.015);
     }
   }
+
+  @media ${({ theme }) => theme.isMobileLandscape} {
+    &::before,
+    &::after {
+      background: transparent;
+    }
+  }
 `;
 
 const RectangularButton = styled(VirtualButtonBase, {
@@ -177,6 +184,13 @@ const RectangularButton = styled(VirtualButtonBase, {
         inset 0 3px 7px rgba(0, 0, 0, 0.34),
         inset 0 -1px 0 rgba(255, 255, 255, 0.02),
         0 1px 0 rgba(255, 255, 255, 0.01);
+    }
+  }
+
+  @media ${({ theme }) => theme.isMobileLandscape} {
+    &::before,
+    &::after {
+      background: transparent;
     }
   }
 `;
