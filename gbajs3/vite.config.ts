@@ -57,8 +57,8 @@ export default defineConfig(({ mode }) => {
           name: 'Gbajs3',
           short_name: 'GJ3',
           description: 'GBA emulator online in the Browser',
-          theme_color: '#212529',
-          background_color: '#212529',
+          theme_color: '#121821',
+          background_color: '#121821',
           icons: [
             {
               src: './img/icon-192x192.png',
