@@ -18,6 +18,11 @@ describe('<DownloadSaveModal />', () => {
         'Remember to save in game before downloading your save file!'
       )
     ).toBeVisible();
+    expect(
+      screen.getByRole('checkbox', {
+        name: /Truncate save \(128 KiB\)/i
+      })
+    ).not.toBeChecked();
   });
 
   it('renders error if there is no current save or save name', async () => {
@@ -72,6 +77,38 @@ describe('<DownloadSaveModal />', () => {
       'some_rom.sav',
       expect.any(Blob)
     );
+  });
+
+  it('downloads a truncated save when requested', async () => {
+    const { useEmulatorContext: original } = await vi.importActual<
+      typeof contextHooks
+    >('../../hooks/context.tsx');
+    const downloadBlobSpy = vi
+      .spyOn(blobUtilities, 'downloadBlob')
+      .mockImplementation(() => new Blob());
+    const getCurrentSaveTruncated = vi.fn(() =>
+      new TextEncoder().encode('Some truncated sav file contents')
+    );
+    const getCurrentSave = vi.fn(() => new TextEncoder().encode('raw save'));
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      ...original(),
+      emulator: {
+        ...original().emulator,
+        getCurrentSave,
+        getCurrentSaveTruncated: getCurrentSaveTruncated,
+        getCurrentSaveName: () => 'some_rom.sav'
+      } as GBAEmulator
+    }));
+
+    renderWithContext(<DownloadSaveModal />);
+
+    await userEvent.click(screen.getByText('Truncate save (128 KiB)'));
+    await userEvent.click(screen.getByText('Download', { selector: 'button' }));
+
+    expect(getCurrentSaveTruncated).toHaveBeenCalledWith(131072);
+    expect(getCurrentSave).not.toHaveBeenCalled();
+    expect(downloadBlobSpy).toHaveBeenCalledOnce();
   });
 
   it('closes modal using the close button', async () => {

@@ -404,6 +404,19 @@ cheat1_code = "XYZ789"`;
     expect(emulator.getCurrentSave()).toBeNull();
   });
 
+  it('should return a truncated current save file when requested', () => {
+    const save = new Uint8Array([1, 2, 3, 4]);
+    const { emulator } = createEmulator({ getSave: vi.fn(() => save) });
+
+    expect(emulator.getCurrentSaveTruncated(2)).toEqual(new Uint8Array([1, 2]));
+  });
+
+  it('should return null for a truncated save when no save is loaded', () => {
+    const { emulator } = createEmulator({ saveName: undefined });
+
+    expect(emulator.getCurrentSaveTruncated(131072)).toBeNull();
+  });
+
   it('should return the current save name without extension', () => {
     const { emulator } = createEmulator();
     expect(emulator.getCurrentSaveName()).toBe('testGame.sav');
