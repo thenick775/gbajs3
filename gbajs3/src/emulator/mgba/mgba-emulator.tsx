@@ -56,6 +56,7 @@ export type GBAEmulator = {
   getCurrentGameName: () => string | undefined;
   getCurrentRom: () => Uint8Array | null;
   getCurrentSave: () => Uint8Array | null;
+  getCurrentSaveTruncated: (sizeBytes: number) => Uint8Array | null;
   getCurrentSaveName: () => string | undefined;
   getFile: (path: string) => Uint8Array;
   getStat: (path: string) => FS.Stats;
@@ -150,6 +151,9 @@ const filterSaveStates =
     !fileIgnorePaths.includes(saveStateName) &&
     baseSaveStateName &&
     saveStateName.startsWith(baseSaveStateName);
+
+const truncateSave = (save: Uint8Array, sizeBytes: number) =>
+  save.byteLength > sizeBytes ? save.slice(0, sizeBytes) : save;
 
 export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
   const paths = mGBA.filePaths();
@@ -350,6 +354,11 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
       mGBA.gameName ? mGBA.FS.readFile(mGBA.gameName) : null,
     getCurrentGameName: () => filepathToFileName(mGBA.gameName),
     getCurrentSave: () => (mGBA.saveName ? mGBA.getSave() : null),
+    getCurrentSaveTruncated: (sizeBytes) => {
+      const save = mGBA.saveName ? mGBA.getSave() : null;
+
+      return save ? truncateSave(save, sizeBytes) : null;
+    },
     getCurrentSaveName: () => filepathToFileName(mGBA.saveName),
     getCurrentAutoSaveStatePath: () => mGBA.autoSaveStateName ?? null,
     getFile: (path) => mGBA.FS.readFile(path),

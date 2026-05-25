@@ -1,7 +1,9 @@
 import { Checkbox, FormControlLabel, type CheckboxProps } from '@mui/material';
 
+import type { ReactNode } from 'react';
+
 type ManagedCheckBoxProps = {
-  label: string;
+  label: ReactNode;
   watcher?: boolean;
 } & CheckboxProps;
 
