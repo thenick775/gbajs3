@@ -10,6 +10,9 @@
   <a href="https://github.com/thenick775/gbajs3/wiki">
     <img alt="WIKI" src="https://img.shields.io/badge/docs-WIKI-blue">
   </a>
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+  <a href="https://github.com/thenick775/gbajs3#contributors"><img alt="All Contributors" src="https://img.shields.io/github/all-contributors/thenick775/gbajs3?color=ee8449"></a>
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 </div>
 
 <br/>
