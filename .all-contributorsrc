@@ -2,6 +2,8 @@
   "projectName": "gbajs3",
   "projectOwner": "thenick775",
   "repoType": "github",
+  "files": ["README.md"],
+  "badgeTemplate": "  <a href=\"https://github.com/thenick775/gbajs3#contributors\"><img alt=\"All Contributors\" src=\"https://img.shields.io/github/all-contributors/thenick775/gbajs3?color=ee8449\"></a>",
   "commitConvention": "angular",
   "contributors": [
     {
@@ -80,7 +82,13 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/50801476?v=4",
       "profile": "https://github.com/dedwardstech",
       "contributions": ["bug"]
+    },
+    {
+      "login": "pstarter27",
+      "name": "pstarter27",
+      "avatar_url": "https://avatars.githubusercontent.com/u/282081053?v=4",
+      "profile": "https://github.com/pstarter27",
+      "contributions": ["ideas"]
     }
   ]
 }
-
