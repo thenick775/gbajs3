@@ -3,6 +3,7 @@ import {
   Checkbox,
   Divider,
   FormControl,
+  FormControlLabel,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -79,6 +80,12 @@ const UrlInputsContainer = styled('div')`
   gap: 1em;
 `;
 
+const FileTypeContainer = styled('div')`
+  display: grid;
+  grid-template-columns: 70% 30%;
+  gap: 8px;
+`;
+
 const orderFileNamesByExtension = (types?: FileTypes) => {
   if (!types) return;
 
@@ -125,7 +132,10 @@ const fetchFileFromUrl = async (fileUrl: URL) => {
   return file;
 };
 
-const RunRomCheckboxProps = ({
+const localRomSelectionKey = (fileName: string) => `file:${fileName}`;
+const urlRomSelectionKey = (fieldId: string) => `url:${fieldId}`;
+
+const RunRomCheckbox = ({
   fileName,
   checked,
   onChange
@@ -147,7 +157,7 @@ const AdditionalFileActions = ({
   if (!isRomFile) return null;
 
   return (
-    <RunRomCheckboxProps
+    <RunRomCheckbox
       fileName={fileName}
       checked={isChecked}
       onChange={() => {
@@ -204,29 +214,77 @@ export const UploadFilesModal = () => {
     fileUrls,
     romFileToRun
   }) => {
+    const uploadedRomCandidates = files
+      .filter((file) => emulator?.isFileExtensionOfType(file.name, 'rom'))
+      .map((file) => ({
+        selectionKey: localRomSelectionKey(file.name),
+        fileName: file.name
+      }));
+
     await Promise.all(files.map((file) => writeFileToEmulator(file)));
+
+    const activeFileUrls = fields
+      .map((field, index) => ({
+        id: field.id,
+        type: fileUrls[index]?.type,
+        url: fileUrls[index]?.url
+      }))
+      .filter(
+        (
+          fileUrl
+        ): fileUrl is {
+          id: string;
+          type: keyof FileTypes;
+          url: string;
+        } => !!fileUrl.url
+      );
 
     if (fileUrls.length > 0) {
       const externalFilesSettled = await Promise.allSettled(
-        fileUrls
-          .filter((u) => u.url)
-          .map(async ({ url, type }) => ({
-            file: await fetchFileFromUrl(new URL(url)),
-            type
-          }))
+        activeFileUrls.map(async ({ id, url, type }) => ({
+          selectionKey: urlRomSelectionKey(id),
+          file: await fetchFileFromUrl(new URL(url)),
+          type
+        }))
+      );
+
+      const successfulExternalUploads = externalFilesSettled.filter(
+        (
+          result
+        ): result is PromiseFulfilledResult<{
+          selectionKey: string;
+          file: File;
+          type: keyof FileTypes;
+        }> => result.status === 'fulfilled'
       );
 
       await Promise.all(
-        externalFilesSettled
-          .filter((r) => r.status === 'fulfilled')
-          .map((r) => writeFileToEmulator(r.value.file, r.value.type))
+        successfulExternalUploads.map((result) =>
+          writeFileToEmulator(result.value.file, result.value.type)
+        )
+      );
+
+      uploadedRomCandidates.push(
+        ...successfulExternalUploads
+          .filter((result) => result.value.type === 'rom')
+          .map((result) => ({
+            selectionKey: result.value.selectionKey,
+            fileName: result.value.file.name
+          }))
       );
     }
 
     await syncActionIfEnabled();
 
+    const explicitlySelectedRom = uploadedRomCandidates.find(
+      (candidate) => candidate.selectionKey === romFileToRun
+    );
+
     const gameToRun =
-      romFileToRun === undefined ? findFirstRomFile(files) : romFileToRun;
+      romFileToRun === null
+        ? null
+        : (explicitlySelectedRom?.fileName ??
+          uploadedRomCandidates[0]?.fileName);
 
     if (gameToRun) runGame(gameToRun);
 
@@ -236,6 +294,13 @@ export const UploadFilesModal = () => {
   const files = watch('files');
   const firstRomName = findFirstRomFile(files);
   const romFileToRun = watch('romFileToRun');
+  const fileUrls = watch('fileUrls');
+  const firstUrlRomKey =
+    firstRomName || romFileToRun !== undefined
+      ? null
+      : fields.find(
+          (_, index) => fileUrls[index]?.url && fileUrls[index]?.type === 'rom'
+        )?.id;
 
   const handleUploadType = (
     _: React.MouseEvent<HTMLElement>,
@@ -285,7 +350,10 @@ export const UploadFilesModal = () => {
                     renderAdditionalFileActions={({ fileName }) => (
                       <AdditionalFileActions
                         setSelectedFileName={(name) => {
-                          setValue('romFileToRun', name ?? null);
+                          setValue(
+                            'romFileToRun',
+                            name ? localRomSelectionKey(name) : null
+                          );
                         }}
                         isRomFile={
                           emulator?.isFileExtensionOfType(fileName, 'rom') ??
@@ -293,7 +361,7 @@ export const UploadFilesModal = () => {
                         }
                         fileName={fileName}
                         isChecked={
-                          romFileToRun === fileName ||
+                          romFileToRun === localRomSelectionKey(fileName) ||
                           (romFileToRun === undefined &&
                             firstRomName === fileName)
                         }
@@ -356,25 +424,56 @@ export const UploadFilesModal = () => {
                           }
                         })}
                       />
-                      <FormControl size="small">
-                        <InputLabel>File Type</InputLabel>
-                        <Controller
-                          control={control}
-                          name={`fileUrls.${index}.type`}
-                          defaultValue={item.type}
-                          render={({ field }) => (
-                            <Select label="File Type" {...field}>
-                              {Object.keys(
-                                emulator?.defaultFileTypes() ?? { rom: '.gba' }
-                              ).map((fileType) => (
-                                <MenuItem key={fileType} value={fileType}>
-                                  {fileType}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          )}
-                        />
-                      </FormControl>
+                      <FileTypeContainer>
+                        <FormControl size="small">
+                          <InputLabel>File Type</InputLabel>
+                          <Controller
+                            control={control}
+                            name={`fileUrls.${index}.type`}
+                            defaultValue={item.type}
+                            render={({ field }) => (
+                              <Select label="File Type" {...field}>
+                                {Object.keys(
+                                  emulator?.defaultFileTypes() ?? {
+                                    rom: '.gba'
+                                  }
+                                ).map((fileType) => (
+                                  <MenuItem key={fileType} value={fileType}>
+                                    {fileType}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            )}
+                          />
+                        </FormControl>
+                        {fileUrls[index]?.type === 'rom' && (
+                          <FormControlLabel
+                            sx={{ marginRight: 0 }}
+                            control={
+                              <Checkbox
+                                checked={
+                                  romFileToRun ===
+                                    urlRomSelectionKey(item.id) ||
+                                  (romFileToRun === undefined &&
+                                    firstUrlRomKey === item.id)
+                                }
+                                onChange={() => {
+                                  const selectionKey = urlRomSelectionKey(
+                                    item.id
+                                  );
+                                  setValue(
+                                    'romFileToRun',
+                                    romFileToRun === selectionKey
+                                      ? null
+                                      : selectionKey
+                                  );
+                                }}
+                              />
+                            }
+                            label="Run rom"
+                          />
+                        )}
+                      </FileTypeContainer>
                     </UrlInputsContainer>
                   </div>
                 ))}

@@ -173,6 +173,7 @@ describe('<UploadFilesModal />', () => {
 
     const closeModalSpy = vi.fn();
     const syncActionIfEnabledSpy = vi.fn();
+    const runGameSpy = vi.fn();
     const writeFileToEmulatorSpy = vi.fn().mockResolvedValue(undefined);
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
@@ -193,6 +194,8 @@ describe('<UploadFilesModal />', () => {
     vi.spyOn(writeFileHooks, 'useWriteFileToEmulator').mockReturnValue(
       writeFileToEmulatorSpy
     );
+
+    vi.spyOn(runGameHooks, 'useRunGame').mockReturnValue(runGameSpy);
 
     renderWithContext(<UploadFilesModal />);
 
@@ -212,6 +215,8 @@ describe('<UploadFilesModal />', () => {
       );
     });
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
+    expect(runGameSpy).toHaveBeenCalledOnce();
+    expect(runGameSpy).toHaveBeenCalledWith('good_rom.gba');
     expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
@@ -225,6 +230,7 @@ describe('<UploadFilesModal />', () => {
 
     const closeModalSpy = vi.fn();
     const syncActionIfEnabledSpy = vi.fn();
+    const runGameSpy = vi.fn();
     const writeFileToEmulatorSpy = vi.fn().mockResolvedValue(undefined);
 
     vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
@@ -245,6 +251,8 @@ describe('<UploadFilesModal />', () => {
     vi.spyOn(writeFileHooks, 'useWriteFileToEmulator').mockReturnValue(
       writeFileToEmulatorSpy
     );
+
+    vi.spyOn(runGameHooks, 'useRunGame').mockReturnValue(runGameSpy);
 
     renderWithContext(<UploadFilesModal />);
 
@@ -273,6 +281,141 @@ describe('<UploadFilesModal />', () => {
       expect.objectContaining({ name: 'good_rom.gba' }),
       'save'
     );
+    expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
+    expect(runGameSpy).not.toHaveBeenCalled();
+    expect(closeModalSpy).toHaveBeenCalledOnce();
+  });
+
+  it('allows choosing which URL rom to run', async () => {
+    const { useEmulatorContext: originalEmu, useModalContext: originalModal } =
+      await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+    const { useAddCallbacks: originalCallbacks } = await vi.importActual<
+      typeof addCallbackHooks
+    >('../../hooks/emulator/use-add-callbacks.tsx');
+
+    const closeModalSpy = vi.fn();
+    const syncActionIfEnabledSpy = vi.fn();
+    const runGameSpy = vi.fn();
+    const writeFileToEmulatorSpy = vi.fn().mockResolvedValue(undefined);
+
+    vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+      ...originalModal(),
+      closeModal: closeModalSpy
+    }));
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      ...originalEmu(),
+      emulator: emulatorForFiles as GBAEmulator
+    }));
+
+    vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
+      ...originalCallbacks(),
+      syncActionIfEnabled: syncActionIfEnabledSpy
+    }));
+
+    vi.spyOn(writeFileHooks, 'useWriteFileToEmulator').mockReturnValue(
+      writeFileToEmulatorSpy
+    );
+
+    vi.spyOn(runGameHooks, 'useRunGame').mockReturnValue(runGameSpy);
+
+    renderWithContext(<UploadFilesModal />);
+
+    await userEvent.click(screen.getByRole('button', { name: 'urls' }));
+
+    const urlInputs = () => screen.getAllByRole('textbox', { name: 'URL' });
+
+    await userEvent.type(urlInputs()[0], `${testRomLocation}/good_rom.gba`);
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Add upload url' })
+    );
+
+    await userEvent.type(urlInputs()[1], `${testRomLocation}/good_rom_2.gb`);
+
+    const runCheckboxes = screen.getAllByRole('checkbox', {
+      name: 'Run rom'
+    });
+
+    expect(runCheckboxes[0]).toBeChecked();
+    expect(runCheckboxes[1]).not.toBeChecked();
+
+    await userEvent.click(runCheckboxes[1]);
+
+    expect(runCheckboxes[0]).not.toBeChecked();
+    expect(runCheckboxes[1]).toBeChecked();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
+
+    await waitFor(() => {
+      expect(writeFileToEmulatorSpy).toHaveBeenCalledTimes(2);
+    });
+
+    expect(runGameSpy).toHaveBeenCalledOnce();
+    expect(runGameSpy).toHaveBeenCalledWith('good_rom_2.gb');
+    expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
+    expect(closeModalSpy).toHaveBeenCalledOnce();
+  });
+
+  it('falls back to the first successful URL rom when the selected one fails', async () => {
+    const { useEmulatorContext: originalEmu, useModalContext: originalModal } =
+      await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+    const { useAddCallbacks: originalCallbacks } = await vi.importActual<
+      typeof addCallbackHooks
+    >('../../hooks/emulator/use-add-callbacks.tsx');
+
+    const closeModalSpy = vi.fn();
+    const syncActionIfEnabledSpy = vi.fn();
+    const runGameSpy = vi.fn();
+    const writeFileToEmulatorSpy = vi.fn().mockResolvedValue(undefined);
+
+    vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+      ...originalModal(),
+      closeModal: closeModalSpy
+    }));
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      ...originalEmu(),
+      emulator: emulatorForFiles as GBAEmulator
+    }));
+
+    vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
+      ...originalCallbacks(),
+      syncActionIfEnabled: syncActionIfEnabledSpy
+    }));
+
+    vi.spyOn(writeFileHooks, 'useWriteFileToEmulator').mockReturnValue(
+      writeFileToEmulatorSpy
+    );
+
+    vi.spyOn(runGameHooks, 'useRunGame').mockReturnValue(runGameSpy);
+
+    renderWithContext(<UploadFilesModal />);
+
+    await userEvent.click(screen.getByRole('button', { name: 'urls' }));
+
+    const urlInputs = () => screen.getAllByRole('textbox', { name: 'URL' });
+
+    await userEvent.type(urlInputs()[0], `${testRomLocation}/bad_rom.gba`);
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Add upload url' })
+    );
+
+    await userEvent.type(urlInputs()[1], `${testRomLocation}/good_rom_2.gb`);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Upload' }));
+
+    await waitFor(() => {
+      expect(writeFileToEmulatorSpy).toHaveBeenCalledTimes(1);
+    });
+
+    expect(writeFileToEmulatorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'good_rom_2.gb' }),
+      'rom'
+    );
+    expect(runGameSpy).toHaveBeenCalledOnce();
+    expect(runGameSpy).toHaveBeenCalledWith('good_rom_2.gb');
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
     expect(closeModalSpy).toHaveBeenCalledOnce();
   });
