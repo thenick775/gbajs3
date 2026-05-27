@@ -123,6 +123,16 @@ export const handlers = [
     });
   }),
 
+  http.get(`${testRomLocation}/good_rom_2.gb`, async () => {
+    await delay(100);
+
+    return new HttpResponse(`test external rom 2`, {
+      headers: {
+        'Content-Type': 'application/octet-stream'
+      }
+    });
+  }),
+
   http.get(`${testRomLocation}/bad_rom.gba`, async () => {
     await delay(100);
 
