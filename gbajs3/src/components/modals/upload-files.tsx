@@ -39,7 +39,7 @@ import type { FileTypes } from '../../emulator/mgba/mgba-emulator.tsx';
 type InputProps = {
   files: File[];
   fileUrls: { url: string; type: keyof FileTypes }[];
-  romFileToRun?: string | null;
+  romToRun?: { fileName: string } | { romUrl: string } | null;
 };
 
 type RunRomCheckboxProps = {
@@ -132,9 +132,6 @@ const fetchFileFromUrl = async (fileUrl: URL) => {
   return file;
 };
 
-const localRomSelectionKey = (fileName: string) => `file:${fileName}`;
-const urlRomSelectionKey = (fieldId: string) => `url:${fieldId}`;
-
 const RunRomCheckbox = ({
   fileName,
   checked,
@@ -186,7 +183,7 @@ export const UploadFilesModal = () => {
     defaultValues: {
       files: [],
       fileUrls: [defaultFileUrl],
-      romFileToRun: undefined
+      romToRun: undefined
     }
   });
   const { fields, append, remove } = useFieldArray({
@@ -212,50 +209,30 @@ export const UploadFilesModal = () => {
   const onSubmit: SubmitHandler<InputProps> = async ({
     files,
     fileUrls,
-    romFileToRun
+    romToRun
   }) => {
-    const uploadedRomCandidates = files
-      .filter((file) => emulator?.isFileExtensionOfType(file.name, 'rom'))
-      .map((file) => ({
-        selectionKey: localRomSelectionKey(file.name),
-        fileName: file.name
-      }));
+    const localRomCandidates = files.filter((file) =>
+      emulator?.isFileExtensionOfType(file.name, 'rom')
+    );
 
     await Promise.all(files.map((file) => writeFileToEmulator(file)));
 
-    const activeFileUrls = fields
-      .map((field, index) => ({
-        id: field.id,
-        type: fileUrls[index]?.type,
-        url: fileUrls[index]?.url
-      }))
-      .filter(
-        (
-          fileUrl
-        ): fileUrl is {
-          id: string;
-          type: keyof FileTypes;
-          url: string;
-        } => !!fileUrl.url
-      );
+    const activeFileUrls = fileUrls.filter((fileUrl) => !!fileUrl.url);
+
+    const successfulUrlRomCandidates: { romUrl: string; fileName: string }[] =
+      [];
 
     if (fileUrls.length > 0) {
       const externalFilesSettled = await Promise.allSettled(
-        activeFileUrls.map(async ({ id, url, type }) => ({
-          selectionKey: urlRomSelectionKey(id),
+        activeFileUrls.map(async ({ url, type }) => ({
+          romUrl: url,
           file: await fetchFileFromUrl(new URL(url)),
           type
         }))
       );
 
       const successfulExternalUploads = externalFilesSettled.filter(
-        (
-          result
-        ): result is PromiseFulfilledResult<{
-          selectionKey: string;
-          file: File;
-          type: keyof FileTypes;
-        }> => result.status === 'fulfilled'
+        (result) => result.status === 'fulfilled'
       );
 
       await Promise.all(
@@ -264,11 +241,11 @@ export const UploadFilesModal = () => {
         )
       );
 
-      uploadedRomCandidates.push(
+      successfulUrlRomCandidates.push(
         ...successfulExternalUploads
           .filter((result) => result.value.type === 'rom')
           .map((result) => ({
-            selectionKey: result.value.selectionKey,
+            romUrl: result.value.romUrl,
             fileName: result.value.file.name
           }))
       );
@@ -276,15 +253,28 @@ export const UploadFilesModal = () => {
 
     await syncActionIfEnabled();
 
-    const explicitlySelectedRom = uploadedRomCandidates.find(
-      (candidate) => candidate.selectionKey === romFileToRun
-    );
+    const selectedLocalRom: string | undefined =
+      romToRun && 'fileName' in romToRun
+        ? localRomCandidates.find((file) => file.name === romToRun.fileName)
+            ?.name
+        : undefined;
+
+    const selectedUrlRom: string | undefined =
+      romToRun && 'romUrl' in romToRun
+        ? successfulUrlRomCandidates.find(
+            (candidate) => candidate.romUrl === romToRun.romUrl
+          )?.fileName
+        : undefined;
 
     const gameToRun =
-      romFileToRun === null
+      romToRun === null
         ? null
-        : (explicitlySelectedRom?.fileName ??
-          uploadedRomCandidates[0]?.fileName);
+        : [
+            selectedLocalRom,
+            selectedUrlRom,
+            localRomCandidates[0]?.name,
+            successfulUrlRomCandidates[0]?.fileName
+          ].find((candidate) => candidate !== undefined);
 
     if (gameToRun) runGame(gameToRun);
 
@@ -293,14 +283,12 @@ export const UploadFilesModal = () => {
 
   const files = watch('files');
   const firstRomName = findFirstRomFile(files);
-  const romFileToRun = watch('romFileToRun');
+  const romToRun = watch('romToRun');
   const fileUrls = watch('fileUrls');
-  const firstUrlRomKey =
-    firstRomName || romFileToRun !== undefined
+  const firstUrlRom =
+    firstRomName || romToRun !== undefined
       ? null
-      : fields.find(
-          (_, index) => fileUrls[index]?.url && fileUrls[index]?.type === 'rom'
-        )?.id;
+      : fileUrls.find((fileUrl) => fileUrl.url && fileUrl.type === 'rom')?.url;
 
   const handleUploadType = (
     _: React.MouseEvent<HTMLElement>,
@@ -351,8 +339,8 @@ export const UploadFilesModal = () => {
                       <AdditionalFileActions
                         setSelectedFileName={(name) => {
                           setValue(
-                            'romFileToRun',
-                            name ? localRomSelectionKey(name) : null
+                            'romToRun',
+                            name ? { fileName: name } : null
                           );
                         }}
                         isRomFile={
@@ -361,9 +349,10 @@ export const UploadFilesModal = () => {
                         }
                         fileName={fileName}
                         isChecked={
-                          romFileToRun === localRomSelectionKey(fileName) ||
-                          (romFileToRun === undefined &&
-                            firstRomName === fileName)
+                          (!!romToRun &&
+                            'fileName' in romToRun &&
+                            romToRun.fileName === fileName) ||
+                          (romToRun === undefined && firstRomName === fileName)
                         }
                       />
                     )}
@@ -451,21 +440,24 @@ export const UploadFilesModal = () => {
                             sx={{ marginRight: 0 }}
                             control={
                               <Checkbox
+                                disabled={!fileUrls[index]?.url}
                                 checked={
-                                  romFileToRun ===
-                                    urlRomSelectionKey(item.id) ||
-                                  (romFileToRun === undefined &&
-                                    firstUrlRomKey === item.id)
+                                  (!!romToRun &&
+                                    'romUrl' in romToRun &&
+                                    romToRun.romUrl === fileUrls[index]?.url) ||
+                                  (romToRun === undefined &&
+                                    firstUrlRom === fileUrls[index]?.url)
                                 }
                                 onChange={() => {
-                                  const selectionKey = urlRomSelectionKey(
-                                    item.id
-                                  );
                                   setValue(
-                                    'romFileToRun',
-                                    romFileToRun === selectionKey
+                                    'romToRun',
+                                    !!romToRun &&
+                                      'romUrl' in romToRun &&
+                                      romToRun.romUrl === fileUrls[index]?.url
                                       ? null
-                                      : selectionKey
+                                      : fileUrls[index]?.url
+                                        ? { romUrl: fileUrls[index].url }
+                                        : null
                                   );
                                 }}
                               />
