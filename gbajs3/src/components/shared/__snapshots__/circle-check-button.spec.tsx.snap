@@ -397,17 +397,6 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 2`] = `
   -moz-transform: scale(1);
   -ms-transform: scale(1);
   transform: scale(1);
-  -webkit-animation-name: animation-3;
-  animation-name: animation-3;
-  -webkit-animation-duration: 550ms;
-  animation-duration: 550ms;
-  -webkit-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.emotion-10.MuiTouchRipple-ripplePulsate {
-  -webkit-animation-duration: 200ms;
-  animation-duration: 200ms;
 }
 
 .emotion-10 .MuiTouchRipple-child {
@@ -421,6 +410,29 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 2`] = `
 
 .emotion-10 .MuiTouchRipple-childLeaving {
   opacity: 0;
+}
+
+.emotion-10 .MuiTouchRipple-childPulsate {
+  position: absolute;
+  left: 0px;
+  top: 0;
+}
+
+.emotion-10.MuiTouchRipple-rippleVisible {
+  -webkit-animation-name: animation-3;
+  animation-name: animation-3;
+  -webkit-animation-duration: 550ms;
+  animation-duration: 550ms;
+  -webkit-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.emotion-10.MuiTouchRipple-ripplePulsate {
+  -webkit-animation-duration: 200ms;
+  animation-duration: 200ms;
+}
+
+.emotion-10 .MuiTouchRipple-childLeaving {
   -webkit-animation-name: animation-4;
   animation-name: animation-4;
   -webkit-animation-duration: 550ms;
@@ -430,9 +442,6 @@ exports[`<CircleCheckButton /> > matches snapshot when clicked 2`] = `
 }
 
 .emotion-10 .MuiTouchRipple-childPulsate {
-  position: absolute;
-  left: 0px;
-  top: 0;
   -webkit-animation-name: animation-5;
   animation-name: animation-5;
   -webkit-animation-duration: 2500ms;
