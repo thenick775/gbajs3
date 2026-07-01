@@ -39,7 +39,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
 - Control profiles
 - Mobile UI support
 - Offline PWA support
-- Save state support
+- (Near unlimited) Save state support
 - Auto save state support
 - Cheat code support
 - Soft patch support
