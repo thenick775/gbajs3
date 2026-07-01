@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
     // Work around react-draggable shipping process.env.DRAGGABLE_DEBUG in the browser bundle.
     // Upstream issue: https://github.com/react-grid-layout/react-draggable/issues/806
     define: {
-      'process.env.DRAGGABLE_DEBUG': 'false'
+      'process.env': {}
     },
     plugins: [
       react({
