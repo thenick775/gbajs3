@@ -228,10 +228,12 @@ describe('<DragAndDropInput />', () => {
     fireEvent.dragEnter(dropArea, data);
     fireEvent.drop(dropArea, data);
 
-    expect(await screen.findByText('Too many files')).toBeVisible();
+    expect(await screen.findByText('File to upload:')).toBeVisible();
+    expect(screen.getByText('test_file1.test')).toBeVisible();
+    expect(screen.getByText('Some files were rejected')).toBeVisible();
 
     expect(onDropSpy).toHaveBeenCalledOnce();
-    expect(onDropSpy).toHaveBeenCalledWith([]);
+    expect(onDropSpy).toHaveBeenCalledWith([testFiles[0]]);
   });
 
   it('renders error if file extension is incorrect', async () => {
