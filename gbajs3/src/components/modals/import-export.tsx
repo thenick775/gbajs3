@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { type Entry } from '@zip.js/zip.js';
+import { ERR_UNSAFE_FILENAME, type Entry } from '@zip.js/zip.js';
 import { useCallback, useId, useState } from 'react';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 
@@ -31,7 +31,16 @@ type InputProps = {
   zipFile: File;
 };
 
+type UnsafeFilenameError = Error & {
+  filename?: string;
+};
+
 const validFileExtensions = ['.zip'];
+
+const isUnsafeFilenameError = (
+  error: unknown
+): error is UnsafeFilenameError =>
+  error instanceof Error && error.message === ERR_UNSAFE_FILENAME;
 
 const flattenFiles = (node?: FileNode): string[] =>
   !node
@@ -75,14 +84,7 @@ const importZipToEmulatorFs = (
     if (!entry.filename) return;
     if (entry.directory) return;
 
-    const normalized = entry.filename.replace(/\\/g, '/').replace(/^\/+/, '');
-
-    if (normalized.includes('..')) {
-      console.warn('Skipping unsafe path in ZIP:', normalized);
-      return;
-    }
-
-    if (normalized === 'local-storage.json') {
+    if (entry.filename === 'local-storage.json') {
       await restoreLocalStorageFromZip(entry);
       return;
     }
@@ -108,10 +110,12 @@ export const ImportExportModal = () => {
     formState: { isSubmitting }
   } = useForm<InputProps>();
   const [isExportLoading, setIsExportLoading] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
   const importFormId = useId();
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
+      setImportError(null);
       reset();
       setValue('zipFile', acceptedFiles[0], { shouldValidate: true });
     },
@@ -119,7 +123,19 @@ export const ImportExportModal = () => {
   );
 
   const onSubmit: SubmitHandler<InputProps> = async ({ zipFile }) => {
-    await importZipToEmulatorFs(zipFile, writeFileToEmulator);
+    setImportError(null);
+
+    try {
+      await importZipToEmulatorFs(zipFile, writeFileToEmulator);
+    } catch (error) {
+      if (isUnsafeFilenameError(error)) {
+        setImportError('ZIP contains an unsafe file path and cannot be imported');
+        return;
+      }
+
+      throw error;
+    }
+
     await syncActionIfEnabled();
     closeModal();
   };
@@ -147,7 +163,7 @@ export const ImportExportModal = () => {
                 onDrop={onDrop}
                 name={name}
                 validFileExtensions={validFileExtensions}
-                error={error?.message}
+                error={error?.message ?? importError ?? undefined}
                 hideAcceptedFiles={!value}
               >
                 <p>
