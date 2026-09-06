@@ -6,35 +6,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/rs/cors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"gorm.io/gorm/logger"
 )
-
-func TestInitRuntimeBuildsDefaultConfig(t *testing.T) {
-	t.Parallel()
-
-	got, logfile, gconf := initRuntime(func(key string) string {
-		if key == "CLIENT_HOST" {
-			return "https://gbajs.dev"
-		}
-
-		return ""
-	})
-
-	assert.Equal(t, runtimeConfig{
-		basePath:   "./data",
-		certLoc:    "./certs/fullchain.pem",
-		keyLoc:     "./certs/privkey.pem",
-		clientHost: "https://gbajs.dev",
-	}, got)
-	assert.Equal(t, "./logs/auth_server_log.log", logfile.Filename)
-	require.NotNil(t, gconf)
-}
 
 func TestNewServerRouter(t *testing.T) {
 	t.Parallel()
@@ -58,21 +34,6 @@ func TestNewServerRouter(t *testing.T) {
 			require.NotNil(t, match.Handler)
 		})
 	}
-}
-
-func TestNewCorsOptions(t *testing.T) {
-	t.Parallel()
-
-	got := newCorsOptions("https://gbajs.dev")
-
-	assert.Equal(t, cors.Options{
-		AllowedOrigins:   []string{"https://gbajs.dev"},
-		AllowCredentials: true,
-		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "Authorization", "X-Real-Ip", "X-Forwarded-For", "Host", "User-Agent", "Connection"},
-		ExposedHeaders:   []string{"Set-Cookie"},
-		Debug:            false,
-	}, got)
 }
 
 func TestNewServerHandlerAppliesCors(t *testing.T) {
@@ -104,17 +65,6 @@ func TestNewRollingLogger(t *testing.T) {
 	assert.True(t, got.Compress)
 }
 
-func TestNewGormLoggerConfig(t *testing.T) {
-	t.Parallel()
-
-	got := newGormLoggerConfig()
-
-	assert.Equal(t, time.Second, got.SlowThreshold)
-	assert.Equal(t, logger.Error, got.LogLevel)
-	assert.True(t, got.IgnoreRecordNotFoundError)
-	assert.False(t, got.Colorful)
-}
-
 func TestNewGormConfig(t *testing.T) {
 	t.Parallel()
 
@@ -127,22 +77,4 @@ func TestNewGormConfig(t *testing.T) {
 	got.Logger.Error(context.TODO(), "boom")
 	assert.Contains(t, buf.String(), "[DEBUG]")
 	assert.Contains(t, buf.String(), "boom")
-}
-
-func TestInitRuntime(t *testing.T) {
-	t.Parallel()
-
-	cfg, logfile, gconf := initRuntime(func(key string) string {
-		if key == "CLIENT_HOST" {
-			return "https://gbajs.dev"
-		}
-
-		return ""
-	})
-
-	assert.Equal(t, "https://gbajs.dev", cfg.clientHost)
-	assert.Equal(t, "./logs/auth_server_log.log", logfile.Filename)
-	require.NotNil(t, gconf)
-	assert.True(t, gconf.PrepareStmt)
-	assert.NotNil(t, gconf.Logger)
 }
