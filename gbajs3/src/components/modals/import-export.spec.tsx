@@ -1,6 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import {
+  ERR_UNSAFE_FILENAME,
   BlobWriter,
   TextReader,
   ZipWriter,
@@ -200,10 +201,6 @@ describe('<ImportExportModal />', () => {
       closeModal: closeModalSpy
     }));
 
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {
-      /* empty */
-    });
-
     const restoreLocalStorageFromZipSpy = vi.spyOn(
       zipUtils,
       'restoreLocalStorageFromZip'
@@ -226,7 +223,6 @@ describe('<ImportExportModal />', () => {
           { name: 'patch.bps' },
           { name: 'screenshot.png' },
           { name: 'local-storage.json', data: '{"some-key":"some-value"}' },
-          { name: '../evil.txt' }, // unsafe
           { name: 'invalid.txt' }, // no write path
           { name: 'some/dir/', directory: true } // directory -> skipped
         ]);
@@ -262,9 +258,55 @@ describe('<ImportExportModal />', () => {
     expect(uploadScreenshotSpy).toHaveBeenCalledTimes(1);
 
     expect(restoreLocalStorageFromZipSpy).toHaveBeenCalledTimes(1);
+  });
 
-    expect(warnSpy).toHaveBeenCalledTimes(1);
-    warnSpy.mockRestore();
+  it('shows an error and keeps the modal open when the zip contains an unsafe path', async () => {
+    const syncActionIfEnabledSpy = vi.fn();
+    const closeModalSpy = vi.fn();
+    const unsafeFilenameMessage: string = ERR_UNSAFE_FILENAME;
+
+    const { useModalContext: originalModal } = await vi.importActual<
+      typeof contextHooks
+    >('../../hooks/context.tsx');
+    const { useAddCallbacks: originalCallbacks } = await vi.importActual<
+      typeof addCallbackHooks
+    >('../../hooks/emulator/use-add-callbacks.tsx');
+
+    vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
+      ...originalCallbacks(),
+      syncActionIfEnabled: syncActionIfEnabledSpy
+    }));
+
+    vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+      ...originalModal(),
+      closeModal: closeModalSpy
+    }));
+
+    vi.spyOn(zipUtils, 'readZipEntriesFromBlob').mockRejectedValue(
+      Object.assign(new Error(unsafeFilenameMessage), {
+        filename: '../evil.txt'
+      })
+    );
+
+    const testZip = new File(['zip-bytes'], 'export.zip', {
+      type: 'application/zip'
+    });
+
+    renderWithContext(<ImportExportModal />);
+
+    await userEvent.upload(screen.getByTestId('hidden-file-input'), testZip);
+    await userEvent.click(screen.getByRole('button', { name: 'Import' }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'ZIP contains an unsafe file path and cannot be imported'
+        )
+      ).toBeVisible();
+    });
+
+    expect(syncActionIfEnabledSpy).not.toHaveBeenCalled();
+    expect(closeModalSpy).not.toHaveBeenCalled();
   });
 
   it('exports emulator file system to a zip', async () => {

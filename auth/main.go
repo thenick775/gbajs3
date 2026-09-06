@@ -15,16 +15,10 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
-	"github.com/gorilla/mux"
-	"github.com/natefinch/lumberjack"
-	"github.com/rs/cors"
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/afero"
-	httpSwagger "github.com/swaggo/http-swagger"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 const (
@@ -38,69 +32,28 @@ var (
 	accessSignKey []byte
 )
 
-func serveRequests(port string, certLoc string, keyLoc string, clientHost string) {
-	router := mux.NewRouter().StrictSlash(false)
-	addRoutes(router, ROUTES)
-
-	// cors support
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{clientHost},
-		AllowCredentials: true,
-		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "Authorization", "X-Real-Ip", "X-Forwarded-For", "Host", "User-Agent", "Connection"},
-		ExposedHeaders:   []string{"Set-Cookie"},
-		Debug:            false,
-	})
-
-	// below for eventual permanent swagger docs
-	/*myRouter.PathPrefix("/documentation/").Handler(httpSwagger.Handler( // if we ever have a stable api deployment, this can be used to make it searchable
-		httpSwagger.URL("http://localhost:8081/documentation/doc.json"), // The url pointing to API definition"
-	))*/
-	router.PathPrefix("/api/documentation/").Handler(httpSwagger.WrapHandler) // swagger documentation endpoint
-
-	log.Println("handling requests initiated")
-	log.Fatal(http.ListenAndServeTLS(port, certLoc, keyLoc, c.Handler(router)))
-}
-
 func main() {
 	log.Println("gbajs3 auth server started")
-	const (
-		basePath = "./data"
-		certLoc  = "./certs/fullchain.pem"
-		keyLoc   = "./certs/privkey.pem"
-	)
 	var err error
+	cfg := runtimeConfig{
+		basePath:   "./data",
+		certLoc:    "./certs/fullchain.pem",
+		keyLoc:     "./certs/privkey.pem",
+		clientHost: os.Getenv("CLIENT_HOST"),
+	}
+	logfile := newRollingLogger()
+	gconf := newGormConfig(logfile)
 	accessSignKey = uuid.NewV4().Bytes()
-	clientHost := os.Getenv("CLIENT_HOST")
-
-	logfile := &lumberjack.Logger{ // handle rolling logs internally
-		Filename:   "./logs/auth_server_log.log",
-		MaxSize:    50, // megabytes
-		MaxBackups: 5,
-		MaxAge:     15,   // days
-		Compress:   true, // disabled by default
-	}
 	log.SetOutput(logfile)
-
-	gconf := &gorm.Config{
-		PrepareStmt: true,
-		Logger: logger.New(
-			log.New(logfile, fmt.Sprintf("\n%s [DEBUG] ", time.Now().String())+"\r\n", 0), // io writer
-			logger.Config{
-				SlowThreshold:             time.Second,  // Slow SQL threshold
-				LogLevel:                  logger.Error, // Log level
-				IgnoreRecordNotFoundError: true,         // Ignore ErrRecordNotFound error for logger
-				Colorful:                  false,        // Disable color
-			},
-		),
-	}
 
 	userdb, err = newGbaJsDatabase(gconf)
 	if err != nil {
 		panic(fmt.Errorf("could not connect to gbajs3 db: %w", err))
 	}
 
-	appFs = afero.NewBasePathFs(afero.NewOsFs(), basePath)
+	appFs = afero.NewBasePathFs(afero.NewOsFs(), cfg.basePath)
+	handler := newServerHandler(cfg.clientHost)
 
-	serveRequests(":443", certLoc, keyLoc, clientHost)
+	log.Println("handling requests initiated")
+	log.Fatal(http.ListenAndServeTLS(":443", cfg.certLoc, cfg.keyLoc, handler))
 }

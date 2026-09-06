@@ -99,17 +99,25 @@ export const addUint8ArrayToZip = (
   bytes: Uint8Array
 ) => writer.add(relativePath, new Uint8ArrayReader(bytes), zipOptions);
 
+/**
+ * Reads entries from a ZIP file and calls `onReadEntry` for each read file.
+ *
+ * @throws {Error} If the ZIP cannot be read, including when `zip.js`
+ * rejects unsafe entries with `ERR_UNSAFE_FILENAME`.
+ */
 export const readZipEntriesFromBlob = async (
   zipFile: File,
   onReadEntry: (entry: Entry) => Promise<void>
 ) => {
   const reader = new ZipReader(new BlobReader(zipFile));
 
-  const entries = await reader.getEntries();
+  try {
+    const entries = await reader.getEntries();
 
-  await Promise.allSettled(entries.map(onReadEntry));
-
-  await reader.close();
+    await Promise.allSettled(entries.map(onReadEntry));
+  } finally {
+    await reader.close();
+  }
 };
 
 export const readFileFromZipEntry = async (entry: FileEntry) => {
