@@ -63,6 +63,12 @@ server {
     access_log  /var/log/nginx/access_log.log custom;
     error_log  /var/log/nginx/error_log.log warn;
 
+    location = /cloud-sync-auth.html {
+        add_header Referrer-Policy no-referrer always;
+
+        root   /var/www;
+    }
+
     location / {
         add_header Cross-Origin-Opener-Policy same-origin always;
         add_header Cross-Origin-Embedder-Policy require-corp always;

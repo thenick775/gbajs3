@@ -26,6 +26,7 @@ import {
   BiBrain,
   BiRefresh,
   BiDownload,
+  BiCloud,
   BiX
 } from 'react-icons/bi';
 import { MdImportExport } from 'react-icons/md';
@@ -188,6 +189,7 @@ export const NavigationMenu = () => {
   const isEmulatorReady = !!emulator;
   const isMenuItemDisabledByAuth = !isAuthenticated();
   const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
+  const hasGoogleClientId = !!import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const hasNoLocalRoms = isEmulatorReady && !emulator.listRoms().length;
 
   useShowLoadPublicRoms();
@@ -422,6 +424,16 @@ export const NavigationMenu = () => {
               }}
             />
           </NavComponent>
+
+          <NavLeaf
+            title="Cloud Sync"
+            icon={<BiCloud />}
+            $disabled={!hasGoogleClientId || !isEmulatorReady}
+            onClick={() => {
+              openModal({ type: 'cloudSync' });
+            }}
+            $withPadding
+          />
 
           <NavLeaf
             title="Import/Export"
