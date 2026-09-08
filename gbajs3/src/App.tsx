@@ -11,6 +11,7 @@ import { Screen } from './components/screen/screen.tsx';
 import { AppErrorBoundary } from './components/shared/error-boundary.tsx';
 import { ToasterWithDefaults } from './components/toast/toaster.tsx';
 import { AuthProvider } from './context/auth/auth-provider.tsx';
+import { CloudSyncProvider } from './context/cloud-sync/cloud-sync-provider.tsx';
 import { EmulatorContextProvider } from './context/emulator/emulator-context-provider.tsx';
 import { InitialBoundsProvider } from './context/initial-bounds/initial-bounds-provider.tsx';
 import { LayoutProvider } from './context/layout/layout-provider.tsx';
@@ -27,22 +28,24 @@ export const App = () => (
       <ToasterWithDefaults />
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <EmulatorContextProvider>
-            <InitialBoundsProvider>
-              <LayoutProvider>
-                <ModalProvider>
-                  <main>
-                    <PwaPrompt />
-                    <NavigationMenu />
-                    <Screen />
-                    <ControlPanel />
-                    <VirtualControls />
-                    <ModalContainer />
-                  </main>
-                </ModalProvider>
-              </LayoutProvider>
-            </InitialBoundsProvider>
-          </EmulatorContextProvider>
+          <CloudSyncProvider>
+            <EmulatorContextProvider>
+              <InitialBoundsProvider>
+                <LayoutProvider>
+                  <ModalProvider>
+                    <main>
+                      <PwaPrompt />
+                      <NavigationMenu />
+                      <Screen />
+                      <ControlPanel />
+                      <VirtualControls />
+                      <ModalContainer />
+                    </main>
+                  </ModalProvider>
+                </LayoutProvider>
+              </InitialBoundsProvider>
+            </EmulatorContextProvider>
+          </CloudSyncProvider>
         </AuthProvider>
       </QueryClientProvider>
     </AppErrorBoundary>

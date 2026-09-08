@@ -2,7 +2,6 @@ import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import {
   ERR_UNSAFE_FILENAME,
-  BlobWriter,
   TextReader,
   ZipWriter,
   ZipReader,
@@ -13,6 +12,7 @@ import {
 } from '@zip.js/zip.js';
 import { describe, expect, it, vi } from 'vitest';
 
+import * as blobUtils from './file-utilities/blob.ts';
 import * as zipUtils from './file-utilities/zip.ts';
 import { ImportExportModal } from './import-export.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
@@ -312,19 +312,13 @@ describe('<ImportExportModal />', () => {
   it('exports emulator file system to a zip', async () => {
     vi.setSystemTime(Date.UTC(2025, 0, 1, 8, 0, 0));
 
-    const finalizeSpy = vi.fn();
     const generateExportZipNameSpy = vi.spyOn(
       zipUtils,
       'generateExportZipName'
     );
-    const setupZipTargetSpy = vi
-      .spyOn(zipUtils, 'setupZipTarget')
-      .mockImplementation(() =>
-        Promise.resolve({
-          writer: new ZipWriter<Blob>(new BlobWriter('application/zip')),
-          finalize: finalizeSpy
-        })
-      );
+    const downloadBlobSpy = vi
+      .spyOn(blobUtils, 'downloadBlob')
+      .mockImplementation((_, blob) => blob);
     const addUint8ArrayToZipSpy = vi.spyOn(zipUtils, 'addUint8ArrayToZip');
     const addLocalStorageToZipSpy = vi.spyOn(zipUtils, 'addLocalStorageToZip');
     const listAllFilesSpy: () => FileNode = vi.fn(
@@ -351,14 +345,12 @@ describe('<ImportExportModal />', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Export' }));
 
-    expect(generateExportZipNameSpy).toHaveBeenCalledOnce();
-    expect(setupZipTargetSpy).toHaveBeenCalledWith(
-      'gbajs-files-2025-01-01-08-00-00.zip',
-      zipUtils.zipOptions
-    );
-
     await waitFor(() => {
-      expect(finalizeSpy).toHaveBeenCalledOnce();
+      expect(generateExportZipNameSpy).toHaveBeenCalledOnce();
+      expect(downloadBlobSpy).toHaveBeenCalledWith(
+        'gbajs-files-2025-01-01-08-00-00.zip',
+        expect.any(Blob)
+      );
     });
 
     expect(addUint8ArrayToZipSpy).toHaveBeenCalledTimes(3);

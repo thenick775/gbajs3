@@ -1,6 +1,7 @@
 import { useContext, type Context } from 'react';
 
 import { AuthContext } from '../context/auth/auth-context.tsx';
+import { CloudSyncContext } from '../context/cloud-sync/cloud-sync-context.tsx';
 import { DragContext } from '../context/emulator/contexts/drag-context.tsx';
 import { EmulatorContext } from '../context/emulator/contexts/emulator-context.tsx';
 import { ResizeContext } from '../context/emulator/contexts/resize-context.tsx';
@@ -25,6 +26,9 @@ const useLoadContext = <T,>(context: Context<T>) => {
 
 // auth
 export const useAuthContext = () => useLoadContext(AuthContext);
+
+// cloud sync
+export const useCloudSyncContext = () => useLoadContext(CloudSyncContext);
 
 // initial bounds
 export const useInitialBoundsContext = () =>

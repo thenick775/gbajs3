@@ -26,6 +26,8 @@ declare global {
 }
 
 /*! coi-serviceworker v0.1.7 - Guido Zuidhof and contributors, licensed under MIT */
+const cloudSyncAuthPath = 'cloud-sync-auth.html';
+
 let coepCredentialless = false;
 if (typeof window === 'undefined') {
   self.addEventListener('install', () => self.skipWaiting());
@@ -55,6 +57,11 @@ if (typeof window === 'undefined') {
   self.addEventListener('fetch', function (event) {
     const r = event.request;
     if (r.cache === 'only-if-cached' && r.mode !== 'same-origin') {
+      return;
+    }
+
+    if (new URL(r.url).pathname.endsWith(`/${cloudSyncAuthPath}`)) {
+      event.respondWith(fetch(r));
       return;
     }
 
