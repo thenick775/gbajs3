@@ -176,6 +176,10 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: true,
       rolldownOptions: {
+        input: {
+          main: 'index.html',
+          cloudSyncAuth: cloudSyncAuthPath
+        },
         output: {
           codeSplitting: {
             groups: [

@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 
 import { CloudSyncContext } from './cloud-sync-context.tsx';
 
@@ -18,39 +18,17 @@ const getValidGoogleDriveToken = (token: MemoryToken | null) => {
 };
 
 export const CloudSyncProvider = ({ children }: CloudSyncProviderProps) => {
-  const [googleDriveToken, setGoogleDriveToken] =
-    useState<MemoryToken | null>(null);
-
-  const clearGoogleDriveToken = useCallback(() => {
-    setGoogleDriveToken(null);
-  }, []);
-
-  const getGoogleDriveAccessToken = useCallback(
-    (token = googleDriveToken) => {
-      const validToken = getValidGoogleDriveToken(token);
-      if (!validToken) {
-        setGoogleDriveToken(null);
-        return null;
-      }
-
-      return validToken.accessToken;
-    },
-    [googleDriveToken]
+  const [googleDriveToken, setGoogleDriveToken] = useState<MemoryToken | null>(
+    null
   );
-
-  const isGoogleDriveConnected = useCallback(
-    () => !!getValidGoogleDriveToken(googleDriveToken),
-    [googleDriveToken]
-  );
+  const googleDriveAccessToken =
+    getValidGoogleDriveToken(googleDriveToken)?.accessToken ?? null;
 
   return (
     <CloudSyncContext.Provider
       value={{
-        googleDriveToken,
+        googleDriveAccessToken,
         setGoogleDriveToken,
-        clearGoogleDriveToken,
-        getGoogleDriveAccessToken,
-        isGoogleDriveConnected
       }}
     >
       {children}

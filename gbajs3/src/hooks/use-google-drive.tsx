@@ -5,6 +5,8 @@ import {
   type UseQueryOptions
 } from '@tanstack/react-query';
 
+import { useCloudSyncContext } from './context.tsx';
+
 import type { MemoryToken } from '../context/cloud-sync/cloud-sync-context.tsx';
 
 type DriveFile = {
@@ -38,7 +40,7 @@ type GoogleApiErrorResponse = {
   };
 };
 
-export type CloudBackup = {
+type CloudBackup = {
   id: string;
   name: string;
   createdAt: string;
@@ -47,18 +49,16 @@ export type CloudBackup = {
 };
 
 type PushGoogleDriveBackupProps = {
-  accessToken: string;
   backup: Blob;
   name: string;
 };
 
 type PullGoogleDriveBackupProps = {
-  accessToken: string;
   backupId: string;
+  name: string;
 };
 
 type DeleteGoogleDriveBackupProps = {
-  accessToken: string;
   backupId: string;
 };
 
@@ -71,8 +71,7 @@ const cloudBackupNameRegex = new RegExp(
   `^${cloudBackupFilePrefix}-(\\d{4}-\\d{2}-\\d{2}T\\d{2}-\\d{2}-\\d{2}Z)\\${cloudBackupFileExtension}$`
 );
 
-export const googleDriveLabel = 'Google Drive';
-export const googleDriveBackupsQueryKey = (accessToken?: string | null) => [
+const googleDriveBackupsQueryKey = (accessToken?: string | null) => [
   'googleDriveBackups',
   accessToken
 ];
@@ -83,7 +82,7 @@ export const generateCloudBackupName = (date = new Date()) =>
     .slice(0, 19)
     .replace(/:/g, '-')}Z${cloudBackupFileExtension}`;
 
-export const sortCloudBackupsNewestFirst = <T extends { createdAt: string }>(
+const sortCloudBackupsNewestFirst = <T extends { createdAt: string }>(
   backups: T[]
 ) =>
   backups.toSorted(
@@ -180,7 +179,6 @@ export const useConnectGoogleDrive = (
           `${import.meta.env.BASE_URL}cloud-sync-auth.html`,
           window.location.href
         );
-        helperUrl.searchParams.set('client_id', clientId);
         helperUrl.searchParams.set('state', state);
 
         const cleanup = () => {
@@ -236,15 +234,15 @@ export const useConnectGoogleDrive = (
   });
 
 export const useGoogleDriveBackups = (
-  accessToken: string | null,
   options?: UseQueryOptions<CloudBackup[]>
 ) => {
+  const { googleDriveAccessToken } = useCloudSyncContext();
   const { enabled = true, ...queryOptions } = options ?? {};
 
   return useQuery<CloudBackup[]>({
-    queryKey: googleDriveBackupsQueryKey(accessToken),
+    queryKey: googleDriveBackupsQueryKey(googleDriveAccessToken),
     queryFn: async () => {
-      if (!accessToken) throw new Error('Connect Google Drive first');
+      if (!googleDriveAccessToken) throw new Error('Connect Google Drive first');
 
       const url = new URL(driveApiBaseUrl);
       url.searchParams.set('spaces', 'appDataFolder');
@@ -255,7 +253,7 @@ export const useGoogleDriveBackups = (
       url.searchParams.set('pageSize', '100');
 
       const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${accessToken}` }
+        headers: { Authorization: `Bearer ${googleDriveAccessToken}` }
       });
       await assertOk(res, 'Listing Google Drive backups');
 
@@ -266,17 +264,19 @@ export const useGoogleDriveBackups = (
 
       return sortCloudBackupsNewestFirst(backups);
     },
-    enabled: !!accessToken && enabled,
+    enabled: !!googleDriveAccessToken && enabled,
     ...queryOptions
   });
 };
 
 export const usePushGoogleDriveBackup = (
   options?: UseMutationOptions<CloudBackup, Error, PushGoogleDriveBackupProps>
-) =>
-  useMutation<CloudBackup, Error, PushGoogleDriveBackupProps>({
+) => {
+  const { googleDriveAccessToken } = useCloudSyncContext();
+
+  return useMutation<CloudBackup, Error, PushGoogleDriveBackupProps>({
     mutationKey: ['googleDrivePushBackup'],
-    mutationFn: async ({ accessToken, backup, name }) => {
+    mutationFn: async ({ backup, name }) => {
       const metadata = {
         name,
         parents: ['appDataFolder'],
@@ -290,7 +290,7 @@ export const usePushGoogleDriveBackup = (
       const res = await fetch(url, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${googleDriveAccessToken}`,
           'Content-Type': `multipart/related; boundary=${boundary}`
         },
         body
@@ -306,18 +306,21 @@ export const usePushGoogleDriveBackup = (
     },
     ...options
   });
+};
 
 export const usePullGoogleDriveBackup = (
   options?: UseMutationOptions<Blob, Error, PullGoogleDriveBackupProps>
-) =>
-  useMutation<Blob, Error, PullGoogleDriveBackupProps>({
+) => {
+  const { googleDriveAccessToken } = useCloudSyncContext();
+
+  return useMutation<Blob, Error, PullGoogleDriveBackupProps>({
     mutationKey: ['googleDrivePullBackup'],
-    mutationFn: async ({ accessToken, backupId }) => {
+    mutationFn: async ({ backupId }) => {
       const url = new URL(`${driveApiBaseUrl}/${backupId}`);
       url.searchParams.set('alt', 'media');
 
       const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${accessToken}` }
+        headers: { Authorization: `Bearer ${googleDriveAccessToken}` }
       });
       await assertOk(res, 'Downloading Google Drive backup');
 
@@ -325,16 +328,19 @@ export const usePullGoogleDriveBackup = (
     },
     ...options
   });
+};
 
 export const useDeleteGoogleDriveBackup = (
   options?: UseMutationOptions<Response, Error, DeleteGoogleDriveBackupProps>
-) =>
-  useMutation<Response, Error, DeleteGoogleDriveBackupProps>({
+) => {
+  const { googleDriveAccessToken } = useCloudSyncContext();
+
+  return useMutation<Response, Error, DeleteGoogleDriveBackupProps>({
     mutationKey: ['googleDriveDeleteBackup'],
-    mutationFn: async ({ accessToken, backupId }) => {
+    mutationFn: async ({ backupId }) => {
       const res = await fetch(`${driveApiBaseUrl}/${backupId}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${accessToken}` }
+        headers: { Authorization: `Bearer ${googleDriveAccessToken}` }
       });
 
       await assertOk(res, 'Deleting Google Drive backup');
@@ -343,3 +349,4 @@ export const useDeleteGoogleDriveBackup = (
     },
     ...options
   });
+};

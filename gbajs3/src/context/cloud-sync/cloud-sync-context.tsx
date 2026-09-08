@@ -6,11 +6,8 @@ export type MemoryToken = {
 };
 
 export type CloudSyncContextProps = {
-  googleDriveToken: MemoryToken | null;
-  setGoogleDriveToken: (token: MemoryToken | null) => void;
-  clearGoogleDriveToken: () => void;
-  getGoogleDriveAccessToken: (token?: MemoryToken | null) => string | null;
-  isGoogleDriveConnected: () => boolean;
+  googleDriveAccessToken: string | null;
+  setGoogleDriveToken: (token: MemoryToken) => void;
 };
 
 export const CloudSyncContext = createContext<CloudSyncContextProps | null>(

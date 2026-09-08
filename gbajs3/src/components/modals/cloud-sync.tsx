@@ -1,11 +1,9 @@
 import { Button, Divider, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
 import { BiError, BiTrash } from 'react-icons/bi';
 
 import {
   createFilesystemBackupBlob,
-  deleteFilesystemFiles,
   importZipToEmulatorFs
 } from './file-utilities/filesystem-backup.ts';
 import { ModalBody } from './modal-body.tsx';
@@ -20,7 +18,6 @@ import { useAddCallbacks } from '../../hooks/emulator/use-add-callbacks.tsx';
 import { useWriteFileToEmulator } from '../../hooks/emulator/use-write-file-to-emulator.tsx';
 import {
   generateCloudBackupName,
-  googleDriveLabel,
   useConnectGoogleDrive,
   useDeleteGoogleDriveBackup,
   useGoogleDriveBackups,
@@ -110,85 +107,57 @@ const formatDate = (date: string) =>
     timeStyle: 'short'
   }).format(new Date(date));
 
-const missingGoogleDriveTokenError = 'Connect Google Drive first';
-
 export const CloudSyncModal = () => {
   const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
   const writeFileToEmulator = useWriteFileToEmulator();
-  const connectGoogleDrive = useConnectGoogleDrive();
-  const pushGoogleDriveBackup = usePushGoogleDriveBackup();
-  const pullGoogleDriveBackup = usePullGoogleDriveBackup();
-  const deleteGoogleDriveBackup = useDeleteGoogleDriveBackup();
-  const {
-    googleDriveToken,
-    setGoogleDriveToken,
-    getGoogleDriveAccessToken,
-    isGoogleDriveConnected
-  } = useCloudSyncContext();
-  const [localError, setLocalError] = useState<string | null>(null);
-  const hasGoogleClientId = !!import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const isConnected = isGoogleDriveConnected();
-  const accessToken = isConnected ? (googleDriveToken?.accessToken ?? null) : null;
-  const googleDriveBackups = useGoogleDriveBackups(accessToken);
+  const { googleDriveAccessToken, setGoogleDriveToken } = useCloudSyncContext();
+  const googleDriveBackups = useGoogleDriveBackups();
+  const connectGoogleDrive = useConnectGoogleDrive({
+    onSuccess: setGoogleDriveToken
+  });
+  const pushGoogleDriveBackup = usePushGoogleDriveBackup({
+    onSuccess: () => void googleDriveBackups.refetch()
+  });
+  const pullGoogleDriveBackup = usePullGoogleDriveBackup({
+    onSuccess: async (backupBlob, { name }) => {
+      const backupFile = new File([backupBlob], name, {
+        type: 'application/zip'
+      });
+      emulator?.clearFilesystem();
+      await importZipToEmulatorFs(backupFile, writeFileToEmulator);
+      await syncActionIfEnabled();
+    }
+  });
+  const deleteGoogleDriveBackup = useDeleteGoogleDriveBackup({
+    onSuccess: () => void googleDriveBackups.refetch()
+  });
   const backups = googleDriveBackups.data ?? [];
 
   const error =
-    localError ??
     connectGoogleDrive.error?.message ??
     googleDriveBackups.error?.message ??
     pushGoogleDriveBackup.error?.message ??
     pullGoogleDriveBackup.error?.message ??
     deleteGoogleDriveBackup.error?.message;
 
-  const resetErrors = () => {
-    setLocalError(null);
-    connectGoogleDrive.reset();
-    pushGoogleDriveBackup.reset();
-    pullGoogleDriveBackup.reset();
-    deleteGoogleDriveBackup.reset();
-  };
-
   const createBackup = async () => {
-    resetErrors();
-
-    try {
-      const accessToken = getGoogleDriveAccessToken();
-      if (!accessToken) {
-        setLocalError(missingGoogleDriveTokenError);
-        return;
-      }
-
-      const backupBlob = await createFilesystemBackupBlob(emulator);
-      await pushGoogleDriveBackup.mutateAsync({
-        accessToken,
-        backup: backupBlob,
-        name: generateCloudBackupName()
-      });
-      await googleDriveBackups.refetch();
-    } catch (error) {
-      if (!pushGoogleDriveBackup.error)
-        setLocalError(
-          error instanceof Error ? error.message : 'Pushing backup failed'
-        );
-    }
+    const backupBlob = await createFilesystemBackupBlob(emulator);
+    pushGoogleDriveBackup.mutate({
+      backup: backupBlob,
+      name: generateCloudBackupName()
+    });
   };
 
   return (
     <>
       <ModalHeader title="Cloud Sync" />
       <ModalBody>
-        <Copy>Provider: {googleDriveLabel}</Copy>
-        {!hasGoogleClientId && (
-          <ErrorWithIcon
-            icon={<BiError />}
-            text="Google Drive is not configured. Set VITE_GOOGLE_CLIENT_ID."
-          />
-        )}
+        <Copy>Google Drive</Copy>
         {error && <ErrorWithIcon icon={<BiError />} text={error} />}
         <Divider flexItem sx={{ margin: '10px 0' }} />
-        {isConnected ? (
+        {googleDriveAccessToken ? (
           <>
             <BackupList aria-label="Cloud Backups">
               {backups.map((backup) => {
@@ -199,7 +168,7 @@ export const CloudSyncModal = () => {
                     <BackupActions>
                       <BackupButton
                         type="button"
-                        onClick={async () => {
+                        onClick={() => {
                           if (
                             !window.confirm(
                               'Pulling this backup will replace local files. Continue?'
@@ -207,41 +176,10 @@ export const CloudSyncModal = () => {
                           )
                             return;
 
-                          resetErrors();
-
-                          try {
-                            const accessToken = getGoogleDriveAccessToken();
-                            if (!accessToken) {
-                              setLocalError(missingGoogleDriveTokenError);
-                              return;
-                            }
-
-                            const backupBlob =
-                              await pullGoogleDriveBackup.mutateAsync({
-                                accessToken,
-                                backupId: backup.id
-                              });
-                            const backupFile = new File(
-                              [backupBlob],
-                              backup.name,
-                              {
-                                type: 'application/zip'
-                              }
-                            );
-                            deleteFilesystemFiles(emulator);
-                            await importZipToEmulatorFs(
-                              backupFile,
-                              writeFileToEmulator
-                            );
-                            await syncActionIfEnabled();
-                          } catch (error) {
-                            if (!pullGoogleDriveBackup.error)
-                              setLocalError(
-                                error instanceof Error
-                                  ? error.message
-                                  : 'Pulling backup failed'
-                              );
-                          }
+                          pullGoogleDriveBackup.mutate({
+                            backupId: backup.id,
+                            name: backup.name
+                          });
                         }}
                       >
                         {formatDate(backup.createdAt)}
@@ -251,31 +189,12 @@ export const CloudSyncModal = () => {
                       </BackupButton>
                       <IconButton
                         aria-label={`Delete ${backup.name}`}
-                        onClick={async () => {
+                        onClick={() => {
                           if (!window.confirm(`Delete ${backup.name}?`)) return;
 
-                          resetErrors();
-
-                          try {
-                            const accessToken = getGoogleDriveAccessToken();
-                            if (!accessToken) {
-                              setLocalError(missingGoogleDriveTokenError);
-                              return;
-                            }
-
-                            await deleteGoogleDriveBackup.mutateAsync({
-                              accessToken,
-                              backupId: backup.id
-                            });
-                            await googleDriveBackups.refetch();
-                          } catch (error) {
-                            if (!deleteGoogleDriveBackup.error)
-                              setLocalError(
-                                error instanceof Error
-                                  ? error.message
-                                  : 'Deleting backup failed'
-                              );
-                          }
+                          deleteGoogleDriveBackup.mutate({
+                            backupId: backup.id
+                          });
                         }}
                       >
                         <StyledBiTrash />
@@ -299,7 +218,7 @@ export const CloudSyncModal = () => {
               aria-label="Create new cloud backup"
               disabled={pushGoogleDriveBackup.isPending}
               sx={{ padding: 0, marginTop: '10px' }}
-              onClick={createBackup}
+              onClick={() => void createBackup()}
             >
               <StyledBiPlus />
             </IconButton>
@@ -309,26 +228,13 @@ export const CloudSyncModal = () => {
         )}
       </ModalBody>
       <ModalFooter>
-        {!isConnected ? (
+        {!googleDriveAccessToken ? (
           <Button
             variant="contained"
-            onClick={async () => {
-              resetErrors();
-
-              try {
-                const token = await connectGoogleDrive.mutateAsync();
-                setGoogleDriveToken(token);
-              } catch (error) {
-                if (!connectGoogleDrive.error)
-                  setLocalError(
-                    error instanceof Error
-                      ? error.message
-                      : 'Google Drive connection failed'
-                  );
-              }
+            onClick={() => {
+              connectGoogleDrive.mutate();
             }}
             loading={connectGoogleDrive.isPending}
-            disabled={!hasGoogleClientId}
           >
             Connect Google Drive
           </Button>
@@ -337,7 +243,6 @@ export const CloudSyncModal = () => {
             <Button
               variant="outlined"
               onClick={() => {
-                resetErrors();
                 void googleDriveBackups.refetch();
               }}
               loading={googleDriveBackups.isFetching}
