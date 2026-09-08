@@ -22,12 +22,6 @@ const flattenFiles = (node?: FileNode): string[] =>
           : (node.children ?? []).flatMap(flattenFiles))
       ];
 
-export const deleteFilesystemFiles = (emulator: GBAEmulator | null) => {
-  flattenFiles(emulator?.listAllFiles()).forEach((path) => {
-    emulator?.deleteFile(path);
-  });
-};
-
 export const createFilesystemBackupBlob = async (
   emulator: GBAEmulator | null
 ): Promise<Blob> => {
