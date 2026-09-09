@@ -346,12 +346,13 @@ describe('<ImportExportModal />', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Export' }));
 
     await waitFor(() => {
-      expect(generateExportZipNameSpy).toHaveBeenCalledOnce();
       expect(downloadBlobSpy).toHaveBeenCalledWith(
         'gbajs-files-2025-01-01-08-00-00.zip',
         expect.any(Blob)
       );
     });
+
+    expect(generateExportZipNameSpy).toHaveBeenCalledOnce();
 
     expect(addUint8ArrayToZipSpy).toHaveBeenCalledTimes(3);
 
