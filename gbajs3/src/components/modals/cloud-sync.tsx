@@ -1,6 +1,8 @@
 import { Button, Divider, IconButton } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
+import { useState } from 'react';
 import { BiError, BiTrash } from 'react-icons/bi';
+import { BeatLoader } from 'react-spinners';
 
 import {
   createFilesystemBackupBlob,
@@ -37,6 +39,21 @@ const BackupList = styled('ul')`
   border: 1px solid ${({ theme }) => theme.modalListBorder};
   border-radius: 10px;
   overflow: hidden;
+`;
+
+const BackupListWrapper = styled('div')`
+  position: relative;
+`;
+
+const BackupListOverlay = styled('div')`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${({ theme }) => `${theme.modalContainerSurface}99`};
+  border-radius: 10px;
+  z-index: 1;
 `;
 
 const BackupListItem = styled('li')`
@@ -108,6 +125,7 @@ const formatDate = (date: string) =>
   }).format(new Date(date));
 
 export const CloudSyncModal = () => {
+  const theme = useTheme();
   const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
@@ -117,9 +135,7 @@ export const CloudSyncModal = () => {
   const connectGoogleDrive = useConnectGoogleDrive({
     onSuccess: setGoogleDriveToken
   });
-  const pushGoogleDriveBackup = usePushGoogleDriveBackup({
-    onSuccess: () => void googleDriveBackups.refetch()
-  });
+  const pushGoogleDriveBackup = usePushGoogleDriveBackup();
   const pullGoogleDriveBackup = usePullGoogleDriveBackup({
     onSuccess: async (backupBlob, { name }) => {
       const backupFile = new File([backupBlob], name, {
@@ -133,7 +149,12 @@ export const CloudSyncModal = () => {
   const deleteGoogleDriveBackup = useDeleteGoogleDriveBackup({
     onSuccess: () => void googleDriveBackups.refetch()
   });
+  const [isCreatingFilesystemBackup, setIsCreatingFilesystemBackup] =
+    useState(false);
   const backups = googleDriveBackups.data ?? [];
+  const isCreatingBackup =
+    isCreatingFilesystemBackup || pushGoogleDriveBackup.isPending;
+  const isBackupListBusy = isCreatingBackup || pullGoogleDriveBackup.isPending;
 
   const error =
     connectGoogleDrive.error?.message ??
@@ -143,11 +164,19 @@ export const CloudSyncModal = () => {
     deleteGoogleDriveBackup.error?.message;
 
   const createBackup = async () => {
-    const backupBlob = await createFilesystemBackupBlob(emulator);
-    pushGoogleDriveBackup.mutate({
-      backup: backupBlob,
-      name: generateCloudBackupName()
-    });
+    setIsCreatingFilesystemBackup(true);
+
+    try {
+      const backupBlob = await createFilesystemBackupBlob(emulator);
+      setIsCreatingFilesystemBackup(false);
+      await pushGoogleDriveBackup.mutateAsync({
+        backup: backupBlob,
+        name: generateCloudBackupName()
+      });
+      await googleDriveBackups.refetch();
+    } finally {
+      setIsCreatingFilesystemBackup(false);
+    }
   };
 
   return (
@@ -159,66 +188,71 @@ export const CloudSyncModal = () => {
         <Divider flexItem sx={{ margin: '10px 0' }} />
         {googleDriveAccessToken ? (
           <>
-            <BackupList aria-label="Cloud Backups">
-              {backups.map((backup) => {
-                const size = formatBytes(backup.size);
+            <BackupListWrapper>
+              <BackupList aria-label="Cloud Backups">
+                {backups.map((backup) => {
+                  const size = formatBytes(backup.size);
 
-                return (
-                  <BackupListItem key={backup.id}>
-                    <BackupActions>
-                      <BackupButton
-                        type="button"
-                        onClick={() => {
-                          if (
-                            !window.confirm(
-                              'Pulling this backup will replace local files. Continue?'
+                  return (
+                    <BackupListItem key={backup.id}>
+                      <BackupActions>
+                        <BackupButton
+                          type="button"
+                          onClick={() => {
+                            if (
+                              !window.confirm(
+                                'Pulling this backup will replace local files. Continue?'
+                              )
                             )
-                          )
-                            return;
+                              return;
 
-                          pullGoogleDriveBackup.mutate({
-                            backupId: backup.id,
-                            name: backup.name
-                          });
-                        }}
-                      >
-                        {formatDate(backup.createdAt)}
-                        <BackupMeta>
-                          {size ? `${size} | ${backup.name}` : backup.name}
-                        </BackupMeta>
-                      </BackupButton>
-                      <IconButton
-                        aria-label={`Delete ${backup.name}`}
-                        onClick={() => {
-                          if (!window.confirm(`Delete ${backup.name}?`)) return;
+                            pullGoogleDriveBackup.mutate({
+                              backupId: backup.id,
+                              name: backup.name
+                            });
+                          }}
+                        >
+                          {formatDate(backup.createdAt)}
+                          <BackupMeta>
+                            {backup.name} <br /> {size}
+                          </BackupMeta>
+                        </BackupButton>
+                        <IconButton
+                          aria-label={`Delete ${backup.name}`}
+                          onClick={() => {
+                            if (!window.confirm(`Delete ${backup.name}?`))
+                              return;
 
-                          deleteGoogleDriveBackup.mutate({
-                            backupId: backup.id
-                          });
-                        }}
-                      >
-                        <StyledBiTrash />
-                      </IconButton>
-                    </BackupActions>
+                            deleteGoogleDriveBackup.mutate({
+                              backupId: backup.id
+                            });
+                          }}
+                        >
+                          <StyledBiTrash />
+                        </IconButton>
+                      </BackupActions>
+                    </BackupListItem>
+                  );
+                })}
+                {!googleDriveBackups.isLoading && !backups.length && (
+                  <BackupListItem>
+                    <EmptyState>No cloud backups yet.</EmptyState>
                   </BackupListItem>
-                );
-              })}
-              {googleDriveBackups.isLoading && (
-                <BackupListItem>
-                  <EmptyState>Loading cloud backups...</EmptyState>
-                </BackupListItem>
+                )}
+              </BackupList>
+              {isBackupListBusy && (
+                <BackupListOverlay>
+                  <BeatLoader color={theme.gbaThemeBlue} margin={3} size={7} />
+                </BackupListOverlay>
               )}
-              {!googleDriveBackups.isLoading && !backups.length && (
-                <BackupListItem>
-                  <EmptyState>No cloud backups yet.</EmptyState>
-                </BackupListItem>
-              )}
-            </BackupList>
+            </BackupListWrapper>
             <IconButton
               aria-label="Create new cloud backup"
-              disabled={pushGoogleDriveBackup.isPending}
+              disabled={isBackupListBusy}
               sx={{ padding: 0, marginTop: '10px' }}
-              onClick={() => void createBackup()}
+              onClick={() => {
+                void createBackup();
+              }}
             >
               <StyledBiPlus />
             </IconButton>
@@ -245,6 +279,7 @@ export const CloudSyncModal = () => {
               onClick={() => {
                 void googleDriveBackups.refetch();
               }}
+              disabled={isBackupListBusy}
               loading={googleDriveBackups.isFetching}
             >
               Refresh
