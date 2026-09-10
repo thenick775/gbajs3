@@ -215,7 +215,6 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
 
         if (mGBA.FS.isDir(mode)) {
           recursiveDelete(currPath);
-          mGBA.FS.rmdir(currPath);
         } else {
           mGBA.FS.unlink(currPath);
         }

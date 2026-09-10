@@ -65,10 +65,9 @@ type DeleteGoogleDriveBackupProps = {
 const driveAppDataScope = 'https://www.googleapis.com/auth/drive.appdata';
 const driveApiBaseUrl = 'https://www.googleapis.com/drive/v3/files';
 const driveUploadBaseUrl = 'https://www.googleapis.com/upload/drive/v3/files';
-const cloudBackupFilePrefix = 'gbajs3-backup';
 const cloudBackupFileExtension = '.zip';
 const cloudBackupNameRegex = new RegExp(
-  `^${cloudBackupFilePrefix}-(\\d{4}-\\d{2}-\\d{2}T\\d{2}-\\d{2}-\\d{2}Z)\\${cloudBackupFileExtension}$`
+  `^.*(\\d{4}-\\d{2}-\\d{2}T\\d{2}-\\d{2}-\\d{2}Z)\\${cloudBackupFileExtension}$`
 );
 
 const googleDriveBackupsQueryKey = (accessToken?: string | null) => [
@@ -77,7 +76,7 @@ const googleDriveBackupsQueryKey = (accessToken?: string | null) => [
 ];
 
 export const generateCloudBackupName = (date = new Date()) =>
-  `${cloudBackupFilePrefix}-${date
+  `${date
     .toISOString()
     .slice(0, 19)
     .replace(/:/g, '-')}Z${cloudBackupFileExtension}`;
@@ -242,7 +241,8 @@ export const useGoogleDriveBackups = (
   return useQuery<CloudBackup[]>({
     queryKey: googleDriveBackupsQueryKey(googleDriveAccessToken),
     queryFn: async () => {
-      if (!googleDriveAccessToken) throw new Error('Connect Google Drive first');
+      if (!googleDriveAccessToken)
+        throw new Error('Connect Google Drive first');
 
       const url = new URL(driveApiBaseUrl);
       url.searchParams.set('spaces', 'appDataFolder');
