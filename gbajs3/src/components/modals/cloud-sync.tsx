@@ -1,4 +1,4 @@
-import { Button, Divider, IconButton } from '@mui/material';
+import { Button, Checkbox, Divider, IconButton } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { BiError, BiTrash } from 'react-icons/bi';
@@ -66,25 +66,19 @@ const BackupListItem = styled('li')`
 
 const BackupActions = styled('div')`
   display: grid;
-  grid-template-columns: 1fr 36px;
+  grid-template-columns: 40px minmax(0, 1fr) 36px;
   align-items: center;
 `;
 
-const BackupButton = styled('button')`
+const BackupDetails = styled('div')`
   width: 100%;
-  padding: 0.875rem 1rem;
+  min-width: 0;
+  padding: 0.75rem 0.5rem;
   text-align: left;
-  cursor: pointer;
   color: ${({ theme }) => theme.modalTextPrimary};
   background-color: transparent;
-  border: 0;
-  font: inherit;
+  font-size: 1rem;
   line-height: 1.35;
-
-  &:hover,
-  &:focus-visible {
-    background-color: ${({ theme }) => theme.modalListItemHoverSurface};
-  }
 `;
 
 const BackupMeta = styled('span')`
@@ -105,9 +99,7 @@ const EmptyState = styled(Copy)`
   color: ${({ theme }) => theme.modalTextSecondary};
 `;
 
-const formatBytes = (bytes?: number) => {
-  if (!bytes) return null;
-
+const formatBytes = (bytes: number) => {
   const units = ['B', 'KiB', 'MiB', 'GiB'];
   const exponent = Math.min(
     Math.floor(Math.log(bytes) / Math.log(1024)),
@@ -151,7 +143,10 @@ export const CloudSyncModal = () => {
   });
   const [isCreatingFilesystemBackup, setIsCreatingFilesystemBackup] =
     useState(false);
+  const [selectedBackupId, setSelectedBackupId] = useState<string | null>(null);
   const backups = googleDriveBackups.data ?? [];
+  const selectedBackup =
+    backups.find((backup) => backup.id === selectedBackupId) ?? null;
   const isCreatingBackup =
     isCreatingFilesystemBackup || pushGoogleDriveBackup.isPending;
   const isBackupListBusy = isCreatingBackup || pullGoogleDriveBackup.isPending;
@@ -179,6 +174,15 @@ export const CloudSyncModal = () => {
     }
   };
 
+  const restoreSelectedBackup = () => {
+    if (!selectedBackup) return;
+
+    pullGoogleDriveBackup.mutate({
+      backupId: selectedBackup.id,
+      name: selectedBackup.name
+    });
+  };
+
   return (
     <>
       <ModalHeader title="Cloud Sync" />
@@ -196,27 +200,19 @@ export const CloudSyncModal = () => {
                   return (
                     <BackupListItem key={backup.id}>
                       <BackupActions>
-                        <BackupButton
-                          type="button"
-                          onClick={() => {
-                            if (
-                              !window.confirm(
-                                'Pulling this backup will replace local files. Continue?'
-                              )
-                            )
-                              return;
-
-                            pullGoogleDriveBackup.mutate({
-                              backupId: backup.id,
-                              name: backup.name
-                            });
+                        <Checkbox
+                          aria-label={`Select ${backup.name}`}
+                          checked={selectedBackupId === backup.id}
+                          onChange={() => {
+                            setSelectedBackupId(
+                              selectedBackupId === backup.id ? null : backup.id
+                            );
                           }}
-                        >
+                        />
+                        <BackupDetails>
                           {formatDate(backup.createdAt)}
-                          <BackupMeta>
-                            {backup.name} <br /> {size}
-                          </BackupMeta>
-                        </BackupButton>
+                          <BackupMeta>{size}</BackupMeta>
+                        </BackupDetails>
                         <IconButton
                           aria-label={`Delete ${backup.name}`}
                           onClick={() => {
@@ -234,6 +230,11 @@ export const CloudSyncModal = () => {
                     </BackupListItem>
                   );
                 })}
+                {googleDriveBackups.isLoading && (
+                  <BackupListItem>
+                    <EmptyState>Loading cloud backups...</EmptyState>
+                  </BackupListItem>
+                )}
                 {!googleDriveBackups.isLoading && !backups.length && (
                   <BackupListItem>
                     <EmptyState>No cloud backups yet.</EmptyState>
@@ -274,6 +275,13 @@ export const CloudSyncModal = () => {
           </Button>
         ) : (
           <>
+            <Button
+              variant="contained"
+              disabled={!selectedBackup || isBackupListBusy}
+              onClick={restoreSelectedBackup}
+            >
+              Restore
+            </Button>
             <Button
               variant="outlined"
               onClick={() => {

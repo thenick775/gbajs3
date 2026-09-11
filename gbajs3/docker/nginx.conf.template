@@ -65,6 +65,8 @@ server {
 
     location = /cloud-sync-auth.html {
         add_header Referrer-Policy no-referrer always;
+        add_header Cross-Origin-Opener-Policy same-origin-allow-popups always;
+        add_header Cross-Origin-Embedder-Policy require-corp always;
 
         root   /var/www;
     }

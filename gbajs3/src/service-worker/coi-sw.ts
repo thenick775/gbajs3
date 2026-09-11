@@ -60,10 +60,9 @@ if (typeof window === 'undefined') {
       return;
     }
 
-    if (new URL(r.url).pathname.endsWith(`/${cloudSyncAuthPath}`)) {
-      event.respondWith(fetch(r));
-      return;
-    }
+    const isCloudSyncAuth = new URL(r.url).pathname.endsWith(
+      `/${cloudSyncAuthPath}`
+    );
 
     const request =
       coepCredentialless && r.mode === 'no-cors'
@@ -86,7 +85,13 @@ if (typeof window === 'undefined') {
           if (!coepCredentialless) {
             newHeaders.set('Cross-Origin-Resource-Policy', 'cross-origin');
           }
-          newHeaders.set('Cross-Origin-Opener-Policy', 'same-origin');
+          newHeaders.set(
+            'Cross-Origin-Opener-Policy',
+            isCloudSyncAuth ? 'same-origin-allow-popups' : 'same-origin'
+          );
+          if (isCloudSyncAuth) {
+            newHeaders.set('Referrer-Policy', 'no-referrer');
+          }
 
           return new Response(response.body, {
             status: response.status,
