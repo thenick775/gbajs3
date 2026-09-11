@@ -12,8 +12,6 @@ import type { MemoryToken } from '../context/cloud-sync/cloud-sync-context.tsx';
 type DriveFile = {
   id: string;
   name: string;
-  createdTime?: string;
-  modifiedTime?: string;
   size?: string;
 };
 
@@ -44,8 +42,7 @@ type CloudBackup = {
   id: string;
   name: string;
   createdAt: string;
-  modifiedTime?: string;
-  size?: number;
+  size: number;
 };
 
 type PushGoogleDriveBackupProps = {
@@ -95,9 +92,6 @@ const parseCloudBackupCreatedAt = (name: string): string | null => {
   return match[1].replace(/T(\d{2})-(\d{2})-(\d{2})Z$/, 'T$1:$2:$3Z');
 };
 
-const isCloudBackupName = (name: string) =>
-  parseCloudBackupCreatedAt(name) !== null;
-
 const getGoogleApiErrorDetail = async (res: Response) => {
   try {
     const data = (await res.clone().json()) as GoogleApiErrorResponse;
@@ -142,15 +136,14 @@ const createMultipartBody = (metadata: object, backup: Blob) => {
 };
 
 const toCloudBackup = (file: DriveFile): CloudBackup | null => {
-  const createdAt = parseCloudBackupCreatedAt(file.name) ?? file.createdTime;
-  if (!createdAt || !isCloudBackupName(file.name)) return null;
+  const createdAt = parseCloudBackupCreatedAt(file.name);
+  if (!createdAt || !file.size) return null;
 
   return {
     id: file.id,
     name: file.name,
     createdAt,
-    modifiedTime: file.modifiedTime,
-    size: file.size ? Number(file.size) : undefined
+    size: Number(file.size)
   };
 };
 
@@ -246,10 +239,7 @@ export const useGoogleDriveBackups = (
 
       const url = new URL(driveApiBaseUrl);
       url.searchParams.set('spaces', 'appDataFolder');
-      url.searchParams.set(
-        'fields',
-        'files(id,name,size,createdTime,modifiedTime)'
-      );
+      url.searchParams.set('fields', 'files(id,name,size)');
       url.searchParams.set('pageSize', '100');
 
       const res = await fetch(url, {
@@ -284,7 +274,7 @@ export const usePushGoogleDriveBackup = (
       };
       const url = new URL(driveUploadBaseUrl);
       url.searchParams.set('uploadType', 'multipart');
-      url.searchParams.set('fields', 'id,name,size,createdTime,modifiedTime');
+      url.searchParams.set('fields', 'id,name,size');
       const { body, boundary } = createMultipartBody(metadata, backup);
 
       const res = await fetch(url, {

@@ -158,10 +158,15 @@ export default defineConfig(({ mode }) => {
           server.middlewares.use((req, res, next) => {
             const path = req.url?.split('?')[0];
 
+            res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+
             if (path?.endsWith(`/${cloudSyncAuthPath}`)) {
               res.setHeader('Referrer-Policy', 'no-referrer');
+              res.setHeader(
+                'Cross-Origin-Opener-Policy',
+                'same-origin-allow-popups'
+              );
             } else {
-              res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
               res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
             }
             next();
