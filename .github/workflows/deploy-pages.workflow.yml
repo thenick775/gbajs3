@@ -26,3 +26,4 @@ jobs:
           build_command: npm run build:with-coi-serviceworker
         env:
           VITE_GBA_RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}

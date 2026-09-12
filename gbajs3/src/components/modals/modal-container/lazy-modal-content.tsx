@@ -36,6 +36,10 @@ const modals = {
     () => import('../controls.tsx'),
     (module) => module.ControlsModal
   ),
+  cloudSync: lazyNamedModal(
+    () => import('../cloud-sync.tsx'),
+    (module) => module.CloudSyncModal
+  ),
   downloadSave: lazyNamedModal(
     () => import('../download-save.tsx'),
     (module) => module.DownloadSaveModal
@@ -107,6 +111,8 @@ const renderModalBody = (modal: Exclude<ModalState, null>) => {
       return <modals.uploadFiles />;
     case 'controls':
       return <modals.controls />;
+    case 'cloudSync':
+      return <modals.cloudSync />;
     case 'fileSystem':
       return <modals.fileSystem />;
     case 'emulatorSettings':

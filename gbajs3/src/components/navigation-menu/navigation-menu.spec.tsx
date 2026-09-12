@@ -25,7 +25,7 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
     expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
     // renders default mounted menu items
-    expect(screen.getAllByRole('listitem')).toHaveLength(13);
+    expect(screen.getAllByRole('listitem')).toHaveLength(14);
     expect(screen.getByTestId('menu-wrapper')).toHaveStyle({
       left: '-255px'
     });
@@ -59,7 +59,7 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
     expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
     // renders default mounted menu items
-    expect(screen.getAllByRole('listitem')).toHaveLength(13);
+    expect(screen.getAllByRole('listitem')).toHaveLength(14);
     expect(screen.getByTestId('menu-wrapper')).toHaveStyle({
       left: 0
     });
@@ -74,7 +74,7 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
     expect(screen.getByLabelText('Menu Dismiss')).toBeVisible();
     // renders default mounted menu items
-    expect(screen.getAllByRole('listitem')).toHaveLength(13);
+    expect(screen.getAllByRole('listitem')).toHaveLength(14);
   });
 
   it('toggles menu with button', async () => {
@@ -184,6 +184,63 @@ describe('<NavigationMenu />', () => {
         expect(openModalSpy).toHaveBeenCalledWith(expected);
       }
     );
+
+    it('Cloud Sync opens modal when emulator is ready and Google client ID is configured', async () => {
+      vi.stubEnv('VITE_GOOGLE_CLIENT_ID', 'test-google-client-id');
+      const openModalSpy = vi.fn();
+      const {
+        useModalContext: originalModal,
+        useEmulatorContext: originalEmulator
+      } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+
+      vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+        ...originalModal(),
+        openModal: openModalSpy
+      }));
+
+      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+        ...originalEmulator(),
+        emulator: {
+          getCurrentAutoSaveStatePath: () => null,
+          getCurrentGameName: () => undefined,
+          listRoms: () => ['some_rom.gba']
+        } as GBAEmulator
+      }));
+
+      renderWithContext(<NavigationMenu />);
+
+      await userEvent.click(screen.getByText('Cloud Sync'));
+
+      expect(openModalSpy).toHaveBeenCalledWith({ type: 'cloudSync' });
+    });
+
+    it('Cloud Sync is disabled when Google client ID is not configured', async () => {
+      vi.stubEnv('VITE_GOOGLE_CLIENT_ID', '');
+      const openModalSpy = vi.fn();
+      const {
+        useModalContext: originalModal,
+        useEmulatorContext: originalEmulator
+      } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+
+      vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+        ...originalModal(),
+        openModal: openModalSpy
+      }));
+
+      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+        ...originalEmulator(),
+        emulator: {
+          getCurrentAutoSaveStatePath: () => null,
+          getCurrentGameName: () => undefined,
+          listRoms: () => ['some_rom.gba']
+        } as GBAEmulator
+      }));
+
+      renderWithContext(<NavigationMenu />);
+
+      expect(screen.getByRole('button', { name: 'Cloud Sync' })).toBeDisabled();
+      expect(openModalSpy).not.toHaveBeenCalled();
+    });
 
     it.each([
       ['Download Save', { type: 'downloadSave' }],
@@ -508,6 +565,17 @@ describe('<NavigationMenu />', () => {
       await userEvent.click(menuNode);
 
       expect(executeLogoutSpy).toHaveBeenCalledOnce();
+    });
+
+    it('Profile is disabled when API location is not configured', () => {
+      const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
+      vi.stubEnv('VITE_GBA_SERVER_LOCATION', '');
+
+      renderWithContext(<NavigationMenu />);
+
+      expect(screen.getByRole('button', { name: 'Profile' })).toBeDisabled();
+
+      vi.stubEnv('VITE_GBA_SERVER_LOCATION', apiLocation);
     });
 
     it.each([
