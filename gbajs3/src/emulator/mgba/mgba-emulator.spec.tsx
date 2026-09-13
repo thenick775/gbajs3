@@ -330,6 +330,40 @@ cheat1_code = "XYZ789"`;
     });
   });
 
+  it('should clear files while preserving directories', () => {
+    const unlink = vi.fn();
+    const { emulator } = createEmulator({
+      FS: {
+        readdir: vi.fn((path: string) => {
+          if (path === '/data') return ['.', '..', 'games', 'saves'];
+          if (path === '/data/games') return ['.', '..', 'rom.gba'];
+          if (path === '/data/saves') return ['.', '..', 'rom.sav'];
+          if (path === '/autosave') return ['.', '..', 'rom_auto.ss'];
+
+          return [];
+        }),
+        lookupPath: vi.fn((path: string) => ({
+          node: {
+            mode:
+              path.endsWith('.sav') ||
+              path.endsWith('.gba') ||
+              path.endsWith('.ss')
+                ? 0o100000
+                : 0o40000
+          }
+        })),
+        isDir: vi.fn((mode: number) => (mode & 0o40000) === 0o40000),
+        unlink
+      } as unknown as typeof FS
+    });
+
+    emulator.clearFilesystem();
+
+    expect(unlink).toHaveBeenCalledWith('/data/games/rom.gba');
+    expect(unlink).toHaveBeenCalledWith('/data/saves/rom.sav');
+    expect(unlink).toHaveBeenCalledWith('/autosave/rom_auto.ss');
+  });
+
   it('should resume the emulator', async () => {
     const { emulator, mock } = createEmulator();
     await emulator.resume();

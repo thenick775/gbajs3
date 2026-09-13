@@ -2,6 +2,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 import { AuthProvider } from '../src/context/auth/auth-provider.tsx';
+import { CloudSyncProvider } from '../src/context/cloud-sync/cloud-sync-provider.tsx';
 import { EmulatorContextProvider } from '../src/context/emulator/emulator-context-provider.tsx';
 import { InitialBoundsProvider } from '../src/context/initial-bounds/initial-bounds-provider.tsx';
 import { LayoutProvider } from '../src/context/layout/layout-provider.tsx';
@@ -18,13 +19,15 @@ export const AllTheProviders = ({ children }: { children: ReactNode }) => (
   <ThemeProvider theme={theme}>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <EmulatorContextProvider>
-          <InitialBoundsProvider>
-            <LayoutProvider>
-              <ModalProvider>{children}</ModalProvider>
-            </LayoutProvider>
-          </InitialBoundsProvider>
-        </EmulatorContextProvider>
+        <CloudSyncProvider>
+          <EmulatorContextProvider>
+            <InitialBoundsProvider>
+              <LayoutProvider>
+                <ModalProvider>{children}</ModalProvider>
+              </LayoutProvider>
+            </InitialBoundsProvider>
+          </EmulatorContextProvider>
+        </CloudSyncProvider>
       </AuthProvider>
     </QueryClientProvider>
   </ThemeProvider>

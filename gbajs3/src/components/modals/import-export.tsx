@@ -1,14 +1,11 @@
 import { Button } from '@mui/material';
-import { ERR_UNSAFE_FILENAME } from '@zip.js/zip.js';
 import { useCallback, useId, useState } from 'react';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 
-import { downloadBlob } from './file-utilities/blob.ts';
 import {
-  createFilesystemBackupBlob,
+  exportEmulatorFsToZip,
   importZipToEmulatorFs
 } from './file-utilities/filesystem-backup.ts';
-import { generateExportZipName } from './file-utilities/zip.ts';
 import { ModalBody } from './modal-body.tsx';
 import { ModalFooter } from './modal-footer.tsx';
 import { ModalHeader } from './modal-header.tsx';
@@ -16,21 +13,13 @@ import { useEmulatorContext, useModalContext } from '../../hooks/context.tsx';
 import { useAddCallbacks } from '../../hooks/emulator/use-add-callbacks.tsx';
 import { useWriteFileToEmulator } from '../../hooks/emulator/use-write-file-to-emulator.tsx';
 import { DragAndDropInput } from '../shared/drag-and-drop-input.tsx';
+import { isZipUnsafeFilenameError } from './file-utilities/zip.ts';
 
 type InputProps = {
   zipFile: File;
 };
 
-type UnsafeFilenameError = Error & {
-  filename?: string;
-};
-
 const validFileExtensions = ['.zip'];
-
-const isUnsafeFilenameError = (
-  error: unknown
-): error is UnsafeFilenameError =>
-  error instanceof Error && error.message === ERR_UNSAFE_FILENAME;
 
 export const ImportExportModal = () => {
   const { closeModal } = useModalContext();
@@ -63,8 +52,10 @@ export const ImportExportModal = () => {
     try {
       await importZipToEmulatorFs(zipFile, writeFileToEmulator);
     } catch (error) {
-      if (isUnsafeFilenameError(error)) {
-        setImportError('ZIP contains an unsafe file path and cannot be imported');
+      if (isZipUnsafeFilenameError(error)) {
+        setImportError(
+          'ZIP contains an unsafe file path and cannot be imported'
+        );
         return;
       }
 
@@ -123,8 +114,7 @@ export const ImportExportModal = () => {
           color="secondary"
           onClick={async () => {
             setIsExportLoading(true);
-            const backup = await createFilesystemBackupBlob(emulator);
-            downloadBlob(generateExportZipName(), backup);
+            await exportEmulatorFsToZip(emulator);
             setIsExportLoading(false);
           }}
           loading={isExportLoading}

@@ -29,6 +29,10 @@ import {
 import { ErrorWithIcon } from '../shared/error-with-icon.tsx';
 import { Copy, StyledBiPlus } from '../shared/styled.tsx';
 
+const StyledLi = styled('li')`
+  margin: 0;
+`;
+
 const BackupList = styled('ul')`
   list-style: none;
   display: flex;
@@ -39,6 +43,10 @@ const BackupList = styled('ul')`
   border: 1px solid ${({ theme }) => theme.modalListBorder};
   border-radius: 10px;
   overflow: hidden;
+
+  & > ${StyledLi} + ${StyledLi} {
+    border-top: 1px solid ${({ theme }) => theme.modalListBorder};
+  }
 `;
 
 const BackupListWrapper = styled('div')`
@@ -54,14 +62,6 @@ const BackupListOverlay = styled('div')`
   background: ${({ theme }) => `${theme.modalContainerSurface}99`};
   border-radius: 10px;
   z-index: 1;
-`;
-
-const BackupListItem = styled('li')`
-  margin: 0;
-
-  & + & {
-    border-top: 1px solid ${({ theme }) => theme.modalListBorder};
-  }
 `;
 
 const BackupActions = styled('div')`
@@ -198,10 +198,12 @@ export const CloudSyncModal = () => {
                   const size = formatBytes(backup.size);
 
                   return (
-                    <BackupListItem key={backup.id}>
+                    <StyledLi key={backup.id}>
                       <BackupActions>
                         <Checkbox
-                          aria-label={`Select ${backup.name}`}
+                          slotProps={{
+                            input: { 'aria-label': `Select ${backup.name}` }
+                          }}
                           checked={selectedBackupId === backup.id}
                           onChange={() => {
                             setSelectedBackupId(
@@ -227,18 +229,18 @@ export const CloudSyncModal = () => {
                           <StyledBiTrash />
                         </IconButton>
                       </BackupActions>
-                    </BackupListItem>
+                    </StyledLi>
                   );
                 })}
                 {googleDriveBackups.isLoading && (
-                  <BackupListItem>
+                  <StyledLi>
                     <EmptyState>Loading cloud backups...</EmptyState>
-                  </BackupListItem>
+                  </StyledLi>
                 )}
                 {!googleDriveBackups.isLoading && !backups.length && (
-                  <BackupListItem>
+                  <StyledLi>
                     <EmptyState>No cloud backups yet.</EmptyState>
-                  </BackupListItem>
+                  </StyledLi>
                 )}
               </BackupList>
               {isBackupListBusy && (

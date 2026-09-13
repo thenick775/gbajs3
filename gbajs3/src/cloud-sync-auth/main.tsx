@@ -7,8 +7,11 @@ import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import './styles.css';
+import {
+  authChannelName,
+  type AuthMessagePayload
+} from '../hooks/use-google-drive.tsx';
 
-const channelName = 'gbajs3-cloud-sync-auth';
 const driveAppDataScope = 'https://www.googleapis.com/auth/drive.appdata';
 
 export const CloudSyncAuthApp = () => {
@@ -16,12 +19,11 @@ export const CloudSyncAuthApp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const params = new URLSearchParams(window.location.search);
   const state = params.get('state') ?? '';
-  const channel =
-    'BroadcastChannel' in window ? new BroadcastChannel(channelName) : null;
+  const channel = new BroadcastChannel(authChannelName);
 
-  const postAndClose = (message: Record<string, unknown>) => {
-    channel?.postMessage({ ...message, state });
-    channel?.close();
+  const postAndClose = (message: AuthMessagePayload) => {
+    channel.postMessage({ ...message, state });
+    channel.close();
     window.close();
   };
 
@@ -94,11 +96,15 @@ export const CloudSyncAuthApp = () => {
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- root element is in cloud-sync-auth.html
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID ?? ''}>
-      <CloudSyncAuthApp />
-    </GoogleOAuthProvider>
-  </StrictMode>
-);
+if (document.getElementById('root')) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- root element is in cloud-sync-auth.html
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <GoogleOAuthProvider
+        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID ?? ''}
+      >
+        <CloudSyncAuthApp />
+      </GoogleOAuthProvider>
+    </StrictMode>
+  );
+}

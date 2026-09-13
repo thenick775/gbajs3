@@ -4,39 +4,55 @@ import {
   type UseMutationOptions,
   type UseQueryOptions
 } from '@tanstack/react-query';
+import { z } from 'zod';
 
 import { useCloudSyncContext } from './context.tsx';
 
 import type { MemoryToken } from '../context/cloud-sync/cloud-sync-context.tsx';
 
-type DriveFile = {
-  id: string;
-  name: string;
-  size?: string;
+export type AuthMessagePayload =
+  | {
+      type: 'success';
+      accessToken: string;
+      expiresIn: number;
+      scope: string;
+    }
+  | {
+      type: 'error';
+      error: string;
+    };
+
+export type AuthMessage = AuthMessagePayload & {
+  state: string;
 };
 
-type DriveFilesResponse = {
-  files?: DriveFile[];
-};
+const DriveFileSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  size: z.string().optional()
+});
 
-type AuthMessage = {
-  type?: 'success' | 'error';
-  state?: string;
-  accessToken?: string;
-  expiresIn?: number;
-  scope?: string;
-  error?: string;
-};
+const DriveFilesResponseSchema = z.object({
+  files: z.array(DriveFileSchema).optional()
+});
 
-type GoogleApiErrorResponse = {
-  error?: {
-    message?: string;
-    errors?: {
-      reason?: string;
-      message?: string;
-    }[];
-  };
-};
+const GoogleApiErrorResponseSchema = z.object({
+  error: z
+    .object({
+      message: z.string().optional(),
+      errors: z
+        .array(
+          z.object({
+            reason: z.string().optional(),
+            message: z.string().optional()
+          })
+        )
+        .optional()
+    })
+    .optional()
+});
+
+type DriveFile = z.infer<typeof DriveFileSchema>;
 
 type CloudBackup = {
   id: string;
@@ -59,6 +75,7 @@ type DeleteGoogleDriveBackupProps = {
   backupId: string;
 };
 
+export const authChannelName = 'gbajs3-cloud-sync-auth';
 const driveAppDataScope = 'https://www.googleapis.com/auth/drive.appdata';
 const driveApiBaseUrl = 'https://www.googleapis.com/drive/v3/files';
 const driveUploadBaseUrl = 'https://www.googleapis.com/upload/drive/v3/files';
@@ -67,23 +84,11 @@ const cloudBackupNameRegex = new RegExp(
   `^.*(\\d{4}-\\d{2}-\\d{2}T\\d{2}-\\d{2}-\\d{2}Z)\\${cloudBackupFileExtension}$`
 );
 
-const googleDriveBackupsQueryKey = (accessToken?: string | null) => [
-  'googleDriveBackups',
-  accessToken
-];
-
-export const generateCloudBackupName = (date = new Date()) =>
-  `${date
+export const generateCloudBackupName = () =>
+  `${new Date()
     .toISOString()
     .slice(0, 19)
     .replace(/:/g, '-')}Z${cloudBackupFileExtension}`;
-
-const sortCloudBackupsNewestFirst = <T extends { createdAt: string }>(
-  backups: T[]
-) =>
-  backups.toSorted(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
 
 const parseCloudBackupCreatedAt = (name: string): string | null => {
   const match = cloudBackupNameRegex.exec(name);
@@ -93,15 +98,11 @@ const parseCloudBackupCreatedAt = (name: string): string | null => {
 };
 
 const getGoogleApiErrorDetail = async (res: Response) => {
-  try {
-    const data = (await res.clone().json()) as GoogleApiErrorResponse;
-    const reason = data.error?.errors?.[0]?.reason;
-    const message = data.error?.message ?? data.error?.errors?.[0]?.message;
+  const data = GoogleApiErrorResponseSchema.parse(await res.json());
+  const reason = data.error?.errors?.[0]?.reason;
+  const message = data.error?.message ?? data.error?.errors?.[0]?.message;
 
-    return [reason, message].filter(Boolean).join(': ');
-  } catch {
-    return res.clone().text();
-  }
+  return [reason, message].filter(Boolean).join(': ');
 };
 
 const assertOk = async (res: Response, action: string) => {
@@ -160,13 +161,13 @@ export const useConnectGoogleDrive = (
           return;
         }
 
-        if (!('BroadcastChannel' in window)) {
+        if (typeof window.BroadcastChannel !== 'function') {
           reject(new Error('This browser does not support Cloud Sync auth'));
           return;
         }
 
         const state = crypto.randomUUID();
-        const channel = new BroadcastChannel('gbajs3-cloud-sync-auth');
+        const channel = new BroadcastChannel(authChannelName);
         const helperUrl = new URL(
           `${import.meta.env.BASE_URL}cloud-sync-auth.html`,
           window.location.href
@@ -189,7 +190,7 @@ export const useConnectGoogleDrive = (
 
           cleanup();
 
-          if (message.type === 'success' && message.accessToken) {
+          if (message.type === 'success') {
             if (!hasDriveAppDataScope(message.scope)) {
               reject(
                 new Error(
@@ -201,19 +202,17 @@ export const useConnectGoogleDrive = (
 
             resolve({
               accessToken: message.accessToken,
-              expiresAt: Date.now() + Math.max(message.expiresIn ?? 0, 0) * 1000
+              expiresAt: Date.now() + Math.max(message.expiresIn, 0) * 1000
             });
             return;
           }
 
-          reject(
-            new Error(message.error ?? 'Google Drive authorization failed')
-          );
+          reject(new Error(message.error));
         };
 
         const authWindow = window.open(
           helperUrl.toString(),
-          'gbajs3-cloud-sync-auth',
+          authChannelName,
           'popup,width=480,height=640'
         );
 
@@ -226,13 +225,13 @@ export const useConnectGoogleDrive = (
   });
 
 export const useGoogleDriveBackups = (
-  options?: UseQueryOptions<CloudBackup[]>
+  options?: Omit<UseQueryOptions<CloudBackup[]>, 'queryKey' | 'queryFn'>
 ) => {
   const { googleDriveAccessToken } = useCloudSyncContext();
   const { enabled = true, ...queryOptions } = options ?? {};
 
   return useQuery<CloudBackup[]>({
-    queryKey: googleDriveBackupsQueryKey(googleDriveAccessToken),
+    queryKey: ['googleDriveBackups', googleDriveAccessToken],
     queryFn: async () => {
       if (!googleDriveAccessToken)
         throw new Error('Connect Google Drive first');
@@ -247,12 +246,16 @@ export const useGoogleDriveBackups = (
       });
       await assertOk(res, 'Listing Google Drive backups');
 
-      const data = (await res.json()) as DriveFilesResponse;
-      const backups = (data.files ?? [])
-        .map(toCloudBackup)
-        .filter((backup): backup is CloudBackup => !!backup);
+      const data = DriveFilesResponseSchema.parse(await res.json());
+      const backups = data.files
+        ?.map(toCloudBackup)
+        .filter((backup): backup is CloudBackup => !!backup)
+        .toSorted(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
 
-      return sortCloudBackupsNewestFirst(backups);
+      return backups ?? [];
     },
     enabled: !!googleDriveAccessToken && enabled,
     ...queryOptions
@@ -287,7 +290,7 @@ export const usePushGoogleDriveBackup = (
       });
       await assertOk(res, 'Uploading Google Drive backup');
 
-      const file = (await res.json()) as DriveFile;
+      const file = DriveFileSchema.parse(await res.json());
       const cloudBackup = toCloudBackup(file);
       if (!cloudBackup)
         throw new Error('Google Drive returned an invalid backup');

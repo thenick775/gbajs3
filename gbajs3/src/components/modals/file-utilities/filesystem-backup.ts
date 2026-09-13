@@ -1,16 +1,16 @@
-import { BlobWriter, ZipWriter, type Entry } from '@zip.js/zip.js';
-
 import {
-  addLocalStorageToZip,
-  addUint8ArrayToZip,
-  readFileFromZipEntry,
-  readZipEntriesFromBlob,
-  restoreLocalStorageFromZip,
+  createZipBlob,
+  downloadZip,
+  generateExportZipName,
+  readZipFiles,
   stripLeadingSlashes,
-  zipOptions
+  type ZipFile
 } from './zip.ts';
 
-import type { FileNode, GBAEmulator } from '../../../emulator/mgba/mgba-emulator.tsx';
+import type {
+  FileNode,
+  GBAEmulator
+} from '../../../emulator/mgba/mgba-emulator.tsx';
 
 const flattenFiles = (node?: FileNode): string[] =>
   !node
@@ -22,46 +22,26 @@ const flattenFiles = (node?: FileNode): string[] =>
           : (node.children ?? []).flatMap(flattenFiles))
       ];
 
+const getFilesystemBackupFiles = (emulator: GBAEmulator | null): ZipFile[] =>
+  flattenFiles(emulator?.listAllFiles()).map((path) => ({
+    zipPath: stripLeadingSlashes(path),
+    read: () => emulator?.getFile(path)
+  }));
+
 export const createFilesystemBackupBlob = async (
   emulator: GBAEmulator | null
-): Promise<Blob> => {
-  const blobWriter = new BlobWriter('application/zip');
-  const writer = new ZipWriter<Blob>(blobWriter, zipOptions);
-  const files = flattenFiles(emulator?.listAllFiles()).map(stripLeadingSlashes);
+): Promise<Blob> => createZipBlob(getFilesystemBackupFiles(emulator));
 
-  await files.reduce(
-    (chain, relPath) =>
-      chain.then(async () => {
-        const bytes = emulator?.getFile('/' + relPath);
-        return bytes?.length
-          ? addUint8ArrayToZip(writer, relPath, bytes).then(() => void 0)
-          : Promise.resolve();
-      }),
-    Promise.resolve()
-  );
-
-  await addLocalStorageToZip(writer);
-
-  return writer.close();
-};
+export const exportEmulatorFsToZip = async (
+  emulator: GBAEmulator | null
+): Promise<void> =>
+  downloadZip(generateExportZipName(), getFilesystemBackupFiles(emulator));
 
 export const importZipToEmulatorFs = async (
   zipFile: File,
   writeFileToEmulator: (file: File) => Promise<void>
 ) => {
-  const writeEntryToEmulator = async (entry: Entry) => {
-    if (!entry.filename) return;
-    if (entry.directory) return;
+  const files = await readZipFiles(zipFile);
 
-    if (entry.filename === 'local-storage.json') {
-      await restoreLocalStorageFromZip(entry);
-      return;
-    }
-
-    const file = await readFileFromZipEntry(entry);
-
-    if (file) await writeFileToEmulator(file);
-  };
-
-  return readZipEntriesFromBlob(zipFile, writeEntryToEmulator);
+  await Promise.allSettled(files.map((file) => writeFileToEmulator(file)));
 };
