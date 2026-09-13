@@ -185,8 +185,7 @@ describe('<NavigationMenu />', () => {
       }
     );
 
-    it('Cloud Sync opens modal when emulator is ready and Google client ID is configured', async () => {
-      vi.stubEnv('VITE_GOOGLE_CLIENT_ID', 'test-google-client-id');
+    it('Cloud Sync opens modal when emulator is ready and google client id is configured', async () => {
       const openModalSpy = vi.fn();
       const {
         useModalContext: originalModal,
@@ -214,7 +213,7 @@ describe('<NavigationMenu />', () => {
       expect(openModalSpy).toHaveBeenCalledWith({ type: 'cloudSync' });
     });
 
-    it('Cloud Sync is disabled when Google client ID is not configured', async () => {
+    it('Cloud Sync is disabled when google client id is not configured', async () => {
       vi.stubEnv('VITE_GOOGLE_CLIENT_ID', '');
       const openModalSpy = vi.fn();
       const {
@@ -568,14 +567,11 @@ describe('<NavigationMenu />', () => {
     });
 
     it('Profile is disabled when API location is not configured', () => {
-      const apiLocation = import.meta.env.VITE_GBA_SERVER_LOCATION;
       vi.stubEnv('VITE_GBA_SERVER_LOCATION', '');
 
       renderWithContext(<NavigationMenu />);
 
       expect(screen.getByRole('button', { name: 'Profile' })).toBeDisabled();
-
-      vi.stubEnv('VITE_GBA_SERVER_LOCATION', apiLocation);
     });
 
     it.each([

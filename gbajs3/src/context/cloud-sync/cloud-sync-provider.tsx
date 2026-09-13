@@ -8,11 +8,9 @@ type CloudSyncProviderProps = {
   children: ReactNode;
 };
 
-const tokenExpirySkewMs = 60_000;
-
 const getValidGoogleDriveToken = (token: MemoryToken | null) => {
   if (!token) return null;
-  if (Date.now() >= token.expiresAt - tokenExpirySkewMs) return null;
+  if (Date.now() >= token.expiresAt) return null;
 
   return token;
 };
@@ -28,7 +26,7 @@ export const CloudSyncProvider = ({ children }: CloudSyncProviderProps) => {
     <CloudSyncContext.Provider
       value={{
         googleDriveAccessToken,
-        setGoogleDriveToken,
+        setGoogleDriveToken
       }}
     >
       {children}

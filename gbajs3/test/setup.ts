@@ -21,15 +21,26 @@ Object.defineProperties(globalThis, {
 */
 expect.addSnapshotSerializer(createSerializer());
 
-// MSW setup
-vi.stubEnv('VITE_GBA_SERVER_LOCATION', gbaServerLocationPlaceholder);
-
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' });
 });
 
 beforeEach(() => {
+  vi.stubEnv('VITE_GBA_SERVER_LOCATION', gbaServerLocationPlaceholder);
+  vi.stubEnv('VITE_GOOGLE_CLIENT_ID', 'test-google-client-id');
+
   HTMLElement.prototype.scrollIntoView = vi.fn();
+
+  Object.defineProperty(window, 'BroadcastChannel', {
+    configurable: true,
+    writable: true,
+    value: class MockBroadcastChannel {
+      onmessage: ((event: MessageEvent) => void) | null = null;
+      close = vi.fn();
+
+      constructor(readonly name: string) {}
+    }
+  });
 
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -56,6 +67,7 @@ afterAll(() => {
 });
 
 afterEach(() => {
+  vi.unstubAllEnvs();
   localStorage.clear();
   server.resetHandlers();
 });

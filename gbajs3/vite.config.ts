@@ -157,18 +157,17 @@ export default defineConfig(({ mode }) => {
         configureServer(server) {
           server.middlewares.use((req, res, next) => {
             const path = req.url?.split('?')[0];
+            const isCloudSyncAuth = path?.endsWith(`/${cloudSyncAuthPath}`);
 
             res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+            res.setHeader(
+              'Cross-Origin-Opener-Policy',
+              isCloudSyncAuth ? 'same-origin-allow-popups' : 'same-origin'
+            );
 
-            if (path?.endsWith(`/${cloudSyncAuthPath}`)) {
+            if (isCloudSyncAuth)
               res.setHeader('Referrer-Policy', 'no-referrer');
-              res.setHeader(
-                'Cross-Origin-Opener-Policy',
-                'same-origin-allow-popups'
-              );
-            } else {
-              res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-            }
+
             next();
           });
         }
