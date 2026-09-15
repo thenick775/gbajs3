@@ -11,6 +11,7 @@ import { coverageConfigDefaults } from 'vitest/config';
 // eslint-disable-next-line import/no-default-export
 export default defineConfig(({ mode }) => {
   const withCOIServiceWorker = mode === 'with-coi-serviceworker';
+  const cloudSyncAuthPath = 'cloud-sync-auth.html';
 
   return {
     base: './',
@@ -151,20 +152,38 @@ export default defineConfig(({ mode }) => {
           }
         ]
       }),
+      {
+        name: 'gbajs3-cross-origin-isolation-headers',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const path = req.url?.split('?')[0];
+            const isCloudSyncAuth = path?.endsWith(`/${cloudSyncAuthPath}`);
+
+            res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+            res.setHeader(
+              'Cross-Origin-Opener-Policy',
+              isCloudSyncAuth ? 'same-origin-allow-popups' : 'same-origin'
+            );
+
+            if (isCloudSyncAuth)
+              res.setHeader('Referrer-Policy', 'no-referrer');
+
+            next();
+          });
+        }
+      },
       visualizer({ gzipSize: true }) as PluginOption
     ],
     optimizeDeps: {
       exclude: ['@thenick775/mgba-wasm']
     },
-    server: {
-      headers: {
-        'Cross-Origin-Embedder-Policy': 'require-corp',
-        'Cross-Origin-Opener-Policy': 'same-origin'
-      }
-    },
     build: {
       sourcemap: true,
       rolldownOptions: {
+        input: {
+          main: 'index.html',
+          cloudSyncAuth: cloudSyncAuthPath
+        },
         output: {
           codeSplitting: {
             groups: [

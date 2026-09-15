@@ -39,6 +39,7 @@ export type FileTypes = Record<
 export type GBAEmulator = {
   addCoreCallbacks: (coreCallbacks: coreCallbacks) => void;
   autoLoadCheats: () => boolean;
+  clearFilesystem: () => void;
   createSaveState: (slot: number) => boolean;
   coreName: string;
   defaultKeyBindings: () => KeyBinding[];
@@ -202,6 +203,26 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     recursiveRead(root);
 
     return root;
+  };
+
+  const clearFilesystem = () => {
+    const recursiveDelete = (path: string) => {
+      for (const name of mGBA.FS.readdir(path)) {
+        if (fileIgnorePaths.includes(name)) continue;
+
+        const currPath = `${path}/${name}`;
+        const { mode } = mGBA.FS.lookupPath(currPath, {}).node;
+
+        if (mGBA.FS.isDir(mode)) {
+          recursiveDelete(currPath);
+        } else {
+          mGBA.FS.unlink(currPath);
+        }
+      }
+    };
+
+    recursiveDelete(paths.root);
+    recursiveDelete(paths.autosave);
   };
 
   // NOTE: only libretro format supported at this time
@@ -436,6 +457,7 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     uploadAutoSaveState: (...args) => mGBA.uploadAutoSaveState(...args),
     listAllFiles,
     parseCheatsString,
-    parsedCheatsToFile
+    parsedCheatsToFile,
+    clearFilesystem
   };
 };

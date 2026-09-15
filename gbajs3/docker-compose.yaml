@@ -10,6 +10,7 @@ services:
             context: ${SERVICE_GBAJS3:-.}
             args:
                 CLIENT_HOST: ${CLIENT_HOST}
+                GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
                 RELEASE_VERSION: ${RELEASE_VERSION}
         ports:
             - 443:443

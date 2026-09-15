@@ -52,6 +52,8 @@ Do not attempt to log into the server unless you are the server owner or an appr
 - Persistent file system utilizing IndexedDB
 - Load public rom files from query string
 - Full import/export support
+- Cloud sync
+  - Google Drive support
 
 ## Existing Feature List
 
