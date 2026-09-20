@@ -1,4 +1,4 @@
-import { Button, Checkbox, Divider, IconButton } from '@mui/material';
+import { Button, Divider, IconButton } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { BiError, BiTrash } from 'react-icons/bi';
@@ -66,19 +66,27 @@ const BackupListOverlay = styled('div')`
 
 const BackupActions = styled('div')`
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 36px;
+  grid-template-columns: minmax(0, 1fr) 36px;
   align-items: center;
 `;
 
-const BackupDetails = styled('div')`
+const BackupButton = styled('button')`
   width: 100%;
   min-width: 0;
-  padding: 0.75rem 0.5rem;
+  padding: 0.75rem 1rem;
   text-align: left;
+  cursor: pointer;
   color: ${({ theme }) => theme.modalTextPrimary};
   background-color: transparent;
+  border: 0;
+  font: inherit;
   font-size: 1rem;
   line-height: 1.35;
+
+  &:hover,
+  &:focus-visible {
+    background-color: ${({ theme }) => theme.modalListItemHoverSurface};
+  }
 `;
 
 const BackupMeta = styled('span')`
@@ -143,10 +151,7 @@ export const CloudSyncModal = () => {
   });
   const [isCreatingFilesystemBackup, setIsCreatingFilesystemBackup] =
     useState(false);
-  const [selectedBackupId, setSelectedBackupId] = useState<string | null>(null);
   const backups = googleDriveBackups.data ?? [];
-  const selectedBackup =
-    backups.find((backup) => backup.id === selectedBackupId) ?? null;
   const isCreatingBackup =
     isCreatingFilesystemBackup || pushGoogleDriveBackup.isPending;
   const isBackupListBusy = isCreatingBackup || pullGoogleDriveBackup.isPending;
@@ -174,15 +179,6 @@ export const CloudSyncModal = () => {
     }
   };
 
-  const restoreSelectedBackup = () => {
-    if (!selectedBackup) return;
-
-    pullGoogleDriveBackup.mutate({
-      backupId: selectedBackup.id,
-      name: selectedBackup.name
-    });
-  };
-
   return (
     <>
       <ModalHeader title="Cloud Sync" />
@@ -200,23 +196,30 @@ export const CloudSyncModal = () => {
                   return (
                     <StyledLi key={backup.id}>
                       <BackupActions>
-                        <Checkbox
-                          slotProps={{
-                            input: { 'aria-label': `Select ${backup.name}` }
+                        <BackupButton
+                          type="button"
+                          aria-label={`Restore ${backup.name}`}
+                          disabled={isBackupListBusy}
+                          onClick={() => {
+                            if (
+                              !window.confirm(
+                                'Pulling this backup will replace local files. Continue?'
+                              )
+                            )
+                              return;
+
+                            pullGoogleDriveBackup.mutate({
+                              backupId: backup.id,
+                              name: backup.name
+                            });
                           }}
-                          checked={selectedBackupId === backup.id}
-                          onChange={() => {
-                            setSelectedBackupId(
-                              selectedBackupId === backup.id ? null : backup.id
-                            );
-                          }}
-                        />
-                        <BackupDetails>
+                        >
                           {formatDate(backup.createdAt)}
                           <BackupMeta>{size}</BackupMeta>
-                        </BackupDetails>
+                        </BackupButton>
                         <IconButton
                           aria-label={`Delete ${backup.name}`}
+                          disabled={isBackupListBusy}
                           onClick={() => {
                             if (!window.confirm(`Delete ${backup.name}?`))
                               return;
@@ -277,13 +280,6 @@ export const CloudSyncModal = () => {
           </Button>
         ) : (
           <>
-            <Button
-              variant="contained"
-              disabled={!selectedBackup || isBackupListBusy}
-              onClick={restoreSelectedBackup}
-            >
-              Restore
-            </Button>
             <Button
               variant="outlined"
               onClick={() => {
