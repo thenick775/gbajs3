@@ -15,6 +15,7 @@ describe('<ModalRenderer />', () => {
 
   it.each<[Exclude<ModalState, null>, string]>([
     [{ type: 'about' }, 'About'],
+    [{ type: 'cloudSync' }, 'Cloud Sync'],
     [{ type: 'controls' }, 'Controls'],
     [{ type: 'fileSystem' }, 'File System'],
     [{ type: 'importExport' }, 'Import/Export'],

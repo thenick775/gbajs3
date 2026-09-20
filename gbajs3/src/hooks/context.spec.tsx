@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   useAuthContext,
+  useCloudSyncContext,
   useDragContext,
   useEmulatorContext,
   useInitialBoundsContext,
@@ -12,6 +13,7 @@ import {
   useRunningContext
 } from './context.tsx';
 import { AuthContext } from '../context/auth/auth-context.tsx';
+import { CloudSyncContext } from '../context/cloud-sync/cloud-sync-context.tsx';
 import { DragContext } from '../context/emulator/contexts/drag-context.tsx';
 import { EmulatorContext } from '../context/emulator/contexts/emulator-context.tsx';
 import { ResizeContext } from '../context/emulator/contexts/resize-context.tsx';
@@ -29,6 +31,7 @@ describe('useContext hooks', () => {
 
   const contextHooks = [
     [useAuthContext, AuthContext.displayName],
+    [useCloudSyncContext, CloudSyncContext.displayName],
     [useInitialBoundsContext, InitialBoundsContext.displayName],
     [useLayoutContext, LayoutContext.displayName],
     [useModalContext, ModalContext.displayName],

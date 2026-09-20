@@ -1,18 +1,9 @@
 import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import {
-  ERR_UNSAFE_FILENAME,
-  BlobWriter,
-  TextReader,
-  ZipWriter,
-  ZipReader,
-  Uint8ArrayWriter,
-  Uint8ArrayReader,
-  type Entry,
-  type FileEntry
-} from '@zip.js/zip.js';
+import { TextReader, ZipWriter, Uint8ArrayWriter } from '@zip.js/zip.js';
 import { describe, expect, it, vi } from 'vitest';
 
+import * as blobUtils from './file-utilities/blob.ts';
 import * as zipUtils from './file-utilities/zip.ts';
 import { ImportExportModal } from './import-export.tsx';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
@@ -74,22 +65,24 @@ describe('<ImportExportModal />', () => {
   };
 
   // only uint8 array style (no blobs) will work in jsdom
-  const makeEntries = async (
+  const makeZipFile = async (
     items: { name: string; data?: string; directory?: boolean }[]
-  ): Promise<Entry[]> => {
+  ): Promise<File> => {
     const u8w = new Uint8ArrayWriter();
     const zw = new ZipWriter(u8w);
+
     for (const { name, data, directory } of items) {
       await zw.add(
         name.endsWith('/') ? name : directory ? `${name}/` : name,
         directory ? undefined : new TextReader(data ?? '')
       );
     }
+
     const bytes = await zw.close();
-    const zr = new ZipReader(new Uint8ArrayReader(bytes));
-    const entries = await zr.getEntries();
-    await zr.close();
-    return entries;
+
+    return new File([new Blob([bytes])], 'export.zip', {
+      type: 'application/zip'
+    });
   };
 
   it('renders form validation error when submitting without a file', async () => {
@@ -105,14 +98,6 @@ describe('<ImportExportModal />', () => {
   it('imports a zip and closes modal', async () => {
     const syncActionIfEnabledSpy = vi.fn();
     const closeModalSpy = vi.fn();
-    const readZipSpy = vi
-      .spyOn(zipUtils, 'readZipEntriesFromBlob')
-      .mockImplementation(async (_, onEntry) => {
-        const entries = await makeEntries([
-          { name: 'rom1.gba', data: 'test-rom1' }
-        ]);
-        for (const e of entries) await onEntry(e);
-      });
 
     const { useModalContext: originalModal } = await vi.importActual<
       typeof contextHooks
@@ -131,9 +116,9 @@ describe('<ImportExportModal />', () => {
       closeModal: closeModalSpy
     }));
 
-    const testZip = new File(['dummy'], 'export.zip', {
-      type: 'application/zip'
-    });
+    const testZip = await makeZipFile([
+      { name: 'rom1.gba', data: 'test-rom1' }
+    ]);
 
     renderWithContext(<ImportExportModal />);
 
@@ -143,8 +128,6 @@ describe('<ImportExportModal />', () => {
     await userEvent.upload(hiddenInput, testZip);
     await userEvent.click(screen.getByRole('button', { name: 'Import' }));
 
-    expect(readZipSpy).toHaveBeenCalledOnce();
-    expect(readZipSpy).toHaveBeenCalledWith(testZip, expect.any(Function));
     await waitFor(() => {
       expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
     });
@@ -201,42 +184,24 @@ describe('<ImportExportModal />', () => {
       closeModal: closeModalSpy
     }));
 
-    const restoreLocalStorageFromZipSpy = vi.spyOn(
-      zipUtils,
-      'restoreLocalStorageFromZip'
-    );
-
-    vi.spyOn(zipUtils, 'readZipEntriesFromBlob').mockImplementation(
-      async (_file: File, onEntry: (e: Entry) => Promise<void>) => {
-        const entries = await makeEntries([
-          { name: 'rom.gba' },
-          { name: 'rom.gbc' },
-          { name: 'rom.gb' },
-          { name: 'rom.zip' },
-          { name: 'rom.7z' },
-          { name: 'state_auto.ss' },
-          { name: 'data.sav' },
-          { name: 'save.ss2' },
-          { name: 'rules.cheats' },
-          { name: 'patch.ips' },
-          { name: 'patch.ups' },
-          { name: 'patch.bps' },
-          { name: 'screenshot.png' },
-          { name: 'local-storage.json', data: '{"some-key":"some-value"}' },
-          { name: 'invalid.txt' }, // no write path
-          { name: 'some/dir/', directory: true } // directory -> skipped
-        ]);
-        for (const e of entries) await onEntry(e);
-      }
-    );
-
-    vi.spyOn(zipUtils, 'readFileFromZipEntry').mockImplementation(
-      (entry: FileEntry) => Promise.resolve(new File(['bytes'], entry.filename))
-    );
-
-    const testZip = new File(['zip-bytes'], 'export.zip', {
-      type: 'application/zip'
-    });
+    const testZip = await makeZipFile([
+      { name: 'rom.gba' },
+      { name: 'rom.gbc' },
+      { name: 'rom.gb' },
+      { name: 'rom.zip' },
+      { name: 'rom.7z' },
+      { name: 'state_auto.ss' },
+      { name: 'data.sav' },
+      { name: 'save.ss2' },
+      { name: 'rules.cheats' },
+      { name: 'patch.ips' },
+      { name: 'patch.ups' },
+      { name: 'patch.bps' },
+      { name: 'screenshot.png' },
+      { name: 'local-storage.json', data: '{"some-key":"some-value"}' },
+      { name: 'invalid.txt' }, // no write path
+      { name: 'some/dir/', directory: true } // directory -> skipped
+    ]);
 
     renderWithContext(<ImportExportModal />);
 
@@ -257,13 +222,12 @@ describe('<ImportExportModal />', () => {
 
     expect(uploadScreenshotSpy).toHaveBeenCalledTimes(1);
 
-    expect(restoreLocalStorageFromZipSpy).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem('some-key')).toBe('some-value');
   });
 
   it('shows an error and keeps the modal open when the zip contains an unsafe path', async () => {
     const syncActionIfEnabledSpy = vi.fn();
     const closeModalSpy = vi.fn();
-    const unsafeFilenameMessage: string = ERR_UNSAFE_FILENAME;
 
     const { useModalContext: originalModal } = await vi.importActual<
       typeof contextHooks
@@ -282,15 +246,7 @@ describe('<ImportExportModal />', () => {
       closeModal: closeModalSpy
     }));
 
-    vi.spyOn(zipUtils, 'readZipEntriesFromBlob').mockRejectedValue(
-      Object.assign(new Error(unsafeFilenameMessage), {
-        filename: '../evil.txt'
-      })
-    );
-
-    const testZip = new File(['zip-bytes'], 'export.zip', {
-      type: 'application/zip'
-    });
+    const testZip = await makeZipFile([{ name: '../evil.txt' }]);
 
     renderWithContext(<ImportExportModal />);
 
@@ -312,21 +268,13 @@ describe('<ImportExportModal />', () => {
   it('exports emulator file system to a zip', async () => {
     vi.setSystemTime(Date.UTC(2025, 0, 1, 8, 0, 0));
 
-    const finalizeSpy = vi.fn();
     const generateExportZipNameSpy = vi.spyOn(
       zipUtils,
       'generateExportZipName'
     );
-    const setupZipTargetSpy = vi
-      .spyOn(zipUtils, 'setupZipTarget')
-      .mockImplementation(() =>
-        Promise.resolve({
-          writer: new ZipWriter<Blob>(new BlobWriter('application/zip')),
-          finalize: finalizeSpy
-        })
-      );
-    const addUint8ArrayToZipSpy = vi.spyOn(zipUtils, 'addUint8ArrayToZip');
-    const addLocalStorageToZipSpy = vi.spyOn(zipUtils, 'addLocalStorageToZip');
+    const downloadBlobSpy = vi
+      .spyOn(blobUtils, 'downloadBlob')
+      .mockImplementation((_, blob) => blob);
     const listAllFilesSpy: () => FileNode = vi.fn(
       (): FileNode => defaultFSData
     );
@@ -351,40 +299,18 @@ describe('<ImportExportModal />', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Export' }));
 
-    expect(generateExportZipNameSpy).toHaveBeenCalledOnce();
-    expect(setupZipTargetSpy).toHaveBeenCalledWith(
-      'gbajs-files-2025-01-01-08-00-00.zip',
-      zipUtils.zipOptions
-    );
-
     await waitFor(() => {
-      expect(finalizeSpy).toHaveBeenCalledOnce();
+      expect(downloadBlobSpy).toHaveBeenCalledWith(
+        'gbajs-files-2025-01-01-08-00-00.zip',
+        expect.any(Blob)
+      );
     });
 
-    expect(addUint8ArrayToZipSpy).toHaveBeenCalledTimes(3);
-
-    expect(addUint8ArrayToZipSpy).toHaveBeenNthCalledWith(
-      1,
-      expect.any(ZipWriter<Blob>),
-      'autosave/rom1_auto.ss',
-      expect.anything()
-    );
-
-    expect(zipUtils.addUint8ArrayToZip).toHaveBeenNthCalledWith(
-      2,
-      expect.any(ZipWriter<Blob>),
-      'data/games/rom1.gba',
-      expect.anything()
-    );
-
-    expect(zipUtils.addUint8ArrayToZip).toHaveBeenNthCalledWith(
-      3,
-      expect.any(ZipWriter<Blob>),
-      'data/games/rom1.sav',
-      expect.anything()
-    );
-
-    expect(addLocalStorageToZipSpy).toHaveBeenCalledOnce();
+    expect(generateExportZipNameSpy).toHaveBeenCalledOnce();
+    expect(getFileSpy).toHaveBeenCalledTimes(3);
+    expect(getFileSpy).toHaveBeenCalledWith('/autosave/rom1_auto.ss');
+    expect(getFileSpy).toHaveBeenCalledWith('/data/games/rom1.gba');
+    expect(getFileSpy).toHaveBeenCalledWith('/data/games/rom1.sav');
   });
 
   it('closes modal when clicking Close', async () => {

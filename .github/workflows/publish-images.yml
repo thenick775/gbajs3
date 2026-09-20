@@ -35,6 +35,7 @@ jobs:
           - name: gba-webserver
             directory: ./gbajs3
             needs_client_host: true
+            needs_google_client_id: true
             needs_release_version: true
           - name: gba-auth-server
             directory: ./auth
@@ -58,9 +59,11 @@ jobs:
           IMAGE_TAG: ${{ needs.setup.outputs.image_tag }}
           NEEDS_PG_DB_USER: ${{ matrix.image.needs_pg_db_user }}
           NEEDS_CLIENT_HOST: ${{ matrix.image.needs_client_host }}
+          NEEDS_GOOGLE_CLIENT_ID: ${{ matrix.image.needs_google_client_id }}
           NEEDS_RELEASE_VERSION: ${{ matrix.image.needs_release_version }}
           PG_DB_USER: ${{ secrets.PG_DB_USER }}
           CLIENT_HOST: ${{ secrets.CLIENT_HOST }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
         run: |
           BUILD_ARG_FLAGS=""
           if [ "$NEEDS_PG_DB_USER" = "true" ]; then
@@ -68,6 +71,9 @@ jobs:
           fi
           if [ "$NEEDS_CLIENT_HOST" = "true" ]; then
             BUILD_ARG_FLAGS="$BUILD_ARG_FLAGS --build-arg CLIENT_HOST=$CLIENT_HOST"
+          fi
+          if [ "$NEEDS_GOOGLE_CLIENT_ID" = "true" ]; then
+            BUILD_ARG_FLAGS="$BUILD_ARG_FLAGS --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID"
           fi
           if [ "$NEEDS_RELEASE_VERSION" = "true" ]; then
             BUILD_ARG_FLAGS="$BUILD_ARG_FLAGS --build-arg RELEASE_VERSION=$IMAGE_TAG"

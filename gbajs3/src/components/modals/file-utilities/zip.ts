@@ -1,6 +1,7 @@
 import {
   BlobReader,
   BlobWriter,
+  ERR_UNSAFE_FILENAME,
   TextReader,
   TextWriter,
   Uint8ArrayReader,
@@ -16,9 +17,18 @@ import { z } from 'zod';
 
 import { downloadBlob } from './blob.ts';
 
-export type ZipTarget = {
+export type ZipFile = {
+  zipPath: string;
+  read: () => Uint8Array | undefined;
+};
+
+type ZipTarget = {
   writer: ZipWriter<Blob>;
   finalize: () => Promise<Blob>;
+};
+
+type UnsafeFilenameError = Error & {
+  filename?: string;
 };
 
 const zipTypes: FilePickerAcceptType[] = [
@@ -28,7 +38,7 @@ const zipTypes: FilePickerAcceptType[] = [
   }
 ];
 
-export const zipOptions = {
+const zipOptions = {
   level: 6,
   bufferedWrite: true
 };
@@ -41,7 +51,7 @@ export const generateExportZipName = (prefix = 'gbajs-files') =>
     .slice(0, 19)
     .replace(/[:T]/g, '-')}.zip`;
 
-export const setupZipTarget = async (
+const setupZipTarget = async (
   name: string,
   opts: ZipWriterConstructorOptions
 ): Promise<ZipTarget> => {
@@ -73,7 +83,12 @@ export const setupZipTarget = async (
 export const stripLeadingSlashes = (filePath: string) =>
   filePath.replace(/^\/+/, '');
 
-export const addLocalStorageToZip = (
+export const isZipUnsafeFilenameError = (
+  error: unknown
+): error is UnsafeFilenameError =>
+  error instanceof Error && error.message === ERR_UNSAFE_FILENAME;
+
+const addLocalStorageToZip = (
   writer: ZipWriter<Blob>
 ): Promise<EntryMetaData> =>
   writer.add(
@@ -82,9 +97,7 @@ export const addLocalStorageToZip = (
     zipOptions
   );
 
-export const restoreLocalStorageFromZip = async (
-  entry: FileEntry
-): Promise<void> => {
+const restoreLocalStorageFromZip = async (entry: FileEntry): Promise<void> => {
   const textJson = await entry.getData(new TextWriter());
   const json = storageSchema.parse(JSON.parse(textJson));
 
@@ -93,11 +106,47 @@ export const restoreLocalStorageFromZip = async (
   });
 };
 
-export const addUint8ArrayToZip = (
+const addUint8ArrayToZip = (
   writer: ZipWriter<Blob>,
   relativePath: string,
   bytes: Uint8Array
 ) => writer.add(relativePath, new Uint8ArrayReader(bytes), zipOptions);
+
+const writeFilesToZip = async (writer: ZipWriter<Blob>, files: ZipFile[]) => {
+  await files.reduce(
+    (chain, { zipPath, read }) =>
+      chain.then(async () => {
+        const bytes = read();
+
+        return bytes?.length
+          ? addUint8ArrayToZip(writer, zipPath, bytes).then(() => void 0)
+          : Promise.resolve();
+      }),
+    Promise.resolve()
+  );
+
+  await addLocalStorageToZip(writer);
+};
+
+export const createZipBlob = async (files: ZipFile[]): Promise<Blob> => {
+  const blobWriter = new BlobWriter('application/zip');
+  const writer = new ZipWriter<Blob>(blobWriter, zipOptions);
+
+  await writeFilesToZip(writer, files);
+
+  return writer.close();
+};
+
+export const downloadZip = async (
+  name: string,
+  files: ZipFile[]
+): Promise<void> => {
+  const { writer, finalize } = await setupZipTarget(name, zipOptions);
+
+  await writeFilesToZip(writer, files);
+
+  await finalize();
+};
 
 /**
  * Reads entries from a ZIP file and calls `onReadEntry` for each read file.
@@ -105,7 +154,7 @@ export const addUint8ArrayToZip = (
  * @throws {Error} If the ZIP cannot be read, including when `zip.js`
  * rejects unsafe entries with `ERR_UNSAFE_FILENAME`.
  */
-export const readZipEntriesFromBlob = async (
+const readZipEntriesFromBlob = async (
   zipFile: File,
   onReadEntry: (entry: Entry) => Promise<void>
 ) => {
@@ -120,7 +169,7 @@ export const readZipEntriesFromBlob = async (
   }
 };
 
-export const readFileFromZipEntry = async (entry: FileEntry) => {
+const readFileFromZipEntry = async (entry: FileEntry) => {
   const bytes = await entry.getData(new Uint8ArrayWriter());
   const name = entry.filename.split('/').pop();
 
@@ -130,4 +179,24 @@ export const readFileFromZipEntry = async (entry: FileEntry) => {
         name
       )
     : null;
+};
+
+export const readZipFiles = async (zipFile: File): Promise<File[]> => {
+  const files: File[] = [];
+
+  await readZipEntriesFromBlob(zipFile, async (entry) => {
+    if (!entry.filename) return;
+    if (entry.directory) return;
+
+    if (entry.filename === 'local-storage.json') {
+      await restoreLocalStorageFromZip(entry);
+      return;
+    }
+
+    const file = await readFileFromZipEntry(entry);
+
+    if (file) files.push(file);
+  });
+
+  return files;
 };

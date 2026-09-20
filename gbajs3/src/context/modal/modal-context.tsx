@@ -6,6 +6,7 @@ type ModalPayloadMap = {
   about: undefined;
   uploadFiles: undefined;
   controls: undefined;
+  cloudSync: undefined;
   fileSystem: undefined;
   emulatorSettings: undefined;
   importExport: undefined;

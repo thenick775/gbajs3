@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^9.1.2",
     "@mui/x-tree-view": "^9.10.1",
+    "@react-oauth/google": "^0.13.5",
     "@tanstack/react-query": "^5.101.2",
     "@thenick775/mgba-wasm": "^2.4.1",
     "@uidotdev/usehooks": "^2.4.1",
