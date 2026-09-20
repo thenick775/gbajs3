@@ -4,10 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { CloudSyncModal } from './cloud-sync.tsx';
 import * as filesystemBackup from './file-utilities/filesystem-backup.ts';
-import {
-  testGoogleDriveBackup,
-  testGoogleDriveBackup2
-} from '../../../test/mocks/handlers.ts';
+import { testGoogleDriveBackup } from '../../../test/mocks/handlers.ts';
 import { renderWithContext } from '../../../test/render-with-context.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
 import * as addCallbackHooks from '../../hooks/emulator/use-add-callbacks.tsx';
@@ -60,33 +57,37 @@ describe('<CloudSyncModal />', () => {
     expect(connectGoogleDriveSpy).toHaveBeenCalledOnce();
   });
 
-  it('selects at most one backup', async () => {
+  it('restores a backup after confirmation', async () => {
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const pullGoogleDriveBackupSpy = vi.fn();
+    vi.spyOn(googleDriveHooks, 'usePullGoogleDriveBackup').mockReturnValue({
+      error: null,
+      isPending: false,
+      mutate: pullGoogleDriveBackupSpy as UseMutateFunction<
+        Blob,
+        Error,
+        { backupId: string; name: string }
+      >
+    } as UseMutationResult<Blob, Error, { backupId: string; name: string }>);
     await mockCloudSyncContext('token');
 
     renderWithContext(<CloudSyncModal />);
 
     expect(await screen.findByText('2.0 KiB')).toBeVisible();
-    expect(screen.getByText('1.0 KiB')).toBeVisible();
-    const restoreButton = screen.getByRole('button', { name: 'Restore' });
-    const first = screen.getByLabelText(
-      `Select ${testGoogleDriveBackup2.name}`
-    );
-    const second = screen.getByLabelText(
-      `Select ${testGoogleDriveBackup.name}`
+
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: `Restore ${testGoogleDriveBackup.name}`
+      })
     );
 
-    expect(restoreButton).toBeDisabled();
-
-    await userEvent.click(first);
-    expect(first).toBeChecked();
-    expect(second).not.toBeChecked();
-
-    await userEvent.click(second);
-    expect(first).not.toBeChecked();
-    expect(second).toBeChecked();
-
-    await userEvent.click(second);
-    expect(restoreButton).toBeDisabled();
+    expect(confirmSpy).toHaveBeenCalledWith(
+      'Pulling this backup will replace local files. Continue?'
+    );
+    expect(pullGoogleDriveBackupSpy).toHaveBeenCalledWith({
+      backupId: testGoogleDriveBackup.id,
+      name: testGoogleDriveBackup.name
+    });
   });
 
   it('creates a filesystem backup and uploads it to google drive', async () => {
@@ -141,7 +142,6 @@ describe('<CloudSyncModal />', () => {
     expect(
       screen.getByRole('button', { name: 'Create new cloud backup' })
     ).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Restore' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Refresh' })).toBeDisabled();
   });
 
@@ -205,10 +205,13 @@ describe('<CloudSyncModal />', () => {
 
     expect(await screen.findByText('2.0 KiB')).toBeInTheDocument();
 
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+
     await userEvent.click(
-      screen.getByLabelText(`Select ${testGoogleDriveBackup.name}`)
+      screen.getByRole('button', {
+        name: `Restore ${testGoogleDriveBackup.name}`
+      })
     );
-    await userEvent.click(screen.getByRole('button', { name: 'Restore' }));
 
     expect(clearFilesystemSpy).toHaveBeenCalledOnce();
     expect(importZipToEmulatorFsSpy).toHaveBeenCalledWith(
