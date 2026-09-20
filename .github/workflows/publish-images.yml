@@ -63,7 +63,7 @@ jobs:
           NEEDS_RELEASE_VERSION: ${{ matrix.image.needs_release_version }}
           PG_DB_USER: ${{ secrets.PG_DB_USER }}
           CLIENT_HOST: ${{ secrets.CLIENT_HOST }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
         run: |
           BUILD_ARG_FLAGS=""
           if [ "$NEEDS_PG_DB_USER" = "true" ]; then
