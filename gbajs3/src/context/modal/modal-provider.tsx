@@ -11,8 +11,13 @@ type ModalProviderProps = {
 };
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {
-  const [modal, setModal] = useState<ModalState>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Allows the legal modal to be used as a public google oauth policy url.
+  const [modal, setModal] = useState<ModalState>(() =>
+    new URLSearchParams(window.location.search).get('modal') === 'legal'
+      ? { type: 'legal' }
+      : null
+  );
+  const [isModalOpen, setIsModalOpen] = useState(!!modal);
 
   const openModal = useCallback((nextModal: ModalInput) => {
     setModal(nextModal);

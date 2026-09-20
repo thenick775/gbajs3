@@ -28,7 +28,7 @@ describe('<LegalModal>', () => {
     expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
-  it('renders with current year in copywright', () => {
+  it('renders with current year in copyright', () => {
     vi.setSystemTime(new Date(2023, 0));
 
     renderWithContext(<LegalModal />);

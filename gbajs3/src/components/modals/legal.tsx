@@ -71,6 +71,21 @@ export const LegalModal = () => {
 
           <li>
             <p>
+              Google Drive Cloud Sync:
+              <br />
+              Cloud Sync uses Google Drive only when you choose to connect it.
+              gbajs3 requests access to its private Google Drive app data folder
+              using the drive.appdata scope. gbajs3 creates, lists, restores,
+              and deletes backup zip files in that app-specific folder. gbajs3
+              does not access, read, or modify your normal Google Drive files.
+              Google Drive data accessed by gbajs3 is used only to provide Cloud
+              Sync and is not sold, shared, or used for advertising. You can
+              revoke access from your Google Account at any time.
+            </p>
+          </li>
+
+          <li>
+            <p>
               Limitation of Liability:
               <br />
               THE EMULATOR IS PROVIDED "AS IS" WITHOUT ANY EXPRESS OR IMPLIED
