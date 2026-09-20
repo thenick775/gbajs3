@@ -44,15 +44,34 @@ export default defineConfig(({ mode }) => {
       withCOIServiceWorker
         ? [
             createHtmlPlugin({
-              inject: {
-                tags: [
-                  {
-                    tag: 'script',
-                    attrs: { src: 'coi-sw.js' },
-                    injectTo: 'head-prepend'
+              pages: [
+                {
+                  filename: 'index.html',
+                  template: 'index.html',
+                  injectOptions: {
+                    tags: [
+                      {
+                        tag: 'script',
+                        attrs: { src: 'coi-sw.js' },
+                        injectTo: 'head-prepend'
+                      }
+                    ]
                   }
-                ]
-              }
+                },
+                {
+                  filename: cloudSyncAuthPath,
+                  template: cloudSyncAuthPath,
+                  injectOptions: {
+                    tags: [
+                      {
+                        tag: 'script',
+                        attrs: { src: 'coi-sw.js' },
+                        injectTo: 'head-prepend'
+                      }
+                    ]
+                  }
+                }
+              ]
             })
           ]
         : [],
