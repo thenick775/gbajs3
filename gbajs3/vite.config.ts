@@ -149,7 +149,11 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,wasm}'],
-          navigateFallbackDenylist: [/^\/admin/]
+          ignoreURLParametersMatching: [/^state$/],
+          navigateFallbackDenylist: [
+            /^\/admin/,
+            /\/cloud-sync-auth\.html(?:\?|$)/
+          ]
         },
         ...(withCOIServiceWorker
           ? {
