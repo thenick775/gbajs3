@@ -357,7 +357,35 @@ describe('<UploadFilesModal />', () => {
     expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
-  it('falls back to the first successful URL rom when the selected one fails', async () => {
+  it('keeps duplicate URL row checkboxes independent', async () => {
+    renderWithContext(<UploadFilesModal />);
+
+    await userEvent.click(screen.getByRole('button', { name: 'urls' }));
+
+    const urlInputs = () => screen.getAllByRole('textbox', { name: 'URL' });
+
+    await userEvent.type(urlInputs()[0], `${testRomLocation}/good_rom.gba`);
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Add upload url' })
+    );
+
+    await userEvent.type(urlInputs()[1], `${testRomLocation}/good_rom.gba`);
+
+    const runCheckboxes = screen.getAllByRole('checkbox', {
+      name: 'Run rom'
+    });
+
+    expect(runCheckboxes[0]).toBeChecked();
+    expect(runCheckboxes[1]).not.toBeChecked();
+
+    await userEvent.click(runCheckboxes[1]);
+
+    expect(runCheckboxes[0]).not.toBeChecked();
+    expect(runCheckboxes[1]).toBeChecked();
+  });
+
+  it('does not run another URL rom when the selected URL rom fails', async () => {
     const { useEmulatorContext: originalEmu, useModalContext: originalModal } =
       await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
     const { useAddCallbacks: originalCallbacks } = await vi.importActual<
@@ -414,8 +442,7 @@ describe('<UploadFilesModal />', () => {
       expect.objectContaining({ name: 'good_rom_2.gb' }),
       'rom'
     );
-    expect(runGameSpy).toHaveBeenCalledOnce();
-    expect(runGameSpy).toHaveBeenCalledWith('good_rom_2.gb');
+    expect(runGameSpy).not.toHaveBeenCalled();
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
     expect(closeModalSpy).toHaveBeenCalledOnce();
   });

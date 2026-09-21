@@ -39,7 +39,7 @@ import type { FileTypes } from '../../emulator/mgba/mgba-emulator.tsx';
 type InputProps = {
   files: File[];
   fileUrls: { url: string; type: keyof FileTypes }[];
-  romToRun?: { fileName: string } | { romUrl: string } | null;
+  romToRun?: { fileName: string } | { urlId: string } | null;
 };
 
 type RunRomCheckboxProps = {
@@ -217,15 +217,29 @@ export const UploadFilesModal = () => {
 
     await Promise.all(files.map((file) => writeFileToEmulator(file)));
 
-    const activeFileUrls = fileUrls.filter((fileUrl) => !!fileUrl.url);
+    const activeFileUrls = fields
+      .map((field, index) => ({
+        urlId: field.id,
+        url: fileUrls[index]?.url,
+        type: fileUrls[index]?.type
+      }))
+      .filter(
+        (
+          fileUrl
+        ): fileUrl is {
+          urlId: string;
+          url: string;
+          type: keyof FileTypes;
+        } => !!fileUrl.url
+      );
 
-    const successfulUrlRomCandidates: { romUrl: string; fileName: string }[] =
+    const successfulUrlRomCandidates: { urlId: string; fileName: string }[] =
       [];
 
     if (fileUrls.length > 0) {
       const externalFilesSettled = await Promise.allSettled(
-        activeFileUrls.map(async ({ url, type }) => ({
-          romUrl: url,
+        activeFileUrls.map(async ({ urlId, url, type }) => ({
+          urlId,
           file: await fetchFileFromUrl(new URL(url)),
           type
         }))
@@ -245,13 +259,21 @@ export const UploadFilesModal = () => {
         ...successfulExternalUploads
           .filter((result) => result.value.type === 'rom')
           .map((result) => ({
-            romUrl: result.value.romUrl,
+            urlId: result.value.urlId,
             fileName: result.value.file.name
           }))
       );
     }
 
     await syncActionIfEnabled();
+
+    const defaultUrlRomToRun =
+      romToRun === undefined && !localRomCandidates.length
+        ? activeFileUrls.find((fileUrl) => fileUrl.type === 'rom')?.urlId
+        : undefined;
+
+    const urlRomToRun =
+      romToRun && 'urlId' in romToRun ? romToRun.urlId : defaultUrlRomToRun;
 
     const selectedLocalRom: string | undefined =
       romToRun && 'fileName' in romToRun
@@ -260,21 +282,18 @@ export const UploadFilesModal = () => {
         : undefined;
 
     const selectedUrlRom: string | undefined =
-      romToRun && 'romUrl' in romToRun
+      urlRomToRun !== undefined
         ? successfulUrlRomCandidates.find(
-            (candidate) => candidate.romUrl === romToRun.romUrl
+            (candidate) => candidate.urlId === urlRomToRun
           )?.fileName
         : undefined;
 
     const gameToRun =
       romToRun === null
         ? null
-        : [
-            selectedLocalRom,
-            selectedUrlRom,
-            localRomCandidates[0]?.name,
-            successfulUrlRomCandidates[0]?.fileName
-          ].find((candidate) => candidate !== undefined);
+        : [selectedLocalRom, selectedUrlRom, localRomCandidates[0]?.name].find(
+            (candidate) => candidate !== undefined
+          );
 
     if (gameToRun) runGame(gameToRun);
 
@@ -288,7 +307,9 @@ export const UploadFilesModal = () => {
   const firstUrlRom =
     firstRomName || romToRun !== undefined
       ? null
-      : fileUrls.find((fileUrl) => fileUrl.url && fileUrl.type === 'rom')?.url;
+      : fields.find(
+          (_, index) => fileUrls[index]?.url && fileUrls[index]?.type === 'rom'
+        )?.id;
 
   const handleUploadType = (
     _: React.MouseEvent<HTMLElement>,
@@ -402,14 +423,14 @@ export const UploadFilesModal = () => {
                         }}
                         {...register(`fileUrls.${index}.url`, {
                           validate: (fileUrl) => {
-                            if (uploadType === 'urls') {
-                              try {
-                                if (!fileUrl) return 'Invalid url - empty';
-                                new URL(fileUrl);
-                              } catch {
-                                return 'Invalid url';
-                              }
+                            // if (uploadType === 'urls') {
+                            try {
+                              if (!fileUrl) return 'Invalid url - empty';
+                              new URL(fileUrl);
+                            } catch {
+                              return 'Invalid url';
                             }
+                            // }
                           }
                         })}
                       />
@@ -443,20 +464,20 @@ export const UploadFilesModal = () => {
                                 disabled={!fileUrls[index]?.url}
                                 checked={
                                   (!!romToRun &&
-                                    'romUrl' in romToRun &&
-                                    romToRun.romUrl === fileUrls[index]?.url) ||
+                                    'urlId' in romToRun &&
+                                    romToRun.urlId === item.id) ||
                                   (romToRun === undefined &&
-                                    firstUrlRom === fileUrls[index]?.url)
+                                    firstUrlRom === item.id)
                                 }
                                 onChange={() => {
                                   setValue(
                                     'romToRun',
                                     !!romToRun &&
-                                      'romUrl' in romToRun &&
-                                      romToRun.romUrl === fileUrls[index]?.url
+                                      'urlId' in romToRun &&
+                                      romToRun.urlId === item.id
                                       ? null
                                       : fileUrls[index]?.url
-                                        ? { romUrl: fileUrls[index].url }
+                                        ? { urlId: item.id }
                                         : null
                                   );
                                 }}
@@ -474,7 +495,7 @@ export const UploadFilesModal = () => {
                 aria-label="Add upload url"
                 sx={{ padding: 0, marginTop: '10px' }}
                 onClick={() => {
-                  append(defaultFileUrl);
+                  append({ ...defaultFileUrl });
                 }}
               >
                 <StyledBiPlus />
