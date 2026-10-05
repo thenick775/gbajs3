@@ -1,7 +1,7 @@
 import { useMediaQuery } from '@mui/material';
 import { useTheme, styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import toast from 'react-hot-toast';
 import { IconContext } from 'react-icons';
 import {
@@ -31,6 +31,7 @@ import { Copy } from '../shared/styled.tsx';
 
 import type { AreVirtualControlsEnabledProps } from '../modals/controls/virtual-controls-form.tsx';
 import type { CurrentSaveStateSlots } from '../modals/save-states.tsx';
+import type { LinkLocalStatus } from '@thenick775/mgba-wasm';
 
 const VirtualButtonTextLarge = styled(Copy)`
   text-align: center;
@@ -48,6 +49,13 @@ const VirtualButtonTextSmall = styled('p')`
   font-weight: 600;
   letter-spacing: 0.01em;
   text-align: center;
+`;
+
+const LocalLinkPlayerSwitchText = styled(Copy)`
+  color: ${({ theme }) => theme.surfaceTextPrimary};
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-size: 0.9rem;
 `;
 
 const keyToAriaLabel = (key: string) =>
@@ -73,6 +81,7 @@ export const VirtualControls = () => {
   const { quickReload } = useQuickReload();
   const { syncActionIfEnabled } = useAddCallbacks();
   const isEmulatorReady = !!emulator;
+  const [selectedLocalLinkPlayer, setSelectedLocalLinkPlayer] = useState(1);
   const [currentSaveStateSlots] = useLocalStorage<CurrentSaveStateSlots>(
     saveStateSlotsLocalStorageKey,
     {}
@@ -87,6 +96,7 @@ export const VirtualControls = () => {
   const controlPanelBounds =
     controlPanelLayout?.originalBounds ?? initialBounds?.controlPanel;
   const canvasBounds = screenLayout?.originalBounds ?? initialBounds?.screen;
+  const localLinkStatus: LinkLocalStatus | undefined = emulator?.getLocalLinkStatus();
 
   if (!controlPanelBounds || !canvasBounds) return null;
 
@@ -101,6 +111,8 @@ export const VirtualControls = () => {
   const shouldShowVirtualButtonsAndOpad = shouldShowVirtualControl(
     areVirtualControlsEnabled?.OpadAndButtons
   );
+  const shouldShowLocalLinkPlayerSwitch =
+    areVirtualControlsEnabled?.LocalLinkPlayerSwitch ?? !!localLinkStatus?.running;
 
   const areNotificationsEnabled =
     areVirtualControlsEnabled?.NotificationsEnabled ?? true;
@@ -128,7 +140,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 35px - 3%)`,
-        left: `calc(${horizontalStartPos}px + 465px)`
+        left: `calc(${horizontalStartPos}px + 510px)`
       },
       mobileLandscape: {
         top: '235px',
@@ -145,7 +157,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 35px)`,
-        left: `calc(${horizontalStartPos}px + 400px)`
+        left: `calc(${horizontalStartPos}px + 445px)`
       },
       mobileLandscape: {
         top: 'calc(235px + 3%)',
@@ -278,6 +290,24 @@ export const VirtualControls = () => {
         left: `calc(${canvasBounds.left}px - 5px)`
       }
     },
+    'local-link-player-switch': {
+      defaultMobile: {
+        top: `calc(${verticalStartPos}px + 26% + 52px)`,
+        left: 'calc(100dvw - 55px)'
+      },
+      mobileWithUrlBar: {
+        top: `calc(${verticalStartPos}px + 24% + 38px)`,
+        left: 'calc(100dvw - 60px)'
+      },
+      largerThanPhone: {
+        top: `calc(${verticalStartPos}px + 10px)`,
+        left: `calc(${horizontalStartPos}px + 382px)`
+      },
+      mobileLandscape: {
+        top: '205px',
+        left: `calc(${canvasBounds.left}px - 5px)`
+      }
+    },
     'o-pad': {
       defaultMobile: {
         top: `calc(${verticalStartPos}px + 11%)`,
@@ -289,7 +319,7 @@ export const VirtualControls = () => {
       },
       largerThanPhone: {
         top: `calc(${verticalStartPos}px + 10px)`,
-        left: `calc(${horizontalStartPos}px + 460px)`
+        left: `calc(${horizontalStartPos}px + 505px)`
       },
       mobileLandscape: {
         top: 'calc(100dvh - 205px)',
@@ -330,6 +360,9 @@ export const VirtualControls = () => {
   const currentSaveStateSlot = currentGameName
     ? (currentSaveStateSlots[currentGameName] ?? 0)
     : 0;
+  const activeLocalLinkPlayer =
+    localLinkStatus?.activePlayer ?? selectedLocalLinkPlayer;
+  const nextLocalLinkPlayer = activeLocalLinkPlayer === 1 ? 2 : 1;
 
   const virtualButtons = [
     {
@@ -500,6 +533,26 @@ export const VirtualControls = () => {
       keyName: 'savestate-button',
       disabled: !isEmulatorReady,
       shown: shouldShowVirtualControl(areVirtualControlsEnabled?.SaveState)
+    },
+    {
+      children: (
+        <LocalLinkPlayerSwitchText>
+          P{activeLocalLinkPlayer}
+        </LocalLinkPlayerSwitchText>
+      ),
+      onPointerDown: () => {
+        emulator?.setLocalLinkActivePlayer(nextLocalLinkPlayer);
+        setSelectedLocalLinkPlayer(nextLocalLinkPlayer);
+      },
+      width: 40,
+      initialPosition: initialPositionForKey('local-link-player-switch'),
+      initialOffset: {
+        x: '-100%',
+        y: '0px'
+      },
+      keyName: 'local-link-player-switch',
+      disabled: !isEmulatorReady,
+      shown: shouldShowLocalLinkPlayerSwitch
     }
   ];
 

@@ -3,6 +3,7 @@ import { useTheme, styled } from '@mui/material/styles';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 
+import { useEmulatorContext } from '../../../hooks/context.tsx';
 import { virtualControlsLocalStorageKey } from '../../controls/consts.tsx';
 import { ManagedCheckbox } from '../../shared/managed-checkbox.tsx';
 import { ManagedSwitch } from '../../shared/managed-switch.tsx';
@@ -18,6 +19,7 @@ export type AreVirtualControlsEnabledProps = {
   LoadState: boolean;
   QuickReload: boolean;
   SendSaveToServer: boolean;
+  LocalLinkPlayerSwitch: boolean;
   NotificationsEnabled: boolean;
 };
 
@@ -36,9 +38,11 @@ export const VirtualControlsForm = ({
     useLocalStorage<AreVirtualControlsEnabledProps | undefined>(
       virtualControlsLocalStorageKey
     );
+  const { emulator } = useEmulatorContext();
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
+  const localLinkStatus = emulator?.getLocalLinkStatus();
 
   const shouldShowVirtualControl = (virtualControlEnabled?: boolean) => {
     return (
@@ -49,13 +53,23 @@ export const VirtualControlsForm = ({
   };
 
   const { register, handleSubmit, watch } = useForm<ControlsInputProps>({
-    values: areVirtualControlsEnabled ?? {
-      OpadAndButtons: shouldShowVirtualControl(undefined),
-      SaveState: shouldShowVirtualControl(undefined),
-      LoadState: shouldShowVirtualControl(undefined),
-      QuickReload: shouldShowVirtualControl(undefined),
-      SendSaveToServer: shouldShowVirtualControl(undefined),
-      NotificationsEnabled: true
+    values: {
+      OpadAndButtons: shouldShowVirtualControl(
+        areVirtualControlsEnabled?.OpadAndButtons
+      ),
+      SaveState: shouldShowVirtualControl(areVirtualControlsEnabled?.SaveState),
+      LoadState: shouldShowVirtualControl(areVirtualControlsEnabled?.LoadState),
+      QuickReload: shouldShowVirtualControl(
+        areVirtualControlsEnabled?.QuickReload
+      ),
+      SendSaveToServer: shouldShowVirtualControl(
+        areVirtualControlsEnabled?.SendSaveToServer
+      ),
+      LocalLinkPlayerSwitch:
+        areVirtualControlsEnabled?.LocalLinkPlayerSwitch ??
+        !!localLinkStatus?.running,
+      NotificationsEnabled:
+        areVirtualControlsEnabled?.NotificationsEnabled ?? true
     },
     resetOptions: {
       keepDirtyValues: true
@@ -100,6 +114,11 @@ export const VirtualControlsForm = ({
         label="Send save to server"
         watcher={watch('SendSaveToServer')}
         {...register('SendSaveToServer')}
+      />
+      <ManagedCheckbox
+        label="Local Link Player Switch"
+        watcher={watch('LocalLinkPlayerSwitch')}
+        {...register('LocalLinkPlayerSwitch')}
       />
       <ManagedSwitch
         label="Enable Notifications"
