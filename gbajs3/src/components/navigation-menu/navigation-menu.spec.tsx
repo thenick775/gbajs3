@@ -25,7 +25,7 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
     expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
     // renders default mounted menu items
-    expect(screen.getAllByRole('listitem')).toHaveLength(14);
+    expect(screen.getAllByRole('listitem')).toHaveLength(15);
     expect(screen.getByTestId('menu-wrapper')).toHaveStyle({
       left: '-255px'
     });
@@ -59,7 +59,7 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
     expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
     // renders default mounted menu items
-    expect(screen.getAllByRole('listitem')).toHaveLength(14);
+    expect(screen.getAllByRole('listitem')).toHaveLength(15);
     expect(screen.getByTestId('menu-wrapper')).toHaveStyle({
       left: 0
     });
@@ -74,7 +74,7 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
     expect(screen.getByLabelText('Menu Dismiss')).toBeVisible();
     // renders default mounted menu items
-    expect(screen.getAllByRole('listitem')).toHaveLength(14);
+    expect(screen.getAllByRole('listitem')).toHaveLength(15);
   });
 
   it('toggles menu with button', async () => {
@@ -169,6 +169,7 @@ describe('<NavigationMenu />', () => {
           emulator: {
             getCurrentAutoSaveStatePath: () => null,
             getCurrentGameName: () => undefined,
+            getLocalLinkStatus: () => ({ running: false }),
             listRoms: () => ['some_rom.gba']
           } as GBAEmulator
         }));
@@ -202,6 +203,7 @@ describe('<NavigationMenu />', () => {
         emulator: {
           getCurrentAutoSaveStatePath: () => null,
           getCurrentGameName: () => undefined,
+          getLocalLinkStatus: () => ({ running: false }),
           listRoms: () => ['some_rom.gba']
         } as GBAEmulator
       }));
@@ -231,6 +233,7 @@ describe('<NavigationMenu />', () => {
         emulator: {
           getCurrentAutoSaveStatePath: () => null,
           getCurrentGameName: () => undefined,
+          getLocalLinkStatus: () => ({ running: false }),
           listRoms: () => ['some_rom.gba']
         } as GBAEmulator
       }));
@@ -297,6 +300,7 @@ describe('<NavigationMenu />', () => {
         emulator: {
           getCurrentGameName: () => '/some_rom.gba',
           getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false }),
           listRoms: () => ['some_rom.gba']
         } as GBAEmulator
       }));
@@ -401,6 +405,7 @@ describe('<NavigationMenu />', () => {
           screenshot: screenshotSpy,
           getCurrentGameName: () => '/some_rom.gba',
           getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false }),
           listRoms: () => ['some_rom.gba']
         } as GBAEmulator,
         canvas: {} as HTMLCanvasElement
@@ -442,6 +447,7 @@ describe('<NavigationMenu />', () => {
           screenshot: () => false,
           getCurrentGameName: () => '/some_rom.gba',
           getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false }),
           listRoms: () => ['some_rom.gba']
         } as GBAEmulator,
         canvas: {} as HTMLCanvasElement
@@ -604,6 +610,7 @@ describe('<NavigationMenu />', () => {
           emulator: {
             getCurrentAutoSaveStatePath: () => null,
             getCurrentGameName: () => undefined,
+            getLocalLinkStatus: () => ({ running: false }),
             listRoms: () => ['some_rom.gba']
           } as GBAEmulator
         }));

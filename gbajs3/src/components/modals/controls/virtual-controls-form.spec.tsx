@@ -21,6 +21,7 @@ describe('<VirtualControlsForm />', () => {
     expect(screen.getByLabelText('Load State')).toBeInTheDocument();
     expect(screen.getByLabelText('Quick Reload')).toBeInTheDocument();
     expect(screen.getByLabelText('Send save to server')).toBeInTheDocument();
+    expect(screen.getByLabelText('Local Link Player Switch')).toBeInTheDocument();
     expect(screen.getByLabelText('Enable Notifications')).toBeInTheDocument();
   });
 
@@ -55,7 +56,7 @@ describe('<VirtualControlsForm />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       virtualControlsLocalStorageKey,
-      '{"OpadAndButtons":true,"SaveState":true,"LoadState":true,"QuickReload":true,"SendSaveToServer":true,"NotificationsEnabled":true}'
+      '{"OpadAndButtons":true,"SaveState":true,"LoadState":true,"QuickReload":true,"SendSaveToServer":true,"LocalLinkPlayerSwitch":false,"NotificationsEnabled":true}'
     );
     expect(onAfterSubmitSpy).toHaveBeenCalledOnce();
   });
@@ -80,7 +81,7 @@ describe('<VirtualControlsForm />', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     const switches = screen.getAllByRole('switch');
 
-    expect(checkboxes).toHaveLength(5);
+    expect(checkboxes).toHaveLength(6);
     expect(switches).toHaveLength(1);
 
     for (const el of [...checkboxes, ...switches]) {
@@ -91,7 +92,7 @@ describe('<VirtualControlsForm />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       virtualControlsLocalStorageKey,
-      '{"OpadAndButtons":false,"SaveState":false,"LoadState":false,"QuickReload":false,"SendSaveToServer":false,"NotificationsEnabled":false}'
+      '{"OpadAndButtons":false,"SaveState":false,"LoadState":false,"QuickReload":false,"SendSaveToServer":false,"LocalLinkPlayerSwitch":true,"NotificationsEnabled":false}'
     );
     expect(onAfterSubmitSpy).toHaveBeenCalledOnce();
   });
@@ -127,6 +128,7 @@ describe('<VirtualControlsForm />', () => {
     expect(screen.getByLabelText('Load State')).toBeChecked();
     expect(screen.getByLabelText('Quick Reload')).toBeChecked();
     expect(screen.getByLabelText('Send save to server')).toBeChecked();
+    expect(screen.getByLabelText('Local Link Player Switch')).not.toBeChecked();
   });
 
   it('virtual controls are false by default on desktop resolutions', () => {
@@ -160,6 +162,7 @@ describe('<VirtualControlsForm />', () => {
     expect(screen.getByLabelText('Load State')).not.toBeChecked();
     expect(screen.getByLabelText('Quick Reload')).not.toBeChecked();
     expect(screen.getByLabelText('Send save to server')).not.toBeChecked();
+    expect(screen.getByLabelText('Local Link Player Switch')).not.toBeChecked();
   });
 
   it('renders initial values from storage', () => {
@@ -177,6 +180,7 @@ describe('<VirtualControlsForm />', () => {
     expect(screen.getByLabelText('Load State')).toBeChecked();
     expect(screen.getByLabelText('Quick Reload')).toBeChecked();
     expect(screen.getByLabelText('Send save to server')).toBeChecked();
+    expect(screen.getByLabelText('Local Link Player Switch')).not.toBeChecked();
     expect(screen.getByLabelText('Enable Notifications')).not.toBeChecked();
   });
 });

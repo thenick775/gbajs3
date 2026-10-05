@@ -18,6 +18,7 @@ type ModalPayloadMap = {
   loadLocalRom: undefined;
   loadSave: undefined;
   loadRom: undefined;
+  localLink: undefined;
   uploadSaveToServer: undefined;
   uploadRomToServer: undefined;
   uploadPublicExternalRoms: UploadPublicExternalRomsModalProps;
