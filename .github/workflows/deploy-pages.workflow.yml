@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     steps:
       - id: set-release-version

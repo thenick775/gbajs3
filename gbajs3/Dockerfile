@@ -1,5 +1,5 @@
 # first stage - builder
-FROM node:24.14.0-alpine3.23 AS builder
+FROM node:24.21.0-alpine3.24 AS builder
 WORKDIR /app
 COPY . /app
 
@@ -15,7 +15,7 @@ RUN npm install && npm run build
 # second stage, server
 FROM nginx:stable-alpine
 
-LABEL org.opencontainers.image.source https://github.com/thenick775/gbajs3
+LABEL org.opencontainers.image.source=https://github.com/thenick775/gbajs3
 
 COPY ./docker/nginx.conf.template /etc/nginx/templates/nginx.conf.template
 
