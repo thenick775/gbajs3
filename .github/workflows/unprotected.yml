@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   change-detect:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       actions: write
       contents: read
@@ -22,7 +22,7 @@ jobs:
       gbajs3: ${{ steps.filter.outputs.gbajs3 }}
       duplicate_check: ${{ steps.skip_check.outputs.should_skip }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - id: skip_check
         uses: fkirc/skip-duplicate-actions@v5
         with:
