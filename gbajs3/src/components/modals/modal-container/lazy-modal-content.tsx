@@ -68,6 +68,10 @@ const modals = {
     () => import('../load-rom.tsx'),
     (module) => module.LoadRomModal
   ),
+  localLink: lazyNamedModal(
+    () => import('../local-link.tsx'),
+    (module) => module.LocalLinkModal
+  ),
   loadSave: lazyNamedModal(
     () => import('../load-save.tsx'),
     (module) => module.LoadSaveModal
@@ -135,6 +139,8 @@ const renderModalBody = (modal: Exclude<ModalState, null>) => {
       return <modals.loadSave />;
     case 'loadRom':
       return <modals.loadRom />;
+    case 'localLink':
+      return <modals.localLink />;
     case 'uploadSaveToServer':
       return <modals.uploadSaveToServer />;
     case 'uploadRomToServer':

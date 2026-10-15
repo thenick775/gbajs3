@@ -481,4 +481,44 @@ cheat1_code = "XYZ789"`;
     const saveName = emulator.getCurrentSaveName();
     expect(saveName).toEqual('testGame.sav');
   });
+
+  it('should list saves while excluding filesystem navigation entries', () => {
+    const listSaves = vi.fn(() => ['.', '..', 'testGame.sav']);
+    const { emulator } = createEmulator({ listSaves });
+
+    expect(emulator.listSaves()).toEqual(['testGame.sav']);
+  });
+
+  it('should expose the current save path', () => {
+    const { emulator } = createEmulator();
+
+    expect(emulator.getCurrentSavePath()).toBe('/data/saves/testGame.sav');
+  });
+
+  it('should forward local-link session operations', () => {
+    const linkLocalStartSession = vi.fn(() => true);
+    const linkLocalStopSession = vi.fn();
+    const linkLocalSetActivePlayer = vi.fn();
+    const status = { activePlayer: 1 as const, running: true };
+    const linkLocalGetStatus = vi.fn(() => status);
+    const { emulator } = createEmulator({
+      linkLocalStartSession,
+      linkLocalStopSession,
+      linkLocalSetActivePlayer,
+      linkLocalGetStatus
+    });
+    const config = {
+      player1: { romPath: '/data/games/file1.gba' },
+      player2: { romPath: '/data/games/file2.gba' }
+    };
+
+    expect(emulator.startLocalLinkSession(config)).toBe(true);
+    emulator.stopLocalLinkSession();
+    emulator.setLocalLinkActivePlayer(2);
+
+    expect(linkLocalStartSession).toHaveBeenCalledWith(config);
+    expect(linkLocalStopSession).toHaveBeenCalledOnce();
+    expect(linkLocalSetActivePlayer).toHaveBeenCalledWith(2);
+    expect(emulator.getLocalLinkStatus()).toBe(status);
+  });
 });

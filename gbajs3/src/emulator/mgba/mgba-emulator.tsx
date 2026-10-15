@@ -2,6 +2,9 @@ import type {
   coreCallbacks,
   coreSettings,
   filePaths,
+  LinkLocalStartSessionConfig,
+  LinkLocalStatus,
+  LinkPlayer,
   mGBAEmulator as mGBAEmulatorTypeDef
 } from '@thenick775/mgba-wasm';
 
@@ -59,6 +62,7 @@ export type GBAEmulator = {
   getCurrentSave: () => Uint8Array | null;
   getCurrentSaveTruncated: (sizeBytes: number) => Uint8Array | null;
   getCurrentSaveName: () => string | undefined;
+  getCurrentSavePath: () => string | undefined;
   getFile: (path: string) => Uint8Array;
   getStat: (path: string) => FS.Stats;
   getCurrentAutoSaveStatePath: () => string | null;
@@ -71,7 +75,12 @@ export type GBAEmulator = {
   ) => boolean;
   listAllFiles: () => FileNode;
   listRoms: () => string[];
+  listSaves: () => string[];
   listCurrentSaveStates: () => string[];
+  startLocalLinkSession: (config: LinkLocalStartSessionConfig) => boolean;
+  stopLocalLinkSession: () => void;
+  setLocalLinkActivePlayer: (player: LinkPlayer) => void;
+  getLocalLinkStatus: () => LinkLocalStatus;
   getSaveState: (saveStateName: string) => Uint8Array;
   loadSaveState: (slot: number) => boolean;
   parseCheatsString: (cheatsStr: string) => ParsedCheats[];
@@ -348,6 +357,16 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     },
     listRoms: () =>
       mGBA.listRoms().filter((romName) => !fileIgnorePaths.includes(romName)),
+    listSaves: () =>
+      mGBA.listSaves().filter((saveName) => !fileIgnorePaths.includes(saveName)),
+    startLocalLinkSession: (config) => mGBA.linkLocalStartSession(config),
+    stopLocalLinkSession: () => {
+      mGBA.linkLocalStopSession();
+    },
+    setLocalLinkActivePlayer: (...args) => {
+      mGBA.linkLocalSetActivePlayer(...args);
+    },
+    getLocalLinkStatus: () => mGBA.linkLocalGetStatus(),
     setVolume: (...args) => {
       mGBA.setVolume(...args);
     },
@@ -381,6 +400,7 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
       return save ? truncateSave(save, sizeBytes) : null;
     },
     getCurrentSaveName: () => filepathToFileName(mGBA.saveName),
+    getCurrentSavePath: () => mGBA.saveName,
     getCurrentAutoSaveStatePath: () => mGBA.autoSaveStateName ?? null,
     getFile: (path) => mGBA.FS.readFile(path),
     getStat: (path) => mGBA.FS.stat(path),

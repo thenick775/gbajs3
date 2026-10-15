@@ -12,6 +12,7 @@ import * as addCallbackHooks from '../../hooks/emulator/use-add-callbacks.tsx';
 import * as quickReloadHooks from '../../hooks/emulator/use-quick-reload.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
+import type { LinkPlayer } from '@thenick775/mgba-wasm';
 
 describe('<VirtualControls />', () => {
   beforeEach(async () => {
@@ -133,7 +134,8 @@ describe('<VirtualControls />', () => {
         ...original(),
         emulator: {
           getCurrentGameName: () => 'some_rom.gba',
-          getCurrentAutoSaveStatePath: () => null
+          getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -162,7 +164,8 @@ describe('<VirtualControls />', () => {
         ...original(),
         emulator: {
           getCurrentGameName: () => undefined,
-          getCurrentAutoSaveStatePath: () => null
+          getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -207,7 +210,8 @@ describe('<VirtualControls />', () => {
         ...originalEmulator(),
         emulator: {
           getCurrentAutoSaveStatePath: () => null,
-          getCurrentGameName: () => 'some_rom.gba'
+          getCurrentGameName: () => 'some_rom.gba',
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -242,7 +246,8 @@ describe('<VirtualControls />', () => {
         ...originalEmulator(),
         emulator: {
           getCurrentAutoSaveStatePath: () => null,
-          getCurrentGameName: () => undefined
+          getCurrentGameName: () => undefined,
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -270,7 +275,8 @@ describe('<VirtualControls />', () => {
         emulator: {
           loadSaveState: loadSaveStateSpy,
           getCurrentGameName: () => 'some_rom.gba',
-          getCurrentAutoSaveStatePath: () => null
+          getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -300,7 +306,8 @@ describe('<VirtualControls />', () => {
         emulator: {
           loadSaveState: loadSaveStateSpy,
           getCurrentGameName: () => 'some_rom.gba',
-          getCurrentAutoSaveStatePath: () => null
+          getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -328,7 +335,8 @@ describe('<VirtualControls />', () => {
         emulator: {
           loadSaveState: loadSaveStateSpy,
           getCurrentGameName: () => undefined,
-          getCurrentAutoSaveStatePath: () => null
+          getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -362,7 +370,8 @@ describe('<VirtualControls />', () => {
         emulator: {
           createSaveState: createSaveStateSpy,
           getCurrentGameName: () => 'some_rom.gba',
-          getCurrentAutoSaveStatePath: () => null
+          getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -402,7 +411,8 @@ describe('<VirtualControls />', () => {
         emulator: {
           createSaveState: createSaveStateSpy,
           getCurrentGameName: () => 'some_rom.gba',
-          getCurrentAutoSaveStatePath: () => null
+          getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -436,7 +446,8 @@ describe('<VirtualControls />', () => {
         emulator: {
           createSaveState: createSaveStateSpy,
           getCurrentGameName: () => undefined,
-          getCurrentAutoSaveStatePath: () => null
+          getCurrentAutoSaveStatePath: () => null,
+          getLocalLinkStatus: () => ({ running: false })
         } as GBAEmulator
       }));
 
@@ -454,5 +465,41 @@ describe('<VirtualControls />', () => {
         }
       );
     });
+
+    it.each<[LinkPlayer, string, LinkPlayer]>([
+      [1, 'P1', 2],
+      [2, 'P2', 1]
+    ])(
+      'switches the active local-link player from %s -> %s',
+      async (activePlayer, displayedPlayer, nextPlayer) => {
+        const setLocalLinkActivePlayerSpy: (player: LinkPlayer) => void =
+          vi.fn();
+        const { useEmulatorContext: original } = await vi.importActual<
+          typeof contextHooks
+        >('../../hooks/context.tsx');
+
+        vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+          ...original(),
+          emulator: {
+            getCurrentAutoSaveStatePath: () => null,
+            getCurrentGameName: () => 'some_rom.gba',
+            getLocalLinkStatus: () => ({ activePlayer, running: true }),
+            setLocalLinkActivePlayer: setLocalLinkActivePlayerSpy
+          } as GBAEmulator
+        }));
+
+        renderWithContext(<VirtualControls />);
+
+        expect(
+          screen.getByLabelText('Toggle Local-link-player')
+        ).toHaveTextContent(displayedPlayer);
+
+        await userEvent.click(
+          screen.getByLabelText('Toggle Local-link-player')
+        );
+
+        expect(setLocalLinkActivePlayerSpy).toHaveBeenCalledWith(nextPlayer);
+      }
+    );
   });
 });
