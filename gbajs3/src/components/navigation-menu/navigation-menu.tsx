@@ -283,7 +283,7 @@ export const NavigationMenu = () => {
             />
             <NavLeaf
               title="Start Local Link"
-              $disabled={isRunning || !emulator || hasNoLocalRoms}
+              $disabled={isRunning || !isEmulatorReady || hasNoLocalRoms}
               icon={<BiLink />}
               onClick={() => {
                 openModal({ type: 'localLink' });
@@ -350,7 +350,7 @@ export const NavigationMenu = () => {
             />
             <NavLeaf
               title="Switch Player"
-              $disabled={!emulator || !isLocalLinkRunning}
+              $disabled={!isEmulatorReady || !isLocalLinkRunning}
               icon={<BiLink />}
               onClick={() => {
                 if (!emulator) return;
@@ -364,7 +364,7 @@ export const NavigationMenu = () => {
             />
             <NavLeaf
               title="Stop Local Link"
-              $disabled={!emulator || !isLocalLinkRunning}
+              $disabled={!isEmulatorReady || !isLocalLinkRunning}
               icon={<BiLink />}
               onClick={() => {
                 if (!emulator) return;

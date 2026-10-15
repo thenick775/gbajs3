@@ -9,6 +9,7 @@ import { renderWithContext } from '../../../test/render-with-context.tsx';
 import { GbaDarkTheme } from '../../context/theme/theme.tsx';
 import * as contextHooks from '../../hooks/context.tsx';
 import * as quickReloadHooks from '../../hooks/emulator/use-quick-reload.tsx';
+import * as stopLocalLinkSessionHooks from '../../hooks/emulator/use-stop-local-link-session.tsx';
 import * as logoutHooks from '../../hooks/use-logout.tsx';
 
 import type { GBAEmulator } from '../../emulator/mgba/mgba-emulator.tsx';
@@ -16,6 +17,7 @@ import type {
   UseMutateFunction,
   UseMutationResult
 } from '@tanstack/react-query';
+import type { LinkPlayer } from '@thenick775/mgba-wasm';
 
 describe('<NavigationMenu />', () => {
   it('renders menu button and closed menu by default on mobile', () => {
@@ -332,6 +334,119 @@ describe('<NavigationMenu />', () => {
 
       expect(menuNode).toBeInTheDocument();
       expect(menuNode).toBeDisabled();
+    });
+
+    it('Start Local Link opens modal when local ROMs are present', async () => {
+      const openModalSpy = vi.fn();
+      const {
+        useModalContext: originalModal,
+        useEmulatorContext: originalEmulator
+      } = await vi.importActual<typeof contextHooks>('../../hooks/context.tsx');
+
+      vi.spyOn(contextHooks, 'useModalContext').mockImplementation(() => ({
+        ...originalModal(),
+        openModal: openModalSpy
+      }));
+
+      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+        ...originalEmulator(),
+        emulator: {
+          getCurrentAutoSaveStatePath: () => null,
+          getCurrentGameName: () => undefined,
+          getLocalLinkStatus: () => ({ running: false }),
+          listRoms: () => ['some_rom.gba']
+        } as GBAEmulator
+      }));
+
+      renderWithContext(<NavigationMenu />);
+
+      await userEvent.click(screen.getByText('Start Local Link'));
+
+      expect(openModalSpy).toHaveBeenCalledWith({ type: 'localLink' });
+    });
+
+    it.each([
+      [1, 2],
+      [2, 1]
+    ])(
+      'Switch Player changes the active local-link player from %s -> %s',
+      async (activePlayer, nextPlayer) => {
+        const setLocalLinkActivePlayerSpy: (player: LinkPlayer) => void =
+          vi.fn();
+        const toastSuccessSpy = vi.spyOn(toast.default, 'success');
+        const { useEmulatorContext: originalEmulator } = await vi.importActual<
+          typeof contextHooks
+        >('../../hooks/context.tsx');
+        const { useRunningContext: originalRunning } = await vi.importActual<
+          typeof contextHooks
+        >('../../hooks/context.tsx');
+
+        vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+          ...originalEmulator(),
+          emulator: {
+            getCurrentAutoSaveStatePath: () => null,
+            getCurrentGameName: () => undefined,
+            listRoms: () => ['some_rom.gba'],
+            getLocalLinkStatus: () => ({
+              activePlayer,
+              running: true
+            }),
+            setLocalLinkActivePlayer: setLocalLinkActivePlayerSpy
+          } as GBAEmulator
+        }));
+
+        vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
+          ...originalRunning(),
+          isRunning: true
+        }));
+
+        renderWithContext(<NavigationMenu />);
+
+        await userEvent.click(screen.getByText('Switch Player'));
+
+        expect(setLocalLinkActivePlayerSpy).toHaveBeenCalledWith(nextPlayer);
+        expect(toastSuccessSpy).toHaveBeenCalledWith(
+          `Switched to player ${nextPlayer}`
+        );
+      }
+    );
+
+    it('Stop Local Link stops the active session', async () => {
+      const stopLocalLinkSessionSpy = vi.fn();
+      const { useEmulatorContext: originalEmulator } = await vi.importActual<
+        typeof contextHooks
+      >('../../hooks/context.tsx');
+      const { useRunningContext: originalRunning } = await vi.importActual<
+        typeof contextHooks
+      >('../../hooks/context.tsx');
+      const toastSuccessSpy = vi.spyOn(toast.default, 'success');
+
+      vi.spyOn(
+        stopLocalLinkSessionHooks,
+        'useStopLocalLinkSession'
+      ).mockReturnValue(stopLocalLinkSessionSpy);
+
+      vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+        ...originalEmulator(),
+        emulator: {
+          getCurrentAutoSaveStatePath: () => null,
+          getCurrentGameName: () => undefined,
+          listRoms: () => ['some_rom.gba'],
+          getLocalLinkStatus: () => ({ activePlayer: 1, running: true })
+        } as GBAEmulator
+      }));
+
+      vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
+        ...originalRunning(),
+        isRunning: true
+      }));
+
+      renderWithContext(<NavigationMenu />);
+
+      await userEvent.click(screen.getByText('Stop Local Link'));
+
+      expect(stopLocalLinkSessionSpy).toHaveBeenCalledOnce();
+      expect(toastSuccessSpy).toHaveBeenCalledWith('Local link stopped');
     });
 
     it.each(['Upload Files', 'File System', 'Import/Export'])(

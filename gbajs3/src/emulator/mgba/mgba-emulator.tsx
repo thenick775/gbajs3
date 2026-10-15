@@ -62,7 +62,6 @@ export type GBAEmulator = {
   getCurrentSave: () => Uint8Array | null;
   getCurrentSaveTruncated: (sizeBytes: number) => Uint8Array | null;
   getCurrentSaveName: () => string | undefined;
-  getCurrentSavePath: () => string | undefined;
   getFile: (path: string) => Uint8Array;
   getStat: (path: string) => FS.Stats;
   getCurrentAutoSaveStatePath: () => string | null;
@@ -400,7 +399,6 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
       return save ? truncateSave(save, sizeBytes) : null;
     },
     getCurrentSaveName: () => filepathToFileName(mGBA.saveName),
-    getCurrentSavePath: () => mGBA.saveName,
     getCurrentAutoSaveStatePath: () => mGBA.autoSaveStateName ?? null,
     getFile: (path) => mGBA.FS.readFile(path),
     getStat: (path) => mGBA.FS.stat(path),
