@@ -96,7 +96,8 @@ export const VirtualControls = () => {
   const controlPanelBounds =
     controlPanelLayout?.originalBounds ?? initialBounds?.controlPanel;
   const canvasBounds = screenLayout?.originalBounds ?? initialBounds?.screen;
-  const localLinkStatus: LinkLocalStatus | undefined = emulator?.getLocalLinkStatus();
+  const localLinkStatus: LinkLocalStatus | undefined =
+    emulator?.getLocalLinkStatus();
 
   if (!controlPanelBounds || !canvasBounds) return null;
 
@@ -112,7 +113,8 @@ export const VirtualControls = () => {
     areVirtualControlsEnabled?.OpadAndButtons
   );
   const shouldShowLocalLinkPlayerSwitch =
-    areVirtualControlsEnabled?.LocalLinkPlayerSwitch ?? !!localLinkStatus?.running;
+    areVirtualControlsEnabled?.LocalLinkPlayerSwitch ??
+    !!localLinkStatus?.running;
 
   const areNotificationsEnabled =
     areVirtualControlsEnabled?.NotificationsEnabled ?? true;
@@ -290,7 +292,7 @@ export const VirtualControls = () => {
         left: `calc(${canvasBounds.left}px - 5px)`
       }
     },
-    'local-link-player-switch': {
+    'toggle-local-link-player': {
       defaultMobile: {
         top: `calc(${verticalStartPos}px + 26% + 52px)`,
         left: 'calc(100dvw - 55px)'
@@ -545,12 +547,12 @@ export const VirtualControls = () => {
         setSelectedLocalLinkPlayer(nextLocalLinkPlayer);
       },
       width: 40,
-      initialPosition: initialPositionForKey('local-link-player-switch'),
+      initialPosition: initialPositionForKey('toggle-local-link-player'),
       initialOffset: {
         x: '-100%',
         y: '0px'
       },
-      keyName: 'local-link-player-switch',
+      keyName: 'toggle-local-link-player',
       disabled: !isEmulatorReady,
       shown: shouldShowLocalLinkPlayerSwitch
     }
