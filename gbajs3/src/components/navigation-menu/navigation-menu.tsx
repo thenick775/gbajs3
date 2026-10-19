@@ -11,6 +11,7 @@ import {
   BiGame,
   BiScreenshot,
   BiFullscreen,
+  BiLink,
   BiCloudDownload,
   BiRedo,
   BiBookmarks,
@@ -43,6 +44,7 @@ import {
   useLayoutContext
 } from '../../hooks/context.tsx';
 import { useQuickReload } from '../../hooks/emulator/use-quick-reload.tsx';
+import { useStopLocalLinkSession } from '../../hooks/emulator/use-stop-local-link-session.tsx';
 import { useLogout } from '../../hooks/use-logout.tsx';
 import { useShowLoadPublicRoms } from '../../hooks/use-show-load-public-roms.tsx';
 import { ButtonBase } from '../shared/custom-button-base.tsx';
@@ -183,6 +185,7 @@ export const NavigationMenu = () => {
   const screenshotToastId = useId();
   const fullScreenToastId = useId();
   const { quickReload, isQuickReloadAvailable } = useQuickReload();
+  const stopLocalLinkSession = useStopLocalLinkSession();
 
   const isExpanded =
     isExpandedByUser ?? (isLargerThanPhone && !isMobileLandscape);
@@ -191,6 +194,8 @@ export const NavigationMenu = () => {
   const hasApiLocation = !!import.meta.env.VITE_GBA_SERVER_LOCATION;
   const hasGoogleClientId = !!import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const hasNoLocalRoms = isEmulatorReady && !emulator.listRoms().length;
+  const localLinkStatus = emulator?.getLocalLinkStatus();
+  const isLocalLinkRunning = !!localLinkStatus?.running;
 
   useShowLoadPublicRoms();
 
@@ -276,6 +281,14 @@ export const NavigationMenu = () => {
                 openModal({ type: 'loadLocalRom' });
               }}
             />
+            <NavLeaf
+              title="Start Local Link"
+              $disabled={isRunning || !isEmulatorReady || hasNoLocalRoms}
+              icon={<BiLink />}
+              onClick={() => {
+                openModal({ type: 'localLink' });
+              }}
+            />
           </NavComponent>
 
           <NavComponent
@@ -333,6 +346,31 @@ export const NavigationMenu = () => {
               icon={<BiEdit />}
               onClick={() => {
                 openModal({ type: 'cheats' });
+              }}
+            />
+            <NavLeaf
+              title="Switch Player"
+              $disabled={!isEmulatorReady || !isLocalLinkRunning}
+              icon={<BiLink />}
+              onClick={() => {
+                if (!emulator) return;
+
+                const currentPlayer =
+                  emulator.getLocalLinkStatus().activePlayer;
+                const nextPlayer = currentPlayer === 1 ? 2 : 1;
+                emulator.setLocalLinkActivePlayer(nextPlayer);
+                toast.success(`Switched to player ${nextPlayer}`);
+              }}
+            />
+            <NavLeaf
+              title="Stop Local Link"
+              $disabled={!isEmulatorReady || !isLocalLinkRunning}
+              icon={<BiLink />}
+              onClick={() => {
+                if (!emulator) return;
+
+                stopLocalLinkSession();
+                toast.success('Local link stopped');
               }}
             />
           </NavComponent>

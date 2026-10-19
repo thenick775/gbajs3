@@ -27,6 +27,7 @@ describe('<ModalRenderer />', () => {
     [{ type: 'loadLocalRom' }, 'Load Local Rom'],
     [{ type: 'loadSave' }, 'Load Save'],
     [{ type: 'loadRom' }, 'Load Rom'],
+    [{ type: 'localLink' }, 'Local Link'],
     [{ type: 'uploadSaveToServer' }, 'Send Save to Server'],
     [{ type: 'uploadRomToServer' }, 'Send Rom to Server'],
     [{ type: 'uploadFiles' }, 'Upload Files'],
