@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { HttpResponse, delay, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
+import { delay } from 'msw/utils/delay';
 
 export const gbaServerLocationPlaceholder = 'https://server_location.test';
 export const testRomLocation = 'https://rom_location.test';
