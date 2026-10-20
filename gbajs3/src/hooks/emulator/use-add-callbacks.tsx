@@ -34,18 +34,22 @@ export const useAddCallbacks = () => {
   const savedFileSystemToastId = useId();
   const autoSaveStateLoadedToastId = useId();
   const autoSaveStateCapturedToastId = useId();
+  const saveFileSystemOnCreateUpdateDelete =
+    emulatorSettings?.saveFileSystemOnCreateUpdateDelete;
+  const fileSystemNotificationsEnabled =
+    emulatorSettings?.fileSystemNotificationsEnabled;
 
   const syncActionIfEnabled = useCallback(
     async ({ withToast = true }: SyncActionIfEnabledProps = {}) => {
-      if (emulatorSettings?.saveFileSystemOnCreateUpdateDelete) {
+      if (saveFileSystemOnCreateUpdateDelete) {
         await emulator?.fsSync();
-        if (emulatorSettings.fileSystemNotificationsEnabled && withToast)
+        if (fileSystemNotificationsEnabled && withToast)
           toast.success('Saved File System', { id: savedFileSystemToastId });
       }
     },
     [
-      emulatorSettings?.saveFileSystemOnCreateUpdateDelete,
-      emulatorSettings?.fileSystemNotificationsEnabled,
+      saveFileSystemOnCreateUpdateDelete,
+      fileSystemNotificationsEnabled,
       emulator,
       savedFileSystemToastId
     ]
