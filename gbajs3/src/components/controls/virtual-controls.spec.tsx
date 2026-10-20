@@ -47,9 +47,11 @@ describe('<VirtualControls />', () => {
     vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
       matches: query === GbaDarkTheme.isLargerThanPhone,
       media: '',
+      // eslint-disable-next-line @typescript-eslint/no-deprecated -- required by the MediaQueryList test double type
       addListener: () => {
         /* empty */
       },
+      // eslint-disable-next-line @typescript-eslint/no-deprecated -- required by the MediaQueryList test double type
       removeListener: () => {
         /* empty */
       },
@@ -81,9 +83,11 @@ describe('<VirtualControls />', () => {
       vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
         matches: query === GbaDarkTheme.isLargerThanPhone,
         media: '',
+        // eslint-disable-next-line @typescript-eslint/no-deprecated -- required by the MediaQueryList test double type
         addListener: () => {
           /* empty */
         },
+        // eslint-disable-next-line @typescript-eslint/no-deprecated -- required by the MediaQueryList test double type
         removeListener: () => {
           /* empty */
         },

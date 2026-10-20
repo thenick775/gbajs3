@@ -51,6 +51,13 @@ export default [
       sourceType: 'module'
     },
 
+    settings: {
+      'import/resolver': {
+        typescript: true,
+        node: true
+      }
+    },
+
     rules: {
       eqeqeq: 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
@@ -69,10 +76,7 @@ export default [
       '@typescript-eslint/no-deprecated': 'error',
       'react-refresh/only-export-components': 'warn',
       'import/no-default-export': 'error',
-      'import/no-unresolved': [
-        'error',
-        { caseSensitive: true, ignore: ['^react-error-boundary$'] }
-      ],
+      'import/no-unresolved': ['error', { caseSensitive: true }],
       // https://typescript-eslint.io/rules/no-empty-function/#how-to-use
       'no-empty-function': 'off',
 
