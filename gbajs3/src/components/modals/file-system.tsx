@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { EmulatorFileSystem } from './file-system/emulator-file-system.tsx';
 import { ModalBody } from './modal-body.tsx';
@@ -12,8 +12,6 @@ import { useFileStat } from '../../hooks/emulator/use-file-stat.tsx';
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 import { downloadBlob } from './file-utilities/blob.ts';
 
-import type { FileNode } from '../../emulator/mgba/mgba-emulator.tsx';
-
 const FlexModalBody = styled(ModalBody)`
   display: flex;
   flex-direction: column;
@@ -24,26 +22,22 @@ export const FileSystemModal = () => {
   const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
-  const [allFiles, setAllFiles] = useState<FileNode | undefined>();
+  const [fileSystemChangeTime, setFileSystemChangeTime] = useState<
+    number | null
+  >(null);
+
+  const autoSaveStatePath = emulator?.getCurrentAutoSaveStatePath();
+  const { modifiedTime } = useFileStat(autoSaveStatePath);
+  const fileSystemChangeKey = modifiedTime ?? fileSystemChangeTime;
 
   const deleteFile = useCallback(
     async (path: string) => {
       emulator?.deleteFile(path);
-      setAllFiles(emulator?.listAllFiles());
+      setFileSystemChangeTime(Date.now());
       await syncActionIfEnabled();
     },
     [emulator, syncActionIfEnabled]
   );
-
-  const autoSaveStatePath = emulator?.getCurrentAutoSaveStatePath();
-  const { modifiedTime } = useFileStat(autoSaveStatePath);
-
-  // the only flow that can force the file system to change without user interaction after the modal
-  // is open is the auto save state timer, if the modified time of the current auto save state has
-  // changed, we should refresh the file system view
-  useEffect(() => {
-    setAllFiles(emulator?.listAllFiles());
-  }, [emulator, modifiedTime]);
 
   const downloadFile = (path: string) => {
     const fileName = path.split('/').pop();
@@ -58,13 +52,14 @@ export const FileSystemModal = () => {
     }
   };
 
-  const renderedFiles = allFiles ?? emulator?.listAllFiles();
+  const renderedFiles = emulator?.listAllFiles();
 
   return (
     <>
       <ModalHeader title="File System" />
       <FlexModalBody>
         <EmulatorFileSystem
+          key={fileSystemChangeKey}
           allFiles={renderedFiles}
           deleteFile={deleteFile}
           downloadFile={downloadFile}
