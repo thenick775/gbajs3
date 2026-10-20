@@ -139,16 +139,14 @@ export const Screen = () => {
     [setCanvas]
   );
 
-  const currentDimensions =
-    rndRef.current?.resizableElement.current?.getBoundingClientRect();
-  const width = currentDimensions?.width ?? 0;
-  const height = currentDimensions?.height ?? 0;
+  const usesDefaultMobileLandscapePosition =
+    !screenLayout?.position && isMobileLandscape;
   const position =
     screenLayout?.position ??
     (isMobileLandscape
       ? {
-          x: Math.floor(document.documentElement.clientWidth / 2 - width / 2),
-          y: Math.floor(document.documentElement.clientHeight / 2 - height / 2)
+          x: Math.floor(document.documentElement.clientWidth / 2),
+          y: 0
         }
       : {
           x: screenWrapperXStart,
@@ -175,6 +173,9 @@ export const Screen = () => {
         topLeft: { marginTop: '15px', marginLeft: '15px' }
       }}
       position={position}
+      dragPositionOffset={
+        usesDefaultMobileLandscapePosition ? { x: '-50%', y: 0 } : undefined
+      }
       size={size}
       onDragStart={() => {
         if (!screenLayout?.originalBounds)
