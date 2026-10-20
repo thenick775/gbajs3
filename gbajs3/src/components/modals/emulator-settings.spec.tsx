@@ -41,6 +41,7 @@ describe('<EmulatorSettingsModal />', () => {
   it('updates frame only value', async () => {
     renderWithContext(<EmulatorSettingsModal />);
 
+    await userEvent.click(screen.getByRole('tab', { name: 'Video' }));
     const frameSkipInput = screen.getByLabelText('Frame Skip');
 
     await userEvent.clear(frameSkipInput);
@@ -52,6 +53,7 @@ describe('<EmulatorSettingsModal />', () => {
   it('toggles checkboxes', async () => {
     renderWithContext(<EmulatorSettingsModal />);
 
+    await userEvent.click(screen.getByRole('tab', { name: 'Audio' }));
     const checkbox = screen.getByLabelText('Mute on rewind');
     expect(checkbox).toBeChecked();
 
@@ -156,88 +158,54 @@ describe('<EmulatorSettingsModal />', () => {
 
     renderWithContext(<EmulatorSettingsModal />);
 
-    const frameSkipInput = screen.getByLabelText('Frame Skip');
-    const baseFpsTargetInput = screen.getByLabelText('Base FPS Target');
-    const rewindCapacityInput = screen.getByLabelText('Rewind Capacity');
-    const rewindIntervalInput = screen.getByLabelText('Rewind Interval');
-    const saveFileNameInput = screen.getByLabelText('Save File Name');
-    const autoSaveStateIntervalInput = screen.getByLabelText(
-      'Auto Save State Interval'
-    );
     // TODO: test select inputs
 
-    const allowOpposingDirectionsCheckbox = screen.getByLabelText(
-      'Allow opposing directions'
+    await userEvent.clear(screen.getByLabelText('Rewind Capacity'));
+    await userEvent.type(screen.getByLabelText('Rewind Capacity'), '1000');
+    await userEvent.clear(screen.getByLabelText('Rewind Interval'));
+    await userEvent.type(screen.getByLabelText('Rewind Interval'), '10');
+    await userEvent.clear(screen.getByLabelText('Save File Name'));
+    await userEvent.type(
+      screen.getByLabelText('Save File Name'),
+      'custom_save_override.sav'
     );
-    const fileSystemNotificationsCheckbox = screen.getByLabelText(
-      'File system notifications'
-    );
-    const muteOnRewindCheckbox = screen.getByLabelText('Mute on rewind');
-    const muteOnFastForwardCheckbox = screen.getByLabelText(
-      'Mute on fast forward'
-    );
-    const muteOnSlowdownCheckbox = screen.getByLabelText('Mute on slowdown');
-    const saveFileSystemOnFSOperationCheckbox = screen.getByLabelText(
-      'Save file system on create / update / delete'
-    );
-    const saveOnInGameSaveCheckbox = screen.getByLabelText(
-      'Save file system on in-game save'
-    );
-    const timestepSyncCheckbox = screen.getByLabelText('Timestep Sync');
-    const videoSyncCheckbox = screen.getByLabelText('Video Sync');
-    const audioSyncCheckbox = screen.getByLabelText('Audio Sync');
-    const fpsCounterCheckbox = screen.getByLabelText('FPS Counter');
-    const threadedVideoCheckbox = screen.getByLabelText('Threaded Video');
-    const rewindEnabledCheckbox = screen.getByLabelText('Rewind enabled');
-    const autoSaveStateEnabledCheckbox = screen.getByLabelText(
-      'Auto save state enabled'
-    );
-    const restoreAutoSaveStateCheckbox = screen.getByLabelText(
-      'Restore auto save state'
-    );
-    const autoSaveStateCaptureNotificationCheckbox = screen.getByLabelText(
-      'Auto save state capture notification'
-    );
-    const autoSaveStateLoadNotificationCheckbox = screen.getByLabelText(
-      'Auto save state load notification'
-    );
-    const slowdownEnabledCheckbox = screen.getByLabelText('Slowdown enabled');
+    await userEvent.clear(screen.getByLabelText('Auto Save State Interval'));
+    await userEvent.type(screen.getByLabelText('Auto Save State Interval'), '10');
+    await userEvent.click(screen.getByLabelText('Allow opposing directions'));
+    await userEvent.click(screen.getByLabelText('Rewind enabled'));
+    await userEvent.click(screen.getByLabelText('Auto save state enabled'));
+    await userEvent.click(screen.getByLabelText('Restore auto save state'));
+    await userEvent.click(screen.getByLabelText('Slowdown enabled'));
 
-    await userEvent.type(frameSkipInput, '25');
+    await userEvent.click(screen.getByRole('tab', { name: 'Audio' }));
+    await userEvent.click(screen.getByLabelText('Mute on rewind'));
+    await userEvent.click(screen.getByLabelText('Mute on fast forward'));
+    await userEvent.click(screen.getByLabelText('Mute on slowdown'));
 
-    await userEvent.clear(baseFpsTargetInput);
-    await userEvent.type(baseFpsTargetInput, '30');
+    await userEvent.click(screen.getByRole('tab', { name: 'Video' }));
+    await userEvent.type(screen.getByLabelText('Frame Skip'), '25');
+    await userEvent.clear(screen.getByLabelText('Base FPS Target'));
+    await userEvent.type(screen.getByLabelText('Base FPS Target'), '30');
+    await userEvent.click(screen.getByLabelText('Timestep Sync'));
+    await userEvent.click(screen.getByLabelText('Video Sync'));
+    await userEvent.click(screen.getByLabelText('Audio Sync'));
+    await userEvent.click(screen.getByLabelText('FPS Counter'));
+    await userEvent.click(screen.getByLabelText('Threaded Video'));
 
-    await userEvent.clear(rewindCapacityInput);
-    await userEvent.type(rewindCapacityInput, '1000');
+    await userEvent.click(screen.getByRole('tab', { name: 'File' }));
+    await userEvent.click(
+      screen.getByLabelText('Save file system on create / update / delete')
+    );
+    await userEvent.click(screen.getByLabelText('Save file system on in-game save'));
 
-    await userEvent.clear(rewindIntervalInput);
-    await userEvent.type(rewindIntervalInput, '10');
-
-    await userEvent.clear(saveFileNameInput);
-    await userEvent.type(saveFileNameInput, 'custom_save_override.sav');
-
-    await userEvent.clear(autoSaveStateIntervalInput);
-    await userEvent.type(autoSaveStateIntervalInput, '10');
-
-    await userEvent.click(allowOpposingDirectionsCheckbox);
-    await userEvent.click(fileSystemNotificationsCheckbox);
-    await userEvent.click(muteOnRewindCheckbox);
-    await userEvent.click(muteOnFastForwardCheckbox);
-    await userEvent.click(muteOnSlowdownCheckbox);
-    await userEvent.click(saveFileSystemOnFSOperationCheckbox);
-    await userEvent.click(saveOnInGameSaveCheckbox);
-    await userEvent.click(timestepSyncCheckbox);
-    await userEvent.click(videoSyncCheckbox);
-    await userEvent.click(audioSyncCheckbox);
-    await userEvent.click(fpsCounterCheckbox);
-    await userEvent.click(threadedVideoCheckbox);
-    await userEvent.click(rewindEnabledCheckbox);
-    await userEvent.click(autoSaveStateEnabledCheckbox);
-    await userEvent.click(restoreAutoSaveStateCheckbox);
-    await userEvent.click(autoSaveStateCaptureNotificationCheckbox);
-    await userEvent.click(autoSaveStateLoadNotificationCheckbox);
-    await userEvent.click(slowdownEnabledCheckbox);
+    await userEvent.click(screen.getByRole('tab', { name: 'Alert' }));
+    await userEvent.click(screen.getByLabelText('File system notifications'));
+    await userEvent.click(
+      screen.getByLabelText('Auto save state capture notification')
+    );
+    await userEvent.click(
+      screen.getByLabelText('Auto save state load notification')
+    );
 
     await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 

@@ -76,22 +76,31 @@ describe('<NavLeaf />', () => {
   it('renders without extra padding by default', () => {
     renderWithContext(<NavLeaf {...defaultProps} />);
 
-    expect(screen.getByRole('button')).toHaveStyle('padding: 0.5rem 0.5rem');
+    expect(screen.getByRole('button')).toHaveStyleRule(
+      'padding',
+      '0.5rem 0.5rem'
+    );
 
     const link = 'https://example.com';
     renderWithContext(<NavLeaf {...defaultProps} $link={link} />);
 
-    expect(screen.getByRole('link')).toHaveStyle('padding: 0.5rem 0.5rem');
+    expect(screen.getByRole('link')).toHaveStyleRule(
+      'padding',
+      '0.5rem 0.5rem'
+    );
   });
 
   it('renders with extra padding if requested', () => {
     renderWithContext(<NavLeaf {...defaultProps} $withPadding />);
 
-    expect(screen.getByRole('button')).toHaveStyle('padding: 0.5rem 1rem');
+    expect(screen.getByRole('button')).toHaveStyleRule(
+      'padding',
+      '0.5rem 1rem'
+    );
 
     const link = 'https://example.com';
     renderWithContext(<NavLeaf {...defaultProps} $link={link} $withPadding />);
 
-    expect(screen.getByRole('link')).toHaveStyle('padding: 0.5rem 1rem');
+    expect(screen.getByRole('link')).toHaveStyleRule('padding', '0.5rem 1rem');
   });
 });

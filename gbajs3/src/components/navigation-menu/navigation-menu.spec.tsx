@@ -834,7 +834,14 @@ describe('<NavigationMenu />', () => {
 
       renderWithContext(<NavigationMenu />);
 
-      fireEvent.mouseDown(screen.getByLabelText('Menu Toggle'), initialPos);
+      const menuToggle = screen.getByLabelText('Menu Toggle');
+      const menuButtonParent = screen.getByTestId('menu-wrapper');
+      // not my favorite approach here, but works for this case
+      Object.defineProperties(menuButtonParent, {
+        clientHeight: { value: 1000 }
+      });
+
+      fireEvent.mouseDown(menuToggle, initialPos);
       fireEvent.mouseMove(document, movements[0]);
       fireEvent.mouseUp(document, movements[1]);
 

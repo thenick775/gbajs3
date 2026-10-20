@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 import { Blob, File } from 'node:buffer';
 
-import { createSerializer } from '@emotion/jest';
-import { FormData, Request, Response } from 'undici';
+import { createSerializer, matchers } from '@emotion/jest';
+import { fetch, FormData, Request, Response } from 'undici';
 import { afterAll, afterEach, beforeAll, beforeEach, expect, vi } from 'vitest';
 
 import { gbaServerLocationPlaceholder } from './mocks/handlers.ts';
@@ -11,6 +11,7 @@ import { server } from './mocks/server.ts';
 Object.defineProperties(globalThis, {
   Blob: { value: Blob },
   File: { value: File },
+  fetch: { value: fetch },
   FormData: { value: FormData },
   Request: { value: Request },
   Response: { value: Response }
@@ -20,6 +21,7 @@ Object.defineProperties(globalThis, {
    -- This still works with only a type mismatch, see https://github.com/emotion-js/emotion/issues/3132
 */
 expect.addSnapshotSerializer(createSerializer());
+expect.extend({ ...matchers });
 
 beforeAll(() => {
   server.listen({ onUnhandledFrame: 'error' });
