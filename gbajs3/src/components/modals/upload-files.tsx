@@ -19,6 +19,7 @@ import {
   Controller,
   useFieldArray,
   useForm,
+  useWatch,
   type SubmitHandler
 } from 'react-hook-form';
 import { BiTrash } from 'react-icons/bi';
@@ -169,7 +170,6 @@ export const UploadFilesModal = () => {
     handleSubmit,
     setValue,
     control,
-    watch,
     register,
     formState: { errors, isSubmitting }
   } = useForm<InputProps>({
@@ -233,9 +233,8 @@ export const UploadFilesModal = () => {
     closeModal();
   };
 
-  const files = watch('files');
-  const firstRomName = findFirstRomFile(files);
-  const romFileToRun = watch('romFileToRun');
+  const watchedFields = useWatch({ control });
+  const firstRomName = findFirstRomFile(watchedFields.files ?? []);
 
   const handleUploadType = (
     _: React.MouseEvent<HTMLElement>,
@@ -293,8 +292,8 @@ export const UploadFilesModal = () => {
                         }
                         fileName={fileName}
                         isChecked={
-                          romFileToRun === fileName ||
-                          (romFileToRun === undefined &&
+                          watchedFields.romFileToRun === fileName ||
+                          (watchedFields.romFileToRun === undefined &&
                             firstRomName === fileName)
                         }
                       />
