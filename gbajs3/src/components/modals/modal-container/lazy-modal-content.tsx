@@ -56,6 +56,10 @@ const modals = {
     () => import('../import-export.tsx'),
     (module) => module.ImportExportModal
   ),
+  homebrewLibrary: lazyNamedModal(
+    () => import('../homebrew-library.tsx'),
+    (module) => module.HomebrewLibraryModal
+  ),
   legal: lazyNamedModal(
     () => import('../legal.tsx'),
     (module) => module.LegalModal
@@ -125,6 +129,8 @@ const renderModalBody = (modal: Exclude<ModalState, null>) => {
       return <modals.importExport />;
     case 'legal':
       return <modals.legal />;
+    case 'homebrewLibrary':
+      return <modals.homebrewLibrary />;
     case 'login':
       return <modals.login />;
     case 'downloadSave':
