@@ -166,8 +166,7 @@ describe('<CheatsModal />', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
-    expect(parsedCheatsToFileSpy).toHaveBeenCalledOnce();
-    expect(parsedCheatsToFileSpy).toHaveBeenCalledWith([
+    expect(parsedCheatsToFileSpy).toHaveBeenCalledExactlyOnceWith([
       {
         desc: 'cheat1_edited',
         code: 'code1_edited',

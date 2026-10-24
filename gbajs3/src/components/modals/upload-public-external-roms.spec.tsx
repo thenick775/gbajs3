@@ -76,11 +76,9 @@ describe('<UploadPublicExternalRomsModal />', () => {
 
     expect(uploadRomSpy).toHaveBeenCalledOnce();
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
-    expect(runGameSpy).toHaveBeenCalledOnce();
-    expect(runGameSpy).toHaveBeenCalledWith('good_rom.gba');
+    expect(runGameSpy).toHaveBeenCalledExactlyOnceWith('good_rom.gba');
 
-    expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();
-    expect(onLoadOrDismissSpy).toHaveBeenCalledWith('loaded');
+    expect(onLoadOrDismissSpy).toHaveBeenCalledExactlyOnceWith('loaded');
     expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
@@ -134,8 +132,7 @@ describe('<UploadPublicExternalRomsModal />', () => {
     );
 
     // if dismissed here, should mark rom as skipped with error
-    expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();
-    expect(onLoadOrDismissSpy).toHaveBeenCalledWith('skipped-error');
+    expect(onLoadOrDismissSpy).toHaveBeenCalledExactlyOnceWith('skipped-error');
   });
 
   it('temporarily dismisses modal', async () => {
@@ -164,8 +161,9 @@ describe('<UploadPublicExternalRomsModal />', () => {
     expect(modalDismissButton).toBeInTheDocument();
     await userEvent.click(modalDismissButton);
 
-    expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();
-    expect(onLoadOrDismissSpy).toHaveBeenCalledWith('temporarily-dismissed');
+    expect(onLoadOrDismissSpy).toHaveBeenCalledExactlyOnceWith(
+      'temporarily-dismissed'
+    );
     expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 
@@ -196,8 +194,7 @@ describe('<UploadPublicExternalRomsModal />', () => {
     await userEvent.click(permanentlyDismissButton);
 
     // marks rom as skipped
-    expect(onLoadOrDismissSpy).toHaveBeenCalledOnce();
-    expect(onLoadOrDismissSpy).toHaveBeenCalledWith('skipped');
+    expect(onLoadOrDismissSpy).toHaveBeenCalledExactlyOnceWith('skipped');
     expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 });

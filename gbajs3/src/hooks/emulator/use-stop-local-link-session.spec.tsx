@@ -53,12 +53,19 @@ describe('useStopLocalLinkSession', () => {
       result.current();
     });
 
-    expect(screenshotSpy).toHaveBeenCalledWith('fade-copy.png');
-    expect(getFileSpy).toHaveBeenCalledWith('/screenshots/fade-copy.png');
-    expect(deleteFileSpy).toHaveBeenCalledWith('/screenshots/fade-copy.png');
-    expect(startFadeSpy).toHaveBeenCalledWith(testCanvas, expect.any(Blob));
+    expect(screenshotSpy).toHaveBeenCalledExactlyOnceWith('fade-copy.png');
+    expect(getFileSpy).toHaveBeenCalledExactlyOnceWith(
+      '/screenshots/fade-copy.png'
+    );
+    expect(deleteFileSpy).toHaveBeenCalledExactlyOnceWith(
+      '/screenshots/fade-copy.png'
+    );
+    expect(startFadeSpy).toHaveBeenCalledExactlyOnceWith(
+      testCanvas,
+      expect.any(Blob)
+    );
     expect(stopLocalLinkSessionSpy).toHaveBeenCalledOnce();
-    expect(setIsRunningSpy).toHaveBeenCalledWith(false);
+    expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(false);
   });
 
   it('sets running to false if emulator is not running', () => {
@@ -92,7 +99,6 @@ describe('useStopLocalLinkSession', () => {
     expect(startFadeSpy).not.toHaveBeenCalled();
     expect(stopLocalLinkSessionSpy).not.toHaveBeenCalled();
 
-    expect(setIsRunningSpy).toHaveBeenCalledOnce();
-    expect(setIsRunningSpy).toHaveBeenCalledWith(false);
+    expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(false);
   });
 });

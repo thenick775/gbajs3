@@ -93,8 +93,9 @@ describe('<FileSystemModal />', () => {
     await userEvent.click(screen.getByText('games'));
     await userEvent.click(screen.getByLabelText('Delete rom1.gba'));
 
-    expect(deleteFileSpy).toHaveBeenCalledOnce();
-    expect(deleteFileSpy).toHaveBeenCalledWith('/data/games/rom1.gba');
+    expect(deleteFileSpy).toHaveBeenCalledExactlyOnceWith(
+      '/data/games/rom1.gba'
+    );
     expect(listAllFilesSpy).toHaveBeenCalledOnce();
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
   });
@@ -126,11 +127,12 @@ describe('<FileSystemModal />', () => {
     await userEvent.click(screen.getByText('games'));
     await userEvent.click(screen.getByLabelText('Download rom1.gba'));
 
-    expect(getFileSpy).toHaveBeenCalledOnce();
-    expect(getFileSpy).toHaveBeenCalledWith('/data/games/rom1.gba');
+    expect(getFileSpy).toHaveBeenCalledExactlyOnceWith('/data/games/rom1.gba');
 
-    expect(downloadBlobSpy).toHaveBeenCalledOnce();
-    expect(downloadBlobSpy).toHaveBeenCalledWith('rom1.gba', expect.any(Blob));
+    expect(downloadBlobSpy).toHaveBeenCalledExactlyOnceWith(
+      'rom1.gba',
+      expect.any(Blob)
+    );
   });
 
   it('saves file system', async () => {

@@ -75,12 +75,9 @@ describe('useQuickReload hook', () => {
         quickReload();
       });
 
-      expect(runGameSpy).toHaveBeenCalledOnce();
-      expect(runGameSpy).toHaveBeenCalledWith('some_rom.gba');
+      expect(runGameSpy).toHaveBeenCalledExactlyOnceWith('some_rom.gba');
       expect(emulatorQuickReloadSpy).not.toHaveBeenCalled();
-
-      expect(setIsRunningSpy).toHaveBeenCalledOnce();
-      expect(setIsRunningSpy).toHaveBeenCalledWith(true);
+      expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(true);
     });
 
     it('quick reloads last stored game name from localStorage', () => {
@@ -116,12 +113,9 @@ describe('useQuickReload hook', () => {
         quickReload();
       });
 
-      expect(runGameSpy).toHaveBeenCalledOnce();
-      expect(runGameSpy).toHaveBeenCalledWith('some_rom_2.gba');
+      expect(runGameSpy).toHaveBeenCalledExactlyOnceWith('some_rom_2.gba');
       expect(emulatorQuickReloadSpy).not.toHaveBeenCalled();
-
-      expect(setIsRunningSpy).toHaveBeenCalledOnce();
-      expect(setIsRunningSpy).toHaveBeenCalledWith(true);
+      expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(true);
     });
   });
 

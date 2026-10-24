@@ -24,8 +24,8 @@ describe('downloadBlob', () => {
 
     await vi.runAllTimersAsync();
 
-    expect(createObjectURLSpy).toHaveBeenCalledWith(blob);
-    expect(revokeObjectURLSpy).toHaveBeenCalledWith(
+    expect(createObjectURLSpy).toHaveBeenCalledExactlyOnceWith(blob);
+    expect(revokeObjectURLSpy).toHaveBeenCalledExactlyOnceWith(
       expect.stringMatching(/object_url:test-download\.txt$/)
     );
 

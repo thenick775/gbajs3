@@ -31,7 +31,7 @@ describe('useRestoreAutoSaveStateData hook', () => {
     });
 
     await waitFor(() => {
-      expect(uploadAutoSaveStateSpy).toHaveBeenCalledWith(
+      expect(uploadAutoSaveStateSpy).toHaveBeenCalledExactlyOnceWith(
         'autosave.ss0',
         new Uint8Array([
           116, 101, 115, 116, 32, 98, 105, 110, 97, 114, 121, 32, 98, 108, 111,

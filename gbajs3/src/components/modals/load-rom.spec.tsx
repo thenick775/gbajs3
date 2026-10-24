@@ -65,8 +65,7 @@ describe('<LoadRomModal />', () => {
 
     expect(uploadRomSpy).toHaveBeenCalledOnce();
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
-    expect(runGameSpy).toHaveBeenCalledOnce();
-    expect(runGameSpy).toHaveBeenCalledWith('rom1.gba');
+    expect(runGameSpy).toHaveBeenCalledExactlyOnceWith('rom1.gba');
   });
 
   it('renders message when there are no roms', () => {

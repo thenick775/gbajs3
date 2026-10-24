@@ -185,7 +185,7 @@ describe('<VirtualControls />', () => {
       await userEvent.click(screen.getByLabelText('Quickreload Button'));
 
       expect(quickReloadSpy).toHaveBeenCalledOnce();
-      expect(toastErrorSpy).toHaveBeenCalledWith(
+      expect(toastErrorSpy).toHaveBeenCalledExactlyOnceWith(
         'Load a game to quick reload',
         { id: expect.any(String) }
       );
@@ -228,7 +228,7 @@ describe('<VirtualControls />', () => {
 
       await userEvent.click(screen.getByLabelText('Uploadsave Button'));
 
-      expect(openModalSpy).toHaveBeenCalledWith({
+      expect(openModalSpy).toHaveBeenCalledExactlyOnceWith({
         type: 'uploadSaveToServer'
       });
     });
@@ -261,7 +261,7 @@ describe('<VirtualControls />', () => {
 
       await userEvent.click(screen.getByLabelText('Uploadsave Button'));
 
-      expect(toastErrorSpy).toHaveBeenCalledWith(
+      expect(toastErrorSpy).toHaveBeenCalledExactlyOnceWith(
         'Please log in and load a game',
         { id: expect.any(String) }
       );
@@ -292,11 +292,13 @@ describe('<VirtualControls />', () => {
 
       await userEvent.click(screen.getByLabelText('Loadstate Button'));
 
-      expect(loadSaveStateSpy).toHaveBeenCalledOnce();
-      expect(loadSaveStateSpy).toHaveBeenCalledWith(2);
-      expect(toastSuccessSpy).toHaveBeenCalledWith('Loaded slot: 2', {
-        id: expect.any(String)
-      });
+      expect(loadSaveStateSpy).toHaveBeenCalledExactlyOnceWith(2);
+      expect(toastSuccessSpy).toHaveBeenCalledExactlyOnceWith(
+        'Loaded slot: 2',
+        {
+          id: expect.any(String)
+        }
+      );
     });
 
     it('load save state renders error toast', async () => {
@@ -321,11 +323,13 @@ describe('<VirtualControls />', () => {
 
       await userEvent.click(screen.getByLabelText('Loadstate Button'));
 
-      expect(loadSaveStateSpy).toHaveBeenCalledOnce();
-      expect(loadSaveStateSpy).toHaveBeenCalledWith(0);
-      expect(toastErrorSpy).toHaveBeenCalledWith('Failed to load slot: 0', {
-        id: expect.any(String)
-      });
+      expect(loadSaveStateSpy).toHaveBeenCalledExactlyOnceWith(0);
+      expect(toastErrorSpy).toHaveBeenCalledExactlyOnceWith(
+        'Failed to load slot: 0',
+        {
+          id: expect.any(String)
+        }
+      );
     });
 
     it('load save state renders no game toast', async () => {
@@ -351,7 +355,7 @@ describe('<VirtualControls />', () => {
       await userEvent.click(screen.getByLabelText('Loadstate Button'));
 
       expect(loadSaveStateSpy).not.toHaveBeenCalled();
-      expect(toastErrorSpy).toHaveBeenCalledWith(
+      expect(toastErrorSpy).toHaveBeenCalledExactlyOnceWith(
         'Load a game to load state slots',
         {
           id: expect.any(String)
@@ -392,10 +396,9 @@ describe('<VirtualControls />', () => {
 
       await userEvent.click(screen.getByLabelText('Savestate Button'));
 
-      expect(createSaveStateSpy).toHaveBeenCalledOnce();
-      expect(createSaveStateSpy).toHaveBeenCalledWith(2);
+      expect(createSaveStateSpy).toHaveBeenCalledExactlyOnceWith(2);
       expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
-      expect(toastSuccessSpy).toHaveBeenCalledWith('Saved slot: 2', {
+      expect(toastSuccessSpy).toHaveBeenCalledExactlyOnceWith('Saved slot: 2', {
         id: expect.any(String)
       });
     });
@@ -431,12 +434,14 @@ describe('<VirtualControls />', () => {
 
       await userEvent.click(screen.getByLabelText('Savestate Button'));
 
-      expect(createSaveStateSpy).toHaveBeenCalledOnce();
-      expect(createSaveStateSpy).toHaveBeenCalledWith(0);
+      expect(createSaveStateSpy).toHaveBeenCalledExactlyOnceWith(0);
       expect(syncActionIfEnabledSpy).not.toHaveBeenCalled();
-      expect(toastErrorSpy).toHaveBeenCalledWith('Failed to save slot: 0', {
-        id: expect.any(String)
-      });
+      expect(toastErrorSpy).toHaveBeenCalledExactlyOnceWith(
+        'Failed to save slot: 0',
+        {
+          id: expect.any(String)
+        }
+      );
     });
 
     it('create save state renders no game toast', async () => {
@@ -462,7 +467,7 @@ describe('<VirtualControls />', () => {
       await userEvent.click(screen.getByLabelText('Savestate Button'));
 
       expect(createSaveStateSpy).not.toHaveBeenCalled();
-      expect(toastErrorSpy).toHaveBeenCalledWith(
+      expect(toastErrorSpy).toHaveBeenCalledExactlyOnceWith(
         'Load a game to save state slots',
         {
           id: expect.any(String)
@@ -502,7 +507,9 @@ describe('<VirtualControls />', () => {
           screen.getByLabelText('Toggle Local-link-player')
         );
 
-        expect(setLocalLinkActivePlayerSpy).toHaveBeenCalledWith(nextPlayer);
+        expect(setLocalLinkActivePlayerSpy).toHaveBeenCalledExactlyOnceWith(
+          nextPlayer
+        );
       }
     );
   });

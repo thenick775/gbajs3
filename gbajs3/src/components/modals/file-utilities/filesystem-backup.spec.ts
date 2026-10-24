@@ -129,8 +129,7 @@ describe('filesystem backup utilities', () => {
     await importZipToEmulatorFs(backupFile, writeFileToEmulator);
 
     expect(localStorage.getItem('setting')).toBe('value');
-    expect(writeFileToEmulator).toHaveBeenCalledOnce();
-    expect(writeFileToEmulator).toHaveBeenCalledWith(
+    expect(writeFileToEmulator).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({
         name: 'game.gba',
         size: 3,

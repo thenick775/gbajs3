@@ -145,7 +145,7 @@ describe('<NavigationMenu />', () => {
 
       await userEvent.click(menuNode);
 
-      expect(openModalSpy).toHaveBeenCalledWith(expected);
+      expect(openModalSpy).toHaveBeenCalledExactlyOnceWith(expected);
     });
 
     it.each([
@@ -186,7 +186,7 @@ describe('<NavigationMenu />', () => {
 
         await userEvent.click(menuNode);
 
-        expect(openModalSpy).toHaveBeenCalledWith(expected);
+        expect(openModalSpy).toHaveBeenCalledExactlyOnceWith(expected);
       }
     );
 
@@ -216,7 +216,9 @@ describe('<NavigationMenu />', () => {
 
       await userEvent.click(screen.getByText('Cloud Sync'));
 
-      expect(openModalSpy).toHaveBeenCalledWith({ type: 'cloudSync' });
+      expect(openModalSpy).toHaveBeenCalledExactlyOnceWith({
+        type: 'cloudSync'
+      });
     });
 
     it('Cloud Sync is disabled when google client id is not configured', async () => {
@@ -281,7 +283,7 @@ describe('<NavigationMenu />', () => {
 
         await userEvent.click(menuNode);
 
-        expect(openModalSpy).toHaveBeenCalledWith(expected);
+        expect(openModalSpy).toHaveBeenCalledExactlyOnceWith(expected);
       }
     );
 
@@ -317,7 +319,9 @@ describe('<NavigationMenu />', () => {
 
       await userEvent.click(menuNode);
 
-      expect(openModalSpy).toHaveBeenCalledWith({ type: 'loadLocalRom' });
+      expect(openModalSpy).toHaveBeenCalledExactlyOnceWith({
+        type: 'loadLocalRom'
+      });
     });
 
     it('Load Local Rom renders as disabled', async () => {
@@ -364,7 +368,9 @@ describe('<NavigationMenu />', () => {
 
       await userEvent.click(screen.getByText('Start Local Link'));
 
-      expect(openModalSpy).toHaveBeenCalledWith({ type: 'localLink' });
+      expect(openModalSpy).toHaveBeenCalledExactlyOnceWith({
+        type: 'localLink'
+      });
     });
 
     it.each([
@@ -406,8 +412,10 @@ describe('<NavigationMenu />', () => {
 
         await userEvent.click(screen.getByText('Switch Player'));
 
-        expect(setLocalLinkActivePlayerSpy).toHaveBeenCalledWith(nextPlayer);
-        expect(toastSuccessSpy).toHaveBeenCalledWith(
+        expect(setLocalLinkActivePlayerSpy).toHaveBeenCalledExactlyOnceWith(
+          nextPlayer
+        );
+        expect(toastSuccessSpy).toHaveBeenCalledExactlyOnceWith(
           `Switched to player ${nextPlayer}`
         );
       }
@@ -448,7 +456,9 @@ describe('<NavigationMenu />', () => {
       await userEvent.click(screen.getByText('Stop Local Link'));
 
       expect(stopLocalLinkSessionSpy).toHaveBeenCalledOnce();
-      expect(toastSuccessSpy).toHaveBeenCalledWith('Local link stopped');
+      expect(toastSuccessSpy).toHaveBeenCalledExactlyOnceWith(
+        'Local link stopped'
+      );
     });
 
     it.each(['Upload Files', 'File System', 'Import/Export'])(
@@ -544,7 +554,7 @@ describe('<NavigationMenu />', () => {
       await userEvent.click(menuNode);
 
       expect(screenshotSpy).toHaveBeenCalledOnce();
-      expect(toastSuccessSpy).toHaveBeenCalledWith(
+      expect(toastSuccessSpy).toHaveBeenCalledExactlyOnceWith(
         'Screenshot saved successfully',
         {
           id: expect.any(String)
@@ -585,9 +595,12 @@ describe('<NavigationMenu />', () => {
 
       await userEvent.click(menuNode);
 
-      expect(toastErrorSpy).toHaveBeenCalledWith('Screenshot has failed', {
-        id: expect.any(String)
-      });
+      expect(toastErrorSpy).toHaveBeenCalledExactlyOnceWith(
+        'Screenshot has failed',
+        {
+          id: expect.any(String)
+        }
+      );
     });
 
     it('Full Screen requests canvas full screen on click when running', async () => {
@@ -653,7 +666,7 @@ describe('<NavigationMenu />', () => {
 
       await userEvent.click(menuNode);
 
-      expect(toastErrorSpy).toHaveBeenCalledWith(
+      expect(toastErrorSpy).toHaveBeenCalledExactlyOnceWith(
         'Full screen request has failed',
         {
           id: expect.any(String)
@@ -742,7 +755,7 @@ describe('<NavigationMenu />', () => {
 
         await userEvent.click(menuNode);
 
-        expect(openModalSpy).toHaveBeenCalledWith(expected);
+        expect(openModalSpy).toHaveBeenCalledExactlyOnceWith(expected);
       }
     );
 
@@ -804,7 +817,7 @@ describe('<NavigationMenu />', () => {
 
         await userEvent.click(menuNode);
 
-        expect(openModalSpy).toHaveBeenCalledWith(expected);
+        expect(openModalSpy).toHaveBeenCalledExactlyOnceWith(expected);
       }
     );
   });
@@ -847,8 +860,7 @@ describe('<NavigationMenu />', () => {
       fireEvent.mouseMove(document, movements[0]);
       fireEvent.mouseUp(document, movements[1]);
 
-      expect(setLayoutSpy).toHaveBeenCalledOnce();
-      expect(setLayoutSpy).toHaveBeenCalledWith('menuButton', {
+      expect(setLayoutSpy).toHaveBeenCalledExactlyOnceWith('menuButton', {
         position: {
           x: movements[1].clientX,
           y: movements[1].clientY

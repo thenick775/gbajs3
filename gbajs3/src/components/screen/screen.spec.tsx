@@ -36,8 +36,7 @@ describe('<Screen />', () => {
 
     const canvas = screen.getByTestId('screen-wrapper:render-canvas');
 
-    expect(setCanvasSpy).toHaveBeenCalledOnce();
-    expect(setCanvasSpy).toHaveBeenCalledWith(canvas);
+    expect(setCanvasSpy).toHaveBeenCalledExactlyOnceWith(canvas);
   });
 
   it('renders a loading indicator while canvas exists and emulator is unavailable', async () => {
@@ -72,7 +71,7 @@ describe('<Screen />', () => {
 
     renderWithContext(<Screen />);
 
-    expect(setInitialBoundSpy).toHaveBeenCalledWith('screen', {
+    expect(setInitialBoundSpy).toHaveBeenCalledExactlyOnceWith('screen', {
       bottom: 0,
       height: 0,
       left: 0,
@@ -168,8 +167,7 @@ describe('<Screen />', () => {
     fireEvent.mouseDown(screen.getByTestId('screen-wrapper'), initialPos);
     fireEvent.mouseMove(document, movements[0]);
 
-    expect(setLayoutSpy).toHaveBeenCalledOnce();
-    expect(setLayoutSpy).toHaveBeenCalledWith('screen', {
+    expect(setLayoutSpy).toHaveBeenCalledExactlyOnceWith('screen', {
       originalBounds: {
         bottom: 0,
         height: 0,
@@ -218,8 +216,7 @@ describe('<Screen />', () => {
     fireEvent.mouseDown(screen.getAllByTestId('gripper-handle')[0], initialPos);
     fireEvent.mouseMove(document, movements[0]);
 
-    expect(setLayoutSpy).toHaveBeenCalledOnce();
-    expect(setLayoutSpy).toHaveBeenCalledWith('screen', {
+    expect(setLayoutSpy).toHaveBeenCalledExactlyOnceWith('screen', {
       originalBounds: {
         bottom: 0,
         height: 0,

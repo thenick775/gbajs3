@@ -94,7 +94,7 @@ describe('fallbackRender', () => {
 
     await user.click(screen.getByText('Copy trace'));
 
-    expect(writeTextSpy).toHaveBeenCalledWith(
+    expect(writeTextSpy).toHaveBeenCalledExactlyOnceWith(
       expect.stringContaining('Error: A test error\n    at')
     );
   });
@@ -114,7 +114,9 @@ describe('fallbackRender', () => {
 
     await user.click(screen.getByText('Copy trace'));
 
-    expect(writeTextSpy).toHaveBeenCalledWith('Error had empty stack');
+    expect(writeTextSpy).toHaveBeenCalledExactlyOnceWith(
+      'Error had empty stack'
+    );
   });
 
   it('copies clipboard text fallback', async () => {
@@ -132,6 +134,6 @@ describe('fallbackRender', () => {
 
     await user.click(screen.getByText('Copy trace'));
 
-    expect(writeTextSpy).toHaveBeenCalledWith('No stack available');
+    expect(writeTextSpy).toHaveBeenCalledExactlyOnceWith('No stack available');
   });
 });

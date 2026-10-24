@@ -40,8 +40,7 @@ describe('useShowLoadPublicRoms', () => {
       useShowLoadPublicRoms();
     });
 
-    expect(openModalSpy).toHaveBeenCalledOnce();
-    expect(openModalSpy).toHaveBeenCalledWith({
+    expect(openModalSpy).toHaveBeenCalledExactlyOnceWith({
       type: 'uploadPublicExternalRoms',
       props: {
         url: new URL(valid_url),

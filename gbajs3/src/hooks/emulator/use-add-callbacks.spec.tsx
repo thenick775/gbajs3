@@ -112,8 +112,9 @@ describe('useAddCallbacks hook', () => {
 
         act(() => result.current.addCallbacks(input));
 
-        expect(emulatorAddCoreCallbacksSpy).toHaveBeenCalledOnce();
-        expect(emulatorAddCoreCallbacksSpy).toHaveBeenCalledWith(expected);
+        expect(emulatorAddCoreCallbacksSpy).toHaveBeenCalledExactlyOnceWith(
+          expected
+        );
       }
     );
   });
@@ -143,10 +144,12 @@ describe('useAddCallbacks hook', () => {
       await act(() => result.current.syncActionIfEnabled());
 
       expect(emulatorFSSyncSpy).toHaveBeenCalledOnce();
-      expect(toastSuccessSpy).toHaveBeenCalledOnce();
-      expect(toastSuccessSpy).toHaveBeenCalledWith('Saved File System', {
-        id: expect.any(String)
-      });
+      expect(toastSuccessSpy).toHaveBeenCalledExactlyOnceWith(
+        'Saved File System',
+        {
+          id: expect.any(String)
+        }
+      );
     });
 
     it('should only sync files', async () => {

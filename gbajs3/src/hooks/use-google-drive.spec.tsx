@@ -268,7 +268,7 @@ describe('Google Drive hooks', () => {
     });
 
     await waitFor(() => {
-      expect(onSuccess).toHaveBeenCalledWith(
+      expect(onSuccess).toHaveBeenCalledExactlyOnceWith(
         {
           accessToken: 'access-token',
           expiresAt: expect.any(Number)
@@ -278,7 +278,7 @@ describe('Google Drive hooks', () => {
         expect.any(Object)
       );
     });
-    expect(openSpy).toHaveBeenCalledWith(
+    expect(openSpy).toHaveBeenCalledExactlyOnceWith(
       expect.stringContaining(
         'cloud-sync-auth.html?state=00000000-0000-4000-8000-000000000000'
       ),
@@ -335,7 +335,7 @@ describe('Google Drive hooks', () => {
     });
 
     await waitFor(() => {
-      expect(onSuccess).toHaveBeenCalledWith(
+      expect(onSuccess).toHaveBeenCalledExactlyOnceWith(
         {
           accessToken: 'access-token',
           expiresAt: expect.any(Number)
@@ -378,7 +378,7 @@ describe('Google Drive hooks', () => {
     });
 
     await waitFor(() => {
-      expect(onError).toHaveBeenCalledWith(
+      expect(onError).toHaveBeenCalledExactlyOnceWith(
         new Error('access_denied'),
         undefined,
         undefined,
@@ -410,7 +410,7 @@ describe('Google Drive hooks', () => {
       await vi.advanceTimersByTimeAsync(120_000);
     });
 
-    expect(onError).toHaveBeenCalledWith(
+    expect(onError).toHaveBeenCalledExactlyOnceWith(
       new Error('Google Drive authorization timed out'),
       undefined,
       undefined,
@@ -454,7 +454,7 @@ describe('Google Drive hooks', () => {
     });
 
     await waitFor(() => {
-      expect(onError).toHaveBeenCalledWith(
+      expect(onError).toHaveBeenCalledExactlyOnceWith(
         new Error('Google Drive authorization did not grant app data access'),
         undefined,
         undefined,

@@ -300,7 +300,7 @@ describe('<ImportExportModal />', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Export' }));
 
     await waitFor(() => {
-      expect(downloadBlobSpy).toHaveBeenCalledWith(
+      expect(downloadBlobSpy).toHaveBeenCalledExactlyOnceWith(
         'gbajs-files-2025-01-01-08-00-00.zip',
         expect.any(Blob)
       );
