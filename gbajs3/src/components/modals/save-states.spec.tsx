@@ -158,8 +158,7 @@ describe('<SaveStatesModal />', () => {
       screen.getByRole('button', { name: 'Create new save state' })
     );
 
-    expect(createSaveStateSpy).toHaveBeenCalledOnce();
-    expect(createSaveStateSpy).toHaveBeenCalledWith(1);
+    expect(createSaveStateSpy).toHaveBeenCalledExactlyOnceWith(1);
     expect(listCurrentSaveStatesSpy).toHaveBeenCalledOnce();
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
     expect(getSaveStateSpy).toHaveBeenCalledTimes(2);
@@ -248,11 +247,10 @@ describe('<SaveStatesModal />', () => {
 
     await userEvent.click(screen.getByLabelText('Delete rom0.ss1'));
 
-    expect(deleteSaveStateSpy).toHaveBeenCalledOnce();
-    expect(deleteSaveStateSpy).toHaveBeenCalledWith(1);
+    expect(deleteSaveStateSpy).toHaveBeenCalledExactlyOnceWith(1);
     expect(listCurrentSaveStatesSpy).toHaveBeenCalledOnce();
     expect(syncActionIfEnabledSpy).toHaveBeenCalledOnce();
-    expect(getSaveStateSpy).toHaveBeenCalledTimes(1);
+    expect(getSaveStateSpy).toHaveBeenCalledOnce();
   });
 
   it('deletes auto save state', async () => {
@@ -290,8 +288,7 @@ describe('<SaveStatesModal />', () => {
 
     await userEvent.click(screen.getByLabelText('Delete rom0_auto.ss'));
 
-    expect(deleteFileSpy).toHaveBeenCalledOnce();
-    expect(deleteFileSpy).toHaveBeenCalledWith('rom0_auto.ss');
+    expect(deleteFileSpy).toHaveBeenCalledExactlyOnceWith('rom0_auto.ss');
     expect(triggerSpy).toHaveBeenCalledOnce();
   });
 
@@ -330,8 +327,7 @@ describe('<SaveStatesModal />', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'some_rom.ss1' }));
 
-    expect(loadSaveStateSpy).toHaveBeenCalledOnce();
-    expect(loadSaveStateSpy).toHaveBeenCalledWith(1);
+    expect(loadSaveStateSpy).toHaveBeenCalledExactlyOnceWith(1);
     expect(getSaveStateSpy).not.toHaveBeenCalled();
   });
 

@@ -42,9 +42,11 @@ describe('useEmulator', () => {
       expect(result.current).toBe(emulator);
     });
 
-    expect(mGBA).toHaveBeenCalledWith({ canvas });
+    expect(mGBA).toHaveBeenCalledExactlyOnceWith({ canvas });
     expect(fsInitSpy).toHaveBeenCalledOnce();
-    expect(mgbaEmulatorModule.mGBAEmulator).toHaveBeenCalledWith(module);
-    expect(consoleLogSpy).toHaveBeenCalledWith('mGBA 1.0.0');
+    expect(mgbaEmulatorModule.mGBAEmulator).toHaveBeenCalledExactlyOnceWith(
+      module
+    );
+    expect(consoleLogSpy).toHaveBeenCalledExactlyOnceWith('mGBA 1.0.0');
   });
 });

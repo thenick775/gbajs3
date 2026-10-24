@@ -137,8 +137,9 @@ describe('<EmulatorFileSystem />', () => {
     await userEvent.click(screen.getByText('games'));
     await userEvent.click(screen.getByLabelText('Delete rom1.gba'));
 
-    expect(deleteFileSpy).toHaveBeenCalledOnce();
-    expect(deleteFileSpy).toHaveBeenCalledWith('/data/games/rom1.gba');
+    expect(deleteFileSpy).toHaveBeenCalledExactlyOnceWith(
+      '/data/games/rom1.gba'
+    );
   });
 
   it('calls download file on button click', async () => {
@@ -150,7 +151,8 @@ describe('<EmulatorFileSystem />', () => {
     await userEvent.click(screen.getByText('states'));
     await userEvent.click(screen.getByLabelText('Download rom1.ss1'));
 
-    expect(downloadFileSpy).toHaveBeenCalledOnce();
-    expect(downloadFileSpy).toHaveBeenCalledWith('/data/states/rom1.ss1');
+    expect(downloadFileSpy).toHaveBeenCalledExactlyOnceWith(
+      '/data/states/rom1.ss1'
+    );
   });
 });

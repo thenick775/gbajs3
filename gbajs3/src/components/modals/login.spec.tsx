@@ -47,7 +47,7 @@ describe('<LoginModal />', () => {
     expect(setLoginTokenSpy).toHaveBeenCalledOnce();
     expect(closeModalSpy).toHaveBeenCalledOnce();
 
-    expect(setLoginTokenSpy).toHaveBeenCalledWith(
+    expect(setLoginTokenSpy).toHaveBeenCalledExactlyOnceWith(
       expect.stringMatching(/^.+$/)
     );
     expect(closeModalSpy).toHaveBeenCalledOnce();

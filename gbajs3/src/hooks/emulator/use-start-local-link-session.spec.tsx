@@ -66,8 +66,8 @@ describe('useStartLocalLinkSession hook', () => {
       ).toBe(true);
     });
 
-    expect(setVolumeSpy).toHaveBeenCalledWith(1);
-    expect(setFastForwardMultiplierSpy).toHaveBeenCalledWith(1);
+    expect(setVolumeSpy).toHaveBeenCalledExactlyOnceWith(1);
+    expect(setFastForwardMultiplierSpy).toHaveBeenCalledExactlyOnceWith(1);
     expect(setCoreSettingsSpy).toHaveBeenNthCalledWith(1, {
       audioBufferSize: 1024,
       audioSampleRate: 48000,
@@ -76,13 +76,13 @@ describe('useStartLocalLinkSession hook', () => {
       rewindBufferInterval: undefined,
       showFpsCounter: false
     });
-    expect(startLocalLinkSessionSpy).toHaveBeenCalledWith({
+    expect(startLocalLinkSessionSpy).toHaveBeenCalledExactlyOnceWith({
       player1: { romPath: '/games/rom1.gba', savePath: '/saves/file1.sav' },
       player2: { romPath: '/games/rom2.gba', savePath: '/saves/file2.sav' }
     });
-    expect(setIsRunningSpy).toHaveBeenCalledWith(true);
+    expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(true);
     expect(remapKeyBindingsSpy).not.toHaveBeenCalled();
-    expect(addCallbacksSpy).toHaveBeenCalledWith({
+    expect(addCallbacksSpy).toHaveBeenCalledExactlyOnceWith({
       autoSaveStateCaptureNotificationEnabled: true,
       autoSaveStateLoadNotificationEnabled: true,
       fileSystemNotificationsEnabled: true,
@@ -148,8 +148,8 @@ describe('useStartLocalLinkSession hook', () => {
       ).toBe(true);
     });
 
-    expect(setVolumeSpy).toHaveBeenCalledWith(0.75);
-    expect(setFastForwardMultiplierSpy).toHaveBeenCalledWith(3);
+    expect(setVolumeSpy).toHaveBeenCalledExactlyOnceWith(0.75);
+    expect(setFastForwardMultiplierSpy).toHaveBeenCalledExactlyOnceWith(3);
     expect(setCoreSettingsSpy).toHaveBeenNthCalledWith(1, {
       audioBufferSize: 2048,
       audioSampleRate: 44100,
@@ -158,15 +158,15 @@ describe('useStartLocalLinkSession hook', () => {
       rewindBufferInterval: 5,
       showFpsCounter: true
     });
-    expect(startLocalLinkSessionSpy).toHaveBeenCalledWith({
+    expect(startLocalLinkSessionSpy).toHaveBeenCalledExactlyOnceWith({
       player1: { romPath: '/games/rom1.gba', savePath: '/saves/file1.sav' },
       player2: { romPath: '/games/rom2.gba', savePath: '/saves/file2.sav' }
     });
-    expect(setIsRunningSpy).toHaveBeenCalledWith(true);
-    expect(remapKeyBindingsSpy).toHaveBeenCalledWith([
+    expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(true);
+    expect(remapKeyBindingsSpy).toHaveBeenCalledExactlyOnceWith([
       { gbaInput: 'A', key: 'X', location: 0 }
     ]);
-    expect(addCallbacksSpy).toHaveBeenCalledWith({
+    expect(addCallbacksSpy).toHaveBeenCalledExactlyOnceWith({
       autoSaveStateCaptureNotificationEnabled: false,
       autoSaveStateLoadNotificationEnabled: false,
       fileSystemNotificationsEnabled: false,
@@ -219,7 +219,7 @@ describe('useStartLocalLinkSession hook', () => {
       ).toBe(false);
     });
 
-    expect(setIsRunningSpy).toHaveBeenCalledWith(false);
+    expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(false);
     expect(setCoreSettingsSpy).toHaveBeenCalledOnce();
     expect(remapKeyBindingsSpy).not.toHaveBeenCalled();
     expect(addCallbacksSpy).not.toHaveBeenCalled();

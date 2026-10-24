@@ -98,16 +98,14 @@ describe('<EmulatorSettingsModal />', () => {
       '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnSlowdown":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false,"autoSaveStateTimerIntervalSeconds":30,"autoSaveStateEnable":true,"restoreAutoSaveStateOnLoad":true,"autoSaveStateLoadNotificationEnabled":true,"autoSaveStateCaptureNotificationEnabled":true,"slowdownEnabled":true}'
     );
 
-    expect(addCallbacksSpy).toHaveBeenCalledOnce();
-    expect(addCallbacksSpy).toHaveBeenCalledWith({
+    expect(addCallbacksSpy).toHaveBeenCalledExactlyOnceWith({
       autoSaveStateCaptureNotificationEnabled: true,
       autoSaveStateLoadNotificationEnabled: true,
       fileSystemNotificationsEnabled: true,
       saveFileSystemOnInGameSave: true
     });
 
-    expect(setCoreSettingsSpy).toHaveBeenCalledOnce();
-    expect(setCoreSettingsSpy).toHaveBeenCalledWith({
+    expect(setCoreSettingsSpy).toHaveBeenCalledExactlyOnceWith({
       allowOpposingDirections: true,
       audioBufferSize: 1024,
       audioSampleRate: 48000,
@@ -170,7 +168,10 @@ describe('<EmulatorSettingsModal />', () => {
       'custom_save_override.sav'
     );
     await userEvent.clear(screen.getByLabelText('Auto Save State Interval'));
-    await userEvent.type(screen.getByLabelText('Auto Save State Interval'), '10');
+    await userEvent.type(
+      screen.getByLabelText('Auto Save State Interval'),
+      '10'
+    );
     await userEvent.click(screen.getByLabelText('Allow opposing directions'));
     await userEvent.click(screen.getByLabelText('Rewind enabled'));
     await userEvent.click(screen.getByLabelText('Auto save state enabled'));
@@ -196,7 +197,9 @@ describe('<EmulatorSettingsModal />', () => {
     await userEvent.click(
       screen.getByLabelText('Save file system on create / update / delete')
     );
-    await userEvent.click(screen.getByLabelText('Save file system on in-game save'));
+    await userEvent.click(
+      screen.getByLabelText('Save file system on in-game save')
+    );
 
     await userEvent.click(screen.getByRole('tab', { name: 'Alert' }));
     await userEvent.click(screen.getByLabelText('File system notifications'));
@@ -214,16 +217,14 @@ describe('<EmulatorSettingsModal />', () => {
       '{"frameSkip":25,"baseFpsTarget":30,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnSlowdown":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"showFpsCounter":true,"autoSaveStateTimerIntervalSeconds":10,"autoSaveStateEnable":false,"restoreAutoSaveStateOnLoad":false,"autoSaveStateLoadNotificationEnabled":false,"autoSaveStateCaptureNotificationEnabled":false,"slowdownEnabled":false,"saveFileName":"custom_save_override.sav"}'
     );
 
-    expect(addCallbacksSpy).toHaveBeenCalledOnce();
-    expect(addCallbacksSpy).toHaveBeenCalledWith({
+    expect(addCallbacksSpy).toHaveBeenCalledExactlyOnceWith({
       autoSaveStateCaptureNotificationEnabled: false,
       autoSaveStateLoadNotificationEnabled: false,
       fileSystemNotificationsEnabled: false,
       saveFileSystemOnInGameSave: false
     });
 
-    expect(setCoreSettingsSpy).toHaveBeenCalledOnce();
-    expect(setCoreSettingsSpy).toHaveBeenCalledWith({
+    expect(setCoreSettingsSpy).toHaveBeenCalledExactlyOnceWith({
       allowOpposingDirections: false,
       audioBufferSize: 1024,
       audioSampleRate: 48000,
@@ -283,17 +284,18 @@ describe('<EmulatorSettingsModal />', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Reset' }));
 
-    expect(removeItemSpy).toHaveBeenCalledWith(emulatorSettingsLocalStorageKey);
+    expect(removeItemSpy).toHaveBeenCalledExactlyOnceWith(
+      emulatorSettingsLocalStorageKey
+    );
 
-    expect(addCallbacksSpy).toHaveBeenCalledOnce();
-    expect(addCallbacksSpy).toHaveBeenCalledWith({
+    expect(addCallbacksSpy).toHaveBeenCalledExactlyOnceWith({
       autoSaveStateCaptureNotificationEnabled: true,
       autoSaveStateLoadNotificationEnabled: true,
       fileSystemNotificationsEnabled: true,
       saveFileSystemOnInGameSave: true
     });
 
-    expect(setCoreSettingsSpy).toHaveBeenCalledWith({
+    expect(setCoreSettingsSpy).toHaveBeenCalledExactlyOnceWith({
       allowOpposingDirections: true,
       audioBufferSize: 1024,
       audioSampleRate: 48000,

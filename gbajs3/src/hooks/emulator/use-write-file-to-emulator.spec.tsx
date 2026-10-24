@@ -44,9 +44,8 @@ describe('useWriteFileToEmulator hook', () => {
         uploadScreenshot: uploadScreenshotSpy
       };
 
-      const { useEmulatorContext: original } = await vi.importActual<
-        typeof contextHooks
-      >('../context.tsx');
+      const { useEmulatorContext: original } =
+        await vi.importActual<typeof contextHooks>('../context.tsx');
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...original(),
         emulator: emulator as GBAEmulator
@@ -65,8 +64,7 @@ describe('useWriteFileToEmulator hook', () => {
         uploadScreenshot: uploadScreenshotSpy
       }[method];
 
-      expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(file, expect.any(Function));
+      expect(spy).toHaveBeenCalledExactlyOnceWith(file, expect.any(Function));
     }
   );
 
@@ -74,14 +72,13 @@ describe('useWriteFileToEmulator hook', () => {
     const uploadAutoSaveStateSpy = vi.fn(() => Promise.resolve());
 
     const emulator: Partial<GBAEmulator> = {
-      filePaths: () => ({ autosave: '/data/autosave' } as filePaths),
+      filePaths: () => ({ autosave: '/data/autosave' }) as filePaths,
       isFileExtensionOfType: vi.fn(() => false),
       uploadAutoSaveState: uploadAutoSaveStateSpy
     };
 
-    const { useEmulatorContext: original } = await vi.importActual<
-      typeof contextHooks
-    >('../context.tsx');
+    const { useEmulatorContext: original } =
+      await vi.importActual<typeof contextHooks>('../context.tsx');
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),
       emulator: emulator as GBAEmulator
@@ -93,9 +90,7 @@ describe('useWriteFileToEmulator hook', () => {
 
     await act(async () => result.current(file, 'autosave'));
 
-    expect(uploadAutoSaveStateSpy).toHaveBeenCalledOnce();
-
-    expect(uploadAutoSaveStateSpy).toHaveBeenCalledWith(
+    expect(uploadAutoSaveStateSpy).toHaveBeenCalledExactlyOnceWith(
       '/data/autosave/state.ss',
       expect.any(Uint8Array)
     );
@@ -173,9 +168,8 @@ describe('useWriteFileToEmulator hook', () => {
         uploadAutoSaveState: uploadAutoSaveStateSpy
       };
 
-      const { useEmulatorContext: original } = await vi.importActual<
-        typeof contextHooks
-      >('../context.tsx');
+      const { useEmulatorContext: original } =
+        await vi.importActual<typeof contextHooks>('../context.tsx');
       vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
         ...original(),
         emulator: emulator as GBAEmulator
@@ -195,15 +189,13 @@ describe('useWriteFileToEmulator hook', () => {
         uploadAutoSaveState: uploadAutoSaveStateSpy
       }[method];
 
-      expect(spy).toHaveBeenCalledOnce();
-
       if (method === 'uploadAutoSaveState') {
-        expect(spy).toHaveBeenCalledWith(
+        expect(spy).toHaveBeenCalledExactlyOnceWith(
           `/autosave/${name}`,
           expect.any(Uint8Array)
         );
       } else {
-        expect(spy).toHaveBeenCalledWith(file, expect.any(Function));
+        expect(spy).toHaveBeenCalledExactlyOnceWith(file, expect.any(Function));
       }
     }
   );
@@ -216,14 +208,13 @@ describe('useWriteFileToEmulator hook', () => {
     const uploadSaveOrSaveState = vi.fn((_f: File, cb?: () => void) => cb?.());
 
     const emulator: Partial<GBAEmulator> = {
-      filePaths: () => ({ autosave: '/data/autosave' } as filePaths),
+      filePaths: () => ({ autosave: '/data/autosave' }) as filePaths,
       isFileExtensionOfType,
       uploadSaveOrSaveState
     };
 
-    const { useEmulatorContext: original } = await vi.importActual<
-      typeof contextHooks
-    >('../context.tsx');
+    const { useEmulatorContext: original } =
+      await vi.importActual<typeof contextHooks>('../context.tsx');
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),
       emulator: emulator as GBAEmulator
@@ -234,9 +225,21 @@ describe('useWriteFileToEmulator hook', () => {
 
     await act(async () => result.current(file));
 
-    expect(isFileExtensionOfType).toHaveBeenCalledWith('save1.sav', 'rom');
-    expect(isFileExtensionOfType).toHaveBeenCalledWith('save1.sav', 'autosave');
-    expect(isFileExtensionOfType).toHaveBeenCalledWith('save1.sav', 'save');
+    expect(isFileExtensionOfType).toHaveBeenNthCalledWith(
+      1,
+      'save1.sav',
+      'rom'
+    );
+    expect(isFileExtensionOfType).toHaveBeenNthCalledWith(
+      2,
+      'save1.sav',
+      'autosave'
+    );
+    expect(isFileExtensionOfType).toHaveBeenNthCalledWith(
+      3,
+      'save1.sav',
+      'save'
+    );
 
     expect(uploadSaveOrSaveState).toHaveBeenCalledTimes(1);
   });
@@ -244,7 +247,7 @@ describe('useWriteFileToEmulator hook', () => {
   it('does nothing when no override and no type matches', async () => {
     const emulator: Partial<GBAEmulator> = {
       isFileExtensionOfType: vi.fn(() => false),
-      filePaths: () => ({ autosave: '/data/autosave' } as filePaths),
+      filePaths: () => ({ autosave: '/data/autosave' }) as filePaths,
       uploadRom: vi.fn(),
       uploadSaveOrSaveState: vi.fn(),
       uploadCheats: vi.fn(),
@@ -253,9 +256,8 @@ describe('useWriteFileToEmulator hook', () => {
       uploadAutoSaveState: vi.fn()
     };
 
-    const { useEmulatorContext: original } = await vi.importActual<
-      typeof contextHooks
-    >('../context.tsx');
+    const { useEmulatorContext: original } =
+      await vi.importActual<typeof contextHooks>('../context.tsx');
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),
       emulator: emulator as GBAEmulator
@@ -275,9 +277,8 @@ describe('useWriteFileToEmulator hook', () => {
   });
 
   it('resolves immediately when emulator is unavailable', async () => {
-    const { useEmulatorContext: original } = await vi.importActual<
-      typeof contextHooks
-    >('../context.tsx');
+    const { useEmulatorContext: original } =
+      await vi.importActual<typeof contextHooks>('../context.tsx');
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       ...original(),

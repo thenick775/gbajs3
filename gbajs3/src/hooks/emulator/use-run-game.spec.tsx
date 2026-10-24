@@ -60,14 +60,12 @@ describe('useRunGame hook', () => {
       expect(result.current('some_rom.gba')).toBeTruthy();
     });
 
-    expect(emulatorRunSpy).toHaveBeenCalledOnce();
-    expect(emulatorRunSpy).toHaveBeenCalledWith(
+    expect(emulatorRunSpy).toHaveBeenCalledExactlyOnceWith(
       '/data/games/some_rom.gba',
       undefined
     );
 
-    expect(setIsRunningSpy).toHaveBeenCalledOnce();
-    expect(setIsRunningSpy).toHaveBeenCalledWith(true);
+    expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(true);
 
     // set stored game name
     expect(setItemSpy).toHaveBeenCalledWith(
@@ -76,12 +74,10 @@ describe('useRunGame hook', () => {
     );
 
     // set volume
-    expect(emulatorSetVolumeSpy).toHaveBeenCalledOnce();
-    expect(emulatorSetVolumeSpy).toHaveBeenCalledWith(1);
+    expect(emulatorSetVolumeSpy).toHaveBeenCalledExactlyOnceWith(1);
 
     // sets core settings
-    expect(setCoreSettingsSpy).toHaveBeenCalledOnce();
-    expect(setCoreSettingsSpy).toHaveBeenCalledWith({
+    expect(setCoreSettingsSpy).toHaveBeenCalledExactlyOnceWith({
       allowOpposingDirections: true,
       audioBufferSize: 1024,
       audioSampleRate: 48000,
@@ -154,28 +150,21 @@ describe('useRunGame hook', () => {
       expect(result.current('some_rom.gba')).toBeTruthy();
     });
 
-    expect(emulatorRunSpy).toHaveBeenCalledOnce();
-    expect(emulatorRunSpy).toHaveBeenCalledWith(
+    expect(emulatorRunSpy).toHaveBeenCalledExactlyOnceWith(
       '/data/games/some_rom.gba',
       '/data/saves/custom_sav.sav'
     );
-
-    expect(emulatorRemapKeyBindingsSpy).toHaveBeenCalledOnce();
-    expect(emulatorRemapKeyBindingsSpy).toHaveBeenCalledWith(
+    expect(emulatorRemapKeyBindingsSpy).toHaveBeenCalledExactlyOnceWith(
       'some set of keybindings'
     );
-
-    expect(emulatorSetFastForwardMultiplierSpy).toHaveBeenCalledOnce();
-    expect(emulatorSetFastForwardMultiplierSpy).toHaveBeenCalledWith(2);
-
-    expect(addCallbacksSpy).toHaveBeenCalledOnce();
-    expect(addCallbacksSpy).toHaveBeenCalledWith({
+    expect(emulatorSetFastForwardMultiplierSpy).toHaveBeenCalledExactlyOnceWith(
+      2
+    );
+    expect(addCallbacksSpy).toHaveBeenCalledExactlyOnceWith({
       saveFileSystemOnInGameSave: false,
       fileSystemNotificationsEnabled: false
     });
-
-    expect(setCoreSettingsSpy).toHaveBeenCalledOnce();
-    expect(setCoreSettingsSpy).toHaveBeenCalledWith({
+    expect(setCoreSettingsSpy).toHaveBeenCalledExactlyOnceWith({
       allowOpposingDirections: false,
       audioBufferSize: 1024,
       audioSampleRate: 48000,
@@ -217,7 +206,7 @@ describe('useRunGame hook', () => {
       expect(result.current('some_rom.gba')).toBeFalsy();
     });
 
-    expect(setIsRunningSpy).toHaveBeenCalledWith(false);
+    expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(false);
     expect(setItemSpy).not.toHaveBeenCalledWith(
       emulatorGameNameLocalStorageKey,
       '"some_rom.gba"'

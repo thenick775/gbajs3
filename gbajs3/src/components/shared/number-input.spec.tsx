@@ -132,7 +132,6 @@ describe('<NumberInput />', () => {
 
     const inputElement = screen.getByRole('spinbutton');
 
-    expect(refSpy).toHaveBeenCalledOnce();
-    expect(refSpy).toHaveBeenCalledWith(inputElement);
+    expect(refSpy).toHaveBeenCalledExactlyOnceWith(inputElement);
   });
 });

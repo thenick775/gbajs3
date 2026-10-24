@@ -71,8 +71,7 @@ describe('<LoadLocalRomModal />', () => {
 
     await userEvent.click(localRom);
 
-    expect(runGameSpy).toHaveBeenCalledOnce();
-    expect(runGameSpy).toHaveBeenCalledWith('rom1.gba');
+    expect(runGameSpy).toHaveBeenCalledExactlyOnceWith('rom1.gba');
     expect(closeModalSpy).toHaveBeenCalledOnce();
   });
 

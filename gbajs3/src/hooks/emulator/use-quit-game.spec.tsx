@@ -53,26 +53,23 @@ describe('useQuitGame hook', () => {
       result.current();
     });
 
-    expect(startFadeSpy).toHaveBeenCalledOnce();
     // blob is not implemented, but we can check the type
-    expect(startFadeSpy).toHaveBeenCalledWith(testCanvas, expect.any(Blob));
+    expect(startFadeSpy).toHaveBeenCalledExactlyOnceWith(
+      testCanvas,
+      expect.any(Blob)
+    );
     // if the emulator is running, it is expected that we attempt to cancel the fade
     // if the fade itself is not actively running, it is a no-op
     expect(cancelFadeSpy).toHaveBeenCalledOnce();
-
-    expect(screenshotSpy).toHaveBeenCalledOnce();
-    expect(screenshotSpy).toHaveBeenCalledWith('fade-copy.png');
-
-    expect(getFileSpy).toHaveBeenCalledOnce();
-    expect(getFileSpy).toHaveBeenCalledWith('/screenshots/fade-copy.png');
-
-    expect(deleteFileSpy).toHaveBeenCalledOnce();
-    expect(deleteFileSpy).toHaveBeenCalledWith('/screenshots/fade-copy.png');
-
+    expect(screenshotSpy).toHaveBeenCalledExactlyOnceWith('fade-copy.png');
+    expect(getFileSpy).toHaveBeenCalledExactlyOnceWith(
+      '/screenshots/fade-copy.png'
+    );
+    expect(deleteFileSpy).toHaveBeenCalledExactlyOnceWith(
+      '/screenshots/fade-copy.png'
+    );
     expect(emulatorQuitGameSpy).toHaveBeenCalledOnce();
-
-    expect(setIsRunningSpy).toHaveBeenCalledOnce();
-    expect(setIsRunningSpy).toHaveBeenCalledWith(false);
+    expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(false);
   });
 
   it('sets running to false if emulator is not running', () => {
@@ -104,8 +101,6 @@ describe('useQuitGame hook', () => {
 
     expect(startFadeSpy).not.toHaveBeenCalled();
     expect(cancelFadeSpy).not.toHaveBeenCalled();
-
-    expect(setIsRunningSpy).toHaveBeenCalledOnce();
-    expect(setIsRunningSpy).toHaveBeenCalledWith(false);
+    expect(setIsRunningSpy).toHaveBeenCalledExactlyOnceWith(false);
   });
 });

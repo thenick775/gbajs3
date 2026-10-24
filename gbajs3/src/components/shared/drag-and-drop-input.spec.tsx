@@ -64,8 +64,7 @@ describe('<DragAndDropInput />', () => {
 
     await userEvent.upload(screen.getByTestId('hidden-file-input'), testFile);
 
-    expect(onDropSpy).toHaveBeenCalledOnce();
-    expect(onDropSpy).toHaveBeenCalledWith([testFile]);
+    expect(onDropSpy).toHaveBeenCalledExactlyOnceWith([testFile]);
 
     expect(screen.getByText('File to upload:')).toBeVisible();
     expect(screen.getByText('test_file.test')).toBeVisible();
@@ -93,8 +92,7 @@ describe('<DragAndDropInput />', () => {
 
     await userEvent.upload(screen.getByTestId('hidden-file-input'), testFiles);
 
-    expect(onDropSpy).toHaveBeenCalledOnce();
-    expect(onDropSpy).toHaveBeenCalledWith(testFiles);
+    expect(onDropSpy).toHaveBeenCalledExactlyOnceWith(testFiles);
 
     expect(screen.getByText('Files to upload:')).toBeVisible();
     expect(screen.getByText('test_file1.test')).toBeVisible();
@@ -138,7 +136,7 @@ describe('<DragAndDropInput />', () => {
       expect(onDropSpy).toHaveBeenCalledOnce();
     });
 
-    expect(onDropSpy).toHaveBeenCalledWith(testFiles);
+    expect(onDropSpy).toHaveBeenCalledExactlyOnceWith(testFiles);
 
     expect(screen.getByText('File to upload:')).toBeVisible();
     expect(screen.getByText('test_file.test')).toBeVisible();
@@ -185,7 +183,7 @@ describe('<DragAndDropInput />', () => {
       expect(onDropSpy).toHaveBeenCalledOnce();
     });
 
-    expect(onDropSpy).toHaveBeenCalledWith(testFiles);
+    expect(onDropSpy).toHaveBeenCalledExactlyOnceWith(testFiles);
 
     expect(screen.getByText('Files to upload:')).toBeVisible();
     expect(screen.getByText('test_file1.test')).toBeVisible();
@@ -232,8 +230,7 @@ describe('<DragAndDropInput />', () => {
     expect(screen.getByText('test_file1.test')).toBeVisible();
     expect(screen.getByText('Some files were rejected')).toBeVisible();
 
-    expect(onDropSpy).toHaveBeenCalledOnce();
-    expect(onDropSpy).toHaveBeenCalledWith([testFiles[0]]);
+    expect(onDropSpy).toHaveBeenCalledExactlyOnceWith([testFiles[0]]);
   });
 
   it('renders error if file extension is incorrect', async () => {
@@ -273,8 +270,7 @@ describe('<DragAndDropInput />', () => {
 
     expect(await screen.findByText('One .test file is required')).toBeVisible();
 
-    expect(onDropSpy).toHaveBeenCalledOnce();
-    expect(onDropSpy).toHaveBeenCalledWith([]);
+    expect(onDropSpy).toHaveBeenCalledExactlyOnceWith([]);
   });
 
   it('renders error if regex extension is incorrect', async () => {
@@ -314,8 +310,7 @@ describe('<DragAndDropInput />', () => {
 
     expect(await screen.findByText('One .test file is required')).toBeVisible();
 
-    expect(onDropSpy).toHaveBeenCalledOnce();
-    expect(onDropSpy).toHaveBeenCalledWith([]);
+    expect(onDropSpy).toHaveBeenCalledExactlyOnceWith([]);
   });
 
   it('renders error if files are partially rejected', async () => {

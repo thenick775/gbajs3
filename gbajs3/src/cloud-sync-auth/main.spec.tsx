@@ -87,8 +87,7 @@ describe('<CloudSyncAuthApp />', () => {
       'Waiting for Google...'
     );
 
-    expect(channel.postMessage).toHaveBeenCalledOnce();
-    expect(channel.postMessage).toHaveBeenCalledWith({
+    expect(channel.postMessage).toHaveBeenCalledExactlyOnceWith({
       type: 'success',
       accessToken: 'access-token',
       expiresIn: 3600,
@@ -125,7 +124,7 @@ describe('<CloudSyncAuthApp />', () => {
       screen.getByRole('button', { name: 'Continue with Google Drive' })
     );
 
-    expect(channel.postMessage).toHaveBeenCalledWith({
+    expect(channel.postMessage).toHaveBeenCalledExactlyOnceWith({
       type: 'error',
       error: 'Google Drive authorization did not grant app data access',
       state: 'test-state'
@@ -152,7 +151,7 @@ describe('<CloudSyncAuthApp />', () => {
       screen.getByRole('button', { name: 'Continue with Google Drive' })
     );
 
-    expect(channel.postMessage).toHaveBeenCalledWith({
+    expect(channel.postMessage).toHaveBeenCalledExactlyOnceWith({
       type: 'error',
       error: 'Access denied',
       state: 'test-state'
@@ -178,7 +177,7 @@ describe('<CloudSyncAuthApp />', () => {
       screen.getByRole('button', { name: 'Continue with Google Drive' })
     );
 
-    expect(channel.postMessage).toHaveBeenCalledWith({
+    expect(channel.postMessage).toHaveBeenCalledExactlyOnceWith({
       type: 'error',
       error: 'Google Drive authorization failed: popup_failed_to_open',
       state: 'test-state'

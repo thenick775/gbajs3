@@ -54,7 +54,7 @@ describe('<ControlProfiles />', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Profile-1' }));
 
-    expect(setLayoutsSpy).toHaveBeenCalledWith({
+    expect(setLayoutsSpy).toHaveBeenCalledExactlyOnceWith({
       controlPanel: expect.anything(),
       screen: expect.anything()
     });

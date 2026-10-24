@@ -72,8 +72,7 @@ describe('<DownloadSaveModal />', () => {
     const downloadButton = screen.getByText('Download', { selector: 'button' });
     await userEvent.click(downloadButton);
 
-    expect(downloadBlobSpy).toHaveBeenCalledOnce();
-    expect(downloadBlobSpy).toHaveBeenCalledWith(
+    expect(downloadBlobSpy).toHaveBeenCalledExactlyOnceWith(
       'some_rom.sav',
       expect.any(Blob)
     );
@@ -106,7 +105,7 @@ describe('<DownloadSaveModal />', () => {
     await userEvent.click(screen.getByText('Truncate save (128 KiB)'));
     await userEvent.click(screen.getByText('Download', { selector: 'button' }));
 
-    expect(getCurrentSaveTruncated).toHaveBeenCalledWith(131072);
+    expect(getCurrentSaveTruncated).toHaveBeenCalledExactlyOnceWith(131072);
     expect(getCurrentSave).not.toHaveBeenCalled();
     expect(downloadBlobSpy).toHaveBeenCalledOnce();
   });

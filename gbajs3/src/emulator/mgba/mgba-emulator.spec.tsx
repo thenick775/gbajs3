@@ -184,7 +184,7 @@ cheat1_code = "XYZ789"`;
   it('should retrieve the current cheats file', () => {
     const { emulator, mock } = createEmulator();
     expect(emulator.getCurrentCheatsFile()).toEqual(new Uint8Array([1, 2, 3]));
-    expect(mock.FS?.readFile).toHaveBeenCalledWith(
+    expect(mock.FS?.readFile).toHaveBeenCalledExactlyOnceWith(
       '/data/cheats/testGame.cheats'
     );
   });
@@ -213,7 +213,7 @@ cheat1_code = "XYZ789"`;
   it('should properly remap key bindings', () => {
     const { emulator, mock } = createEmulator();
     emulator.remapKeyBindings([{ gbaInput: 'A', key: 'X', location: 0 }]);
-    expect(mock.bindKey).toHaveBeenCalledWith('X', 'A');
+    expect(mock.bindKey).toHaveBeenCalledExactlyOnceWith('X', 'A');
   });
 
   it('should handle key remapping edge cases', () => {
@@ -225,9 +225,9 @@ cheat1_code = "XYZ789"`;
     ]);
 
     expect(mock.bindKey).toHaveBeenCalledTimes(3);
-    expect(mock.bindKey).toHaveBeenCalledWith('Return', 'Start');
-    expect(mock.bindKey).toHaveBeenCalledWith('Up', 'Up');
-    expect(mock.bindKey).toHaveBeenCalledWith('Keypad 5', '5');
+    expect(mock.bindKey).toHaveBeenNthCalledWith(1, 'Return', 'Start');
+    expect(mock.bindKey).toHaveBeenNthCalledWith(2, 'Up', 'Up');
+    expect(mock.bindKey).toHaveBeenNthCalledWith(3, 'Keypad 5', '5');
   });
 
   it('should list all current save states based on the game name', () => {
@@ -251,7 +251,9 @@ cheat1_code = "XYZ789"`;
   it('should delete a save state', () => {
     const { emulator, mock } = createEmulator();
     emulator.deleteSaveState(3);
-    expect(mock.FS?.unlink).toHaveBeenCalledWith('/data/states/testGame.ss3');
+    expect(mock.FS?.unlink).toHaveBeenCalledExactlyOnceWith(
+      '/data/states/testGame.ss3'
+    );
   });
 
   it('should list all files', () => {
@@ -359,9 +361,9 @@ cheat1_code = "XYZ789"`;
 
     emulator.clearFilesystem();
 
-    expect(unlink).toHaveBeenCalledWith('/data/games/rom.gba');
-    expect(unlink).toHaveBeenCalledWith('/data/saves/rom.sav');
-    expect(unlink).toHaveBeenCalledWith('/autosave/rom_auto.ss');
+    expect(unlink).toHaveBeenNthCalledWith(1, '/data/games/rom.gba');
+    expect(unlink).toHaveBeenNthCalledWith(2, '/data/saves/rom.sav');
+    expect(unlink).toHaveBeenNthCalledWith(3, '/autosave/rom_auto.ss');
   });
 
   it('should resume the emulator', async () => {
@@ -413,8 +415,9 @@ cheat1_code = "XYZ789"`;
   it('should get the current ROM as a Uint8Array', () => {
     const { emulator, mock } = createEmulator();
     expect(emulator.getCurrentRom()).toEqual(new Uint8Array([4, 5, 6]));
-    expect(mock.FS?.readFile).toHaveBeenCalledOnce();
-    expect(mock.FS?.readFile).toHaveBeenCalledWith('/data/games/testGame.gba');
+    expect(mock.FS?.readFile).toHaveBeenCalledExactlyOnceWith(
+      '/data/games/testGame.gba'
+    );
   });
 
   it('should return null if there is no game loaded', () => {
@@ -460,7 +463,7 @@ cheat1_code = "XYZ789"`;
     const { emulator, mock } = createEmulator();
     const filePath = '/mockGame';
     expect(emulator.getFile(filePath)).toEqual(new Uint8Array([4, 5, 6]));
-    expect(mock.FS?.readFile).toHaveBeenCalledWith(filePath);
+    expect(mock.FS?.readFile).toHaveBeenCalledExactlyOnceWith(filePath);
   });
 
   it('should properly quit the emulator', () => {
@@ -519,9 +522,9 @@ cheat1_code = "XYZ789"`;
     emulator.stopLocalLinkSession();
     emulator.setLocalLinkActivePlayer(2);
 
-    expect(linkLocalStartSession).toHaveBeenCalledWith(config);
+    expect(linkLocalStartSession).toHaveBeenCalledExactlyOnceWith(config);
     expect(linkLocalStopSession).toHaveBeenCalledOnce();
-    expect(linkLocalSetActivePlayer).toHaveBeenCalledWith(2);
+    expect(linkLocalSetActivePlayer).toHaveBeenCalledExactlyOnceWith(2);
     expect(emulator.getLocalLinkStatus()).toBe(status);
   });
 });

@@ -137,7 +137,7 @@ describe('<KeyBindingsForm />', () => {
       emulatorKeyBindingsLocalStorageKey,
       '[{"gbaInput":"A","key":"T","location":0},{"gbaInput":"B","key":"Delete","location":0}]'
     );
-    expect(remapBindingsSpy).toHaveBeenCalledWith([
+    expect(remapBindingsSpy).toHaveBeenCalledExactlyOnceWith([
       { gbaInput: 'A', key: 'T', location: 0 },
       { gbaInput: 'B', key: 'Delete', location: 0 }
     ]);

@@ -118,7 +118,7 @@ describe('<ControlPanel />', () => {
 
     renderWithContext(<ControlPanel />);
 
-    expect(setInitialBoundSpy).toHaveBeenCalledWith('controlPanel', {
+    expect(setInitialBoundSpy).toHaveBeenCalledExactlyOnceWith('controlPanel', {
       bottom: 0,
       height: 0,
       left: 0,
@@ -156,8 +156,7 @@ describe('<ControlPanel />', () => {
     );
     fireEvent.mouseMove(document, movements[0]);
 
-    expect(setLayoutSpy).toHaveBeenCalledOnce();
-    expect(setLayoutSpy).toHaveBeenCalledWith('controlPanel', {
+    expect(setLayoutSpy).toHaveBeenCalledExactlyOnceWith('controlPanel', {
       originalBounds: {
         bottom: 0,
         height: 0,
@@ -215,8 +214,7 @@ describe('<ControlPanel />', () => {
     fireEvent.mouseDown(screen.getAllByTestId('gripper-handle')[0], initialPos);
     fireEvent.mouseMove(document, movements[0]);
 
-    expect(setLayoutSpy).toHaveBeenCalledOnce();
-    expect(setLayoutSpy).toHaveBeenCalledWith('controlPanel', {
+    expect(setLayoutSpy).toHaveBeenCalledExactlyOnceWith('controlPanel', {
       originalBounds: {
         bottom: 0,
         height: 0,
@@ -347,8 +345,7 @@ describe('<ControlPanel />', () => {
 
       fireEvent.pointerDown(screen.getByLabelText('Rewind Emulator'));
 
-      expect(toggleRewindSpy).toHaveBeenCalledOnce();
-      expect(toggleRewindSpy).toHaveBeenCalledWith(true);
+      expect(toggleRewindSpy).toHaveBeenCalledExactlyOnceWith(true);
 
       fireEvent.pointerUp(screen.getByLabelText('Rewind Emulator'));
 
@@ -379,8 +376,7 @@ describe('<ControlPanel />', () => {
 
       fireEvent.pointerDown(screen.getByLabelText('Rewind Emulator'));
 
-      expect(setVolumeSpy).toHaveBeenCalledOnce();
-      expect(setVolumeSpy).toHaveBeenCalledWith(0);
+      expect(setVolumeSpy).toHaveBeenCalledExactlyOnceWith(0);
 
       fireEvent.pointerUp(screen.getByLabelText('Rewind Emulator'));
 
@@ -406,8 +402,7 @@ describe('<ControlPanel />', () => {
 
       await userEvent.click(screen.getByLabelText('Mute Volume'));
 
-      expect(emulatorSetVolumeSpy).toHaveBeenCalledOnce();
-      expect(emulatorSetVolumeSpy).toHaveBeenCalledWith(0);
+      expect(emulatorSetVolumeSpy).toHaveBeenCalledExactlyOnceWith(0);
       expect(setItemSpy).toHaveBeenCalledWith(
         emulatorVolumeLocalStorageKey,
         '0'
@@ -434,8 +429,7 @@ describe('<ControlPanel />', () => {
         target: { value: 0.5 }
       });
 
-      expect(emulatorSetVolumeSpy).toHaveBeenCalledOnce();
-      expect(emulatorSetVolumeSpy).toHaveBeenCalledWith(0.5);
+      expect(emulatorSetVolumeSpy).toHaveBeenCalledExactlyOnceWith(0.5);
       expect(setItemSpy).toHaveBeenCalledWith(
         emulatorVolumeLocalStorageKey,
         '0.5'
@@ -460,8 +454,7 @@ describe('<ControlPanel />', () => {
 
       await userEvent.click(screen.getByLabelText('Max Volume'));
 
-      expect(emulatorSetVolumeSpy).toHaveBeenCalledOnce();
-      expect(emulatorSetVolumeSpy).toHaveBeenCalledWith(1);
+      expect(emulatorSetVolumeSpy).toHaveBeenCalledExactlyOnceWith(1);
       expect(setItemSpy).toHaveBeenCalledWith(
         emulatorVolumeLocalStorageKey,
         '1'
@@ -495,8 +488,7 @@ describe('<ControlPanel />', () => {
 
       await userEvent.click(screen.getByLabelText('Regular Speed'));
 
-      expect(ffMultiplierSpy).toHaveBeenCalledOnce();
-      expect(ffMultiplierSpy).toHaveBeenCalledWith(1);
+      expect(ffMultiplierSpy).toHaveBeenCalledExactlyOnceWith(1);
       expect(setItemSpy).toHaveBeenCalledWith(
         emulatorFFMultiplierLocalStorageKey,
         '1'
@@ -524,8 +516,7 @@ describe('<ControlPanel />', () => {
         target: { value: 6 }
       });
 
-      expect(ffMultiplierSpy).toHaveBeenCalledOnce();
-      expect(ffMultiplierSpy).toHaveBeenCalledWith(3);
+      expect(ffMultiplierSpy).toHaveBeenCalledExactlyOnceWith(3);
       expect(setItemSpy).toHaveBeenCalledWith(
         emulatorFFMultiplierLocalStorageKey,
         '3'
@@ -551,8 +542,7 @@ describe('<ControlPanel />', () => {
 
       await userEvent.click(screen.getByLabelText('Max Fast Forward'));
 
-      expect(ffMultiplierSpy).toHaveBeenCalledOnce();
-      expect(ffMultiplierSpy).toHaveBeenCalledWith(5);
+      expect(ffMultiplierSpy).toHaveBeenCalledExactlyOnceWith(5);
       expect(setItemSpy).toHaveBeenCalledWith(
         emulatorFFMultiplierLocalStorageKey,
         '5'
@@ -594,8 +584,7 @@ describe('<ControlPanel />', () => {
 
     await userEvent.click(screen.getByLabelText('Max Fast Forward'));
 
-    expect(setVolumeSpy).toHaveBeenCalledOnce();
-    expect(setVolumeSpy).toHaveBeenCalledWith(0);
+    expect(setVolumeSpy).toHaveBeenCalledExactlyOnceWith(0);
 
     await userEvent.click(screen.getByLabelText('Regular Speed'));
 

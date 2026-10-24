@@ -81,10 +81,10 @@ describe('<CloudSyncModal />', () => {
       })
     );
 
-    expect(confirmSpy).toHaveBeenCalledWith(
+    expect(confirmSpy).toHaveBeenCalledExactlyOnceWith(
       'Pulling this backup will replace local files. Continue?'
     );
-    expect(pullGoogleDriveBackupSpy).toHaveBeenCalledWith({
+    expect(pullGoogleDriveBackupSpy).toHaveBeenCalledExactlyOnceWith({
       backupId: testGoogleDriveBackup.id,
       name: testGoogleDriveBackup.name
     });
@@ -119,7 +119,9 @@ describe('<CloudSyncModal />', () => {
     );
 
     await waitFor(() => {
-      expect(createFilesystemBackupBlobSpy).toHaveBeenCalledWith(emulator);
+      expect(createFilesystemBackupBlobSpy).toHaveBeenCalledExactlyOnceWith(
+        emulator
+      );
     });
   });
 
@@ -169,10 +171,10 @@ describe('<CloudSyncModal />', () => {
       })
     );
 
-    expect(confirmSpy).toHaveBeenCalledWith(
+    expect(confirmSpy).toHaveBeenCalledExactlyOnceWith(
       `Delete ${testGoogleDriveBackup.name}?`
     );
-    expect(deleteGoogleDriveBackupSpy).toHaveBeenCalledWith({
+    expect(deleteGoogleDriveBackupSpy).toHaveBeenCalledExactlyOnceWith({
       backupId: testGoogleDriveBackup.id
     });
   });
@@ -214,7 +216,7 @@ describe('<CloudSyncModal />', () => {
     );
 
     expect(clearFilesystemSpy).toHaveBeenCalledOnce();
-    expect(importZipToEmulatorFsSpy).toHaveBeenCalledWith(
+    expect(importZipToEmulatorFsSpy).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({ name: testGoogleDriveBackup.name }),
       writeFileToEmulatorSpy
     );
