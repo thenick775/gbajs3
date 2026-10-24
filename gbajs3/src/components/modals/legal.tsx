@@ -63,7 +63,7 @@ export const LegalModal = () => {
               Open-Source ROM Catalog:
               <br />
               The Emulator includes a catalog of open-source Game Boy Advance
-              homebrew ROMs. Files are fetched directly from their source hosts;
+              homebrew ROMs. Files are fetched directly from their source hosts,
               the Emulator does not host them. Each title remains subject to its
               creator's license.
             </p>
@@ -191,7 +191,7 @@ export const LegalModal = () => {
           this website and open an issue or a discussion in GitHub.
         </p>
 
-        <p>Last updated: October 23 2026</p>
+        <p>Last updated: October 25 2026</p>
 
         <p>© {year}, Nicholas VanCise. All rights reserved.</p>
       </ModalBody>

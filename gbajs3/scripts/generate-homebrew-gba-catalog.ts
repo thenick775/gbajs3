@@ -1,11 +1,5 @@
 import { execFile } from 'node:child_process';
-import {
-  mkdtemp,
-  mkdir,
-  readFile,
-  rm,
-  writeFile
-} from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { promisify } from 'node:util';
@@ -51,8 +45,6 @@ type CatalogEntry = {
 };
 
 const run = promisify(execFile);
-const sourceDir = await mkdtemp(join(tmpdir(), 'gbadev-games-'));
-const outputFile = 'public/homebrew/gba.json';
 const supportedPlatforms = ['GB', 'GBC', 'GBA'];
 const supportedRomExtensions = ['.gba', '.gbc', '.gb', '.zip', '.7z'];
 const sources = [
@@ -87,88 +79,100 @@ const websiteUrl = (website: z.infer<typeof ManifestSchema>['website']) => {
   return typeof website === 'string' ? website : website?.url;
 };
 
-try {
-  const entries: CatalogEntry[] = [];
+export const generateHomebrewCatalog = async (
+  outputFile = 'public/homebrew/gba.json'
+) => {
+  const sourceDir = await mkdtemp(join(tmpdir(), 'gbadev-games-'));
 
-  for (const source of sources) {
-    const repositoryDir = join(sourceDir, source.id);
-    await run('git', [
-      'clone',
-      '--depth',
-      '1',
-      '--filter=blob:none',
-      '--sparse',
-      source.cloneUrl,
-      repositoryDir
-    ]);
-    await run('git', [
-      '-C',
-      repositoryDir,
-      'sparse-checkout',
-      'set',
-      '--no-cone',
-      'entries/*/game.json'
-    ]);
+  try {
+    const entries: CatalogEntry[] = [];
 
-    const { stdout } = await run('git', [
-      '-C',
-      repositoryDir,
-      'ls-tree',
-      '-r',
-      '--name-only',
-      'HEAD',
-      'entries'
-    ]);
-    const files = stdout.trim().split('\n');
-    const manifestPaths = files.filter((path) =>
-      /^entries\/[^/]+\/game\.json$/.test(path)
-    );
+    for (const source of sources) {
+      const repositoryDir = join(sourceDir, source.id);
+      await run('git', [
+        'clone',
+        '--depth',
+        '1',
+        '--filter=blob:none',
+        '--sparse',
+        source.cloneUrl,
+        repositoryDir
+      ]);
+      await run('git', [
+        '-C',
+        repositoryDir,
+        'sparse-checkout',
+        'set',
+        '--no-cone',
+        'entries/*/game.json'
+      ]);
 
-    for (const manifestPath of manifestPaths) {
-      const entryPath = dirname(manifestPath);
-      const entryName = entryPath.split('/')[1];
-      const manifest = ManifestSchema.parse(
-        JSON.parse(await readFile(join(repositoryDir, manifestPath), 'utf8'))
+      const { stdout } = await run('git', [
+        '-C',
+        repositoryDir,
+        'ls-tree',
+        '-r',
+        '--name-only',
+        'HEAD',
+        'entries'
+      ]);
+      const files = stdout.trim().split('\n');
+      const manifestPaths = files.filter((path) =>
+        /^entries\/[^/]+\/game\.json$/.test(path)
       );
-      const rom = manifest.files?.find(
-        (file) =>
-          file.playable &&
-          supportedRomExtensions.some((extension) =>
-            file.filename.toLowerCase().endsWith(extension)
-          )
-      );
-      if (!supportedPlatforms.includes(manifest.platform ?? '') || !rom)
-        continue;
 
-      const cover =
-        files.find(
+      for (const manifestPath of manifestPaths) {
+        const entryPath = dirname(manifestPath);
+        const entryName = entryPath.split('/')[1];
+        const manifest = ManifestSchema.parse(
+          JSON.parse(await readFile(join(repositoryDir, manifestPath), 'utf8'))
+        );
+        const rom = manifest.files?.find(
           (file) =>
-            file.startsWith(`${entryPath}/`) &&
-            /^cover\.(gif|jpe?g|png|webp)$/i.test(
-              file.slice(entryPath.length + 1)
+            file.playable &&
+            supportedRomExtensions.some((extension) =>
+              file.filename.toLowerCase().endsWith(extension)
             )
-        )?.slice(entryPath.length + 1) ?? manifest.screenshots?.[0];
-      const entryUrl = `${source.rawUrl}/${encodePath(entryPath)}`;
+        );
+        if (!supportedPlatforms.includes(manifest.platform ?? '') || !rom)
+          continue;
 
-      entries.push({
-        slug: `${source.id}-${manifest.slug ?? entryName}`,
-        title: manifest.title ?? entryName,
-        platform: manifest.platform ?? '',
-        developer: developerName(manifest.developer),
-        description: manifest.description,
-        tags: manifest.tags,
-        license: manifest.gameLicense ?? manifest.license,
-        website: websiteUrl(manifest.website) ?? manifest.gameWebsite,
-        cover: cover ? { url: `${entryUrl}/${encodePath(cover)}` } : undefined,
-        rom: { url: `${entryUrl}/${encodePath(rom.filename)}` }
-      });
+        const cover =
+          files
+            .find(
+              (file) =>
+                file.startsWith(`${entryPath}/`) &&
+                /^cover\.(gif|jpe?g|png|webp)$/i.test(
+                  file.slice(entryPath.length + 1)
+                )
+            )
+            ?.slice(entryPath.length + 1) ?? manifest.screenshots?.[0];
+        const entryUrl = `${source.rawUrl}/${encodePath(entryPath)}`;
+
+        entries.push({
+          slug: `${source.id}-${manifest.slug ?? entryName}`,
+          title: manifest.title ?? entryName,
+          platform: manifest.platform ?? '',
+          developer: developerName(manifest.developer),
+          description: manifest.description,
+          tags: manifest.tags,
+          license: manifest.gameLicense ?? manifest.license,
+          website: websiteUrl(manifest.website) ?? manifest.gameWebsite,
+          cover: cover
+            ? { url: `${entryUrl}/${encodePath(cover)}` }
+            : undefined,
+          rom: { url: `${entryUrl}/${encodePath(rom.filename)}` }
+        });
+      }
     }
-  }
 
-  entries.sort((a, b) => a.title.localeCompare(b.title));
-  await mkdir(dirname(outputFile), { recursive: true });
-  await writeFile(outputFile, JSON.stringify({ entries }) + '\n');
-  console.log(`Generated ${entries.length} Game Boy-compatible homebrew entries`);
-} finally {
-  await rm(sourceDir, { force: true, recursive: true });
-}
+    entries.sort((a, b) => a.title.localeCompare(b.title));
+    await mkdir(dirname(outputFile), { recursive: true });
+    await writeFile(outputFile, JSON.stringify({ entries }) + '\n');
+    console.log(`Generated ${entries.length} GBA homebrew entries`);
+  } finally {
+    await rm(sourceDir, { force: true, recursive: true });
+  }
+};
+
+if (import.meta.main) await generateHomebrewCatalog();

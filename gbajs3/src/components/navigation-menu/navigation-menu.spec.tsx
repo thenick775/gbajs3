@@ -151,7 +151,8 @@ describe('<NavigationMenu />', () => {
     it.each([
       ['Upload Files', { type: 'uploadFiles' }],
       ['File System', { type: 'fileSystem' }],
-      ['Import/Export', { type: 'importExport' }]
+      ['Import/Export', { type: 'importExport' }],
+      ['Homebrew Library', { type: 'homebrewLibrary' }]
     ])(
       '%s opens modal on click when emulator is ready',
       async (title, expected) => {

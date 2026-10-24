@@ -19,6 +19,19 @@ import {
   LoadingIndicator,
   PacmanIndicator
 } from '../shared/loading-indicator.tsx';
+import { Copy } from '../shared/styled.tsx';
+
+type HomebrewCatalogProps = {
+  entries: HomebrewEntry[];
+  error: Error | null;
+  onLoadMore: () => void;
+  onQueryChange: (query: string) => void;
+  onSelect: (entry: HomebrewEntry) => void;
+  query: string;
+  searchId: string;
+  totalEntries?: number;
+  visibleEntries: HomebrewEntry[];
+};
 
 const CatalogItem = styled('li')`
   margin: 0;
@@ -78,9 +91,10 @@ const Cover = styled('img')`
 `;
 
 const DetailCover = styled(Cover)`
-  width: min(100%, 180px);
-  height: 180px;
+  height: unset;
+  width: 100%;
   margin: 0 auto;
+  object-fit: contain;
 `;
 
 const CoverPlaceholder = styled('div')`
@@ -99,6 +113,11 @@ const DetailCoverPlaceholder = styled(CoverPlaceholder)`
   width: min(100%, 180px);
   height: 180px;
   margin: 0 auto;
+`;
+
+const DetailCopy = styled('p')`
+  margin: 0.5rem 0 0;
+  color: ${({ theme }) => theme.modalTextSecondary};
 `;
 
 const GameCopy = styled('span')`
@@ -124,23 +143,132 @@ const GameMeta = styled('span')`
   white-space: nowrap;
 `;
 
-const DetailCopy = styled('p')`
-  margin: 0.75rem 0 0;
-  color: ${({ theme }) => theme.modalTextSecondary};
-  line-height: 1.5;
-`;
-
 const EmptyState = styled('p')`
   padding: 1rem;
   color: ${({ theme }) => theme.modalTextSecondary};
   text-align: center;
 `;
 
+const SearchFieldsContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const DetailWebsite = styled('a')`
+  color: ${({ theme }) => theme.modalTextSecondary};
+`;
+
+const HomebrewDetails = ({ entry }: { entry: HomebrewEntry }) => (
+  <>
+    {entry.cover ? (
+      <DetailCover src={entry.cover.url} alt={`Cover art for ${entry.title}`} />
+    ) : (
+      <DetailCoverPlaceholder aria-hidden>?</DetailCoverPlaceholder>
+    )}
+    {entry.developer && (
+      <DetailCopy>Developer(s): {entry.developer}</DetailCopy>
+    )}
+    <DetailCopy>Platform: {entry.platform}</DetailCopy>
+    {entry.license && <DetailCopy>License: {entry.license}</DetailCopy>}
+    {entry.website && (
+      <DetailCopy>
+        Website:{' '}
+        <DetailWebsite href={entry.website} target="_blank" rel="noopener">
+          {entry.website}
+        </DetailWebsite>
+      </DetailCopy>
+    )}
+    {entry.tags?.length && (
+      <DetailCopy>Tags: {entry.tags.join(', ')}</DetailCopy>
+    )}
+    {entry.description && (
+      <>
+        <DetailCopy>Description:</DetailCopy>
+        <DetailCopy>{entry.description}</DetailCopy>
+      </>
+    )}
+  </>
+);
+
+const HomebrewCatalog = ({
+  entries,
+  error,
+  onLoadMore,
+  onQueryChange,
+  onSelect,
+  query,
+  searchId,
+  totalEntries,
+  visibleEntries
+}: HomebrewCatalogProps) => (
+  <>
+    <SearchFieldsContainer>
+      <Copy>
+        {totalEntries === undefined
+          ? 'Search homebrew games'
+          : `Search ${totalEntries} homebrew games`}
+      </Copy>
+      <TextField
+        id={searchId}
+        label="Name/Platform/Dev/Tags"
+        value={query}
+        onChange={(event) => {
+          onQueryChange(event.target.value);
+        }}
+        fullWidth
+        size="small"
+      />
+    </SearchFieldsContainer>
+    {!!error && (
+      <ErrorWithIcon
+        icon={<BiError />}
+        text="The homebrew catalog could not be loaded"
+      />
+    )}
+    {!!visibleEntries.length && (
+      <CatalogList>
+        {visibleEntries.map((entry) => (
+          <CatalogItem key={entry.slug}>
+            <BrowseButton
+              onClick={() => {
+                onSelect(entry);
+              }}
+            >
+              {entry.cover ? (
+                <Cover src={entry.cover.url} alt="" loading="lazy" />
+              ) : (
+                <CoverPlaceholder aria-hidden>?</CoverPlaceholder>
+              )}
+              <GameCopy>
+                <GameTitle>{entry.title}</GameTitle>
+                <GameMeta>
+                  {[entry.platform, entry.developer, entry.license]
+                    .filter(Boolean)
+                    .join(' - ')}
+                </GameMeta>
+              </GameCopy>
+            </BrowseButton>
+          </CatalogItem>
+        ))}
+      </CatalogList>
+    )}
+    {!error && !entries.length && (
+      <EmptyState>No homebrew games match your search.</EmptyState>
+    )}
+    {entries.length > visibleEntries.length && (
+      <Button fullWidth onClick={onLoadMore}>
+        Load more games
+      </Button>
+    )}
+  </>
+);
+
 export const HomebrewLibraryModal = () => {
   const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
-  const runGame = useRunGame();
   const { syncActionIfEnabled } = useAddCallbacks();
+  const runGame = useRunGame();
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query.trim().toLowerCase());
   const [visibleEntries, setVisibleEntries] = useState(10);
@@ -166,7 +294,7 @@ export const HomebrewLibraryModal = () => {
       return [
         entry.title,
         entry.developer,
-        entry.description,
+        entry.platform,
         ...(entry.tags ?? [])
       ]
         .filter((value): value is string => !!value)
@@ -178,6 +306,7 @@ export const HomebrewLibraryModal = () => {
     <>
       <ModalHeader title={selectedEntry?.title ?? 'Homebrew Library'} />
       <ModalBody
+        ariaLabel="Homebrew catalog"
         onScroll={(event) => {
           const { clientHeight, scrollHeight, scrollTop } = event.currentTarget;
           if (
@@ -200,94 +329,26 @@ export const HomebrewLibraryModal = () => {
             loadingCopy="Downloading homebrew:"
           >
             {selectedEntry ? (
-              <>
-                {selectedEntry.cover ? (
-                  <DetailCover
-                    src={selectedEntry.cover.url}
-                    alt={`Cover art for ${selectedEntry.title}`}
-                  />
-                ) : (
-                  <DetailCoverPlaceholder aria-hidden />
-                )}
-                <GameMeta>
-                  {[selectedEntry.developer, selectedEntry.license]
-                    .filter(Boolean)
-                    .join(' - ')}
-                </GameMeta>
-                {selectedEntry.description && (
-                  <DetailCopy>{selectedEntry.description}</DetailCopy>
-                )}
-              </>
+              <HomebrewDetails entry={selectedEntry} />
             ) : (
-              <>
-                <TextField
-                  id={searchId}
-                  label={
-                    catalog
-                      ? `Search ${catalog.entries.length} homebrew games`
-                      : 'Search homebrew games'
-                  }
-                  value={query}
-                  onChange={(event) => {
-                    setQuery(event.target.value);
-                    setVisibleEntries(10);
-                  }}
-                  fullWidth
-                  size="small"
-                />
-                {!!error && (
-                  <ErrorWithIcon
-                    icon={<BiError />}
-                    text="The homebrew catalog could not be loaded"
-                  />
-                )}
-                {!!visibleHomebrewEntries.length && (
-                  <CatalogList>
-                    {visibleHomebrewEntries.map((entry) => (
-                      <CatalogItem key={entry.slug}>
-                        <BrowseButton
-                          onClick={() => {
-                            setSelectedEntry(entry);
-                          }}
-                        >
-                          {entry.cover ? (
-                            <Cover
-                              src={entry.cover.url}
-                              alt=""
-                              loading="lazy"
-                            />
-                          ) : (
-                            <CoverPlaceholder aria-hidden />
-                          )}
-                          <GameCopy>
-                            <GameTitle>{entry.title}</GameTitle>
-                            <GameMeta>
-                              {[entry.platform, entry.developer, entry.license]
-                                .filter(Boolean)
-                                .join(' - ')}
-                            </GameMeta>
-                          </GameCopy>
-                        </BrowseButton>
-                      </CatalogItem>
-                    ))}
-                  </CatalogList>
-                )}
-                {!error && !entries.length && (
-                  <EmptyState>No homebrew games match your search.</EmptyState>
-                )}
-                {entries.length > visibleEntries && (
-                  <Button
-                    fullWidth
-                    onClick={() => {
-                      setVisibleEntries((current) =>
-                        Math.min(current + 10, entries.length)
-                      );
-                    }}
-                  >
-                    Load more games
-                  </Button>
-                )}
-              </>
+              <HomebrewCatalog
+                entries={entries}
+                error={error}
+                onLoadMore={() => {
+                  setVisibleEntries((current) =>
+                    Math.min(current + 10, entries.length)
+                  );
+                }}
+                onQueryChange={(value) => {
+                  setQuery(value);
+                  setVisibleEntries(10);
+                }}
+                onSelect={setSelectedEntry}
+                query={query}
+                searchId={searchId}
+                totalEntries={catalog?.entries.length}
+                visibleEntries={visibleHomebrewEntries}
+              />
             )}
           </LoadingIndicator>
         )}
@@ -303,17 +364,6 @@ export const HomebrewLibraryModal = () => {
             >
               Back
             </Button>
-            {selectedEntry.website && (
-              <Button
-                component="a"
-                href={selectedEntry.website}
-                target="_blank"
-                rel="noopener"
-                variant="outlined"
-              >
-                Source
-              </Button>
-            )}
             <Button
               variant="contained"
               onClick={() => {

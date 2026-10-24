@@ -266,7 +266,7 @@ export default defineConfig(({ mode }) => {
       setupFiles: ['./test/setup.ts'],
       coverage: {
         provider: 'v8',
-        include: ['src'],
+        include: ['src', 'scripts'],
         reporter: ['html', 'json-summary', 'json'],
         exclude: [
           ...coverageConfigDefaults.exclude,

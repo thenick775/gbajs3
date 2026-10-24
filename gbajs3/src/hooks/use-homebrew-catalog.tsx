@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 import { z } from 'zod';
 
 const HomebrewEntrySchema = z.object({
@@ -18,9 +18,12 @@ export type HomebrewEntry = z.infer<typeof HomebrewEntrySchema>;
 const HomebrewCatalogSchema = z.object({
   entries: z.array(HomebrewEntrySchema)
 });
+export type HomebrewCatalog = z.infer<typeof HomebrewCatalogSchema>;
 
-export const useHomebrewCatalog = () =>
-  useQuery({
+export const useHomebrewCatalog = (
+  options?: Omit<UseQueryOptions<HomebrewCatalog>, 'queryKey' | 'queryFn'>
+) =>
+  useQuery<HomebrewCatalog>({
     queryKey: ['homebrewCatalog', 'gba'],
     queryFn: async () => {
       const url = `${import.meta.env.BASE_URL}homebrew/gba.json`;
@@ -31,5 +34,6 @@ export const useHomebrewCatalog = () =>
 
       return HomebrewCatalogSchema.parse(await res.json());
     },
-    staleTime: Infinity
+    staleTime: Infinity,
+    ...options
   });
