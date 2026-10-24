@@ -50,11 +50,35 @@ export const LegalModal = () => {
               No Distribution of Game Boy Advance ROMs:
               <br />
               The Emulator does not provide or distribute any Game Boy Advance
-              ROMs or copyrighted game software for public consumption. You must
-              obtain Game Boy Advance ROMs from legal sources and ensure
-              compliance with applicable laws regarding the use of copyrighted
-              materials.
+              ROMs or copyrighted game software for public consumption. The
+              Emulator may link to open-source homebrew ROMs hosted by properly
+              licensed third parties. You must obtain Game Boy Advance ROMs from
+              legal sources and ensure compliance with applicable laws regarding
+              the use of copyrighted materials.
             </p>
+          </li>
+
+          <li>
+            <p>
+              Open-Source ROM Catalog:
+              <br />
+              The Emulator includes a catalog of open-source Game Boy Advance
+              homebrew ROMs. Files are fetched directly from their source hosts;
+              the Emulator does not host them. Each title remains subject to its
+              creator's license.
+            </p>
+            <p>Current sources:</p>
+            <ul>
+              <li>
+                <a href="https://github.com/gbadev-org/games">
+                  gbadev-org/games
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/gbdev/database">gbdev/database</a>
+              </li>
+            </ul>
+            <p>Additional sources may be included in the future.</p>
           </li>
 
           <li>
@@ -167,7 +191,7 @@ export const LegalModal = () => {
           this website and open an issue or a discussion in GitHub.
         </p>
 
-        <p>Last updated: March 16 2024</p>
+        <p>Last updated: October 23 2026</p>
 
         <p>© {year}, Nicholas VanCise. All rights reserved.</p>
       </ModalBody>

@@ -8,6 +8,7 @@ type ModalPayloadMap = {
   controls: undefined;
   cloudSync: undefined;
   fileSystem: undefined;
+  homebrewLibrary: undefined;
   emulatorSettings: undefined;
   importExport: undefined;
   legal: undefined;
