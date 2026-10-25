@@ -20,6 +20,21 @@ export const testGoogleDriveBackup2 = {
 };
 export const invalidGoogleDriveBackupName = 'invalid-backup.zip';
 export const googleDriveErrorAccessToken = 'test-google-error-token';
+export const testHomebrewCatalogBaseUrl = 'https://homebrew_catalog.test/';
+export const testHomebrewCatalogErrorBaseUrl =
+  'https://homebrew_catalog_error.test/';
+export const testInvalidHomebrewCatalogBaseUrl =
+  'https://homebrew_catalog_invalid.test/';
+export const testHomebrewCatalog = {
+  entries: [
+    {
+      slug: 'example',
+      title: 'Example',
+      platform: 'GBA',
+      rom: { url: `${testRomLocation}/example.gba` }
+    }
+  ]
+};
 
 const generateMockJwt = () =>
   jwt.sign({}, 'test-fake-key', { expiresIn: '1s' });
@@ -211,5 +226,17 @@ export const handlers = [
     await delay(100);
 
     return new HttpResponse(null, { status: 400 });
+  }),
+
+  http.get(`${testHomebrewCatalogBaseUrl}homebrew/gba.json`, () => {
+    return HttpResponse.json(testHomebrewCatalog, { status: 200 });
+  }),
+
+  http.get(`${testHomebrewCatalogErrorBaseUrl}homebrew/gba.json`, () => {
+    return new HttpResponse(null, { status: 500 });
+  }),
+
+  http.get(`${testInvalidHomebrewCatalogBaseUrl}homebrew/gba.json`, () => {
+    return HttpResponse.json({ entries: [{ title: 'Invalid catalog' }] });
   })
 ];

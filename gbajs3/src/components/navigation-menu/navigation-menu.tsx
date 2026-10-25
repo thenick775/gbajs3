@@ -282,6 +282,14 @@ export const NavigationMenu = () => {
               }}
             />
             <NavLeaf
+              title="Homebrew Library"
+              $disabled={isRunning || !isEmulatorReady}
+              icon={<BiCloudDownload />}
+              onClick={() => {
+                openModal({ type: 'homebrewLibrary' });
+              }}
+            />
+            <NavLeaf
               title="Start Local Link"
               $disabled={isRunning || !isEmulatorReady || hasNoLocalRoms}
               icon={<BiLink />}

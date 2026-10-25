@@ -1,12 +1,28 @@
 import { BodyWrapper } from '../shared/styled.tsx';
 
-import type { ReactNode } from 'react';
+import type { ReactNode, UIEventHandler } from 'react';
 
 type ModalBodyProps = {
+  ariaLabel?: string;
   children: ReactNode;
   className?: string;
+  onScroll?: UIEventHandler<HTMLDivElement>;
 };
 
-export const ModalBody = ({ children, className }: ModalBodyProps) => {
-  return <BodyWrapper className={className}>{children}</BodyWrapper>;
+export const ModalBody = ({
+  ariaLabel,
+  children,
+  className,
+  onScroll
+}: ModalBodyProps) => {
+  return (
+    <BodyWrapper
+      aria-label={ariaLabel}
+      className={className}
+      onScroll={onScroll}
+      role={ariaLabel ? 'region' : undefined}
+    >
+      {children}
+    </BodyWrapper>
+  );
 };

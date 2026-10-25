@@ -27,7 +27,7 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
     expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
     // renders default mounted menu items
-    expect(screen.getAllByRole('listitem')).toHaveLength(15);
+    expect(screen.getAllByRole('listitem')).toHaveLength(16);
     expect(screen.getByTestId('menu-wrapper')).toHaveStyle({
       left: '-255px'
     });
@@ -63,7 +63,7 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
     expect(screen.queryByLabelText('Menu Dismiss')).not.toBeVisible();
     // renders default mounted menu items
-    expect(screen.getAllByRole('listitem')).toHaveLength(15);
+    expect(screen.getAllByRole('listitem')).toHaveLength(16);
     expect(screen.getByTestId('menu-wrapper')).toHaveStyle({
       left: 0
     });
@@ -78,7 +78,7 @@ describe('<NavigationMenu />', () => {
     expect(screen.getByLabelText('Menu Toggle')).toBeInTheDocument();
     expect(screen.getByLabelText('Menu Dismiss')).toBeVisible();
     // renders default mounted menu items
-    expect(screen.getAllByRole('listitem')).toHaveLength(15);
+    expect(screen.getAllByRole('listitem')).toHaveLength(16);
   });
 
   it('toggles menu with button', async () => {
@@ -151,7 +151,8 @@ describe('<NavigationMenu />', () => {
     it.each([
       ['Upload Files', { type: 'uploadFiles' }],
       ['File System', { type: 'fileSystem' }],
-      ['Import/Export', { type: 'importExport' }]
+      ['Import/Export', { type: 'importExport' }],
+      ['Homebrew Library', { type: 'homebrewLibrary' }]
     ])(
       '%s opens modal on click when emulator is ready',
       async (title, expected) => {

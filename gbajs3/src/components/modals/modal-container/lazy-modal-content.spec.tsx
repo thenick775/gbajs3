@@ -18,6 +18,7 @@ describe('<ModalRenderer />', () => {
     [{ type: 'cloudSync' }, 'Cloud Sync'],
     [{ type: 'controls' }, 'Controls'],
     [{ type: 'fileSystem' }, 'File System'],
+    [{ type: 'homebrewLibrary' }, 'Homebrew Library'],
     [{ type: 'importExport' }, 'Import/Export'],
     [{ type: 'legal' }, 'Legal'],
     [{ type: 'login' }, 'Login'],
