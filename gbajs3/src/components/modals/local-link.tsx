@@ -68,7 +68,7 @@ export const LocalLinkModal = () => {
 
   return (
     <>
-      <ModalHeader title="Local Link" />
+      <ModalHeader title="Local Link Cable" />
       <ModalBody>
         <HelpText>
           Choose each player's ROM and optional save, then switch active players
