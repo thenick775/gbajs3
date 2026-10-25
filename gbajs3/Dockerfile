@@ -3,6 +3,8 @@ FROM node:24.21.0-alpine3.24 AS builder
 WORKDIR /app
 COPY . /app
 
+RUN apk add git
+
 ARG CLIENT_HOST
 ARG GOOGLE_CLIENT_ID
 ARG RELEASE_VERSION
@@ -10,7 +12,7 @@ ENV VITE_GBA_SERVER_LOCATION=${CLIENT_HOST}
 ENV VITE_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
 ENV VITE_GBA_RELEASE_VERSION=${RELEASE_VERSION}
 
-RUN npm install && npm run build
+RUN npm ci && npm run build
 
 # second stage, server
 FROM nginx:stable-alpine
