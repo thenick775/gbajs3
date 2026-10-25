@@ -116,6 +116,27 @@ describe('<HomebrewLibraryModal />', () => {
     expect(screen.getByLabelText('Name/Platform/Dev/Tags')).toBeVisible();
   });
 
+  it('restores the catalog scroll position after returning from details', async () => {
+    vi.spyOn(homebrewCatalogHooks, 'useHomebrewCatalog').mockReturnValue({
+      data: { entries },
+      isPending: false,
+      error: null
+    } as UseQueryResult<HomebrewCatalog>);
+
+    renderWithContext(<HomebrewLibraryModal />);
+
+    const body = screen.getByRole('region', { name: 'Homebrew catalog' });
+    fireEvent.scroll(body, { target: { scrollTop: 100 } });
+
+    await userEvent.click(screen.getByRole('button', { name: /^Game 1 GBC/ }));
+
+    expect(body.scrollTop).toBe(0);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Back' }));
+
+    expect(body.scrollTop).toBe(100);
+  });
+
   it('runs the external loaded rom in the emulator core', async () => {
     const closeModalSpy = vi.fn();
     const uploadRomSpy: (file: File, cb?: () => void) => void = vi.fn(
@@ -154,6 +175,7 @@ describe('<HomebrewLibraryModal />', () => {
     vi.spyOn(runGameHooks, 'useRunGame').mockReturnValue(runGameSpy);
 
     renderWithContext(<HomebrewLibraryModal />);
+
     await userEvent.click(screen.getByRole('button', { name: /^Game 1 GBC/ }));
     await userEvent.click(
       screen.getByRole('button', { name: 'Download and Play' })

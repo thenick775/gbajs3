@@ -54,8 +54,9 @@ Do not attempt to log into the server unless you are the server owner or an appr
 - Full import/export support
 - Cloud sync
   - Google Drive support
-- Local link play
+- Local link cable play
   - v1 supports running one game+inputs at a time, best for things like pokemon trades
+- Homebrew rom catalog
 
 ## Existing Feature List
 

@@ -1,6 +1,12 @@
 import { Button, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useDeferredValue, useId, useState } from 'react';
+import {
+  useDeferredValue,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState
+} from 'react';
 import { BiError } from 'react-icons/bi';
 
 import { ModalBody } from './modal-body.tsx';
@@ -274,6 +280,8 @@ export const HomebrewLibraryModal = () => {
   const [visibleEntries, setVisibleEntries] = useState(10);
   const [selectedEntry, setSelectedEntry] = useState<HomebrewEntry>();
   const [currentRom, setCurrentRom] = useState<HomebrewEntry>();
+  const catalogScrollTop = useRef(0);
+  const modalBodyRef = useRef<HTMLDivElement | null>(null);
   const searchId = useId();
   const { data: catalog, isPending, error } = useHomebrewCatalog();
   const { isPending: isRomLoading, mutate: loadRom } = useLoadExternalRom({
@@ -302,6 +310,11 @@ export const HomebrewLibraryModal = () => {
     }) ?? [];
   const visibleHomebrewEntries = entries.slice(0, visibleEntries);
 
+  useLayoutEffect(() => {
+    if (!selectedEntry && modalBodyRef.current)
+      modalBodyRef.current.scrollTop = catalogScrollTop.current;
+  }, [selectedEntry]);
+
   return (
     <>
       <ModalHeader title={selectedEntry?.title ?? 'Homebrew Library'} />
@@ -309,6 +322,9 @@ export const HomebrewLibraryModal = () => {
         ariaLabel="Homebrew catalog"
         onScroll={(event) => {
           const { clientHeight, scrollHeight, scrollTop } = event.currentTarget;
+          modalBodyRef.current = event.currentTarget;
+          if (!selectedEntry) catalogScrollTop.current = scrollTop;
+
           if (
             entries.length > visibleEntries &&
             scrollTop + clientHeight >= scrollHeight - 200
@@ -343,7 +359,13 @@ export const HomebrewLibraryModal = () => {
                   setQuery(value);
                   setVisibleEntries(10);
                 }}
-                onSelect={setSelectedEntry}
+                onSelect={(entry) => {
+                  if (modalBodyRef.current) {
+                    catalogScrollTop.current = modalBodyRef.current.scrollTop;
+                    modalBodyRef.current.scrollTop = 0;
+                  }
+                  setSelectedEntry(entry);
+                }}
                 query={query}
                 searchId={searchId}
                 totalEntries={catalog?.entries.length}
