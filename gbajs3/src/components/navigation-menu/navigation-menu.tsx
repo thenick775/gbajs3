@@ -290,7 +290,7 @@ export const NavigationMenu = () => {
               }}
             />
             <NavLeaf
-              title="Start Local Link"
+              title="Local Link Cable"
               $disabled={isRunning || !isEmulatorReady || hasNoLocalRoms}
               icon={<BiLink />}
               onClick={() => {

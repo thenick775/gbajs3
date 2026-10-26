@@ -343,7 +343,7 @@ describe('<NavigationMenu />', () => {
       expect(menuNode).toBeDisabled();
     });
 
-    it('Start Local Link opens modal when local ROMs are present', async () => {
+    it('Local Link Cable opens modal when local ROMs are present', async () => {
       const openModalSpy = vi.fn();
       const {
         useModalContext: originalModal,
@@ -367,7 +367,7 @@ describe('<NavigationMenu />', () => {
 
       renderWithContext(<NavigationMenu />);
 
-      await userEvent.click(screen.getByText('Start Local Link'));
+      await userEvent.click(screen.getByText('Local Link Cable'));
 
       expect(openModalSpy).toHaveBeenCalledExactlyOnceWith({
         type: 'localLink'
