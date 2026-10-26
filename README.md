@@ -102,7 +102,7 @@ All control positions can be modified if the default layouts do not suit your de
 - Run the bootstrap script and follow the interactive prompts:
 
   ```
-  ./bin/boostrap.sh;
+  ./bin/bootstrap.sh;
   ```
 
 - The bootstrap script will do the following:
