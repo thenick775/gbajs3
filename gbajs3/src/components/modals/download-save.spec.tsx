@@ -14,9 +14,7 @@ describe('<DownloadSaveModal />', () => {
     renderWithContext(<DownloadSaveModal />);
 
     expect(
-      screen.getByText(
-        'Remember to save in game before downloading your save file!'
-      )
+      screen.getByText('Remember to save in game before downloading!')
     ).toBeVisible();
     expect(
       screen.getByRole('checkbox', {

@@ -32,9 +32,7 @@ export const DownloadSaveModal = () => {
             text="Load a rom to download its save file"
           />
         ) : (
-          <Copy>
-            Remember to save in game before downloading your save file!
-          </Copy>
+          <Copy>Remember to save in game before downloading!</Copy>
         )}
         <Divider flexItem sx={{ margin: '10px 0' }} />
         <Copy>Download Options</Copy>
