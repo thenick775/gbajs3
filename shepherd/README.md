@@ -1,6 +1,6 @@
 # Shepherd
 
-An optional swarm manager service that watches for updated images and deploys them. It is not part of the normal local compose stack, only for swarm.
+An optional swarm manager service that watches for updated images and deploys them. It is not part of the normal local dev compose stack, only for swarm.
 
 ## Requirements
 

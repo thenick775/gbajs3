@@ -14,17 +14,7 @@ The image initializes two databases, both owned by `PG_DB_USER`.
 
 ### `gbajs3`
 
-`init_gbajs3_db.sql` creates the application database and enables the `uuid-ossp` extension. The auth service owns the application schema and runs its migrations at startup.
-
-The current application table is `public.users`:
-
-| Column                   | Purpose                                                 |
-| ------------------------ | ------------------------------------------------------- |
-| `id`                     | Primary key                                             |
-| `username`               | Unique login name                                       |
-| `pass_hash`              | Password hash                                           |
-| `token_slug`, `token_id` | Authentication token data                               |
-| `storage_dir`            | Unique identifier for the user's file storage directory |
+`init_gbajs3_db.sql` creates the application database and enables the `uuid-ossp` extension. The auth service manages its own application tables.
 
 ### `goadmin`
 
@@ -55,7 +45,7 @@ PG_DATA_LOCATION=<host path for persistent PostgreSQL data>
 Use the root stack so dependent services wait for the PostgreSQL health check:
 
 ```sh
-./bin/bootstrap.sh
+../bin/bootstrap.sh
 docker compose up --build
 ```
 

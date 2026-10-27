@@ -96,7 +96,7 @@ All control positions can be modified if the default layouts do not suit your de
 
 ## Getting Started
 
-- Local builds require [docker](https://www.docker.com)
+- Running the full local stack requires [docker](https://www.docker.com)
   - today, the project is only compatible with [docker compose v2](https://docs.docker.com/compose/releases/migrate/) and above
 
 - Run the bootstrap script and follow the interactive prompts:
@@ -158,6 +158,8 @@ All control positions can be modified if the default layouts do not suit your de
 - Build and run the docker containers using swarm:
 
   ```
+  # expose the swarm env for build/deploy
+  source ./.env.swarm
   # swarm does not build images by default
   docker compose build;
   # add all images to the stack except shepherd for local dev
@@ -177,6 +179,8 @@ All control positions can be modified if the default layouts do not suit your de
   **please modify the database dump or log in to the admin portal and change the default username/password immediately in hosted installations**
 
 - Golang api swagger UI can be found at https://localhost/api/documentation/
+
+- To deploy the frontend staging environment to github pages, run `Deploy Staging` from the Actions tab.
 
 - To run each service individually, with or without docker, see the nested READMEs under each top level service directory
 
