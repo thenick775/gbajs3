@@ -107,8 +107,14 @@ export const useRunGame = () => {
             emulatorSettings.autoSaveStateTimerIntervalSeconds,
           autoSaveStateEnable: emulatorSettings.autoSaveStateEnable,
           restoreAutoSaveStateOnLoad:
-            emulatorSettings.restoreAutoSaveStateOnLoad
+            emulatorSettings.restoreAutoSaveStateOnLoad,
+          highResolutionScale: emulatorSettings.highResolutionScale
         });
+
+        if (emulatorSettings.shader)
+          emulator?.loadShader(
+            `${emulator.filePaths().shaderPath}/${emulatorSettings.shader}`
+          );
       }
 
       return !!isSuccessfulRun;
