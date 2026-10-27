@@ -1,41 +1,50 @@
-# GoAdmin Instruction
+# Getting started
 
-GoAdmin is a golang framework help gopher quickly build a data visualization platform. 
+## Required env
 
-- [github](https://github.com/GoAdminGroup/go-admin)
-- [forum](http://discuss.go-admin.com)
-- [document](https://book.go-admin.cn)
+```env
+CLIENT_HOST=<public frontend URL>
+APP_ID=<unique application identifier>
 
-## Directories Introduction
-
-```
-.
-├── Dockerfile          Dockerfile
-├── Makefile            Makefile
-├── adm.ini             adm config
-├── admin.db            sqlite database
-├── build               binary build target folder
-├── config.json         config file
-├── go.mod              go.mod
-├── go.sum              go.sum
-├── html                frontend html files
-├── logs                logs
-├── main.go             main.go
-├── main_test.go        ci test
-├── pages               page controllers
-├── tables              table models
-└── uploads             upload files
+# postgres
+PG_DB_HOST=<database host>
+PG_DB_PORT=<database port>
+PG_DB_USER=<database user>
+PG_DB_PASSWORD=<database user password>
+GBAJS_DB_NAME=<application database name>
+ADMIN_DB_NAME=<admin database name>
+PG_SSL_MODE=<PostgreSQL SSL mode>
 ```
 
-## Generate Table Model
+## Required directories/files
 
-### online tool
+For a direct local run, add certificate files at:
 
-visit: http://127.0.0.1:80/admin/info/generate/new
-
-### use adm
-
-```
-adm generate
+```text
+./certs/fullchain.pem
+./certs/privkey.pem
 ```
 
+## Running the app
+
+```sh
+make serve
+```
+
+The standalone service listens on HTTPS port `443`.
+
+## Build
+
+```sh
+make build
+```
+
+The Linux build is written to `build/goadmin`.
+
+## Generate table models
+
+This service uses [GoAdmin](https://github.com/GoAdminGroup/go-admin). Generate table models with:
+
+```sh
+make generate
+```
