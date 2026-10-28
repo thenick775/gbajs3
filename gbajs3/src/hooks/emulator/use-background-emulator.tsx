@@ -1,5 +1,5 @@
 import { useVisibilityChange } from '@uidotdev/usehooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useEmulatorContext, useRunningContext } from '../context.tsx';
 
@@ -21,20 +21,20 @@ export const useBackgroundEmulator = ({
   const isDocumentVisible = useVisibilityChange();
   const { emulator } = useEmulatorContext();
   const { isRunning } = useRunningContext();
-  const [pausedForBackground, setPausedForBackground] = useState(false);
+  const pausedForBackgroundRef = useRef(false);
 
   const isRunningAndNotPaused = isRunning && !isPaused;
 
   useEffect(() => {
     if (isRunningAndNotPaused) {
-      if (!isDocumentVisible && !pausedForBackground) {
+      if (!isDocumentVisible && !pausedForBackgroundRef.current) {
         emulator?.pause();
         emulator?.forceAutoSaveState();
-        setPausedForBackground(true);
-      } else if (isDocumentVisible && pausedForBackground) {
+        pausedForBackgroundRef.current = true;
+      } else if (isDocumentVisible && pausedForBackgroundRef.current) {
         void emulator?.resume();
-        setPausedForBackground(false);
+        pausedForBackgroundRef.current = false;
       }
     }
-  }, [emulator, isDocumentVisible, isRunningAndNotPaused, pausedForBackground]);
+  }, [emulator, isDocumentVisible, isRunningAndNotPaused]);
 };

@@ -1,7 +1,7 @@
 import { Button, IconButton, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useCallback, useId, useMemo, useRef, useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { BiTrash } from 'react-icons/bi';
 
 import { ModalBody } from './modal-body.tsx';
@@ -87,7 +87,6 @@ export const CheatsModal = () => {
     register,
     control,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors, isSubmitSuccessful }
   } = useForm({
@@ -98,6 +97,10 @@ export const CheatsModal = () => {
   });
 
   const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'cheats'
+  });
+  const watchedCheats = useWatch({
     control,
     name: 'cheats'
   });
@@ -192,7 +195,7 @@ export const CheatsModal = () => {
                   <RowContainer>
                     <ManagedSwitch
                       label="Enabled"
-                      watcher={watch(`cheats.${index}.enable`)}
+                      watcher={watchedCheats[index]?.enable}
                       {...register(`cheats.${index}.enable`)}
                     />
                     <IconButton
