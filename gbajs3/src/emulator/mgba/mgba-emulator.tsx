@@ -360,7 +360,9 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     listRoms: () =>
       mGBA.listRoms().filter((romName) => !fileIgnorePaths.includes(romName)),
     listSaves: () =>
-      mGBA.listSaves().filter((saveName) => !fileIgnorePaths.includes(saveName)),
+      mGBA
+        .listSaves()
+        .filter((saveName) => !fileIgnorePaths.includes(saveName)),
     startLocalLinkSession: (config) => mGBA.linkLocalStartSession(config),
     stopLocalLinkSession: () => {
       mGBA.linkLocalStopSession();
@@ -480,7 +482,10 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     parseCheatsString,
     parsedCheatsToFile,
     clearFilesystem,
-    listShaders: () => mGBA.listShaders(),
+    listShaders: () =>
+      mGBA
+        .listShaders()
+        .filter((shaderName) => !fileIgnorePaths.includes(shaderName)),
     loadShader: (shaderPath: string) => {
       mGBA.loadShader(shaderPath);
     },

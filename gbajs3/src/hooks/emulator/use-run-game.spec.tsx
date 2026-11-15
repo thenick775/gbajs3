@@ -103,7 +103,7 @@ describe('useRunGame hook', () => {
     localStorage.setItem(emulatorFFMultiplierLocalStorageKey, '2');
     localStorage.setItem(
       emulatorSettingsLocalStorageKey,
-      '{"frameSkip":5,"rewindBufferCapacity":1200,"rewindBufferInterval":5,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"videoSync":false,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"saveFileName":"custom_sav.sav"}'
+      '{"frameSkip":5,"rewindBufferCapacity":1200,"rewindBufferInterval":5,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"videoSync":false,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"saveFileName":"custom_sav.sav","shader":"lcd.shader"}'
     );
 
     const setIsRunningSpy = vi.fn();
@@ -114,6 +114,7 @@ describe('useRunGame hook', () => {
       vi.fn();
     const addCallbacksSpy: (f: CoreCallbackOptions) => void = vi.fn();
     const setCoreSettingsSpy: (c: coreSettings) => void = vi.fn();
+    const loadShaderSpy: (shaderPath: string) => void = vi.fn();
 
     vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
       setCanvas: vi.fn(),
@@ -127,9 +128,11 @@ describe('useRunGame hook', () => {
         setFastForwardMultiplier: emulatorSetFastForwardMultiplierSpy,
         filePaths: () => ({
           gamePath: '/data/games',
-          savePath: '/data/saves'
+          savePath: '/data/saves',
+          shaderPath: '/data/shaders'
         }),
-        setCoreSettings: setCoreSettingsSpy
+        setCoreSettings: setCoreSettingsSpy,
+        loadShader: loadShaderSpy
       } as GBAEmulator
     }));
 
@@ -176,6 +179,9 @@ describe('useRunGame hook', () => {
       threadedVideo: true,
       videoSync: false
     });
+    expect(loadShaderSpy).toHaveBeenCalledExactlyOnceWith(
+      '/data/shaders/lcd.shader'
+    );
   });
 
   it('does not persist the game name when emulator is unavailable', () => {

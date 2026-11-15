@@ -175,9 +175,7 @@ export const EmulatorSettingsModal = () => {
   const renderedAudioBufferSize = defaultAudioBufferSizes
     ? audioBufferSize
     : '';
-  const defaultShaderPaths = emulator
-    ?.listShaders()
-    .filter((ss) => ss !== '.' && ss !== '..');
+  const defaultShaderPaths = emulator?.listShaders();
 
   const onSubmit: SubmitHandler<EmulatorSettings> = ({
     saveFileName,
@@ -457,7 +455,7 @@ export const EmulatorSettingsModal = () => {
                 })}
               />
               <NumberInput
-                label="Resolution Scale"
+                label="Render Scale"
                 min={1}
                 max={16}
                 size="small"

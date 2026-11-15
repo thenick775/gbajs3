@@ -528,4 +528,25 @@ cheat1_code = "XYZ789"`;
     expect(linkLocalSetActivePlayer).toHaveBeenCalledExactlyOnceWith(2);
     expect(emulator.getLocalLinkStatus()).toBe(status);
   });
+
+  it('should forward shader operations', () => {
+    const listShaders: () => string[] = vi.fn(() => ['lcd.shader']);
+    const loadShader: (shaderPath: string) => void = vi.fn();
+    const unloadShader: () => void = vi.fn();
+    const { emulator } = createEmulator({
+      listShaders,
+      loadShader,
+      unloadShader
+    });
+
+    expect(emulator.listShaders()).toEqual(['lcd.shader']);
+    emulator.loadShader('/data/shaders/lcd.shader');
+    emulator.unloadShader();
+
+    expect(listShaders).toHaveBeenCalledOnce();
+    expect(loadShader).toHaveBeenCalledExactlyOnceWith(
+      '/data/shaders/lcd.shader'
+    );
+    expect(unloadShader).toHaveBeenCalledOnce();
+  });
 });

@@ -322,6 +322,88 @@ describe('<EmulatorSettingsModal />', () => {
       autoSaveStateEnable: true,
       restoreAutoSaveStateOnLoad: true
     });
+    expect(unloadShaderSpy).toHaveBeenCalledOnce();
+  });
+
+  it('loads the selected shader when saving settings for a running game', async () => {
+    const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
+    const loadShaderSpy: (shaderPath: string) => void = vi.fn();
+    const emulator: Partial<GBAEmulator> = {
+      defaultAudioSampleRates: () => defaultSampleRates,
+      defaultAudioBufferSizes: () => defaultAudioBufferSizes,
+      getCurrentAutoSaveStatePath: () => null,
+      getCurrentSaveName: () => 'current_save.sav',
+      listShaders: () => ['lcd.shader'],
+      filePaths: () =>
+        ({ shaderPath: '/data/shaders' }) as ReturnType<
+          GBAEmulator['filePaths']
+        >,
+      setCoreSettings: setCoreSettingsSpy,
+      loadShader: loadShaderSpy
+    };
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      canvas: null,
+      setCanvas: vi.fn(),
+      emulator: emulator as GBAEmulator
+    }));
+    vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
+      isRunning: true,
+      setIsRunning: vi.fn()
+    }));
+    vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
+      addCallbacks: vi.fn(),
+      addCallbacksAndSaveSettings: vi.fn(),
+      syncActionIfEnabled: vi.fn()
+    }));
+
+    renderWithContext(<EmulatorSettingsModal />);
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Video' }));
+    await userEvent.click(screen.getByRole('combobox'));
+    await userEvent.click(screen.getByRole('option', { name: 'lcd.shader' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(loadShaderSpy).toHaveBeenCalledExactlyOnceWith(
+      '/data/shaders/lcd.shader'
+    );
+  });
+
+  it('unloads a stored shader when saving without a selection', async () => {
+    const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
+    const unloadShaderSpy: () => void = vi.fn();
+    localStorage.setItem(
+      emulatorSettingsLocalStorageKey,
+      '{"shader":"lcd.shader"}'
+    );
+    const emulator: Partial<GBAEmulator> = {
+      defaultAudioSampleRates: () => defaultSampleRates,
+      defaultAudioBufferSizes: () => defaultAudioBufferSizes,
+      getCurrentAutoSaveStatePath: () => null,
+      listShaders: () => ['lcd.shader'],
+      setCoreSettings: setCoreSettingsSpy,
+      unloadShader: unloadShaderSpy
+    };
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      canvas: null,
+      setCanvas: vi.fn(),
+      emulator: emulator as GBAEmulator
+    }));
+    vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
+      addCallbacks: vi.fn(),
+      addCallbacksAndSaveSettings: vi.fn(),
+      syncActionIfEnabled: vi.fn()
+    }));
+
+    renderWithContext(<EmulatorSettingsModal />);
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Video' }));
+    await userEvent.click(screen.getByRole('combobox'));
+    await userEvent.click(screen.getByRole('option', { name: 'No Shader' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(unloadShaderSpy).toHaveBeenCalledOnce();
   });
 
   it('displays current save name from emulator when running if no override is present', async () => {
