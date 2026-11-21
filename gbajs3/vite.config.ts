@@ -148,7 +148,7 @@ export default defineConfig(({ mode }) => {
           ]
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,wasm}'],
+          globPatterns: ['**/*.{js,css,html,wasm,data}'],
           ignoreURLParametersMatching: [/^state$/],
           navigateFallbackDenylist: [
             /^\/admin/,
@@ -177,6 +177,23 @@ export default defineConfig(({ mode }) => {
       }),
       {
         name: 'gbajs3-cross-origin-isolation-headers',
+        configurePreviewServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const path = req.url?.split('?')[0];
+            const isCloudSyncAuth = path?.endsWith(`/${cloudSyncAuthPath}`);
+
+            res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+            res.setHeader(
+              'Cross-Origin-Opener-Policy',
+              isCloudSyncAuth ? 'same-origin-allow-popups' : 'same-origin'
+            );
+
+            if (isCloudSyncAuth)
+              res.setHeader('Referrer-Policy', 'no-referrer');
+
+            next();
+          });
+        },
         configureServer(server) {
           server.middlewares.use((req, res, next) => {
             const path = req.url?.split('?')[0];
