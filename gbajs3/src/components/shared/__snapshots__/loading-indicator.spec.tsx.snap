@@ -6,22 +6,22 @@ exports[`<PacmanIndicator /> > renders pacman indicator with additional props 1`
   style="display: inherit; position: relative; font-size: 0px; height: 100px; width: 100px; margin: 0px auto;"
 >
   <span
-    style="width: 0px; height: 0px; border-right: 50px solid transparent; border-top: 50px solid transparent; border-left: 50px solid rgb(28, 118, 253); border-bottom: 50px solid rgb(28, 118, 253); border-radius: 50px; position: absolute; animation: react-spinners-PacmanLoader-pacman-1 0.8s infinite ease-in-out; animation-fill-mode: both;"
+    style="width: 0px; height: 0px; border-width: 50px; border-style: solid; border-color: transparent transparent rgb(28, 118, 253) rgb(28, 118, 253); border-radius: 50px; position: absolute; animation: 0.8s ease-in-out infinite both react-spinners-PacmanLoader-pacman-1;"
   />
   <span
-    style="width: 0px; height: 0px; border-right: 50px solid transparent; border-top: 50px solid rgb(28, 118, 253); border-left: 50px solid rgb(28, 118, 253); border-bottom: 50px solid transparent; border-radius: 50px; position: absolute; animation: react-spinners-PacmanLoader-pacman-2 0.8s infinite ease-in-out; animation-fill-mode: both;"
+    style="width: 0px; height: 0px; border-width: 50px; border-style: solid; border-color: rgb(28, 118, 253) transparent transparent rgb(28, 118, 253); border-radius: 50px; position: absolute; animation: 0.8s ease-in-out infinite both react-spinners-PacmanLoader-pacman-2;"
   />
   <span
-    style="width: 16.666666666666668px; height: 16.666666666666668px; background-color: rgb(28, 118, 253); margin: 2px; border-radius: 100%; transform: translate(0, -12.5px); position: absolute; top: 50px; left: 200px; animation: react-spinners-PacmanLoader-ball 1s 0.5s infinite linear; animation-fill-mode: both;"
+    style="width: 16.6667px; height: 16.6667px; background-color: rgb(28, 118, 253); margin: 2px; border-radius: 100%; transform: translate(0px, -12.5px); position: absolute; top: 50px; left: 200px; animation: 1s linear 0.5s infinite both react-spinners-PacmanLoader-ball;"
   />
   <span
-    style="width: 16.666666666666668px; height: 16.666666666666668px; background-color: rgb(28, 118, 253); margin: 2px; border-radius: 100%; transform: translate(0, -12.5px); position: absolute; top: 50px; left: 200px; animation: react-spinners-PacmanLoader-ball 1s 0.75s infinite linear; animation-fill-mode: both;"
+    style="width: 16.6667px; height: 16.6667px; background-color: rgb(28, 118, 253); margin: 2px; border-radius: 100%; transform: translate(0px, -12.5px); position: absolute; top: 50px; left: 200px; animation: 1s linear 0.75s infinite both react-spinners-PacmanLoader-ball;"
   />
   <span
-    style="width: 16.666666666666668px; height: 16.666666666666668px; background-color: rgb(28, 118, 253); margin: 2px; border-radius: 100%; transform: translate(0, -12.5px); position: absolute; top: 50px; left: 200px; animation: react-spinners-PacmanLoader-ball 1s 1s infinite linear; animation-fill-mode: both;"
+    style="width: 16.6667px; height: 16.6667px; background-color: rgb(28, 118, 253); margin: 2px; border-radius: 100%; transform: translate(0px, -12.5px); position: absolute; top: 50px; left: 200px; animation: 1s linear 1s infinite both react-spinners-PacmanLoader-ball;"
   />
   <span
-    style="width: 16.666666666666668px; height: 16.666666666666668px; background-color: rgb(28, 118, 253); margin: 2px; border-radius: 100%; transform: translate(0, -12.5px); position: absolute; top: 50px; left: 200px; animation: react-spinners-PacmanLoader-ball 1s 1.25s infinite linear; animation-fill-mode: both;"
+    style="width: 16.6667px; height: 16.6667px; background-color: rgb(28, 118, 253); margin: 2px; border-radius: 100%; transform: translate(0px, -12.5px); position: absolute; top: 50px; left: 200px; animation: 1s linear 1.25s infinite both react-spinners-PacmanLoader-ball;"
   />
 </span>
 `;

@@ -76,7 +76,7 @@ exports[`<Screen /> > renders with default desktop position and size 1`] = `
 <div
   class="emotion-0 emotion-1 react-draggable"
   data-testid="screen-wrapper"
-  style="position: absolute; user-select: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(520px,30px); max-width: 9007199254740991px; max-height: 9007199254740991px; box-sizing: border-box; flex-shrink: 0;"
+  style="position: absolute; user-select: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(520px, 30px); max-size: 9007200000000000px; box-sizing: border-box; flex-shrink: 0;"
 >
   <canvas
     class="emotion-2 emotion-3"
@@ -92,13 +92,13 @@ exports[`<Screen /> > renders with default desktop position and size 1`] = `
       style="display: inherit;"
     >
       <span
-        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0s infinite linear; animation-fill-mode: both;"
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: 0.7s linear infinite both react-spinners-BeatLoader-beat;"
       />
       <span
-        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0.35s infinite linear; animation-fill-mode: both;"
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: 0.7s linear 0.35s infinite both react-spinners-BeatLoader-beat;"
       />
       <span
-        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0s infinite linear; animation-fill-mode: both;"
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: 0.7s linear infinite both react-spinners-BeatLoader-beat;"
       />
     </span>
   </div>
@@ -182,7 +182,7 @@ exports[`<Screen /> > renders with default mobile position and size 1`] = `
 <div
   class="emotion-0 emotion-1 react-draggable"
   data-testid="screen-wrapper"
-  style="position: absolute; user-select: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px,0px); max-width: 9007199254740991px; max-height: 9007199254740991px; box-sizing: border-box; flex-shrink: 0;"
+  style="position: absolute; user-select: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px); max-size: 9007200000000000px; box-sizing: border-box; flex-shrink: 0;"
 >
   <canvas
     class="emotion-2 emotion-3"
@@ -198,13 +198,13 @@ exports[`<Screen /> > renders with default mobile position and size 1`] = `
       style="display: inherit;"
     >
       <span
-        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0s infinite linear; animation-fill-mode: both;"
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: 0.7s linear infinite both react-spinners-BeatLoader-beat;"
       />
       <span
-        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0.35s infinite linear; animation-fill-mode: both;"
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: 0.7s linear 0.35s infinite both react-spinners-BeatLoader-beat;"
       />
       <span
-        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: react-spinners-BeatLoader-beat 0.7s 0s infinite linear; animation-fill-mode: both;"
+        style="display: inline-block; background-color: rgb(28, 118, 253); width: 7px; height: 7px; margin: 3px; border-radius: 100%; animation: 0.7s linear infinite both react-spinners-BeatLoader-beat;"
       />
     </span>
   </div>
