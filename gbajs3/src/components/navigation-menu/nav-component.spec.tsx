@@ -41,9 +41,9 @@ describe('<NavComponent />', () => {
     await userEvent.click(screen.getByText('Test Title'));
 
     // Check if the children are not visible
-    await waitFor(() =>
-      expect(screen.getByText('Test Children')).not.toBeVisible()
-    );
+    await waitFor(() => {
+      expect(screen.getByText('Test Children')).not.toBeVisible();
+    });
   });
 
   it('applies styles correctly when disabled', async () => {

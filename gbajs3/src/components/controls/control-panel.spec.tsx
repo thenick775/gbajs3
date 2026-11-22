@@ -57,13 +57,10 @@ describe('<ControlPanel />', () => {
     const controlPanelWrapper = screen.getByTestId('control-panel-wrapper');
 
     expect(controlPanelWrapper).toHaveStyle({
-      // note: width and height using dynamic viewport units is not properly respected
-      // see: https://github.com/jsdom/jsdom/issues/1332
-      width: '100dvw',
+      width: '1024px',
       height: 'auto',
       transform: `translate(0px,0px)`
     });
-    // snapshot due to the above comment, attempting to capture more in the interim
     expect(controlPanelWrapper).toMatchSnapshot();
   });
 

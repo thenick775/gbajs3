@@ -37,6 +37,8 @@ describe('<CircleCheckButton />', () => {
     expect(screen.getByRole('graphics-symbol')).toBeVisible();
 
     // renders copy after animation has finished
-    await waitFor(() => expect(screen.getByText('Submit')).toBeVisible());
+    await waitFor(() => {
+      expect(screen.getByText('Submit')).toBeVisible();
+    });
   });
 });

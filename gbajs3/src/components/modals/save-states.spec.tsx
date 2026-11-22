@@ -391,9 +391,9 @@ describe('<SaveStatesModal />', () => {
       screen.getByRole('button', { name: 'View rom0.ss1' })
     );
 
-    await waitFor(() =>
-      expect(screen.getByAltText('rom0.ss0 Preview')).not.toBeVisible()
-    );
+    await waitFor(() => {
+      expect(screen.getByAltText('rom0.ss0 Preview')).not.toBeVisible();
+    });
     expect(screen.getByAltText('rom0.ss1 Preview')).toBeVisible();
 
     await userEvent.click(
@@ -401,9 +401,9 @@ describe('<SaveStatesModal />', () => {
     );
 
     expect(screen.getByAltText('rom0.ss0 Preview')).not.toBeVisible();
-    await waitFor(() =>
-      expect(screen.getByAltText('rom0.ss1 Preview')).not.toBeVisible()
-    );
+    await waitFor(() => {
+      expect(screen.getByAltText('rom0.ss1 Preview')).not.toBeVisible();
+    });
   });
 
   it('opens and closes auto save state preview', async () => {
@@ -438,9 +438,9 @@ describe('<SaveStatesModal />', () => {
       screen.getByRole('button', { name: 'Close rom0_auto.ss' })
     );
 
-    await waitFor(() =>
-      expect(screen.getByAltText('rom0_auto.ss Preview')).not.toBeVisible()
-    );
+    await waitFor(() => {
+      expect(screen.getByAltText('rom0_auto.ss Preview')).not.toBeVisible();
+    });
   });
 
   it('closes modal using the close button', async () => {

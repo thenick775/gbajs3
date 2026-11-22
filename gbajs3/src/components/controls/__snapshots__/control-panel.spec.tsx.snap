@@ -756,7 +756,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
   class="react-draggable"
   data-testid="control-panel-wrapper"
   id="_r_5_"
-  style="position: absolute; user-select: auto; width: auto; height: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px,10px); max-width: 9007199254740991px; max-height: 9007199254740991px; box-sizing: border-box; flex-shrink: 0;"
+  style="position: absolute; user-select: auto; width: auto; height: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px, 10px); max-size: 9007200000000000px; box-sizing: border-box; flex-shrink: 0;"
 >
   <ul
     class="emotion-0 emotion-1"
@@ -939,7 +939,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
             <span
               class="MuiSlider-mark MuiSlider-markActive emotion-40"
               data-index="3"
-              style="left: 30.000000000000004%;"
+              style="left: 30%;"
             />
             <span
               class="MuiSlider-mark MuiSlider-markActive emotion-40"
@@ -954,7 +954,7 @@ exports[`<ControlPanel /> > renders with default desktop position and size 1`] =
             <span
               class="MuiSlider-mark MuiSlider-markActive emotion-40"
               data-index="6"
-              style="left: 60.00000000000001%;"
+              style="left: 60%;"
             />
             <span
               class="MuiSlider-mark MuiSlider-markActive emotion-40"
@@ -1902,7 +1902,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
   class="react-draggable"
   data-testid="control-panel-wrapper"
   id="_r_3_"
-  style="position: absolute; user-select: auto; width: 100dvw; height: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px,0px); max-width: 9007199254740991px; max-height: 9007199254740991px; box-sizing: border-box; flex-shrink: 0;"
+  style="position: absolute; user-select: auto; width: 100dvw; height: auto; display: inline-block; top: 0px; left: 0px; cursor: auto; transform: translate(0px); max-size: 9007200000000000px; box-sizing: border-box; flex-shrink: 0;"
 >
   <ul
     class="emotion-0 emotion-1"
@@ -2085,7 +2085,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
             <span
               class="MuiSlider-mark MuiSlider-markActive emotion-40"
               data-index="3"
-              style="left: 30.000000000000004%;"
+              style="left: 30%;"
             />
             <span
               class="MuiSlider-mark MuiSlider-markActive emotion-40"
@@ -2100,7 +2100,7 @@ exports[`<ControlPanel /> > renders with default mobile position and size 1`] = 
             <span
               class="MuiSlider-mark MuiSlider-markActive emotion-40"
               data-index="6"
-              style="left: 60.00000000000001%;"
+              style="left: 60%;"
             />
             <span
               class="MuiSlider-mark MuiSlider-markActive emotion-40"

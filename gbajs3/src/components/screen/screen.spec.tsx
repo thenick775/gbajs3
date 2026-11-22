@@ -93,13 +93,10 @@ describe('<Screen />', () => {
     expect(canvas).toHaveAttribute('height', '160');
 
     expect(screenWrapper).toHaveStyle({
-      // note: width and height using dynamic viewport units is not properly respected
-      // see: https://github.com/jsdom/jsdom/issues/1332
-      width: '100dvw',
-      height: '66.6667dvw',
+      width: '739px',
+      height: '652.8px',
       transform: `translate(0px,0px)`
     });
-    // snapshot due to the above comment, attempting to capture more in the interim
     expect(screenWrapper).toMatchSnapshot();
   });
 
@@ -136,8 +133,7 @@ describe('<Screen />', () => {
     expect(canvas).toHaveAttribute('height', '160');
 
     expect(screenWrapper).toHaveStyle({
-      // see: https://github.com/jsdom/jsdom/issues/1332
-      height: '66.6667dvw', // should be '85dvh'
+      height: '652.8px',
       // See: https://github.com/bokuweb/react-rnd/issues/846, in jsdom react-rnd is rendering with
       // 2x transform values after the first render in test only, actual browser render is correct
       transform: `translate(${(NavigationMenuWidth + 10) * 2}px,${15 * 2}px)`
