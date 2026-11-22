@@ -1,11 +1,9 @@
 import react from '@vitejs/plugin-react-swc';
 import { visualizer } from 'rollup-plugin-visualizer';
-// eslint-disable-next-line import/no-unresolved
-import { defineConfig, type PluginOption } from 'vite';
+import { defineConfig } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-// eslint-disable-next-line import/no-unresolved
 import { coverageConfigDefaults } from 'vitest/config';
 
 // eslint-disable-next-line import/no-default-export
@@ -171,12 +169,30 @@ export default defineConfig(({ mode }) => {
         targets: [
           {
             src: 'node_modules/@thenick775/mgba-wasm/dist/*.wasm.map',
-            dest: 'assets'
+            dest: 'assets',
+            rename: { stripBase: true }
           }
         ]
       }),
       {
         name: 'gbajs3-cross-origin-isolation-headers',
+        configurePreviewServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const path = req.url?.split('?')[0];
+            const isCloudSyncAuth = path?.endsWith(`/${cloudSyncAuthPath}`);
+
+            res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+            res.setHeader(
+              'Cross-Origin-Opener-Policy',
+              isCloudSyncAuth ? 'same-origin-allow-popups' : 'same-origin'
+            );
+
+            if (isCloudSyncAuth)
+              res.setHeader('Referrer-Policy', 'no-referrer');
+
+            next();
+          });
+        },
         configureServer(server) {
           server.middlewares.use((req, res, next) => {
             const path = req.url?.split('?')[0];
@@ -195,11 +211,8 @@ export default defineConfig(({ mode }) => {
           });
         }
       },
-      visualizer({ gzipSize: true }) as PluginOption
+      visualizer({ gzipSize: true })
     ],
-    optimizeDeps: {
-      exclude: ['@thenick775/mgba-wasm']
-    },
     build: {
       sourcemap: true,
       rolldownOptions: {
