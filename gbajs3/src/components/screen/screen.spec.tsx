@@ -86,11 +86,7 @@ describe('<Screen />', () => {
   it('renders with default mobile position and size', () => {
     renderWithContext(<Screen />);
 
-    const canvas = screen.getByTestId('screen-wrapper:render-canvas');
     const screenWrapper = screen.getByTestId('screen-wrapper');
-
-    expect(canvas).toHaveAttribute('width', '240');
-    expect(canvas).toHaveAttribute('height', '160');
 
     expect(screenWrapper).toHaveStyle({
       width: '739px',
@@ -126,11 +122,7 @@ describe('<Screen />', () => {
 
     renderWithContext(<Screen />);
 
-    const canvas = screen.getByTestId('screen-wrapper:render-canvas');
     const screenWrapper = screen.getByTestId('screen-wrapper');
-
-    expect(canvas).toHaveAttribute('width', '240');
-    expect(canvas).toHaveAttribute('height', '160');
 
     expect(screenWrapper).toHaveStyle({
       height: '652.8px',

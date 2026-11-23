@@ -16,9 +16,6 @@ import { GripperHandle } from '../shared/gripper-handle.tsx';
 
 type ScreenWrapperProps = RndProps & { $areItemsDraggable: boolean };
 
-const defaultGBACanvasWidth = 240;
-const defaultGBACanvasHeight = 160;
-
 const RenderCanvas = styled('canvas')`
   background-color: ${({ theme }) => theme.pureBlack};
   image-rendering: -webkit-optimize-contrast;
@@ -204,8 +201,6 @@ export const Screen = () => {
       <RenderCanvas
         data-testid="screen-wrapper:render-canvas"
         ref={refSetCanvas}
-        width={defaultGBACanvasWidth}
-        height={defaultGBACanvasHeight}
       />
       {!!canvas && !emulator && (
         <LoadingCoreBadge aria-label="Emulator loading">

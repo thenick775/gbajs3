@@ -26,7 +26,8 @@ describe('<EmulatorSettingsModal />', () => {
       emulator: {
         defaultAudioSampleRates: () => defaultSampleRates,
         defaultAudioBufferSizes: () => defaultAudioBufferSizes,
-        getCurrentAutoSaveStatePath: () => null
+        getCurrentAutoSaveStatePath: () => null,
+        listShaders: () => ['lcd.shader']
       } as GBAEmulator
     }));
   });
@@ -77,7 +78,8 @@ describe('<EmulatorSettingsModal />', () => {
             setCoreSettings: setCoreSettingsSpy,
             defaultAudioSampleRates: () => defaultSampleRates,
             defaultAudioBufferSizes: () => defaultAudioBufferSizes,
-            getCurrentAutoSaveStatePath: () => null
+            getCurrentAutoSaveStatePath: () => null,
+            listShaders: () => ['lcd.shader']
           }
         }) as ReturnType<typeof contextHooks.useEmulatorContext>
     );
@@ -95,7 +97,7 @@ describe('<EmulatorSettingsModal />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnSlowdown":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false,"autoSaveStateTimerIntervalSeconds":30,"autoSaveStateEnable":true,"restoreAutoSaveStateOnLoad":true,"autoSaveStateLoadNotificationEnabled":true,"autoSaveStateCaptureNotificationEnabled":true,"slowdownEnabled":true}'
+      '{"frameSkip":0,"baseFpsTarget":60,"rewindBufferCapacity":600,"rewindBufferInterval":1,"allowOpposingDirections":true,"muteOnFastForward":true,"muteOnSlowdown":true,"muteOnRewind":true,"saveFileSystemOnInGameSave":true,"saveFileSystemOnCreateUpdateDelete":true,"fileSystemNotificationsEnabled":true,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":true,"videoSync":false,"audioSync":false,"threadedVideo":false,"rewindEnable":true,"showFpsCounter":false,"autoSaveStateTimerIntervalSeconds":30,"autoSaveStateEnable":true,"restoreAutoSaveStateOnLoad":true,"autoSaveStateLoadNotificationEnabled":true,"autoSaveStateCaptureNotificationEnabled":true,"slowdownEnabled":true,"highResolutionScale":1,"shader":""}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledExactlyOnceWith({
@@ -111,6 +113,7 @@ describe('<EmulatorSettingsModal />', () => {
       audioSampleRate: 48000,
       audioSync: false,
       frameSkip: 0,
+      highResolutionScale: 1,
       baseFpsTarget: 60,
       rewindBufferCapacity: 600,
       rewindBufferInterval: 1,
@@ -142,7 +145,8 @@ describe('<EmulatorSettingsModal />', () => {
             getCurrentSaveName: () => 'current_save.sav',
             defaultAudioSampleRates: () => defaultSampleRates,
             defaultAudioBufferSizes: () => defaultAudioBufferSizes,
-            getCurrentAutoSaveStatePath: () => null
+            getCurrentAutoSaveStatePath: () => null,
+            listShaders: () => ['lcd.shader']
           }
         }) as ReturnType<typeof contextHooks.useEmulatorContext>
     );
@@ -214,7 +218,7 @@ describe('<EmulatorSettingsModal />', () => {
 
     expect(setItemSpy).toHaveBeenCalledWith(
       'emulatorSettings',
-      '{"frameSkip":25,"baseFpsTarget":30,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnSlowdown":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"showFpsCounter":true,"autoSaveStateTimerIntervalSeconds":10,"autoSaveStateEnable":false,"restoreAutoSaveStateOnLoad":false,"autoSaveStateLoadNotificationEnabled":false,"autoSaveStateCaptureNotificationEnabled":false,"slowdownEnabled":false,"saveFileName":"custom_save_override.sav"}'
+      '{"frameSkip":25,"baseFpsTarget":30,"rewindBufferCapacity":1000,"rewindBufferInterval":10,"allowOpposingDirections":false,"muteOnFastForward":false,"muteOnSlowdown":false,"muteOnRewind":false,"saveFileSystemOnInGameSave":false,"saveFileSystemOnCreateUpdateDelete":false,"fileSystemNotificationsEnabled":false,"audioSampleRate":48000,"audioBufferSize":1024,"timestepSync":false,"videoSync":true,"audioSync":true,"threadedVideo":true,"rewindEnable":false,"showFpsCounter":true,"autoSaveStateTimerIntervalSeconds":10,"autoSaveStateEnable":false,"restoreAutoSaveStateOnLoad":false,"autoSaveStateLoadNotificationEnabled":false,"autoSaveStateCaptureNotificationEnabled":false,"slowdownEnabled":false,"highResolutionScale":1,"saveFileName":"custom_save_override.sav","shader":""}'
     );
 
     expect(addCallbacksSpy).toHaveBeenCalledExactlyOnceWith({
@@ -230,6 +234,7 @@ describe('<EmulatorSettingsModal />', () => {
       audioSampleRate: 48000,
       audioSync: true,
       frameSkip: 25,
+      highResolutionScale: 1,
       baseFpsTarget: 30,
       rewindBufferCapacity: 1000,
       rewindBufferInterval: 10,
@@ -247,6 +252,7 @@ describe('<EmulatorSettingsModal />', () => {
   it('removes settings when reset button is clicked', async () => {
     const addCallbacksSpy: (options: CoreCallbackOptions) => void = vi.fn();
     const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
+    const unloadShaderSpy: () => void = vi.fn();
 
     const removeItemSpy = vi.spyOn(Storage.prototype, 'removeItem');
 
@@ -265,7 +271,9 @@ describe('<EmulatorSettingsModal />', () => {
             getCurrentSaveName: () => 'current_save.sav',
             defaultAudioSampleRates: () => defaultSampleRates,
             defaultAudioBufferSizes: () => defaultAudioBufferSizes,
-            getCurrentAutoSaveStatePath: () => null
+            getCurrentAutoSaveStatePath: () => null,
+            listShaders: () => ['lcd.shader'],
+            unloadShader: unloadShaderSpy
           }
         }) as ReturnType<typeof contextHooks.useEmulatorContext>
     );
@@ -302,6 +310,7 @@ describe('<EmulatorSettingsModal />', () => {
       baseFpsTarget: 60,
       audioSync: false,
       frameSkip: 0,
+      highResolutionScale: 1,
       rewindBufferCapacity: 600,
       rewindBufferInterval: 1,
       rewindEnable: true,
@@ -313,6 +322,88 @@ describe('<EmulatorSettingsModal />', () => {
       autoSaveStateEnable: true,
       restoreAutoSaveStateOnLoad: true
     });
+    expect(unloadShaderSpy).toHaveBeenCalledOnce();
+  });
+
+  it('loads the selected shader when saving settings for a running game', async () => {
+    const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
+    const loadShaderSpy: (shaderPath: string) => void = vi.fn();
+    const emulator: Partial<GBAEmulator> = {
+      defaultAudioSampleRates: () => defaultSampleRates,
+      defaultAudioBufferSizes: () => defaultAudioBufferSizes,
+      getCurrentAutoSaveStatePath: () => null,
+      getCurrentSaveName: () => 'current_save.sav',
+      listShaders: () => ['lcd.shader'],
+      filePaths: () =>
+        ({ shaderPath: '/data/shaders' }) as ReturnType<
+          GBAEmulator['filePaths']
+        >,
+      setCoreSettings: setCoreSettingsSpy,
+      loadShader: loadShaderSpy
+    };
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      canvas: null,
+      setCanvas: vi.fn(),
+      emulator: emulator as GBAEmulator
+    }));
+    vi.spyOn(contextHooks, 'useRunningContext').mockImplementation(() => ({
+      isRunning: true,
+      setIsRunning: vi.fn()
+    }));
+    vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
+      addCallbacks: vi.fn(),
+      addCallbacksAndSaveSettings: vi.fn(),
+      syncActionIfEnabled: vi.fn()
+    }));
+
+    renderWithContext(<EmulatorSettingsModal />);
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Video' }));
+    await userEvent.click(screen.getByRole('combobox'));
+    await userEvent.click(screen.getByRole('option', { name: 'lcd.shader' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(loadShaderSpy).toHaveBeenCalledExactlyOnceWith(
+      '/data/shaders/lcd.shader'
+    );
+  });
+
+  it('unloads a stored shader when saving without a selection', async () => {
+    const setCoreSettingsSpy: (coreSettings: coreSettings) => void = vi.fn();
+    const unloadShaderSpy: () => void = vi.fn();
+    localStorage.setItem(
+      emulatorSettingsLocalStorageKey,
+      '{"shader":"lcd.shader"}'
+    );
+    const emulator: Partial<GBAEmulator> = {
+      defaultAudioSampleRates: () => defaultSampleRates,
+      defaultAudioBufferSizes: () => defaultAudioBufferSizes,
+      getCurrentAutoSaveStatePath: () => null,
+      listShaders: () => ['lcd.shader'],
+      setCoreSettings: setCoreSettingsSpy,
+      unloadShader: unloadShaderSpy
+    };
+
+    vi.spyOn(contextHooks, 'useEmulatorContext').mockImplementation(() => ({
+      canvas: null,
+      setCanvas: vi.fn(),
+      emulator: emulator as GBAEmulator
+    }));
+    vi.spyOn(addCallbackHooks, 'useAddCallbacks').mockImplementation(() => ({
+      addCallbacks: vi.fn(),
+      addCallbacksAndSaveSettings: vi.fn(),
+      syncActionIfEnabled: vi.fn()
+    }));
+
+    renderWithContext(<EmulatorSettingsModal />);
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Video' }));
+    await userEvent.click(screen.getByRole('combobox'));
+    await userEvent.click(screen.getByRole('option', { name: 'No Shader' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(unloadShaderSpy).toHaveBeenCalledOnce();
   });
 
   it('displays current save name from emulator when running if no override is present', async () => {
@@ -327,7 +418,8 @@ describe('<EmulatorSettingsModal />', () => {
             getCurrentSaveName: () => 'current_save.sav',
             defaultAudioSampleRates: () => defaultSampleRates,
             defaultAudioBufferSizes: () => defaultAudioBufferSizes,
-            getCurrentAutoSaveStatePath: () => null
+            getCurrentAutoSaveStatePath: () => null,
+            listShaders: () => ['lcd.shader']
           }
         }) as ReturnType<typeof contextHooks.useEmulatorContext>
     );
