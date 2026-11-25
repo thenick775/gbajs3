@@ -21,7 +21,7 @@ This project is a Game Boy Advance emulator that is freely licensed and works in
 
 It began as a re-skin of the [gbajs2](https://github.com/andychase/gbajs2) fork by andychase, but now supports the [mGBA wasm](https://github.com/thenick775/mgba/tree/feature/wasm) core through the use of emscripten, for a feature rich user experience.
 
-This project was driven specifically by a need to play modern GBA rom hacks outside of desktop applications, without side loading or building through xcode. It is designed as an all-in-one mono repo containing the backend services and frontend services.
+This project was driven specifically by a need to play modern GBA rom hacks outside of desktop applications, without side loading or building through xcode. It is designed as an all-in-one monorepo containing all frontend and optional backend services.
 
 [Try it online!](<https://gba.nicholas-vancise.dev?romURL=https://raw.githubusercontent.com/vbaemulator/GBA-Roms/main/Pokemon%20-%20Ruby%20Version%20(USA%2C%20Europe)%20(Rev%202).zip>)
 
@@ -57,6 +57,7 @@ Do not attempt to log into the server unless you are the server owner or an appr
 - Local link cable play
   - v1 supports running one game+inputs at a time, best for things like pokemon trades
 - Homebrew rom catalog
+- Video shader support
 
 ## Existing Feature List
 
