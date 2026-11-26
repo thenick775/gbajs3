@@ -34,11 +34,8 @@ export const useFadeCanvas = () => {
       if (!canvas || !screenshot) return;
 
       const copyCanvas = document.createElement('canvas');
-      const ctx = copyCanvas.getContext('2d');
       const url = URL.createObjectURL(screenshot);
 
-      copyCanvas.width = 240;
-      copyCanvas.height = 160;
       copyCanvas.className = canvas.className;
       copyCanvas.style.cssText = canvas.style.cssText;
       copyCanvas.style.position = 'absolute';
@@ -49,6 +46,9 @@ export const useFadeCanvas = () => {
 
       const fadeImage = new Image();
       fadeImage.onload = () => {
+        copyCanvas.width = fadeImage.naturalWidth;
+        copyCanvas.height = fadeImage.naturalHeight;
+        const ctx = copyCanvas.getContext('2d');
         ctx?.drawImage(fadeImage, 0, 0);
         canvas.parentElement?.appendChild(copyCanvas);
         clearWebGlCanvas(canvas);

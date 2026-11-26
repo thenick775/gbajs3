@@ -12,6 +12,8 @@ describe('useFadeCanvas', () => {
       class {
         onload: (() => void) | null = null;
         _src = '';
+        naturalWidth = 160;
+        naturalHeight = 144;
 
         set src(value: string) {
           this._src = value;
@@ -90,5 +92,25 @@ describe('useFadeCanvas', () => {
 
     expect(clearIntervalSpy).toHaveBeenCalled();
     expect(parent.contains(canvas)).toBe(true);
+  });
+
+  it('sizes the fade overlay to the screenshot dimensions', () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 240;
+    canvas.height = 160;
+    const parent = document.createElement('div');
+    parent.appendChild(canvas);
+    document.body.appendChild(parent);
+
+    const { result } = renderHook(() => useFadeCanvas());
+
+    act(() => {
+      result.current.startFade(canvas, new Blob());
+      vi.advanceTimersByTime(0);
+    });
+
+    const copyCanvas = parent.children.item(1);
+    expect(copyCanvas).toHaveProperty('width', 160);
+    expect(copyCanvas).toHaveProperty('height', 144);
   });
 });
