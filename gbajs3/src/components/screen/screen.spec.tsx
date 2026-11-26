@@ -134,6 +134,44 @@ describe('<Screen />', () => {
     expect(screenWrapper).toMatchSnapshot();
   });
 
+  it('renders mobile landscape with a centered top-left position', () => {
+    vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
+      matches: query === GbaDarkTheme.isMobileLandscape,
+      media: '',
+      // eslint-disable-next-line @typescript-eslint/no-deprecated -- required by the MediaQueryList test double type
+      addListener: () => {
+        /* empty */
+      },
+      // eslint-disable-next-line @typescript-eslint/no-deprecated -- required by the MediaQueryList test double type
+      removeListener: () => {
+        /* empty */
+      },
+      onchange: () => {
+        /* empty */
+      },
+      addEventListener: () => {
+        /* empty */
+      },
+      removeEventListener: () => {
+        /* empty */
+      },
+      dispatchEvent: () => true
+    }));
+    vi.spyOn(document.documentElement, 'clientWidth', 'get').mockReturnValue(
+      844
+    );
+    vi.spyOn(document.documentElement, 'clientHeight', 'get').mockReturnValue(
+      390
+    );
+
+    renderWithContext(<Screen />);
+
+    expect(screen.getByTestId('screen-wrapper')).toHaveStyle({
+      // See the desktop-position test: jsdom renders react-rnd transforms at 2x.
+      transform: 'translate(258px,0px)'
+    });
+  });
+
   it('sets layout on drag', async () => {
     const setLayoutSpy = vi.fn();
     const { useLayoutContext: originalLayout, useDragContext: originalDrag } =

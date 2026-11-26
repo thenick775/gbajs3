@@ -136,13 +136,14 @@ export const Screen = () => {
     [setCanvas]
   );
 
-  const usesDefaultMobileLandscapePosition =
-    !screenLayout?.position && isMobileLandscape;
+  const viewportWidth = document.documentElement.clientWidth;
+  const viewportHeight = document.documentElement.clientHeight;
+  const mobileLandscapeWidth = viewportHeight * (3 / 2);
   const position =
     screenLayout?.position ??
     (isMobileLandscape
       ? {
-          x: Math.floor(document.documentElement.clientWidth / 2),
+          x: Math.floor(viewportWidth / 2 - mobileLandscapeWidth / 2),
           y: 0
         }
       : {
@@ -170,9 +171,6 @@ export const Screen = () => {
         topLeft: { marginTop: '15px', marginLeft: '15px' }
       }}
       position={position}
-      dragPositionOffset={
-        usesDefaultMobileLandscapePosition ? { x: '-50%', y: 0 } : undefined
-      }
       size={size}
       onDragStart={() => {
         if (!screenLayout?.originalBounds)
