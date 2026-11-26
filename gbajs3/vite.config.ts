@@ -37,7 +37,14 @@ export default defineConfig(({ mode }) => {
               }
             }
           ]
-        ]
+        ],
+        useAtYourOwnRisk_mutateSwcOptions: (options) => {
+          options.jsc ??= {};
+          options.jsc.transform ??= {};
+          options.jsc.transform.reactCompiler = {
+            panicThreshold: 'all_errors'
+          };
+        }
       }),
       withCOIServiceWorker
         ? [

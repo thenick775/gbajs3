@@ -141,6 +141,27 @@ const RightArrow = styled(DirectionArrow)`
   right: 16px;
 `;
 
+const getKeyId = ({ x, y }: Position) => {
+  // Rotate the x and y axis 45 degrees,
+  // these are now the grid lines for our quadrants.
+  // Convert to the rotated coordinate system
+  const xAxisRotated = x * Math.cos(Math.PI / 4) - y * Math.sin(Math.PI / 4);
+  const yAxisRotated = x * Math.sin(Math.PI / 4) + y * Math.cos(Math.PI / 4);
+
+  // evaluate which arrow button was pressed, return keyId
+  if (xAxisRotated >= 0 && yAxisRotated >= 0) {
+    return 'RIGHT';
+  } else if (xAxisRotated < 0 && yAxisRotated >= 0) {
+    return 'DOWN';
+  } else if (xAxisRotated < 0 && yAxisRotated < 0) {
+    return 'LEFT';
+  } else if (xAxisRotated >= 0 && yAxisRotated < 0) {
+    return 'UP';
+  } else {
+    return null;
+  }
+};
+
 export const OPad = ({ initialPosition }: OPadProps) => {
   const { emulator } = useEmulatorContext();
   const { areItemsDraggable } = useDragContext();
@@ -173,27 +194,6 @@ export const OPad = ({ initialPosition }: OPadProps) => {
       )
     );
   }, []);
-
-  const getKeyId = ({ x, y }: Position) => {
-    // Rotate the x and y axis 45 degrees,
-    // these are now the grid lines for our quadrants.
-    // Convert to the rotated coordinate system
-    const xAxisRotated = x * Math.cos(Math.PI / 4) - y * Math.sin(Math.PI / 4);
-    const yAxisRotated = x * Math.sin(Math.PI / 4) + y * Math.cos(Math.PI / 4);
-
-    // evaluate which arrow button was pressed, return keyId
-    if (xAxisRotated >= 0 && yAxisRotated >= 0) {
-      return 'RIGHT';
-    } else if (xAxisRotated < 0 && yAxisRotated >= 0) {
-      return 'DOWN';
-    } else if (xAxisRotated < 0 && yAxisRotated < 0) {
-      return 'LEFT';
-    } else if (xAxisRotated >= 0 && yAxisRotated < 0) {
-      return 'UP';
-    } else {
-      return null;
-    }
-  };
 
   const handlePointerMove = useCallback(
     (event: PointerEvent<HTMLDivElement>) => {
