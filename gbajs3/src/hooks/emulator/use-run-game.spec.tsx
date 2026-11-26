@@ -5,6 +5,7 @@ import { useRunGame } from './use-run-game.tsx';
 import { renderHookWithContext } from '../../../test/render-hook-with-context.tsx';
 import {
   emulatorGameNameLocalStorageKey,
+  emulatorGameLibraryLocalStorageKey,
   emulatorFFMultiplierLocalStorageKey,
   emulatorKeyBindingsLocalStorageKey,
   emulatorSettingsLocalStorageKey
@@ -21,6 +22,7 @@ import type { coreSettings } from '@thenick775/mgba-wasm';
 
 describe('useRunGame hook', () => {
   it('runs game, sets default and stored values', () => {
+    const launchedAt = 1_735_689_600_000;
     const setIsRunningSpy = vi.fn();
     const emulatorRunSpy: (romPath: string) => boolean = vi.fn(() => true);
     const emulatorSetVolumeSpy: (v: number) => void = vi.fn();
@@ -53,6 +55,7 @@ describe('useRunGame hook', () => {
     }));
 
     const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+    vi.spyOn(Date, 'now').mockReturnValue(launchedAt);
 
     const { result } = renderHookWithContext(() => useRunGame());
 
@@ -71,6 +74,15 @@ describe('useRunGame hook', () => {
     expect(setItemSpy).toHaveBeenCalledWith(
       emulatorGameNameLocalStorageKey,
       '"some_rom.gba"'
+    );
+    expect(setItemSpy).toHaveBeenCalledWith(
+      emulatorGameLibraryLocalStorageKey,
+      JSON.stringify({
+        'some_rom.gba': {
+          favorite: false,
+          lastPlayed: launchedAt
+        }
+      })
     );
 
     // set volume

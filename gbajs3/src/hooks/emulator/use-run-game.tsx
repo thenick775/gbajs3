@@ -5,6 +5,7 @@ import { useAddCallbacks } from './use-add-callbacks.tsx';
 import {
   emulatorFFMultiplierLocalStorageKey,
   emulatorGameNameLocalStorageKey,
+  emulatorGameLibraryLocalStorageKey,
   emulatorKeyBindingsLocalStorageKey,
   emulatorVolumeLocalStorageKey,
   emulatorSettingsLocalStorageKey
@@ -14,11 +15,20 @@ import { useEmulatorContext, useRunningContext } from '../context.tsx';
 import type { EmulatorSettings } from '../../components/modals/emulator-settings.tsx';
 import type { KeyBinding } from '../../emulator/mgba/mgba-emulator.tsx';
 
+export type GameLibrary = Record<
+  string,
+  { favorite: boolean; lastPlayed: number } | undefined
+>;
+
 export const useRunGame = () => {
   const { emulator } = useEmulatorContext();
   const { setIsRunning } = useRunningContext();
   const [, setStoredGameName] = useLocalStorage<string | undefined>(
     emulatorGameNameLocalStorageKey
+  );
+  const [, setGameLibrary] = useLocalStorage<GameLibrary>(
+    emulatorGameLibraryLocalStorageKey,
+    {}
   );
   const [currentKeyBindings] = useLocalStorage<KeyBinding[] | undefined>(
     emulatorKeyBindingsLocalStorageKey
@@ -67,6 +77,13 @@ export const useRunGame = () => {
 
       if (isSuccessfulRun) {
         setStoredGameName(romName);
+        setGameLibrary((library) => ({
+          ...library,
+          [romName]: {
+            favorite: library[romName]?.favorite ?? false,
+            lastPlayed: Date.now()
+          }
+        }));
         emulator?.setVolume(currentEmulatorVolume);
 
         if (currentKeyBindings) emulator?.remapKeyBindings(currentKeyBindings);
@@ -127,6 +144,7 @@ export const useRunGame = () => {
       emulatorSettings,
       fastForwardMultiplier,
       setIsRunning,
+      setGameLibrary,
       setStoredGameName
     ]
   );
