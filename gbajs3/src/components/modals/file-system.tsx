@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useCallback, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import { EmulatorFileSystem } from './file-system/emulator-file-system.tsx';
 import { ModalBody } from './modal-body.tsx';
@@ -22,22 +22,28 @@ export const FileSystemModal = () => {
   const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
-  const [fileSystemChangeTime, setFileSystemChangeTime] = useState<
-    number | null
-  >(null);
+
+  const [renderedFiles, refreshFiles] = useReducer(
+    () => emulator?.listAllFiles(),
+    undefined,
+    () => emulator?.listAllFiles()
+  );
 
   const autoSaveStatePath = emulator?.getCurrentAutoSaveStatePath();
   const { modifiedTime } = useFileStat(autoSaveStatePath);
-  const fileSystemChangeKey = modifiedTime ?? fileSystemChangeTime;
 
-  const deleteFile = useCallback(
-    async (path: string) => {
-      emulator?.deleteFile(path);
-      setFileSystemChangeTime(Date.now());
-      await syncActionIfEnabled();
-    },
-    [emulator, syncActionIfEnabled]
-  );
+  // the only flow that can force the file system to change without user interaction after the modal
+  // is open is the auto save state timer, if the modified time of the current auto save state has
+  // changed, we should refresh the file system view
+  useEffect(() => {
+    refreshFiles();
+  }, [modifiedTime]);
+
+  const deleteFile = async (path: string) => {
+    emulator?.deleteFile(path);
+    refreshFiles();
+    await syncActionIfEnabled();
+  };
 
   const downloadFile = (path: string) => {
     const fileName = path.split('/').pop();
@@ -52,14 +58,11 @@ export const FileSystemModal = () => {
     }
   };
 
-  const renderedFiles = emulator?.listAllFiles();
-
   return (
     <>
       <ModalHeader title="File System" />
       <FlexModalBody>
         <EmulatorFileSystem
-          key={fileSystemChangeKey}
           allFiles={renderedFiles}
           deleteFile={deleteFile}
           downloadFile={downloadFile}
