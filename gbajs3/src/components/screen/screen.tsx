@@ -136,16 +136,15 @@ export const Screen = () => {
     [setCanvas]
   );
 
-  const currentDimensions =
-    rndRef.current?.resizableElement.current?.getBoundingClientRect();
-  const width = currentDimensions?.width ?? 0;
-  const height = currentDimensions?.height ?? 0;
+  const viewportWidth = document.documentElement.clientWidth;
+  const viewportHeight = document.documentElement.clientHeight;
+  const mobileLandscapeWidth = viewportHeight * (3 / 2);
   const position =
     screenLayout?.position ??
     (isMobileLandscape
       ? {
-          x: Math.floor(document.documentElement.clientWidth / 2 - width / 2),
-          y: Math.floor(document.documentElement.clientHeight / 2 - height / 2)
+          x: Math.floor(viewportWidth / 2 - mobileLandscapeWidth / 2),
+          y: 0
         }
       : {
           x: screenWrapperXStart,

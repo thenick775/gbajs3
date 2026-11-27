@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import { EmulatorFileSystem } from './file-system/emulator-file-system.tsx';
 import { ModalBody } from './modal-body.tsx';
@@ -12,8 +12,6 @@ import { useFileStat } from '../../hooks/emulator/use-file-stat.tsx';
 import { CircleCheckButton } from '../shared/circle-check-button.tsx';
 import { downloadBlob } from './file-utilities/blob.ts';
 
-import type { FileNode } from '../../emulator/mgba/mgba-emulator.tsx';
-
 const FlexModalBody = styled(ModalBody)`
   display: flex;
   flex-direction: column;
@@ -24,15 +22,11 @@ export const FileSystemModal = () => {
   const { closeModal } = useModalContext();
   const { emulator } = useEmulatorContext();
   const { syncActionIfEnabled } = useAddCallbacks();
-  const [allFiles, setAllFiles] = useState<FileNode | undefined>();
 
-  const deleteFile = useCallback(
-    async (path: string) => {
-      emulator?.deleteFile(path);
-      setAllFiles(emulator?.listAllFiles());
-      await syncActionIfEnabled();
-    },
-    [emulator, syncActionIfEnabled]
+  const [renderedFiles, refreshFiles] = useReducer(
+    () => emulator?.listAllFiles(),
+    undefined,
+    () => emulator?.listAllFiles()
   );
 
   const autoSaveStatePath = emulator?.getCurrentAutoSaveStatePath();
@@ -42,8 +36,14 @@ export const FileSystemModal = () => {
   // is open is the auto save state timer, if the modified time of the current auto save state has
   // changed, we should refresh the file system view
   useEffect(() => {
-    setAllFiles(emulator?.listAllFiles());
-  }, [emulator, modifiedTime]);
+    refreshFiles();
+  }, [modifiedTime]);
+
+  const deleteFile = async (path: string) => {
+    emulator?.deleteFile(path);
+    refreshFiles();
+    await syncActionIfEnabled();
+  };
 
   const downloadFile = (path: string) => {
     const fileName = path.split('/').pop();
@@ -57,8 +57,6 @@ export const FileSystemModal = () => {
       downloadBlob(fileName, fileDownload);
     }
   };
-
-  const renderedFiles = allFiles ?? emulator?.listAllFiles();
 
   return (
     <>
