@@ -194,6 +194,7 @@ describe('<ControlPanel />', () => {
       setLayout: setLayoutSpy,
       setLayouts: vi.fn(),
       layouts: {},
+      layoutType: 'portrait' as const,
       getLayout: () => undefined
     };
 

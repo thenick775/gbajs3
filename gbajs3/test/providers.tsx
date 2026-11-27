@@ -21,11 +21,11 @@ export const AllTheProviders = ({ children }: { children: ReactNode }) => (
       <AuthProvider>
         <CloudSyncProvider>
           <EmulatorContextProvider>
-            <InitialBoundsProvider>
-              <LayoutProvider>
+            <LayoutProvider>
+              <InitialBoundsProvider>
                 <ModalProvider>{children}</ModalProvider>
-              </LayoutProvider>
-            </InitialBoundsProvider>
+              </InitialBoundsProvider>
+            </LayoutProvider>
           </EmulatorContextProvider>
         </CloudSyncProvider>
       </AuthProvider>
