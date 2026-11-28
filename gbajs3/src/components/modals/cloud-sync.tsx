@@ -163,20 +163,21 @@ export const CloudSyncModal = () => {
     pullGoogleDriveBackup.error?.message ??
     deleteGoogleDriveBackup.error?.message;
 
-  const createBackup = async () => {
+  const createBackup = () => {
     setIsCreatingFilesystemBackup(true);
 
-    try {
-      const backupBlob = await createFilesystemBackupBlob(emulator);
-      setIsCreatingFilesystemBackup(false);
-      await pushGoogleDriveBackup.mutateAsync({
-        backup: backupBlob,
-        name: generateCloudBackupName()
+    return createFilesystemBackupBlob(emulator)
+      .then(async (backupBlob) => {
+        setIsCreatingFilesystemBackup(false);
+        await pushGoogleDriveBackup.mutateAsync({
+          backup: backupBlob,
+          name: generateCloudBackupName()
+        });
+        await googleDriveBackups.refetch();
+      })
+      .finally(() => {
+        setIsCreatingFilesystemBackup(false);
       });
-      await googleDriveBackups.refetch();
-    } finally {
-      setIsCreatingFilesystemBackup(false);
-    }
   };
 
   return (
