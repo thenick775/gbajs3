@@ -1,15 +1,10 @@
-import { useOrientation, useWindowSize } from '@uidotdev/usehooks';
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode
-} from 'react';
+import { useCallback, useState, type ReactNode } from 'react';
 
 import { InitialBoundsContext } from './initial-bounds-context.tsx';
+import { useLayoutContext } from '../../hooks/context.tsx';
 
 import type { InitialBounds } from './initial-bounds-context.tsx';
+import type { LayoutType } from '../layout/layout-context.tsx';
 
 type InitialBoundsProviderProps = {
   children: ReactNode;
@@ -18,60 +13,29 @@ type InitialBoundsProviderProps = {
 export const InitialBoundsProvider = ({
   children
 }: InitialBoundsProviderProps) => {
-  const [initialBounds, setInitialBounds] = useState<InitialBounds>();
-  const orientation = useOrientation();
-  const prevOrientation = useRef(orientation.angle);
-  const windowSize = useWindowSize();
-  const prevSize = useRef(windowSize);
+  const [initialBoundsByMode, setInitialBoundsByMode] = useState<
+    Partial<Record<LayoutType, InitialBounds>>
+  >({});
+  const { layoutType } = useLayoutContext();
 
-  const setInitialBound = useCallback((key: string, bounds?: DOMRect) => {
-    setInitialBounds((prevState) => ({ ...prevState, [key]: bounds }));
-  }, []);
+  const setInitialBound = useCallback(
+    (key: string, bounds?: DOMRect) => {
+      setInitialBoundsByMode((prevState) => ({
+        ...prevState,
+        [layoutType]: { ...prevState[layoutType], [key]: bounds }
+      }));
+    },
+    [layoutType]
+  );
 
   const clearInitialBounds = useCallback(() => {
-    setInitialBounds(undefined);
-  }, [setInitialBounds]);
-
-  const hasInitialBounds = !!initialBounds;
-
-  useEffect(() => {
-    if (
-      orientation.angle !== prevOrientation.current &&
-      [0, 90, 270].includes(orientation.angle) &&
-      hasInitialBounds
-    ) {
-      clearInitialBounds();
-      prevOrientation.current = orientation.angle;
-    }
-  }, [clearInitialBounds, orientation.angle, hasInitialBounds]);
-
-  useEffect(() => {
-    if (
-      prevSize.current.width !== null &&
-      prevSize.current.height !== null &&
-      windowSize.width !== null &&
-      windowSize.height !== null &&
-      windowSize.width !== prevSize.current.width &&
-      windowSize.height !== prevSize.current.height &&
-      hasInitialBounds
-    ) {
-      clearInitialBounds();
-      prevSize.current = {
-        width: windowSize.width,
-        height: windowSize.height
-      };
-    }
-  }, [
-    clearInitialBounds,
-    windowSize.width,
-    windowSize.height,
-    hasInitialBounds
-  ]);
+    setInitialBoundsByMode({});
+  }, []);
 
   return (
     <InitialBoundsContext.Provider
       value={{
-        initialBounds,
+        initialBounds: initialBoundsByMode[layoutType],
         setInitialBound,
         clearInitialBounds
       }}

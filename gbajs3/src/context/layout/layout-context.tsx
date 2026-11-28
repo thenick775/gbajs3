@@ -17,8 +17,11 @@ export type Layouts = Record<
   Partial<Record<'portrait' | 'landscape' | 'desktop', Layout> | undefined>
 >;
 
+export type LayoutType = 'portrait' | 'landscape' | 'desktop';
+
 type LayoutContextProps = {
   layouts: Layouts;
+  layoutType: LayoutType;
   getLayout: (layoutKey: string) => Layout | undefined;
   clearLayouts: () => void;
   setLayout: (layoutKey: string, layout: Layout) => void;

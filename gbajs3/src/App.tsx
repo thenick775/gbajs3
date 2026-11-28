@@ -30,8 +30,8 @@ export const App = () => (
         <AuthProvider>
           <CloudSyncProvider>
             <EmulatorContextProvider>
-              <InitialBoundsProvider>
-                <LayoutProvider>
+              <LayoutProvider>
+                <InitialBoundsProvider>
                   <ModalProvider>
                     <main>
                       <PwaPrompt />
@@ -42,8 +42,8 @@ export const App = () => (
                       <ModalContainer />
                     </main>
                   </ModalProvider>
-                </LayoutProvider>
-              </InitialBoundsProvider>
+                </InitialBoundsProvider>
+              </LayoutProvider>
             </EmulatorContextProvider>
           </CloudSyncProvider>
         </AuthProvider>

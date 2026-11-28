@@ -1,11 +1,11 @@
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useLocalStorage, useOrientation } from '@uidotdev/usehooks';
+import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, type ReactNode } from 'react';
 
 import { LayoutContext } from './layout-context.tsx';
 
-import type { Layout, Layouts } from './layout-context.tsx';
+import type { Layout, LayoutType, Layouts } from './layout-context.tsx';
 
 type LayoutProviderProps = {
   children: ReactNode;
@@ -21,16 +21,15 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
   const theme = useTheme();
   const isLargerThanPhone = useMediaQuery(theme.isLargerThanPhone);
   const isMobileLandscape = useMediaQuery(theme.isMobileLandscape);
-  const orientation = useOrientation();
 
   const clearLayouts = useCallback(() => {
     setLayouts({});
   }, [setLayouts]);
 
-  const layoutType =
+  const layoutType: LayoutType =
     isLargerThanPhone && !isMobileLandscape
       ? 'desktop'
-      : orientation.type.startsWith('landscape')
+      : isMobileLandscape
         ? 'landscape'
         : 'portrait';
 
@@ -61,6 +60,7 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
     <LayoutContext.Provider
       value={{
         layouts,
+        layoutType,
         getLayout,
         clearLayouts,
         setLayout,
